@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>角色权限 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#030714',
+                        'card-bg': '#0a1628',
+                        'border-dark': '#1a2744',
+                        'accent-blue': '#3b82f6',
+                        'accent-cyan': '#06b6d4',
+                        'accent-green': '#10b981',
+                        'accent-amber': '#f59e0b',
+                        'accent-red': '#ef4444',
+                        'text-primary': '#f1f5f9',
+                        'text-secondary': '#94a3b8',
+                        'text-muted': '#475569'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+    </style>
+</head>
+<body class="bg-primary-bg text-text-primary min-h-screen">
+    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
+                <i class="fas fa-cube text-white text-lg"></i>
+            </div>
+            <span class="text-lg font-semibold">内容中台</span>
+        </div>
+        <div class="flex-1 max-w-xl mx-8">
+            <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+            </div>
+        </div>
+        <div class="flex items-center gap-6">
+            <button class="relative text-text-secondary hover:text-text-primary">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium">张明远</span>
+                    <span class="text-xs text-text-muted">超级管理员</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <span>工作台</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <span>审核中心</span>
+            </a>
+            <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <span>发布管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
+            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-home w-5 text-text-secondary"></i>
+                <span>首页装修</span>
+            </a>
+            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-image w-5 text-text-secondary"></i>
+                <span>Banner管理</span>
+            </a>
+            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-columns w-5 text-text-secondary"></i>
+                <span>栏目管理</span>
+            </a>
+            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
+                <span>专题管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
+            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
+                <span>新闻资讯</span>
+            </a>
+            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
+                <span>公告通知</span>
+            </a>
+            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
+                <span>政策文件</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <span>视频管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-accent-blue"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="ml-[220px] mt-16 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">角色权限</h1>
+                <p class="text-text-muted mt-1">配置系统角色和权限分配</p>
+            </div>
+            <button onclick="openModal('addModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                <i class="fas fa-plus"></i>
+                新增角色
+            </button>
+        </div>
+
+        <!-- 角色列表 -->
+        <div class="grid grid-cols-3 gap-6">
+            <!-- 超级管理员 -->
+            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
+                        <i class="fas fa-crown text-accent-blue text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">超级管理员</h3>
+                        <span class="text-xs text-text-muted">1 人</span>
+                    </div>
+                </div>
+                <p class="text-sm text-text-secondary mb-4">拥有系统所有权限，可进行系统配置和用户管理</p>
+                <div class="flex items-center gap-2 pt-4 border-t border-border-dark">
+                    <button class="flex-1 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
+                    <button class="flex-1 py-2 text-sm text-text-muted hover:bg-primary-bg rounded transition-colors">权限</button>
+                </div>
+            </div>
+
+            <!-- 内容编辑 -->
+            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-accent-green/20 flex items-center justify-center">
+                        <i class="fas fa-edit text-accent-green text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">内容编辑</h3>
+                        <span class="text-xs text-text-muted">12 人</span>
+                    </div>
+                </div>
+                <p class="text-sm text-text-secondary mb-4">可创建、编辑内容，提交审核申请</p>
+                <div class="flex items-center gap-2 pt-4 border-t border-border-dark">
+                    <button class="flex-1 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
+                    <button class="flex-1 py-2 text-sm text-text-muted hover:bg-primary-bg rounded transition-colors">权限</button>
+                </div>
+            </div>
+
+            <!-- 审核员 -->
+            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-accent-cyan/20 flex items-center justify-center">
+                        <i class="fas fa-check-circle text-accent-cyan text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">审核员</h3>
+                        <span class="text-xs text-text-muted">5 人</span>
+                    </div>
+                </div>
+                <p class="text-sm text-text-secondary mb-4">可审核内容，进行批准或驳回操作</p>
+                <div class="flex items-center gap-2 pt-4 border-t border-border-dark">
+                    <button class="flex-1 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
+                    <button class="flex-1 py-2 text-sm text-text-muted hover:bg-primary-bg rounded transition-colors">权限</button>
+                </div>
+            </div>
+
+            <!-- 运营人员 -->
+            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-accent-amber/20 flex items-center justify-center">
+                        <i class="fas fa-chart-line text-accent-amber text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">运营人员</h3>
+                        <span class="text-xs text-text-muted">8 人</span>
+                    </div>
+                </div>
+                <p class="text-sm text-text-secondary mb-4">可进行页面装修、Banner管理等运营操作</p>
+                <div class="flex items-center gap-2 pt-4 border-t border-border-dark">
+                    <button class="flex-1 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
+                    <button class="flex-1 py-2 text-sm text-text-muted hover:bg-primary-bg rounded transition-colors">权限</button>
+                </div>
+            </div>
+
+            <!-- 访客 -->
+            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
+                <div class="flex items-center gap-3 mb-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center">
+                        <i class="fas fa-user text-purple-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-medium">访客</h3>
+                        <span class="text-xs text-text-muted">3 人</span>
+                    </div>
+                </div>
+                <p class="text-sm text-text-secondary mb-4">只读权限，可查看内容数据</p>
+                <div class="flex items-center gap-2 pt-4 border-t border-border-dark">
+                    <button class="flex-1 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
+                    <button class="flex-1 py-2 text-sm text-text-muted hover:bg-primary-bg rounded transition-colors">权限</button>
+                </div>
+            </div>
+
+            <!-- 添加角色 -->
+            <div class="bg-card-bg rounded-xl border border-dashed border-border-dark p-5 flex items-center justify-center cursor-pointer hover:border-accent-blue transition-colors">
+                <div class="text-center">
+                    <div class="w-12 h-12 rounded-xl bg-primary-bg flex items-center justify-center mx-auto mb-3">
+                        <i class="fas fa-plus text-text-muted text-xl"></i>
+                    </div>
+                    <p class="text-sm text-text-muted">添加新角色</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 权限配置 -->
+        <div class="bg-card-bg rounded-xl border border-border-dark p-5 mt-6">
+            <h3 class="text-lg font-medium mb-4">权限配置 - 内容编辑</h3>
+            <div class="grid grid-cols-4 gap-6">
+                <div>
+                    <h4 class="font-medium mb-3 text-accent-blue">内容管理</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">创建内容</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">编辑内容</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">删除内容</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">批量操作</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-3 text-accent-cyan">分类标签</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">查看分类</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">管理分类</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">使用标签</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-3 text-accent-green">资源管理</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">上传图片</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">上传文件</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">删除资源</span>
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="font-medium mb-3 text-accent-amber">数据分析</h4>
+                    <div class="space-y-2">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" checked class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">查看数据</span>
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
+                            <span class="text-sm">导出报表</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-6 pt-4 border-t border-border-dark flex justify-end gap-3">
+                <button class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">重置</button>
+                <button class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存配置</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- 添加角色弹窗 -->
+    <div id="addModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[500px] border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">新增角色</h3>
+                <button onclick="closeModal('addModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">角色名称 <span class="text-accent-red">*</span></label>
+                    <input type="text" placeholder="请输入角色名称" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">角色描述</label>
+                    <textarea rows="2" placeholder="请输入角色描述" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('addModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="closeModal('addModal'); showToast('角色已添加')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-accent-green text-white px-6 py-3 rounded-xl shadow-lg hidden z-50">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toastText">操作成功</span>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => { toast.classList.add('hidden'); }, 2000);
+        }
+    </script>
+</body>
+</html>

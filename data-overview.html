@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据概览 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#030714',
+                        'card-bg': '#0a1628',
+                        'border-dark': '#1a2744',
+                        'accent-blue': '#3b82f6',
+                        'accent-cyan': '#06b6d4',
+                        'accent-green': '#10b981',
+                        'accent-amber': '#f59e0b',
+                        'accent-red': '#ef4444',
+                        'text-primary': '#f1f5f9',
+                        'text-secondary': '#94a3b8',
+                        'text-muted': '#475569'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+    </style>
+</head>
+<body class="bg-primary-bg text-text-primary min-h-screen">
+    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
+                <i class="fas fa-cube text-white text-lg"></i>
+            </div>
+            <span class="text-lg font-semibold">内容中台</span>
+        </div>
+        <div class="flex-1 max-w-xl mx-8">
+            <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+            </div>
+        </div>
+        <div class="flex items-center gap-6">
+            <button class="relative text-text-secondary hover:text-text-primary">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium">张明远</span>
+                    <span class="text-xs text-text-muted">超级管理员</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <span>工作台</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <span>审核中心</span>
+            </a>
+            <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <span>发布管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
+            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-home w-5 text-text-secondary"></i>
+                <span>首页装修</span>
+            </a>
+            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-image w-5 text-text-secondary"></i>
+                <span>Banner管理</span>
+            </a>
+            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-columns w-5 text-text-secondary"></i>
+                <span>栏目管理</span>
+            </a>
+            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
+                <span>专题管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
+            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
+                <span>新闻资讯</span>
+            </a>
+            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
+                <span>公告通知</span>
+            </a>
+            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
+                <span>政策文件</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-accent-blue"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <span>视频管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="ml-[220px] mt-16 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">数据概览</h1>
+                <p class="text-text-muted mt-1">内容数据统计与分析</p>
+            </div>
+            <button class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
+                <i class="fas fa-download mr-2"></i>导出报表
+            </button>
+        </div>
+
+        <!-- 概览统计 -->
+        <div class="grid grid-cols-4 gap-5 mb-6">
+            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
+                        <i class="fas fa-file-alt text-accent-blue text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">2,847</div>
+                        <div class="text-sm text-text-muted">内容总量</div>
+                    </div>
+                </div>
+                <div class="mt-3 text-sm text-accent-green flex items-center gap-1">
+                    <i class="fas fa-arrow-up text-xs"></i>较上月 +12.5%
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-accent-cyan/20 flex items-center justify-center">
+                        <i class="fas fa-eye text-accent-cyan text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">158.6万</div>
+                        <div class="text-sm text-text-muted">总阅读量</div>
+                    </div>
+                </div>
+                <div class="mt-3 text-sm text-accent-green flex items-center gap-1">
+                    <i class="fas fa-arrow-up text-xs"></i>较上月 +8.3%
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-accent-amber/20 flex items-center justify-center">
+                        <i class="fas fa-thumbs-up text-accent-amber text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">12,847</div>
+                        <div class="text-sm text-text-muted">总点赞量</div>
+                    </div>
+                </div>
+                <div class="mt-3 text-sm text-accent-green flex items-center gap-1">
+                    <i class="fas fa-arrow-up text-xs"></i>较上月 +15.2%
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-xl bg-accent-green/20 flex items-center justify-center">
+                        <i class="fas fa-users text-accent-green text-xl"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">48.5万</div>
+                        <div class="text-sm text-text-muted">访问用户</div>
+                    </div>
+                </div>
+                <div class="mt-3 text-sm text-accent-green flex items-center gap-1">
+                    <i class="fas fa-arrow-up text-xs"></i>较上月 +6.8%
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表区域 -->
+        <div class="grid grid-cols-3 gap-6">
+            <!-- 趋势图 -->
+            <div class="col-span-2 bg-card-bg rounded-xl p-5 border border-border-dark">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium">内容数据趋势</h3>
+                    <div class="flex gap-2">
+                        <button class="px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-lg text-sm">本周</button>
+                        <button class="px-4 py-2 text-text-muted hover:text-text-primary text-sm">本月</button>
+                        <button class="px-4 py-2 text-text-muted hover:text-text-primary text-sm">本年</button>
+                    </div>
+                </div>
+                <div class="h-64 flex items-end gap-2">
+                    <div class="flex-1 flex flex-col items-center gap-2">
+                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 45%"></div>
+                        <span class="text-text-muted text-xs">周一</span>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center gap-2">
+                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 60%"></div>
+                        <span class="text-text-muted text-xs">周二</span>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center gap-2">
+                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 35%"></div>
+                        <span class="text-text-muted text-xs">周三</span>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center gap-2">
+                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 55%"></div>
+                        <span class="text-text-muted text-xs">周四</span>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center gap-2">
+                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 70%"></div>
+                        <span class="text-text-muted text-xs">周五</span>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center gap-2">
+                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 85%"></div>
+                        <span class="text-text-muted text-xs">周六</span>
+                    </div>
+                    <div class="flex-1 flex flex-col items-center gap-2">
+                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 50%"></div>
+                        <span class="text-text-muted text-xs">周日</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分类分布 -->
+            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+                <h3 class="text-lg font-medium mb-4">内容分类分布</h3>
+                <div class="space-y-4">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm">新闻资讯</span>
+                            <span class="text-sm text-text-muted">45%</span>
+                        </div>
+                        <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
+                            <div class="h-full bg-accent-blue rounded-full" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm">政策文件</span>
+                            <span class="text-sm text-text-muted">25%</span>
+                        </div>
+                        <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
+                            <div class="h-full bg-accent-cyan rounded-full" style="width: 25%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm">通知公告</span>
+                            <span class="text-sm text-text-muted">15%</span>
+                        </div>
+                        <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
+                            <div class="h-full bg-accent-green rounded-full" style="width: 15%"></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-sm">专题活动</span>
+                            <span class="text-sm text-text-muted">15%</span>
+                        </div>
+                        <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
+                            <div class="h-full bg-accent-amber rounded-full" style="width: 15%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 热门内容排行 -->
+        <div class="bg-card-bg rounded-xl border border-border-dark p-5 mt-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium">热门内容 TOP 5</h3>
+                <a href="#" class="text-sm text-accent-blue hover:underline">查看全部</a>
+            </div>
+            <div class="grid grid-cols-5 gap-4">
+                <div class="bg-primary-bg rounded-xl p-4">
+                    <div class="w-8 h-8 rounded-full bg-accent-amber/20 flex items-center justify-center mb-3">
+                        <span class="text-accent-amber font-bold">1</span>
+                    </div>
+                    <h4 class="text-sm font-medium mb-2 line-clamp-2">关于开展2024年度工作总结的通知</h4>
+                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                        <span><i class="fas fa-eye"></i> 12.8k</span>
+                    </div>
+                </div>
+                <div class="bg-primary-bg rounded-xl p-4">
+                    <div class="w-8 h-8 rounded-full bg-text-muted/20 flex items-center justify-center mb-3">
+                        <span class="text-text-muted font-bold">2</span>
+                    </div>
+                    <h4 class="text-sm font-medium mb-2 line-clamp-2">数字化转型工作进展报告</h4>
+                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                        <span><i class="fas fa-eye"></i> 8.9k</span>
+                    </div>
+                </div>
+                <div class="bg-primary-bg rounded-xl p-4">
+                    <div class="w-8 h-8 rounded-full bg-orange-700/20 flex items-center justify-center mb-3">
+                        <span class="text-orange-400 font-bold">3</span>
+                    </div>
+                    <h4 class="text-sm font-medium mb-2 line-clamp-2">智慧城市建设成果展示</h4>
+                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                        <span><i class="fas fa-eye"></i> 6.5k</span>
+                    </div>
+                </div>
+                <div class="bg-primary-bg rounded-xl p-4">
+                    <div class="w-8 h-8 rounded-full bg-primary-bg/50 flex items-center justify-center mb-3 border border-border-dark">
+                        <span class="text-text-muted font-bold">4</span>
+                    </div>
+                    <h4 class="text-sm font-medium mb-2 line-clamp-2">两会专题报道：民生改善篇</h4>
+                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                        <span><i class="fas fa-eye"></i> 5.6k</span>
+                    </div>
+                </div>
+                <div class="bg-primary-bg rounded-xl p-4">
+                    <div class="w-8 h-8 rounded-full bg-primary-bg/50 flex items-center justify-center mb-3 border border-border-dark">
+                        <span class="text-text-muted font-bold">5</span>
+                    </div>
+                    <h4 class="text-sm font-medium mb-2 line-clamp-2">安全生产知识竞赛活动方案</h4>
+                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                        <span><i class="fas fa-eye"></i> 4.2k</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

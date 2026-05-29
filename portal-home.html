@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页装修 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#030714',
+                        'card-bg': '#0a1628',
+                        'border-dark': '#1a2744',
+                        'accent-blue': '#3b82f6',
+                        'accent-cyan': '#06b6d4',
+                        'accent-green': '#10b981',
+                        'accent-amber': '#f59e0b',
+                        'accent-red': '#ef4444',
+                        'text-primary': '#f1f5f9',
+                        'text-secondary': '#94a3b8',
+                        'text-muted': '#475569'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        .module-item { transition: all 0.2s; }
+        .module-item:hover { transform: scale(1.02); }
+        .drag-handle { cursor: move; }
+        .drop-zone { border: 2px dashed #3b82f6; }
+    </style>
+</head>
+<body class="bg-primary-bg text-text-primary min-h-screen">
+    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
+                <i class="fas fa-cube text-white text-lg"></i>
+            </div>
+            <span class="text-lg font-semibold">内容中台</span>
+        </div>
+        <div class="flex-1 max-w-xl mx-8">
+            <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+            </div>
+        </div>
+        <div class="flex items-center gap-6">
+            <button class="relative text-text-secondary hover:text-text-primary">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium">张明远</span>
+                    <span class="text-xs text-text-muted">超级管理员</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <span>工作台</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <span>审核中心</span>
+            </a>
+            <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <span>发布管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
+            <a href="portal-home.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-home w-5 text-accent-blue"></i>
+                <span>首页装修</span>
+            </a>
+            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-image w-5 text-text-secondary"></i>
+                <span>Banner管理</span>
+            </a>
+            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-columns w-5 text-text-secondary"></i>
+                <span>栏目管理</span>
+            </a>
+            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
+                <span>专题管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
+            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
+                <span>新闻资讯</span>
+            </a>
+            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
+                <span>公告通知</span>
+            </a>
+            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
+                <span>政策文件</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <span>视频管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="ml-[220px] mt-16 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">首页装修</h1>
+                <p class="text-text-muted mt-1">可视化编辑首页布局，拖拽组件快速搭建</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button class="px-4 py-2 border border-border-dark rounded-xl hover:border-text-muted transition-colors">
+                    <i class="fas fa-undo mr-2"></i>撤销
+                </button>
+                <button class="px-4 py-2 border border-border-dark rounded-xl hover:border-text-muted transition-colors">
+                    <i class="fas fa-redo mr-2"></i>重做
+                </button>
+                <button class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
+                    <i class="fas fa-desktop mr-2"></i>预览
+                </button>
+                <button class="px-5 py-2 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
+                    <i class="fas fa-save mr-2"></i>保存
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-4 gap-6">
+            <!-- 组件面板 -->
+            <div class="col-span-1 bg-card-bg rounded-xl border border-border-dark p-4">
+                <h3 class="text-lg font-medium mb-4">组件库</h3>
+                <div class="space-y-3">
+                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-accent-blue/20 flex items-center justify-center">
+                                <i class="fas fa-image text-accent-blue"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">Banner轮播</div>
+                                <div class="text-xs text-text-muted">顶部轮播大图</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-accent-cyan/20 flex items-center justify-center">
+                                <i class="fas fa-th text-accent-cyan"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">信息流</div>
+                                <div class="text-xs text-text-muted">图文列表展示</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-accent-green/20 flex items-center justify-center">
+                                <i class="fas fa-square text-accent-green"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">卡片模块</div>
+                                <div class="text-xs text-text-muted">精选内容卡片</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-accent-amber/20 flex items-center justify-center">
+                                <i class="fas fa-bullhorn text-accent-amber"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">公告模块</div>
+                                <div class="text-xs text-text-muted">滚动公告条</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-purple-500/20 flex items-center justify-center">
+                                <i class="fas fa-link text-purple-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">快捷入口</div>
+                                <div class="text-xs text-text-muted">图标导航链接</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-red-500/20 flex items-center justify-center">
+                                <i class="fas fa-play text-red-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">视频模块</div>
+                                <div class="text-xs text-text-muted">视频内容播放</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 编辑画布 -->
+            <div class="col-span-2">
+                <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden">
+                    <!-- 设备切换 -->
+                    <div class="flex items-center justify-between px-4 py-3 border-b border-border-dark bg-primary-bg/50">
+                        <div class="flex items-center gap-2">
+                            <button class="p-2 bg-accent-blue/20 text-accent-blue rounded-lg">
+                                <i class="fas fa-desktop"></i>
+                            </button>
+                            <button class="p-2 text-text-muted hover:text-text-primary rounded-lg">
+                                <i class="fas fa-tablet-alt"></i>
+                            </button>
+                            <button class="p-2 text-text-muted hover:text-text-primary rounded-lg">
+                                <i class="fas fa-mobile-alt"></i>
+                            </button>
+                        </div>
+                        <span class="text-sm text-text-muted">PC端 - 1920 x 1080</span>
+                    </div>
+                    <!-- 画布内容 -->
+                    <div class="p-4 min-h-[600px]" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                        <!-- 顶部导航 -->
+                        <div class="bg-card-bg rounded-lg p-3 mb-4 flex items-center justify-between border border-border-dark">
+                            <div class="flex items-center gap-4">
+                                <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=120&h=30&fit=crop" class="h-6 object-cover rounded">
+                                <div class="flex items-center gap-2 text-sm">
+                                    <a href="#" class="text-text-primary hover:text-accent-blue">首页</a>
+                                    <a href="#" class="text-text-secondary hover:text-accent-blue">新闻</a>
+                                    <a href="#" class="text-text-secondary hover:text-accent-blue">政策</a>
+                                    <a href="#" class="text-text-secondary hover:text-accent-blue">专题</a>
+                                    <a href="#" class="text-text-secondary hover:text-accent-blue">关于</a>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <i class="fas fa-search text-text-muted"></i>
+                                <i class="fas fa-user text-text-muted"></i>
+                            </div>
+                        </div>
+                        <!-- 拖放区域 -->
+                        <div id="dropArea" class="min-h-[500px] relative" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
+                            <!-- 已添加的模块 -->
+                            <div class="module-item bg-card-bg rounded-lg p-4 mb-4 border-2 border-dashed border-accent-blue/50 relative">
+                                <div class="absolute top-2 right-2 flex items-center gap-1">
+                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-arrows-alt text-xs"></i></button>
+                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-edit text-xs"></i></button>
+                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-trash text-xs"></i></button>
+                                </div>
+                                <div class="text-xs text-accent-blue mb-2"><i class="fas fa-image mr-1"></i>Banner轮播 - 已配置</div>
+                                <div class="flex gap-2">
+                                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=300&h=120&fit=crop" class="w-32 h-16 rounded object-cover">
+                                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=300&h=120&fit=crop" class="w-32 h-16 rounded object-cover">
+                                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=300&h=120&fit=crop" class="w-32 h-16 rounded object-cover">
+                                </div>
+                            </div>
+                            <div class="module-item bg-card-bg rounded-lg p-4 mb-4 border-2 border-dashed border-accent-blue/50 relative">
+                                <div class="absolute top-2 right-2 flex items-center gap-1">
+                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-arrows-alt text-xs"></i></button>
+                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-edit text-xs"></i></button>
+                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-trash text-xs"></i></button>
+                                </div>
+                                <div class="text-xs text-accent-cyan mb-2"><i class="fas fa-th mr-1"></i>信息流 - 已配置</div>
+                                <div class="grid grid-cols-3 gap-3">
+                                    <div class="bg-primary-bg rounded p-2">
+                                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=100&h=60&fit=crop" class="w-full h-12 rounded object-cover mb-2">
+                                        <div class="text-xs">数字化转型工作进展报告</div>
+                                    </div>
+                                    <div class="bg-primary-bg rounded p-2">
+                                        <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=100&h=60&fit=crop" class="w-full h-12 rounded object-cover mb-2">
+                                        <div class="text-xs">智慧城市建设成果展示</div>
+                                    </div>
+                                    <div class="bg-primary-bg rounded p-2">
+                                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=100&h=60&fit=crop" class="w-full h-12 rounded object-cover mb-2">
+                                        <div class="text-xs">第一季度工作规划部署</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 属性面板 -->
+            <div class="col-span-1 bg-card-bg rounded-xl border border-border-dark p-4">
+                <h3 class="text-lg font-medium mb-4">属性配置</h3>
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">模块名称</label>
+                        <input type="text" value="Banner轮播" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">轮播间隔</label>
+                        <input type="number" value="3" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                        <span class="text-xs text-text-muted mt-1">单位：秒</span>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">显示指示器</label>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="indicator" checked class="accent-accent-blue">
+                                <span class="text-sm">是</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="indicator" class="accent-accent-blue">
+                                <span class="text-sm">否</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">自动播放</label>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="autoplay" checked class="accent-accent-blue">
+                                <span class="text-sm">是</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="autoplay" class="accent-accent-blue">
+                                <span class="text-sm">否</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="pt-4 border-t border-border-dark">
+                        <label class="block text-sm text-text-secondary mb-2">关联内容</label>
+                        <select class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                            <option>选择内容分类</option>
+                            <option>新闻资讯</option>
+                            <option>政策文件</option>
+                            <option selected>通知公告</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function handleDragOver(e) {
+            e.preventDefault();
+            e.currentTarget.classList.add('drop-zone');
+        }
+        function handleDrop(e) {
+            e.preventDefault();
+            e.currentTarget.classList.remove('drop-zone');
+        }
+    </script>
+</body>
+</html>

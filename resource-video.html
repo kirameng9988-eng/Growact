@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>视频管理 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#030714',
+                        'card-bg': '#0a1628',
+                        'border-dark': '#1a2744',
+                        'accent-blue': '#3b82f6',
+                        'accent-cyan': '#06b6d4',
+                        'accent-green': '#10b981',
+                        'accent-amber': '#f59e0b',
+                        'accent-red': '#ef4444',
+                        'text-primary': '#f1f5f9',
+                        'text-secondary': '#94a3b8',
+                        'text-muted': '#475569'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+    </style>
+</head>
+<body class="bg-primary-bg text-text-primary min-h-screen">
+    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
+                <i class="fas fa-cube text-white text-lg"></i>
+            </div>
+            <span class="text-lg font-semibold">内容中台</span>
+        </div>
+        <div class="flex-1 max-w-xl mx-8">
+            <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+            </div>
+        </div>
+        <div class="flex items-center gap-6">
+            <button class="relative text-text-secondary hover:text-text-primary">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium">张明远</span>
+                    <span class="text-xs text-text-muted">超级管理员</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <span>工作台</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <span>审核中心</span>
+            </a>
+            <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <span>发布管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
+            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-home w-5 text-text-secondary"></i>
+                <span>首页装修</span>
+            </a>
+            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-image w-5 text-text-secondary"></i>
+                <span>Banner管理</span>
+            </a>
+            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-columns w-5 text-text-secondary"></i>
+                <span>栏目管理</span>
+            </a>
+            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
+                <span>专题管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
+            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
+                <span>新闻资讯</span>
+            </a>
+            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
+                <span>公告通知</span>
+            </a>
+            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
+                <span>政策文件</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-accent-blue"></i>
+                <span>视频管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="ml-[220px] mt-16 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">视频管理</h1>
+                <p class="text-text-muted mt-1">管理视频素材和上传</p>
+            </div>
+            <button onclick="openModal('uploadModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                <i class="fas fa-upload"></i>
+                上传视频
+            </button>
+        </div>
+
+        <!-- 统计 -->
+        <div class="grid grid-cols-4 gap-5 mb-6">
+            <div class="bg-card-bg rounded-xl p-4 border border-border-dark">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent-blue/20 flex items-center justify-center">
+                        <i class="fas fa-video text-accent-blue"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">48</div>
+                        <div class="text-sm text-text-muted">视频总数</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl p-4 border border-border-dark">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent-cyan/20 flex items-center justify-center">
+                        <i class="fas fa-play text-accent-cyan"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">15.6万</div>
+                        <div class="text-sm text-text-muted">总播放量</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl p-4 border border-border-dark">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent-amber/20 flex items-center justify-center">
+                        <i class="fas fa-hdd text-accent-amber"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">28.5GB</div>
+                        <div class="text-sm text-text-muted">占用空间</div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl p-4 border border-border-dark">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent-green/20 flex items-center justify-center">
+                        <i class="fas fa-clock text-accent-green"></i>
+                    </div>
+                    <div>
+                        <div class="text-2xl font-bold">12.5h</div>
+                        <div class="text-sm text-text-muted">总时长</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 视频列表 -->
+        <div class="grid grid-cols-3 gap-6">
+            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden cursor-pointer group">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">03:45</div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-medium mb-2 line-clamp-1">年度工作总结视频</h3>
+                    <div class="flex items-center justify-between text-xs text-text-muted">
+                        <span><i class="fas fa-play mr-1"></i>12,847</span>
+                        <span>2024-01-15</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden cursor-pointer group">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">05:23</div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-medium mb-2 line-clamp-1">数字化转型工作汇报</h3>
+                    <div class="flex items-center justify-between text-xs text-text-muted">
+                        <span><i class="fas fa-play mr-1"></i>8,932</span>
+                        <span>2024-01-12</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden cursor-pointer group">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">08:12</div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-medium mb-2 line-clamp-1">安全生产培训视频</h3>
+                    <div class="flex items-center justify-between text-xs text-text-muted">
+                        <span><i class="fas fa-play mr-1"></i>6,543</span>
+                        <span>2024-01-10</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden cursor-pointer group">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">04:56</div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-medium mb-2 line-clamp-1">智慧城市建设介绍</h3>
+                    <div class="flex items-center justify-between text-xs text-text-muted">
+                        <span><i class="fas fa-play mr-1"></i>4,231</span>
+                        <span>2024-01-08</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden cursor-pointer group">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">02:34</div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-medium mb-2 line-clamp-1">两会报道片段</h3>
+                    <div class="flex items-center justify-between text-xs text-text-muted">
+                        <span><i class="fas fa-play mr-1"></i>15,678</span>
+                        <span>2024-01-05</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden cursor-pointer group">
+                <div class="relative">
+                    <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
+                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
+                            <i class="fas fa-play text-white text-xl ml-1"></i>
+                        </div>
+                    </div>
+                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">06:18</div>
+                </div>
+                <div class="p-4">
+                    <h3 class="font-medium mb-2 line-clamp-1">党建工作纪实</h3>
+                    <div class="flex items-center justify-between text-xs text-text-muted">
+                        <span><i class="fas fa-play mr-1"></i>3,456</span>
+                        <span>2024-01-02</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 上传弹窗 -->
+    <div id="uploadModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[500px] border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">上传视频</h3>
+                <button onclick="closeModal('uploadModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">视频标题</label>
+                    <input type="text" placeholder="请输入视频标题" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">视频分类</label>
+                    <select class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option>培训视频</option>
+                        <option>宣传视频</option>
+                        <option>会议视频</option>
+                        <option>其他</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">上传视频</label>
+                    <div class="border-2 border-dashed border-border-dark rounded-xl p-8 text-center hover:border-accent-blue transition-colors cursor-pointer">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-text-muted mb-3"></i>
+                        <p class="text-sm text-text-secondary">点击或拖拽上传视频</p>
+                        <p class="text-xs text-text-muted mt-1">支持 MP4、AVI、MOV 格式，最大 500MB</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('uploadModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="closeModal('uploadModal'); showToast('视频已上传')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认上传</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-accent-green text-white px-6 py-3 rounded-xl shadow-lg hidden z-50">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toastText">操作成功</span>
+    </div>
+
+    <script>
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => { toast.classList.add('hidden'); }, 2000);
+        }
+    </script>
+</body>
+</html>
