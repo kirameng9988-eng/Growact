@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>日志管理 - 内容服务平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#030714',
+                        'card-bg': '#0a1628',
+                        'border-dark': '#1a2744',
+                        'accent-blue': '#3b82f6',
+                        'accent-cyan': '#06b6d4',
+                        'accent-green': '#10b981',
+                        'accent-amber': '#f59e0b',
+                        'accent-red': '#ef4444',
+                        'text-primary': '#f1f5f9',
+                        'text-secondary': '#94a3b8',
+                        'text-muted': '#475569'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        .table-row:hover { background: #1a2744; }
+        .tab-active { border-bottom: 2px solid #3b82f6; color: #3b82f6; }
+    </style>
+</head>
+<body class="bg-primary-bg text-text-primary min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium">张明远</span>
+                    <span class="text-xs text-text-muted">超级管理员</span>
+                </div>
+                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- 左侧菜单 -->
+    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <span>工作台</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <span>审核中心</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">12</span>
+            </a>
+            <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <span>发布管理</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <span>视频管理</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-log.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-accent-blue"></i>
+                <span>日志管理</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="ml-[220px] mt-16 p-6">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">日志管理</h1>
+                <p class="text-text-muted mt-1">记录系统操作日志</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="showToast('日志导出中...')" class="px-5 py-2.5 border border-border-dark rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
+                    <i class="fas fa-download"></i>
+                    导出日志
+                </button>
+                <button onclick="openModal('clearModal')" class="px-5 py-2.5 border border-accent-red/50 text-accent-red rounded-xl hover:bg-accent-red/10 transition-colors flex items-center gap-2">
+                    <i class="fas fa-trash-alt"></i>
+                    清空日志
+                </button>
+            </div>
+        </div>
+
+        <!-- 筛选条件 -->
+        <div class="bg-card-bg rounded-xl border border-border-dark p-4 mb-4">
+            <div class="flex items-center gap-4 flex-wrap">
+                <!-- 关键字搜索 -->
+                <div class="relative flex-1 min-w-[200px]">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                    <input type="text" id="searchInput" placeholder="搜索用户/模块/行为..." class="w-full bg-primary-bg border border-border-dark rounded-xl pl-10 pr-4 py-2.5 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
+                </div>
+                <!-- 时间范围 -->
+                <div class="flex items-center gap-2">
+                    <input type="date" id="startDate" class="bg-primary-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                    <span class="text-text-muted">至</span>
+                    <input type="date" id="endDate" class="bg-primary-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                </div>
+                <!-- 搜索按钮 -->
+                <button onclick="filterLogs()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
+                    <i class="fas fa-search mr-1"></i>搜索
+                </button>
+                <button onclick="resetFilters()" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">
+                    <i class="fas fa-redo mr-1"></i>重置
+                </button>
+            </div>
+        </div>
+
+        <!-- 日志类型Tab -->
+        <div class="bg-card-bg rounded-xl border border-border-dark mb-4">
+            <div class="flex border-b border-border-dark">
+                <button onclick="switchTab('login')" id="tab-login" class="px-6 py-3 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors tab-active">
+                    <i class="fas fa-sign-in-alt mr-2"></i>登录日志
+                </button>
+                <button onclick="switchTab('operation')" id="tab-operation" class="px-6 py-3 text-sm font-medium text-text-secondary hover:text-text-primary transition-colors">
+                    <i class="fas fa-cog mr-2"></i>操作日志
+                </button>
+            </div>
+
+            <!-- 日志列表 -->
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-text-muted text-sm border-b border-border-dark bg-primary-bg/50">
+                            <th class="px-4 py-3 font-medium">操作用户</th>
+                            <th class="px-4 py-3 font-medium">用户角色</th>
+                            <th class="px-4 py-3 font-medium">操作模块</th>
+                            <th class="px-4 py-3 font-medium">操作行为</th>
+                            <th class="px-4 py-3 font-medium">操作描述</th>
+                            <th class="px-4 py-3 font-medium">IP地址</th>
+                            <th class="px-4 py-3 font-medium">设备信息</th>
+                            <th class="px-4 py-3 font-medium">操作时间</th>
+                            <th class="px-4 py-3 font-medium">结果</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logTableBody">
+                        <!-- 登录日志示例 -->
+                        <tr class="table-row border-b border-border-dark/50 transition-colors">
+                            <td class="px-4 py-3"><span class="font-medium">张明远</span></td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-blue/20 text-accent-blue text-xs rounded">超级管理员</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary">用户认证</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">登录</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary max-w-[200px] truncate">用户登录系统成功</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">192.168.1.100</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">Chrome/Win10</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">2024-01-15 09:23:45</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">成功</span></td>
+                        </tr>
+                        <tr class="table-row border-b border-border-dark/50 transition-colors">
+                            <td class="px-4 py-3"><span class="font-medium">李晓华</span></td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">内容编辑</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary">用户认证</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">登录</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary max-w-[200px] truncate">用户登录系统成功</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">192.168.1.105</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">Safari/MacOS</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">2024-01-15 09:15:32</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">成功</span></td>
+                        </tr>
+                        <tr class="table-row border-b border-border-dark/50 transition-colors">
+                            <td class="px-4 py-3"><span class="font-medium">王建国</span></td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-cyan/20 text-accent-cyan text-xs rounded">审核员</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary">用户认证</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-red/20 text-accent-red text-xs rounded">登录</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary max-w-[200px] truncate">密码错误，登录失败</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">192.168.1.108</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">Firefox/Win11</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">2024-01-15 09:10:15</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-red/20 text-accent-red text-xs rounded">失败</span></td>
+                        </tr>
+                        <!-- 操作日志示例 -->
+                        <tr class="table-row border-b border-border-dark/50 transition-colors" data-type="operation">
+                            <td class="px-4 py-3"><span class="font-medium">张明远</span></td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-blue/20 text-accent-blue text-xs rounded">超级管理员</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary">内容管理</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">编辑</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary max-w-[200px] truncate">编辑文章《2024年度工作计划》</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">192.168.1.100</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">Chrome/Win10</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">2024-01-15 10:30:22</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">成功</span></td>
+                        </tr>
+                        <tr class="table-row border-b border-border-dark/50 transition-colors" data-type="operation">
+                            <td class="px-4 py-3"><span class="font-medium">李晓华</span></td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">内容编辑</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary">内容管理</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-blue/20 text-accent-blue text-xs rounded">新增</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary max-w-[200px] truncate">新建文章《安全生产知识竞赛方案》</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">192.168.1.105</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">Safari/MacOS</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">2024-01-15 10:15:08</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">成功</span></td>
+                        </tr>
+                        <tr class="table-row border-b border-border-dark/50 transition-colors" data-type="operation">
+                            <td class="px-4 py-3"><span class="font-medium">王建国</span></td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-cyan/20 text-accent-cyan text-xs rounded">审核员</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary">审核中心</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">审核</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary max-w-[200px] truncate">审核通过文章《数字化转型报告》</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">192.168.1.108</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">Firefox/Win11</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">2024-01-15 09:45:33</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">成功</span></td>
+                        </tr>
+                        <tr class="table-row border-b border-border-dark/50 transition-colors" data-type="operation">
+                            <td class="px-4 py-3"><span class="font-medium">陈思远</span></td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">运营人员</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary">资源管理</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-purple-500/20 text-purple-400 text-xs rounded">发布</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary max-w-[200px] truncate">发布专题《两会专题》</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">192.168.1.110</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">Edge/Win10</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">2024-01-15 09:30:15</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">成功</span></td>
+                        </tr>
+                        <tr class="table-row border-b border-border-dark/50 transition-colors" data-type="operation">
+                            <td class="px-4 py-3"><span class="font-medium">周明杰</span></td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded">访客</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary">系统管理</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-red/20 text-accent-red text-xs rounded">删除</span></td>
+                            <td class="px-4 py-3 text-sm text-text-secondary max-w-[200px] truncate">尝试删除用户，权限不足</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">192.168.1.115</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">Chrome/Win11</td>
+                            <td class="px-4 py-3 text-sm text-text-muted">2024-01-15 09:20:45</td>
+                            <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-red/20 text-accent-red text-xs rounded">失败</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 分页 -->
+            <div class="flex items-center justify-between px-4 py-3 border-t border-border-dark">
+                <span class="text-sm text-text-muted">显示 1-8 条，共 156 条</span>
+                <div class="flex items-center gap-2">
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">上一页</button>
+                    <button class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">2</button>
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">3</button>
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">...</button>
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">20</button>
+                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">下一页</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 清空日志确认弹窗 -->
+    <div id="clearModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[420px] border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium text-accent-red"><i class="fas fa-exclamation-triangle mr-2"></i>清空日志</h3>
+                <button onclick="closeModal('clearModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-text-secondary mb-4">确定要清空所有日志记录吗？此操作不可恢复。</p>
+                <div class="bg-accent-red/10 border border-accent-red/30 rounded-xl p-4">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-info-circle text-accent-red mt-0.5"></i>
+                        <div class="text-sm text-text-secondary">
+                            <p class="mb-2">清空前请注意：</p>
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>日志清空后将无法恢复</li>
+                                <li>建议先导出备份重要日志</li>
+                                <li>等保审计要求日志保留期限至少6个月</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('clearModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="closeModal('clearModal'); showToast('日志已清空')" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认清空</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-accent-green text-white px-6 py-3 rounded-xl shadow-lg hidden z-50">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toastText">操作成功</span>
+    </div>
+
+    <script>
+        let currentTab = 'login';
+
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 3000);
+        }
+
+        function switchTab(tab) {
+            currentTab = tab;
+            const loginTab = document.getElementById('tab-login');
+            const operationTab = document.getElementById('tab-operation');
+            const rows = document.querySelectorAll('#logTableBody tr');
+
+            if (tab === 'login') {
+                loginTab.classList.add('tab-active');
+                operationTab.classList.remove('tab-active');
+                rows.forEach(row => {
+                    if (row.getAttribute('data-type') === 'operation') {
+                        row.style.display = 'none';
+                    } else {
+                        row.style.display = '';
+                    }
+                });
+            } else {
+                operationTab.classList.add('tab-active');
+                loginTab.classList.remove('tab-active');
+                rows.forEach(row => {
+                    if (row.getAttribute('data-type') === 'operation') {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            }
+        }
+
+        function filterLogs() {
+            const keyword = document.getElementById('searchInput').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            showToast('搜索完成');
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            showToast('筛选条件已重置');
+        }
+
+        // Initialize - show only login logs
+        switchTab('login');
+    </script>
+</body>
+</html>

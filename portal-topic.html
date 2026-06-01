@@ -31,6 +31,12 @@
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
         .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
         .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        .filter-btn { transition: all 0.2s; }
+        .filter-btn.active { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+        .topic-card { transition: all 0.2s; }
+        .topic-card:hover { transform: translateY(-4px); }
+        .content-item { transition: all 0.15s; }
+        .content-item:hover { background: rgba(59, 130, 246, 0.1); }
     </style>
 </head>
 <body class="bg-primary-bg text-text-primary min-h-screen">
@@ -91,22 +97,6 @@
                 <span>发布管理</span>
             </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
-            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-home w-5 text-text-secondary"></i>
-                <span>首页装修</span>
-            </a>
-            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-image w-5 text-text-secondary"></i>
-                <span>Banner管理</span>
-            </a>
-            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-columns w-5 text-text-secondary"></i>
-                <span>栏目管理</span>
-            </a>
-            <a href="portal-topic.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-layer-group w-5 text-accent-blue"></i>
-                <span>专题管理</span>
-            </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
             <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-newspaper w-5 text-text-secondary"></i>
@@ -170,167 +160,50 @@
             </button>
         </div>
 
-        <!-- 专题卡片列表 -->
-        <div class="grid grid-cols-3 gap-6">
-            <!-- 专题1 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden hover:border-accent-blue/50 transition-colors cursor-pointer">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=200&fit=crop" class="w-full h-36 object-cover">
-                    <div class="absolute top-3 left-3">
-                        <span class="px-2 py-1 bg-accent-blue text-white text-xs rounded">进行中</span>
-                    </div>
-                    <div class="absolute bottom-3 left-3 right-3">
-                        <h3 class="text-white font-medium text-lg drop-shadow-lg">2024年度工作总结</h3>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <p class="text-sm text-text-secondary mb-3">汇总年度工作成果，展示重要成就...</p>
-                    <div class="flex items-center justify-between text-xs text-text-muted">
-                        <span><i class="fas fa-file-alt mr-1"></i>18篇</span>
-                        <span><i class="fas fa-eye mr-1"></i>12,847</span>
-                        <span><i class="fas fa-calendar mr-1"></i>2024.01.01</span>
-                    </div>
-                    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-border-dark">
-                        <button class="flex-1 py-1.5 text-xs text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
-                        <button class="flex-1 py-1.5 text-xs text-text-muted hover:bg-primary-bg rounded transition-colors">预览</button>
-                        <button class="py-1.5 text-xs text-accent-red hover:bg-accent-red/10 rounded transition-colors"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
+        <!-- 筛选栏 -->
+        <div class="flex items-center gap-4 mb-6">
+            <div class="flex-1 relative max-w-md">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                <input type="text" id="searchInput" placeholder="搜索专题名称..." oninput="filterTopics()" class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
             </div>
-
-            <!-- 专题2 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden hover:border-accent-blue/50 transition-colors cursor-pointer">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=200&fit=crop" class="w-full h-36 object-cover">
-                    <div class="absolute top-3 left-3">
-                        <span class="px-2 py-1 bg-accent-green text-white text-xs rounded">已上线</span>
-                    </div>
-                    <div class="absolute bottom-3 left-3 right-3">
-                        <h3 class="text-white font-medium text-lg drop-shadow-lg">数字化转型专题</h3>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <p class="text-sm text-text-secondary mb-3">深入报道数字化转型工作进展与成果...</p>
-                    <div class="flex items-center justify-between text-xs text-text-muted">
-                        <span><i class="fas fa-file-alt mr-1"></i>24篇</span>
-                        <span><i class="fas fa-eye mr-1"></i>8,932</span>
-                        <span><i class="fas fa-calendar mr-1"></i>2024.01.08</span>
-                    </div>
-                    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-border-dark">
-                        <button class="flex-1 py-1.5 text-xs text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
-                        <button class="flex-1 py-1.5 text-xs text-text-muted hover:bg-primary-bg rounded transition-colors">预览</button>
-                        <button class="py-1.5 text-xs text-accent-red hover:bg-accent-red/10 rounded transition-colors"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
+            <div class="flex items-center gap-2">
+                <button onclick="setStatusFilter('all')" id="filter-all" class="filter-btn active px-4 py-2 rounded-lg text-sm border border-border-dark">全部</button>
+                <button onclick="setStatusFilter('published')" id="filter-published" class="filter-btn px-4 py-2 rounded-lg text-sm text-text-secondary border border-border-dark hover:border-accent-blue">已上线</button>
+                <button onclick="setStatusFilter('ongoing')" id="filter-ongoing" class="filter-btn px-4 py-2 rounded-lg text-sm text-text-secondary border border-border-dark hover:border-accent-blue">进行中</button>
+                <button onclick="setStatusFilter('draft')" id="filter-draft" class="filter-btn px-4 py-2 rounded-lg text-sm text-text-secondary border border-border-dark hover:border-accent-blue">草稿</button>
+                <button onclick="setStatusFilter('archived')" id="filter-archived" class="filter-btn px-4 py-2 rounded-lg text-sm text-text-secondary border border-border-dark hover:border-accent-blue">已归档</button>
             </div>
-
-            <!-- 专题3 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden hover:border-accent-blue/50 transition-colors cursor-pointer">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=200&fit=crop" class="w-full h-36 object-cover">
-                    <div class="absolute top-3 left-3">
-                        <span class="px-2 py-1 bg-purple-500 text-white text-xs rounded">进行中</span>
-                    </div>
-                    <div class="absolute bottom-3 left-3 right-3">
-                        <h3 class="text-white font-medium text-lg drop-shadow-lg">智慧城市建设</h3>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <p class="text-sm text-text-secondary mb-3">展示智慧城市建设的规划与成果...</p>
-                    <div class="flex items-center justify-between text-xs text-text-muted">
-                        <span><i class="fas fa-file-alt mr-1"></i>15篇</span>
-                        <span><i class="fas fa-eye mr-1"></i>6,543</span>
-                        <span><i class="fas fa-calendar mr-1"></i>2024.01.10</span>
-                    </div>
-                    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-border-dark">
-                        <button class="flex-1 py-1.5 text-xs text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
-                        <button class="flex-1 py-1.5 text-xs text-text-muted hover:bg-primary-bg rounded transition-colors">预览</button>
-                        <button class="py-1.5 text-xs text-accent-red hover:bg-accent-red/10 rounded transition-colors"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 专题4 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden hover:border-accent-blue/50 transition-colors cursor-pointer">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop" class="w-full h-36 object-cover opacity-60">
-                    <div class="absolute top-3 left-3">
-                        <span class="px-2 py-1 bg-text-muted text-white text-xs rounded">已归档</span>
-                    </div>
-                    <div class="absolute bottom-3 left-3 right-3">
-                        <h3 class="text-white font-medium text-lg drop-shadow-lg">两会专题报道</h3>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <p class="text-sm text-text-secondary mb-3">两会期间重点报道与政策解读...</p>
-                    <div class="flex items-center justify-between text-xs text-text-muted">
-                        <span><i class="fas fa-file-alt mr-1"></i>32篇</span>
-                        <span><i class="fas fa-eye mr-1"></i>45,678</span>
-                        <span><i class="fas fa-calendar mr-1"></i>2024.01.05</span>
-                    </div>
-                    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-border-dark">
-                        <button class="flex-1 py-1.5 text-xs text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
-                        <button class="flex-1 py-1.5 text-xs text-text-muted hover:bg-primary-bg rounded transition-colors">预览</button>
-                        <button class="py-1.5 text-xs text-accent-red hover:bg-accent-red/10 rounded transition-colors"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 专题5 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden hover:border-accent-blue/50 transition-colors cursor-pointer">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=200&fit=crop" class="w-full h-36 object-cover">
-                    <div class="absolute top-3 left-3">
-                        <span class="px-2 py-1 bg-accent-amber text-white text-xs rounded">草稿</span>
-                    </div>
-                    <div class="absolute bottom-3 left-3 right-3">
-                        <h3 class="text-white font-medium text-lg drop-shadow-lg">安全生产月</h3>
-                    </div>
-                </div>
-                <div class="p-4">
-                    <p class="text-sm text-text-secondary mb-3">安全生产知识竞赛与宣传活动...</p>
-                    <div class="flex items-center justify-between text-xs text-text-muted">
-                        <span><i class="fas fa-file-alt mr-1"></i>8篇</span>
-                        <span><i class="fas fa-eye mr-1"></i>-</span>
-                        <span><i class="fas fa-calendar mr-1"></i>未发布</span>
-                    </div>
-                    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-border-dark">
-                        <button class="flex-1 py-1.5 text-xs text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
-                        <button class="flex-1 py-1.5 text-xs text-text-muted hover:bg-primary-bg rounded transition-colors">预览</button>
-                        <button class="py-1.5 text-xs text-accent-red hover:bg-accent-red/10 rounded transition-colors"><i class="fas fa-trash"></i></button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 专题6 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden hover:border-accent-blue/50 transition-colors cursor-pointer flex items-center justify-center">
-                <div class="text-center p-8">
-                    <div class="w-16 h-16 rounded-full bg-accent-blue/20 flex items-center justify-center mx-auto mb-4">
-                        <i class="fas fa-plus text-accent-blue text-2xl"></i>
-                    </div>
-                    <p class="text-text-secondary">创建新专题</p>
-                </div>
-            </div>
+            <select onchange="sortTopics(this.value)" class="bg-card-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                <option value="date-desc">最新创建</option>
+                <option value="date-asc">最早创建</option>
+                <option value="views-desc">浏览量最高</option>
+                <option value="views-asc">浏览量最低</option>
+                <option value="name-asc">名称 A-Z</option>
+                <option value="name-desc">名称 Z-A</option>
+            </select>
         </div>
+
+        <!-- 专题卡片列表 -->
+        <div id="topicList" class="grid grid-cols-3 gap-6"></div>
     </main>
 
     <!-- 创建专题弹窗 -->
     <div id="addModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[600px] border border-border-dark shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+        <div class="bg-card-bg rounded-2xl w-[600px] border border-border-dark shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark sticky top-0 bg-card-bg">
                 <h3 class="text-lg font-medium">创建专题</h3>
                 <button onclick="closeModal('addModal')" class="text-text-muted hover:text-text-primary">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
-            <div class="p-6 space-y-4">
+            <div class="p-6 space-y-5">
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">专题名称 <span class="text-accent-red">*</span></label>
-                    <input type="text" placeholder="请输入专题名称" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <input type="text" id="addName" placeholder="请输入专题名称" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">专题封面</label>
-                    <div class="border-2 border-dashed border-border-dark rounded-xl p-8 text-center hover:border-accent-blue transition-colors cursor-pointer">
+                    <div id="addCoverUpload" class="border-2 border-dashed border-border-dark rounded-xl p-8 text-center hover:border-accent-blue transition-colors cursor-pointer">
                         <i class="fas fa-cloud-upload-alt text-4xl text-text-muted mb-3"></i>
                         <p class="text-sm text-text-secondary">点击或拖拽上传专题封面</p>
                         <p class="text-xs text-text-muted mt-1">建议尺寸 800x400</p>
@@ -338,25 +211,218 @@
                 </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">专题描述</label>
-                    <textarea rows="2" placeholder="请输入专题描述" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                    <textarea id="addDesc" rows="2" placeholder="请输入专题描述" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">专题标签</label>
+                        <input type="text" id="addTags" placeholder="多个标签用逗号分隔" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">关联分类</label>
+                        <select id="addCategory" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                            <option value="">选择关联分类</option>
+                            <option value="news">新闻资讯</option>
+                            <option value="policy">政策文件</option>
+                            <option value="notice">通知公告</option>
+                            <option value="activity">专题活动</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">开始时间</label>
+                        <input type="date" id="addStartDate" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">结束时间</label>
+                        <input type="date" id="addEndDate" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark sticky bottom-0 bg-card-bg">
+                <button onclick="closeModal('addModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="createTopic()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认创建</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑专题弹窗 -->
+    <div id="editModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[600px] border border-border-dark shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark sticky top-0 bg-card-bg">
+                <h3 class="text-lg font-medium">编辑专题</h3>
+                <button onclick="closeModal('editModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-5">
+                <input type="hidden" id="editId">
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">专题名称 <span class="text-accent-red">*</span></label>
+                    <input type="text" id="editName" placeholder="请输入专题名称" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">专题标签</label>
-                    <input type="text" placeholder="多个标签用逗号分隔" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <label class="block text-sm text-text-secondary mb-2">专题封面</label>
+                    <div id="editCoverPreview" class="border-2 border-dashed border-border-dark rounded-xl p-8 text-center hover:border-accent-blue transition-colors cursor-pointer">
+                        <i class="fas fa-cloud-upload-alt text-4xl text-text-muted mb-3"></i>
+                        <p class="text-sm text-text-secondary">点击或拖拽更换封面</p>
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">关联分类</label>
-                    <select class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
-                        <option>选择关联分类</option>
-                        <option>专题活动</option>
-                        <option>新闻资讯</option>
-                        <option>政策文件</option>
+                    <label class="block text-sm text-text-secondary mb-2">专题描述</label>
+                    <textarea id="editDesc" rows="2" placeholder="请输入专题描述" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">专题标签</label>
+                        <input type="text" id="editTags" placeholder="多个标签用逗号分隔" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">关联分类</label>
+                        <select id="editCategory" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                            <option value="">选择关联分类</option>
+                            <option value="news">新闻资讯</option>
+                            <option value="policy">政策文件</option>
+                            <option value="notice">通知公告</option>
+                            <option value="activity">专题活动</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">状态</label>
+                        <select id="editStatus" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                            <option value="draft">草稿</option>
+                            <option value="ongoing">进行中</option>
+                            <option value="published">已上线</option>
+                            <option value="archived">已归档</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">排序权重</label>
+                        <input type="number" id="editSort" value="0" min="0" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark sticky bottom-0 bg-card-bg">
+                <button onclick="closeModal('editModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="saveEdit()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 内容管理弹窗 -->
+    <div id="contentModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[900px] border border-border-dark shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark sticky top-0 bg-card-bg">
+                <h3 class="text-lg font-medium">专题内容管理</h3>
+                <button onclick="closeModal('contentModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-sm text-text-secondary">
+                        专题：<span id="contentTopicName" class="text-text-primary font-medium"></span>
+                        <span class="ml-4">共 <span id="contentCount" class="text-accent-blue">0</span> 篇内容</span>
+                    </div>
+                    <button onclick="openModal('addContentModal')" class="px-4 py-2 bg-accent-blue text-white rounded-lg text-sm hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-plus mr-1"></i>添加内容
+                    </button>
+                </div>
+                <div class="bg-primary-bg rounded-lg overflow-hidden">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left text-sm text-text-muted border-b border-border-dark">
+                                <th class="px-4 py-3 font-medium w-12">#</th>
+                                <th class="px-4 py-3 font-medium">标题</th>
+                                <th class="px-4 py-3 font-medium w-24">类型</th>
+                                <th class="px-4 py-3 font-medium w-28">更新时间</th>
+                                <th class="px-4 py-3 font-medium w-28">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="contentTable"></tbody>
+                    </table>
+                    <div id="contentEmpty" class="py-12 text-center text-text-muted hidden">
+                        <i class="fas fa-inbox text-4xl mb-3 opacity-50"></i>
+                        <p>暂无内容，请添加</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark sticky bottom-0 bg-card-bg">
+                <button onclick="closeModal('contentModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 添加内容弹窗 -->
+    <div id="addContentModal" class="fixed inset-0 bg-black/70 z-[60] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[500px] border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">添加内容</h3>
+                <button onclick="closeModal('addContentModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">选择内容 <span class="text-accent-red">*</span></label>
+                    <select id="addContentSelect" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="">请选择要添加的内容</option>
                     </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">排序权重</label>
+                    <input type="number" id="addContentSort" value="0" min="0" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
             </div>
             <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('addModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
-                <button onclick="closeModal('addModal'); showToast('专题已创建')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认创建</button>
+                <button onclick="closeModal('addContentModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="addContent()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 预览弹窗 -->
+    <div id="previewModal" class="fixed inset-0 bg-black/90 z-50 hidden items-center justify-center">
+        <div class="absolute top-4 right-4 flex items-center gap-3">
+            <button onclick="closeModal('previewModal')" class="w-10 h-10 bg-card-bg/90 rounded-lg flex items-center justify-center hover:bg-card-bg text-white transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="previewContent" class="bg-card-bg rounded-lg overflow-hidden transition-all duration-300" style="width: 1200px; max-height: 90vh;">
+            <div class="p-6">
+                <div class="bg-primary-bg rounded-lg p-6">
+                    <div class="text-center mb-6">
+                        <h1 id="previewTitle" class="text-2xl font-bold mb-2"></h1>
+                        <p id="previewDesc" class="text-text-secondary"></p>
+                        <div id="previewTags" class="mt-3 flex justify-center gap-2"></div>
+                    </div>
+                    <div id="previewBody" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[400px] border border-border-dark shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+                <div class="w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认删除</h3>
+                    <p class="text-sm text-text-muted mt-1">删除后无法恢复</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-text-secondary">确定要删除专题「<span id="deleteTopicName" class="text-text-primary"></span>」吗？</p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('deleteModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="confirmDelete()" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
             </div>
         </div>
     </div>
@@ -368,20 +434,359 @@
     </div>
 
     <script>
+        // Mock Data
+        let topics = [
+            { id: 1, name: '2024年度工作总结', desc: '汇总年度工作成果，展示重要成就', cover: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=200&fit=crop', status: 'ongoing', tags: ['年度', '总结', '工作'], category: 'news', views: 12847, articles: 18, createDate: '2024-01-01', startDate: '2024-01-01', endDate: '2024-12-31', sort: 10, contents: [
+                { id: 101, title: '年度工作总体汇报', type: 'article', updateTime: '2024-01-15' },
+                { id: 102, title: '重点项目成果展示', type: 'article', updateTime: '2024-01-14' }
+            ]},
+            { id: 2, name: '数字化转型专题', desc: '深入报道数字化转型工作进展与成果', cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=200&fit=crop', status: 'published', tags: ['数字化', '转型', '科技'], category: 'news', views: 8932, articles: 24, createDate: '2024-01-08', startDate: '2024-01-08', endDate: '2024-06-30', sort: 20, contents: []},
+            { id: 3, name: '智慧城市建设', desc: '展示智慧城市建设的规划与成果', cover: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=200&fit=crop', status: 'ongoing', tags: ['智慧城市', '建设'], category: 'policy', views: 6543, articles: 15, createDate: '2024-01-10', startDate: '2024-01-10', endDate: '', sort: 15, contents: []},
+            { id: 4, name: '两会专题报道', desc: '两会期间重点报道与政策解读', cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop', status: 'archived', tags: ['两会', '政策'], category: 'news', views: 45678, articles: 32, createDate: '2024-01-05', startDate: '2024-01-05', endDate: '2024-03-15', sort: 5, contents: []},
+            { id: 5, name: '安全生产月', desc: '安全生产知识竞赛与宣传活动', cover: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=200&fit=crop', status: 'draft', tags: ['安全', '生产'], category: 'activity', views: 0, articles: 8, createDate: '2024-01-12', startDate: '', endDate: '', sort: 0, contents: []}
+        ];
+
+        let currentTopicId = null;
+        let currentFilter = 'all';
+        let deleteTargetId = null;
+
+        // Available content for selection
+        const availableContents = [
+            { id: 1, title: '数字化转型工作年度报告', type: 'article' },
+            { id: 2, title: '智慧城市试点建设方案', type: 'article' },
+            { id: 3, title: '2024年一季度工作汇报', type: 'article' },
+            { id: 4, title: '安全生产知识问答', type: 'quiz' },
+            { id: 5, title: '两会政策解读视频', type: 'video' },
+            { id: 6, title: '数字化转型宣传视频', type: 'video' },
+            { id: 7, title: '智慧城市概念介绍', type: 'article' },
+            { id: 8, title: '年度表彰大会预告', type: 'notice' }
+        ];
+
+        const statusMap = {
+            'published': { label: '已上线', class: 'bg-accent-green' },
+            'ongoing': { label: '进行中', class: 'bg-accent-blue' },
+            'draft': { label: '草稿', class: 'bg-accent-amber' },
+            'archived': { label: '已归档', class: 'bg-text-muted' }
+        };
+
+        // Render
+        function renderTopics() {
+            let filtered = topics;
+
+            // Search filter
+            const search = document.getElementById('searchInput')?.value?.toLowerCase() || '';
+            if (search) {
+                filtered = filtered.filter(t => t.name.toLowerCase().includes(search) || t.desc.toLowerCase().includes(search));
+            }
+
+            // Status filter
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(t => t.status === currentFilter);
+            }
+
+            // Sort
+            const sortSelect = document.querySelector('select[onchange="sortTopics(this.value)"]');
+            const sortType = sortSelect?.value || 'date-desc';
+            filtered.sort((a, b) => {
+                switch(sortType) {
+                    case 'date-desc': return new Date(b.createDate) - new Date(a.createDate);
+                    case 'date-asc': return new Date(a.createDate) - new Date(b.createDate);
+                    case 'views-desc': return b.views - a.views;
+                    case 'views-asc': return a.views - b.views;
+                    case 'name-asc': return a.name.localeCompare(b.name, 'zh');
+                    case 'name-desc': return b.name.localeCompare(a.name, 'zh');
+                    default: return 0;
+                }
+            });
+
+            const list = document.getElementById('topicList');
+            if (filtered.length === 0) {
+                list.innerHTML = `
+                    <div class="col-span-3 py-16 text-center text-text-muted">
+                        <i class="fas fa-folder-open text-5xl mb-4 opacity-30"></i>
+                        <p>暂无专题</p>
+                        <button onclick="openModal('addModal')" class="mt-4 px-4 py-2 bg-accent-blue text-white rounded-lg text-sm">创建第一个专题</button>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = filtered.map(t => {
+                const status = statusMap[t.status] || statusMap['draft'];
+                return `
+                    <div class="topic-card bg-card-bg rounded-xl border border-border-dark overflow-hidden cursor-pointer">
+                        <div class="relative" onclick="openPreview(${t.id})">
+                            <img src="${t.cover}" class="w-full h-36 object-cover ${t.status === 'archived' ? 'opacity-60' : ''}">
+                            <div class="absolute top-3 left-3">
+                                <span class="px-2 py-1 ${status.class} text-white text-xs rounded">${status.label}</span>
+                            </div>
+                            <div class="absolute bottom-3 left-3 right-3">
+                                <h3 class="text-white font-medium text-lg drop-shadow-lg">${t.name}</h3>
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <p class="text-sm text-text-secondary mb-3 line-clamp-2">${t.desc}</p>
+                            <div class="flex items-center justify-between text-xs text-text-muted">
+                                <span><i class="fas fa-file-alt mr-1"></i>${t.articles}篇</span>
+                                <span><i class="fas fa-eye mr-1"></i>${t.views > 0 ? t.views.toLocaleString() : '-'}</span>
+                                <span><i class="fas fa-calendar mr-1"></i>${t.createDate}</span>
+                            </div>
+                            <div class="flex items-center gap-2 mt-3 pt-3 border-t border-border-dark">
+                                <button onclick="openEdit(${t.id})" class="flex-1 py-1.5 text-xs text-accent-blue hover:bg-accent-blue/10 rounded transition-colors">编辑</button>
+                                <button onclick="openContent(${t.id})" class="flex-1 py-1.5 text-xs text-text-muted hover:bg-primary-bg rounded transition-colors">内容</button>
+                                <button onclick="openPreview(${t.id})" class="flex-1 py-1.5 text-xs text-text-muted hover:bg-primary-bg rounded transition-colors">预览</button>
+                                <button onclick="openDelete(${t.id})" class="py-1.5 text-xs text-accent-red hover:bg-accent-red/10 rounded transition-colors"><i class="fas fa-trash"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filters
+        function setStatusFilter(status) {
+            currentFilter = status;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active', 'text-text-secondary'));
+            document.getElementById('filter-' + status).classList.add('active');
+            document.getElementById('filter-' + status).classList.remove('text-text-secondary');
+            renderTopics();
+        }
+
+        function filterTopics() {
+            renderTopics();
+        }
+
+        function sortTopics(value) {
+            renderTopics();
+        }
+
+        // CRUD Operations
+        function saveTopicsToStorage() {
+            localStorage.setItem('topics_data', JSON.stringify(topics));
+        }
+
+        function createTopic() {
+            const name = document.getElementById('addName').value.trim();
+            if (!name) { showToast('请输入专题名称', 'error'); return; }
+
+            const newTopic = {
+                id: Date.now(),
+                name: name,
+                desc: document.getElementById('addDesc').value.trim(),
+                cover: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=200&fit=crop',
+                status: 'draft',
+                tags: document.getElementById('addTags').value.split(',').map(t => t.trim()).filter(Boolean),
+                category: document.getElementById('addCategory').value,
+                views: 0,
+                articles: 0,
+                createDate: new Date().toISOString().split('T')[0],
+                startDate: document.getElementById('addStartDate').value,
+                endDate: document.getElementById('addEndDate').value,
+                sort: 0,
+                contents: []
+            };
+
+            topics.unshift(newTopic);
+            saveTopicsToStorage();
+            closeModal('addModal');
+            clearAddForm();
+            renderTopics();
+            showToast('专题已创建');
+        }
+
+        function clearAddForm() {
+            document.getElementById('addName').value = '';
+            document.getElementById('addDesc').value = '';
+            document.getElementById('addTags').value = '';
+            document.getElementById('addCategory').value = '';
+            document.getElementById('addStartDate').value = '';
+            document.getElementById('addEndDate').value = '';
+        }
+
+        function openEdit(id) {
+            const topic = topics.find(t => t.id === id);
+            if (!topic) return;
+
+            document.getElementById('editId').value = topic.id;
+            document.getElementById('editName').value = topic.name;
+            document.getElementById('editDesc').value = topic.desc;
+            document.getElementById('editTags').value = topic.tags.join(', ');
+            document.getElementById('editCategory').value = topic.category || '';
+            document.getElementById('editStatus').value = topic.status;
+            document.getElementById('editSort').value = topic.sort || 0;
+
+            openModal('editModal');
+        }
+
+        function saveEdit() {
+            const id = parseInt(document.getElementById('editId').value);
+            const topic = topics.find(t => t.id === id);
+            if (!topic) return;
+
+            const name = document.getElementById('editName').value.trim();
+            if (!name) { showToast('请输入专题名称', 'error'); return; }
+
+            topic.name = name;
+            topic.desc = document.getElementById('editDesc').value.trim();
+            topic.tags = document.getElementById('editTags').value.split(',').map(t => t.trim()).filter(Boolean);
+            topic.category = document.getElementById('editCategory').value;
+            topic.status = document.getElementById('editStatus').value;
+            topic.sort = parseInt(document.getElementById('editSort').value) || 0;
+
+            saveTopicsToStorage();
+            closeModal('editModal');
+            renderTopics();
+            showToast('专题已保存');
+        }
+
+        function openDelete(id) {
+            const topic = topics.find(t => t.id === id);
+            if (!topic) return;
+            deleteTargetId = id;
+            document.getElementById('deleteTopicName').textContent = topic.name;
+            openModal('deleteModal');
+        }
+
+        function confirmDelete() {
+            if (deleteTargetId) {
+                topics = topics.filter(t => t.id !== deleteTargetId);
+                saveTopicsToStorage();
+                deleteTargetId = null;
+                closeModal('deleteModal');
+                renderTopics();
+                showToast('专题已删除');
+            }
+        }
+
+        // Content Management
+        function openContent(id) {
+            const topic = topics.find(t => t.id === id);
+            if (!topic) return;
+
+            currentTopicId = id;
+            document.getElementById('contentTopicName').textContent = topic.name;
+            document.getElementById('contentCount').textContent = topic.contents.length;
+
+            const tbody = document.getElementById('contentTable');
+            const empty = document.getElementById('contentEmpty');
+
+            if (topic.contents.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+            } else {
+                empty.classList.add('hidden');
+                tbody.innerHTML = topic.contents.map((c, i) => `
+                    <tr class="content-item border-b border-border-dark/50 hover:bg-accent-blue/5">
+                        <td class="px-4 py-3 text-sm text-text-muted">${i + 1}</td>
+                        <td class="px-4 py-3 text-sm">${c.title}</td>
+                        <td class="px-4 py-3 text-sm"><span class="px-2 py-1 bg-primary-bg rounded text-xs">${c.type === 'article' ? '文章' : c.type}</span></td>
+                        <td class="px-4 py-3 text-sm text-text-muted">${c.updateTime}</td>
+                        <td class="px-4 py-3">
+                            <button onclick="removeContent(${c.id})" class="text-accent-red hover:text-red-400 text-sm"><i class="fas fa-trash-alt"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // Populate content select
+            const select = document.getElementById('addContentSelect');
+            select.innerHTML = '<option value="">请选择要添加的内容</option>' +
+                availableContents.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+
+            openModal('contentModal');
+        }
+
+        function addContent() {
+            const topic = topics.find(t => t.id === currentTopicId);
+            if (!topic) return;
+
+            const contentId = parseInt(document.getElementById('addContentSelect').value);
+            if (!contentId) { showToast('请选择内容', 'error'); return; }
+
+            const content = availableContents.find(c => c.id === contentId);
+            if (!content) return;
+
+            // Check if already exists
+            if (topic.contents.some(c => c.id === contentId)) {
+                showToast('该内容已添加', 'error');
+                return;
+            }
+
+            topic.contents.push({
+                id: contentId,
+                title: content.title,
+                type: content.type,
+                updateTime: new Date().toISOString().split('T')[0]
+            });
+
+            topic.articles = topic.contents.length;
+            document.getElementById('contentCount').textContent = topic.contents.length;
+
+            closeModal('addContentModal');
+            openContent(currentTopicId);
+            renderTopics();
+            showToast('内容已添加');
+        }
+
+        function removeContent(contentId) {
+            const topic = topics.find(t => t.id === currentTopicId);
+            if (!topic) return;
+
+            topic.contents = topic.contents.filter(c => c.id !== contentId);
+            topic.articles = topic.contents.length;
+
+            document.getElementById('contentCount').textContent = topic.contents.length;
+            openContent(currentTopicId);
+            renderTopics();
+            showToast('内容已移除');
+        }
+
+        // Preview
+        function openPreview(id) {
+            const topic = topics.find(t => t.id === id);
+            if (!topic) return;
+
+            document.getElementById('previewTitle').textContent = topic.name;
+            document.getElementById('previewDesc').textContent = topic.desc;
+            document.getElementById('previewTags').innerHTML = topic.tags.map(t => `<span class="px-2 py-1 bg-accent-blue/20 text-accent-blue text-xs rounded">${t}</span>`).join('');
+
+            const body = document.getElementById('previewBody');
+            if (topic.contents.length === 0) {
+                body.innerHTML = '<div class="text-center py-8 text-text-muted"><i class="fas fa-inbox text-4xl mb-3"></i><p>暂无内容</p></div>';
+            } else {
+                body.innerHTML = topic.contents.map(c => `
+                    <div class="bg-card-bg rounded-lg p-4 border border-border-dark">
+                        <h4 class="font-medium mb-2">${c.title}</h4>
+                        <p class="text-sm text-text-muted">${c.type === 'article' ? '文章' : c.type} · ${c.updateTime}</p>
+                    </div>
+                `).join('');
+            }
+
+            openModal('previewModal');
+        }
+
+        // Modal helpers
         function openModal(id) {
             document.getElementById(id).classList.remove('hidden');
             document.getElementById(id).classList.add('flex');
         }
+
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
             document.getElementById(id).classList.remove('flex');
         }
-        function showToast(message) {
+
+        function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             document.getElementById('toastText').textContent = message;
+            toast.className = `fixed bottom-6 right-6 ${type === 'error' ? 'bg-accent-red' : 'bg-accent-green'} text-white px-6 py-3 rounded-xl shadow-lg z-50`;
             toast.classList.remove('hidden');
             setTimeout(() => { toast.classList.add('hidden'); }, 2000);
         }
+
+        // Init
+        renderTopics();
+        saveTopicsToStorage();
     </script>
 </body>
 </html>

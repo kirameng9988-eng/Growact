@@ -35,30 +35,25 @@
     </style>
 </head>
 <body class="bg-primary-bg text-text-primary min-h-screen">
+        <!-- 顶部导航 -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
-                <i class="fas fa-cube text-white text-lg"></i>
-            </div>
-            <span class="text-lg font-semibold">内容中台</span>
+                <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
         </div>
-        <div class="flex-1 max-w-xl mx-8">
-            <div class="relative">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-            </div>
-        </div>
-        <div class="flex items-center gap-6">
-            <button class="relative text-text-secondary hover:text-text-primary">
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
                     <span class="text-xs text-text-muted">超级管理员</span>
                 </div>
+                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
             </div>
         </div>
     </header>
@@ -86,50 +81,11 @@
             <a href="content-review.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-check-circle w-5 text-accent-blue"></i>
                 <span>审核中心</span>
-                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">12</span>
+                <span id="sidebarReviewBadge" class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">0</span>
             </a>
             <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
                 <span>发布管理</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
-            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-home w-5 text-text-secondary"></i>
-                <span>首页装修</span>
-            </a>
-            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-image w-5 text-text-secondary"></i>
-                <span>Banner管理</span>
-            </a>
-            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-columns w-5 text-text-secondary"></i>
-                <span>栏目管理</span>
-            </a>
-            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
-                <span>专题管理</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
-            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
-                <span>新闻资讯</span>
-            </a>
-            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
-                <span>公告通知</span>
-            </a>
-            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
-                <span>政策文件</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
-            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
-                <span>数据概览</span>
-            </a>
-            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
-                <span>内容分析</span>
             </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
@@ -144,6 +100,17 @@
                 <i class="fas fa-video w-5 text-text-secondary"></i>
                 <span>视频管理</span>
             </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-users-cog w-5 text-text-secondary"></i>
@@ -153,6 +120,11 @@
                 <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
                 <span>角色权限</span>
             </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <span>日志管理</span>
+            </a>
+
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-cog w-5 text-text-secondary"></i>
                 <span>系统设置</span>
@@ -167,11 +139,11 @@
                 <p class="text-text-muted mt-1">审核待发布内容，确保内容质量合规</p>
             </div>
             <div class="flex items-center gap-3">
-                <button class="px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-xl hover:bg-accent-blue/30 transition-colors">
-                    <i class="fas fa-check-double mr-2"></i>批量通过
+                <button id="batchApproveBtn" class="px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-xl hover:bg-accent-blue/30 transition-colors opacity-50 pointer-events-none">
+                    <i class="fas fa-check-double mr-2"></i>批量通过 (<span id="batchApproveCount">0</span>)
                 </button>
-                <button class="px-4 py-2 bg-accent-red/20 text-accent-red rounded-xl hover:bg-accent-red/30 transition-colors">
-                    <i class="fas fa-times-circle mr-2"></i>批量拒绝
+                <button id="batchRejectBtn" class="px-4 py-2 bg-accent-red/20 text-accent-red rounded-xl hover:bg-accent-red/30 transition-colors opacity-50 pointer-events-none">
+                    <i class="fas fa-times-circle mr-2"></i>批量拒绝 (<span id="batchRejectCount">0</span>)
                 </button>
             </div>
         </div>
@@ -184,7 +156,7 @@
                         <i class="fas fa-clock text-accent-blue text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">12</div>
+                        <div id="statPending" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">待审核</div>
                     </div>
                 </div>
@@ -195,7 +167,7 @@
                         <i class="fas fa-check-circle text-accent-green text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">486</div>
+                        <div id="statApproved" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">今日已审</div>
                     </div>
                 </div>
@@ -206,7 +178,7 @@
                         <i class="fas fa-hourglass-half text-accent-amber text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">28</div>
+                        <div id="statReviewing" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">审核中</div>
                     </div>
                 </div>
@@ -217,7 +189,7 @@
                         <i class="fas fa-times text-accent-red text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">15</div>
+                        <div id="statRejected" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">已驳回</div>
                     </div>
                 </div>
@@ -227,164 +199,33 @@
         <!-- 筛选栏 -->
         <div class="bg-card-bg rounded-xl p-4 mb-6 border border-border-dark">
             <div class="flex items-center gap-4 flex-wrap">
-                <div class="flex items-center gap-2">
-                    <button class="px-4 py-2 bg-accent-blue text-white rounded-lg text-sm">待审核 (12)</button>
-                    <button class="px-4 py-2 text-text-secondary hover:text-text-primary text-sm">审核中 (28)</button>
-                    <button class="px-4 py-2 text-text-secondary hover:text-text-primary text-sm">已通过 (486)</button>
-                    <button class="px-4 py-2 text-text-secondary hover:text-text-primary text-sm">已驳回 (15)</button>
+                <div id="tabButtons" class="flex items-center gap-2">
+                    <button class="tab-btn px-4 py-2 bg-accent-blue text-white rounded-lg text-sm" data-status="pending">待审核 (<span class="tab-count">0</span>)</button>
+                    <button class="tab-btn px-4 py-2 text-text-secondary hover:text-text-primary text-sm" data-status="reviewing">审核中 (<span class="tab-count">0</span>)</button>
+                    <button class="tab-btn px-4 py-2 text-text-secondary hover:text-text-primary text-sm" data-status="approved">已通过 (<span class="tab-count">0</span>)</button>
+                    <button class="tab-btn px-4 py-2 text-text-secondary hover:text-text-primary text-sm" data-status="rejected">已驳回 (<span class="tab-count">0</span>)</button>
                 </div>
                 <div class="flex-1"></div>
-                <select class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm">
-                    <option>全部分类</option>
-                    <option>新闻资讯</option>
-                    <option>政策文件</option>
-                    <option>通知公告</option>
+                <select id="categoryFilter" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm">
+                    <option value="">全部分类</option>
+                    <option value="通知公告">通知公告</option>
+                    <option value="新闻资讯">新闻资讯</option>
+                    <option value="政策文件">政策文件</option>
+                    <option value="专题活动">专题活动</option>
+                    <option value="文件">文件</option>
                 </select>
             </div>
         </div>
 
         <!-- 审核列表 -->
-        <div class="space-y-4">
-            <!-- 审核项 1 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
-                <div class="flex items-start gap-5">
-                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=120&h=80&fit=crop" class="w-32 h-20 rounded-lg object-cover">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-medium">关于开展2024年度工作总结的通知</h3>
-                            <span class="px-2 py-1 bg-accent-blue/20 text-accent-blue text-xs rounded">通知公告</span>
-                            <span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">待审核</span>
-                        </div>
-                        <p class="text-sm text-text-secondary mb-3">各部门、直属单位：为全面总结2024年度工作情况，认真谋划2025年重点工作，现就开展年度工作总结有关事项通知...</p>
-                        <div class="flex items-center gap-4 text-sm text-text-muted">
-                            <span><i class="fas fa-user mr-1"></i>李晓华</span>
-                            <span><i class="fas fa-clock mr-1"></i>提交于 10:23</span>
-                            <span><i class="fas fa-tag mr-1"></i>时政, 年度总结</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-3">
-                        <div class="flex items-center gap-2">
-                            <button onclick="showToast('已通过')" class="px-4 py-2 bg-accent-green text-white rounded-lg hover:bg-green-600 transition-colors">
-                                <i class="fas fa-check mr-1"></i>通过
-                            </button>
-                            <button onclick="openModal('rejectModal')" class="px-4 py-2 border border-accent-red text-accent-red rounded-lg hover:bg-accent-red/10 transition-colors">
-                                <i class="fas fa-times mr-1"></i>驳回
-                            </button>
-                        </div>
-                        <button class="text-text-secondary hover:text-text-primary text-sm">
-                            <i class="fas fa-eye mr-1"></i>预览
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 审核项 2 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
-                <div class="flex items-start gap-5">
-                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=120&h=80&fit=crop" class="w-32 h-20 rounded-lg object-cover">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-medium">数字化转型工作进展报告</h3>
-                            <span class="px-2 py-1 bg-accent-cyan/20 text-accent-cyan text-xs rounded">新闻资讯</span>
-                            <span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">待审核</span>
-                        </div>
-                        <p class="text-sm text-text-secondary mb-3">摘要：本文总结了2024年度数字化转型工作的进展情况，重点介绍了智慧政务平台建设、数据共享交换体系建设等方面的成果...</p>
-                        <div class="flex items-center gap-4 text-sm text-text-muted">
-                            <span><i class="fas fa-user mr-1"></i>王建国</span>
-                            <span><i class="fas fa-clock mr-1"></i>提交于 09:45</span>
-                            <span><i class="fas fa-tag mr-1"></i>科技, 数字化</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-3">
-                        <div class="flex items-center gap-2">
-                            <button onclick="showToast('已通过')" class="px-4 py-2 bg-accent-green text-white rounded-lg hover:bg-green-600 transition-colors">
-                                <i class="fas fa-check mr-1"></i>通过
-                            </button>
-                            <button onclick="openModal('rejectModal')" class="px-4 py-2 border border-accent-red text-accent-red rounded-lg hover:bg-accent-red/10 transition-colors">
-                                <i class="fas fa-times mr-1"></i>驳回
-                            </button>
-                        </div>
-                        <button class="text-text-secondary hover:text-text-primary text-sm">
-                            <i class="fas fa-eye mr-1"></i>预览
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 审核项 3 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
-                <div class="flex items-start gap-5">
-                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=120&h=80&fit=crop" class="w-32 h-20 rounded-lg object-cover">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-medium">安全生产知识竞赛活动方案</h3>
-                            <span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">专题活动</span>
-                            <span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">待审核</span>
-                        </div>
-                        <p class="text-sm text-text-secondary mb-3">为深入贯彻落实安全生产法律法规，普及安全生产知识，提高全员安全意识，特举办本次安全生产知识竞赛...</p>
-                        <div class="flex items-center gap-4 text-sm text-text-muted">
-                            <span><i class="fas fa-user mr-1"></i>陈思远</span>
-                            <span><i class="fas fa-clock mr-1"></i>提交于 09:12</span>
-                            <span><i class="fas fa-tag mr-1"></i>安全, 专题</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-3">
-                        <div class="flex items-center gap-2">
-                            <button onclick="showToast('已通过')" class="px-4 py-2 bg-accent-green text-white rounded-lg hover:bg-green-600 transition-colors">
-                                <i class="fas fa-check mr-1"></i>通过
-                            </button>
-                            <button onclick="openModal('rejectModal')" class="px-4 py-2 border border-accent-red text-accent-red rounded-lg hover:bg-accent-red/10 transition-colors">
-                                <i class="fas fa-times mr-1"></i>驳回
-                            </button>
-                        </div>
-                        <button class="text-text-secondary hover:text-text-primary text-sm">
-                            <i class="fas fa-eye mr-1"></i>预览
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 审核项 4 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
-                <div class="flex items-start gap-5">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=120&h=80&fit=crop" class="w-32 h-20 rounded-lg object-cover">
-                    <div class="flex-1">
-                        <div class="flex items-center gap-3 mb-2">
-                            <h3 class="text-lg font-medium">第一季度工作规划部署会议纪要</h3>
-                            <span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">文件</span>
-                            <span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">待审核</span>
-                        </div>
-                        <p class="text-sm text-text-secondary mb-3">会议时间：2024年1月5日，会议地点：行政楼三楼会议室，参会人员：各部门负责人。会议就第一季度重点工作进行了部署...</p>
-                        <div class="flex items-center gap-4 text-sm text-text-muted">
-                            <span><i class="fas fa-user mr-1"></i>周明杰</span>
-                            <span><i class="fas fa-clock mr-1"></i>提交于 08:56</span>
-                            <span><i class="fas fa-tag mr-1"></i>会议, 规划</span>
-                        </div>
-                    </div>
-                    <div class="flex flex-col items-end gap-3">
-                        <div class="flex items-center gap-2">
-                            <button onclick="showToast('已通过')" class="px-4 py-2 bg-accent-green text-white rounded-lg hover:bg-green-600 transition-colors">
-                                <i class="fas fa-check mr-1"></i>通过
-                            </button>
-                            <button onclick="openModal('rejectModal')" class="px-4 py-2 border border-accent-red text-accent-red rounded-lg hover:bg-accent-red/10 transition-colors">
-                                <i class="fas fa-times mr-1"></i>驳回
-                            </button>
-                        </div>
-                        <button class="text-text-secondary hover:text-text-primary text-sm">
-                            <i class="fas fa-eye mr-1"></i>预览
-                        </button>
-                    </div>
-                </div>
-            </div>
+        <div id="reviewList" class="space-y-4">
+            <!-- 动态渲染 -->
         </div>
 
         <!-- 分页 -->
         <div class="flex items-center justify-center mt-6">
-            <div class="flex items-center gap-2">
-                <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">上一页</button>
-                <button class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
-                <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">2</button>
-                <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">下一页</button>
+            <div id="pagination" class="flex items-center gap-2">
+                <!-- 动态渲染 -->
             </div>
         </div>
     </main>
@@ -399,10 +240,17 @@
                 </button>
             </div>
             <div class="p-6 space-y-4">
+                <div class="flex items-center gap-3 p-3 bg-primary-bg rounded-lg">
+                    <img id="rejectItemCover" src="" class="w-16 h-12 rounded object-cover">
+                    <div>
+                        <div id="rejectItemTitle" class="font-medium"></div>
+                        <div id="rejectItemAuthor" class="text-sm text-text-muted"></div>
+                    </div>
+                </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">驳回原因 <span class="text-accent-red">*</span></label>
-                    <select class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
-                        <option>请选择驳回原因</option>
+                    <select id="rejectReason" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="">请选择驳回原因</option>
                         <option>内容不符合规范</option>
                         <option>信息存在错误</option>
                         <option>需要补充材料</option>
@@ -412,12 +260,85 @@
                 </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">详细说明</label>
-                    <textarea rows="4" placeholder="请输入详细说明，帮助作者了解问题所在" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                    <textarea id="rejectDetail" rows="4" placeholder="请输入详细说明，帮助作者了解问题所在" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
                 <button onclick="closeModal('rejectModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
-                <button onclick="closeModal('rejectModal'); showToast('已驳回')" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认驳回</button>
+                <button onclick="confirmReject()" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认驳回</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量驳回弹窗 -->
+    <div id="batchRejectModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[500px] border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">批量驳回 (<span id="batchRejectNum">0</span> 项)</h3>
+                <button onclick="closeModal('batchRejectModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="flex items-center gap-3 p-3 bg-primary-bg rounded-lg">
+                    <i class="fas fa-exclamation-triangle text-accent-amber"></i>
+                    <span class="text-sm text-text-secondary">将驳回选中的 <span id="batchRejectNum2">0</span> 项内容</span>
+                </div>
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">驳回原因 <span class="text-accent-red">*</span></label>
+                    <select id="batchRejectReason" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="">请选择驳回原因</option>
+                        <option>内容不符合规范</option>
+                        <option>信息存在错误</option>
+                        <option>需要补充材料</option>
+                        <option>重复提交</option>
+                        <option>其他原因</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">详细说明</label>
+                    <textarea id="batchRejectDetail" rows="4" placeholder="请输入详细说明，帮助作者了解问题所在" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('batchRejectModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="confirmBatchReject()" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认驳回</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 预览弹窗 -->
+    <div id="previewModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[90vh] border border-border-dark shadow-2xl overflow-hidden flex flex-col">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">内容预览</h3>
+                <button onclick="closeModal('previewModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-y-auto p-6">
+                <div class="flex gap-6">
+                    <img id="previewCover" src="" class="w-64 h-40 rounded-lg object-cover">
+                    <div class="flex-1">
+                        <h2 id="previewTitle" class="text-xl font-semibold mb-3"></h2>
+                        <div class="flex items-center gap-4 text-sm text-text-muted mb-4">
+                            <span><i class="fas fa-user mr-1"></i><span id="previewAuthor"></span></span>
+                            <span><i class="fas fa-folder mr-1"></i><span id="previewCategory"></span></span>
+                            <span><i class="fas fa-clock mr-1"></i><span id="previewTime"></span></span>
+                        </div>
+                        <div id="previewTags" class="flex flex-wrap gap-2 mb-4">
+                            <!-- 动态渲染 -->
+                        </div>
+                        <p id="previewSummary" class="text-text-secondary"></p>
+                    </div>
+                </div>
+                <div class="mt-6 pt-6 border-t border-border-dark">
+                    <h4 class="text-sm font-medium text-text-muted mb-3">正文内容</h4>
+                    <div id="previewContent" class="text-text-secondary leading-relaxed whitespace-pre-wrap"></div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('previewModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">关闭</button>
             </div>
         </div>
     </div>
@@ -429,6 +350,175 @@
     </div>
 
     <script>
+        // ========== 审核数据 ==========
+        let reviewData = [
+            {
+                id: 1,
+                title: '关于开展2024年度工作总结的通知',
+                cover: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=120&h=80&fit=crop',
+                category: '通知公告',
+                status: 'pending',
+                author: '李晓华',
+                submitTime: '2024-01-15 10:23',
+                tags: ['时政', '年度总结'],
+                summary: '各部门、直属单位：为全面总结2024年度工作情况，认真谋划2025年重点工作，现就开展年度工作总结有关事项通知...',
+                content: '各部门、直属单位：\n\n为全面总结2024年度工作情况，认真谋划2025年重点工作，现就开展年度工作总结有关事项通知如下：\n\n一、总结内容\n1. 年度工作目标完成情况\n2. 主要工作成效与创新举措\n3. 存在的问题与不足\n4. 明年工作思路与建议\n\n二、具体要求\n请各部门于2024年1月20日前将总结材料报送至办公室...',
+                rejectReason: ''
+            },
+            {
+                id: 2,
+                title: '数字化转型工作进展报告',
+                cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=120&h=80&fit=crop',
+                category: '新闻资讯',
+                status: 'pending',
+                author: '王建国',
+                submitTime: '2024-01-15 09:45',
+                tags: ['科技', '数字化'],
+                summary: '摘要：本文总结了2024年度数字化转型工作的进展情况，重点介绍了智慧政务平台建设、数据共享交换体系建设等方面的成果...',
+                content: '一、总体情况\n2024年，我市数字化转型工作取得了显著成效。智慧政务平台已完成三期建设，实现全市政务服务"一网通办"...\n\n二、重点项目进展\n1. 智慧政务平台：已完成三期建设，注册用户突破100万\n2. 数据共享交换体系：接入部门已达45个，数据共享率提升至85%\n3. 智能办公系统：覆盖率已达92%，办公效率提升40%...',
+                rejectReason: ''
+            },
+            {
+                id: 3,
+                title: '安全生产知识竞赛活动方案',
+                cover: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=120&h=80&fit=crop',
+                category: '专题活动',
+                status: 'pending',
+                author: '陈思远',
+                submitTime: '2024-01-15 09:12',
+                tags: ['安全', '专题'],
+                summary: '为深入贯彻落实安全生产法律法规，普及安全生产知识，提高全员安全意识，特举办本次安全生产知识竞赛...',
+                content: '一、活动目的\n为深入贯彻落实安全生产法律法规，普及安全生产知识，提高全员安全意识，特举办本次安全生产知识竞赛。\n\n二、参赛对象\n全市各企事业单位员工均可参加\n\n三、竞赛内容\n1. 安全生产法律法规\n2. 应急救援知识\n3. 职业健康防护\n\n四、奖项设置\n一等奖3名，二等奖10名，三等奖20名...',
+                rejectReason: ''
+            },
+            {
+                id: 4,
+                title: '第一季度工作规划部署会议纪要',
+                cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=120&h=80&fit=crop',
+                category: '文件',
+                status: 'pending',
+                author: '周明杰',
+                submitTime: '2024-01-15 08:56',
+                tags: ['会议', '规划'],
+                summary: '会议时间：2024年1月5日，会议地点：行政楼三楼会议室，参会人员：各部门负责人。会议就第一季度重点工作进行了部署...',
+                content: '会议时间：2024年1月5日\n会议地点：行政楼三楼会议室\n参会人员：各部门负责人\n\n会议议题：第一季度重点工作部署\n\n一、2024年工作目标\n1. 实现GDP增长7%\n2. 重点项目投资突破100亿\n3. 新增就业岗位3万个\n\n二、一季度重点工作\n1. 加快产业转型升级\n2. 推进重点项目建设\n3. 优化营商环境...',
+                rejectReason: ''
+            },
+            {
+                id: 5,
+                title: '智慧城市建设实施方案',
+                cover: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=120&h=80&fit=crop',
+                category: '政策文件',
+                status: 'reviewing',
+                author: '刘芳',
+                submitTime: '2024-01-14 16:30',
+                tags: ['政策', '智慧城市'],
+                summary: '为加快推进智慧城市建设，提升城市治理能力和服务水平，特制定本实施方案...',
+                content: '一、总体目标\n到2025年，基本建成"城市大脑"，实现城市治理智能化、精细化...\n\n二、重点任务\n1. 建设城市运行管理中心\n2. 推进5G网络全覆盖\n3. 打造智能交通系统\n4. 建设智慧社区...\n\n三、保障措施\n1. 加强组织领导\n2. 强化资金保障\n3. 完善法规标准...',
+                rejectReason: ''
+            },
+            {
+                id: 6,
+                title: '新春团拜会活动策划方案',
+                cover: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=120&h=80&fit=crop',
+                category: '专题活动',
+                status: 'reviewing',
+                author: '赵敏',
+                submitTime: '2024-01-14 14:20',
+                tags: ['专题', '文化'],
+                summary: '为丰富干部职工文化生活，增进沟通交流，特举办2024年新春团拜会...',
+                content: '一、活动时间：2024年2月2日（农历腊月二十三）\n二、活动地点：市会议中心\n三、参会人员：全体干部职工及家属\n\n四、活动流程\n1. 领导致辞\n2. 文艺演出\n3. 抽奖环节\n4. 自助晚宴...',
+                rejectReason: ''
+            },
+            {
+                id: 7,
+                title: '2024年度宣传报道工作总结',
+                cover: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=120&h=80&fit=crop',
+                category: '新闻资讯',
+                status: 'approved',
+                author: '孙伟',
+                submitTime: '2024-01-13 11:00',
+                tags: ['时政', '总结'],
+                summary: '2024年，在市委宣传部的正确领导下，我单位宣传报道工作取得了较好成绩...',
+                content: '一、基本情况\n2024年共发布新闻稿件486篇，其中省级以上媒体采用125篇...\n\n二、主要做法\n1. 加强策划，突出重点\n2. 创新形式，提升质量\n3. 强化队伍，增强素质...\n\n三、存在不足\n新媒体运用能力有待加强...',
+                rejectReason: ''
+            },
+            {
+                id: 8,
+                title: '关于加强信息安全管理工作的通知',
+                cover: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=120&h=80&fit=crop',
+                category: '通知公告',
+                status: 'approved',
+                author: '李强',
+                submitTime: '2024-01-12 09:30',
+                tags: ['安全', '通知'],
+                summary: '为进一步加强信息安全管理工作，防范信息安全事故发生，现就有关事项通知...',
+                content: '各部门：\n\n为进一步加强信息安全管理工作，防范信息安全事故发生，现就有关事项通知如下：\n\n一、提高认识，落实责任\n二、完善制度，强化管理\n三、加强检查，及时整改...',
+                rejectReason: ''
+            },
+            {
+                id: 9,
+                title: '政务公开工作年度计划',
+                cover: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=120&h=80&fit=crop',
+                category: '政策文件',
+                status: 'rejected',
+                author: '张华',
+                submitTime: '2024-01-11 15:40',
+                tags: ['政策', '政务'],
+                summary: '根据上级部门要求，结合本单位实际，制定2024年度政务公开工作计划...',
+                content: '一、总体要求\n二、重点任务\n1. 推进决策公开\n2. 推进执行公开\n3. 推进管理公开\n4. 推进服务公开\n5. 推进结果公开...',
+                rejectReason: '内容格式不规范，需要补充具体实施措施'
+            },
+            {
+                id: 10,
+                title: '节能降耗倡议书',
+                cover: 'https://images.unsplash.com/photo-1497435334941-8c899ee9e8e9?w=120&h=80&fit=crop',
+                category: '通知公告',
+                status: 'rejected',
+                author: '王磊',
+                submitTime: '2024-01-10 10:15',
+                tags: ['环保', '通知'],
+                summary: '为响应国家节能减排号召，建设节约型机关，现向全体干部职工发出如下倡议...',
+                content: '全体干部职工：\n\n为响应国家节能减排号召，建设节约型机关，现向全体干部职工发出如下倡议：\n\n一、节约用电\n二、节约用水\n三、节约用纸\n四、绿色出行...',
+                rejectReason: '重复提交'
+            },
+            {
+                id: 11,
+                title: '青年文明号创建工作计划',
+                cover: 'https://images.unsplash.com/photo-1521737712587-375e968ff563?w=120&h=80&fit=crop',
+                category: '专题活动',
+                status: 'pending',
+                author: '陈静',
+                submitTime: '2024-01-15 11:30',
+                tags: ['专题', '青年'],
+                summary: '为深入推进青年文明号创建工作，提升青年职工综合素质...',
+                content: '一、指导思想\n二、创建目标\n三、创建措施\n1. 加强组织领导\n2. 强化教育培训\n3. 开展实践活动\n4. 营造良好氛围...\n\n四、具体安排...\n\n五、预期成效...\n\n六、保障措施...',
+                rejectReason: ''
+            },
+            {
+                id: 12,
+                title: '年度考核工作实施方案',
+                cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=120&h=80&fit=crop',
+                category: '文件',
+                status: 'pending',
+                author: '李明',
+                submitTime: '2024-01-15 08:00',
+                tags: ['文件', '考核'],
+                summary: '为做好2024年度工作考核，客观评价工作绩效...',
+                content: '一、考核目的\n客观评价工作绩效，激励先进、督促后进\n\n二、考核原则\n1. 客观公正\n2. 实绩导向\n3. 注重实效\n\n三、考核内容\n1. 思想政治表现\n2. 业务工作能力\n3. 工作实绩\n4. 廉洁自律...\n\n四、考核时间安排...\n\n五、结果运用...',
+                rejectReason: ''
+            }
+        ];
+
+        // ========== 状态管理 ==========
+        let currentTab = 'pending';
+        let currentCategory = '';
+        let currentPage = 1;
+        let pageSize = 5;
+        let selectedIds = new Set();
+        let currentRejectId = null;
+
+        // ========== 工具函数 ==========
         function openModal(id) {
             document.getElementById(id).classList.remove('hidden');
             document.getElementById(id).classList.add('flex');
@@ -437,14 +527,375 @@
             document.getElementById(id).classList.add('hidden');
             document.getElementById(id).classList.remove('flex');
         }
-        function showToast(message) {
+        function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
             document.getElementById('toastText').textContent = message;
+            toast.className = 'fixed bottom-6 right-6 text-white px-6 py-3 rounded-xl shadow-lg hidden z-50';
+            if (type === 'success') {
+                toast.classList.add('bg-accent-green');
+            } else if (type === 'error') {
+                toast.classList.add('bg-accent-red');
+            } else {
+                toast.classList.add('bg-accent-amber');
+            }
             toast.classList.remove('hidden');
             setTimeout(() => {
                 toast.classList.add('hidden');
             }, 2000);
         }
+
+        // ========== 统计数据 ==========
+        function getStats() {
+            return {
+                pending: reviewData.filter(item => item.status === 'pending').length,
+                reviewing: reviewData.filter(item => item.status === 'reviewing').length,
+                approved: reviewData.filter(item => item.status === 'approved').length,
+                rejected: reviewData.filter(item => item.status === 'rejected').length
+            };
+        }
+
+        function updateStats() {
+            const stats = getStats();
+            document.getElementById('statPending').textContent = stats.pending;
+            document.getElementById('statApproved').textContent = stats.approved;
+            document.getElementById('statReviewing').textContent = stats.reviewing;
+            document.getElementById('statRejected').textContent = stats.rejected;
+
+            // 更新Tab数量
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                const status = btn.dataset.status;
+                btn.querySelector('.tab-count').textContent = stats[status] || 0;
+            });
+
+            // 更新侧边栏Badge
+            const badge = document.getElementById('sidebarReviewBadge');
+            badge.textContent = stats.pending;
+        }
+
+        // ========== 筛选数据 ==========
+        function getFilteredData() {
+            return reviewData.filter(item => {
+                if (currentTab && item.status !== currentTab) return false;
+                if (currentCategory && item.category !== currentCategory) return false;
+                return true;
+            });
+        }
+
+        // ========== 渲染列表 ==========
+        function renderReviewList() {
+            const list = document.getElementById('reviewList');
+            const filtered = getFilteredData();
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageData = filtered.slice(start, end);
+
+            if (pageData.length === 0) {
+                list.innerHTML = `
+                    <div class="bg-card-bg rounded-xl border border-border-dark p-12 text-center">
+                        <i class="fas fa-inbox text-4xl text-text-muted mb-4"></i>
+                        <p class="text-text-muted">暂无待审核内容</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = pageData.map(item => {
+                const statusMap = {
+                    pending: { text: '待审核', class: 'bg-accent-amber/20 text-accent-amber' },
+                    reviewing: { text: '审核中', class: 'bg-accent-blue/20 text-accent-blue' },
+                    approved: { text: '已通过', class: 'bg-accent-green/20 text-accent-green' },
+                    rejected: { text: '已驳回', class: 'bg-accent-red/20 text-accent-red' }
+                };
+                const status = statusMap[item.status];
+                const isChecked = selectedIds.has(item.id);
+                const categoryColorMap = {
+                    '通知公告': 'accent-blue',
+                    '新闻资讯': 'accent-cyan',
+                    '政策文件': 'accent-green',
+                    '专题活动': 'accent-amber',
+                    '文件': 'text-text-secondary'
+                };
+                const catColor = categoryColorMap[item.category] || 'text-text-secondary';
+
+                return `
+                <div class="bg-card-bg rounded-xl border border-border-dark p-5 review-item" data-id="${item.id}">
+                    <div class="flex items-start gap-5">
+                        <div class="flex items-center pt-1">
+                            <input type="checkbox" class="review-checkbox w-5 h-5 rounded border-border-dark bg-primary-bg accent-accent-blue cursor-pointer" ${isChecked ? 'checked' : ''}>
+                        </div>
+                        <img src="${item.cover}" class="w-32 h-20 rounded-lg object-cover">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <h3 class="text-lg font-medium">${item.title}</h3>
+                                <span class="px-2 py-1 bg-${catColor}/20 text-${catColor} text-xs rounded">${item.category}</span>
+                                <span class="px-2 py-1 ${status.class} text-xs rounded">${status.text}</span>
+                            </div>
+                            <p class="text-sm text-text-secondary mb-3 line-clamp-2">${item.summary}</p>
+                            <div class="flex items-center gap-4 text-sm text-text-muted">
+                                <span><i class="fas fa-user mr-1"></i>${item.author}</span>
+                                <span><i class="fas fa-clock mr-1"></i>提交于 ${item.submitTime}</span>
+                                <span><i class="fas fa-tag mr-1"></i>${item.tags.join(', ')}</span>
+                            </div>
+                            ${item.status === 'rejected' && item.rejectReason ? `
+                            <div class="mt-2 text-sm text-accent-red">
+                                <i class="fas fa-exclamation-circle mr-1"></i>驳回原因：${item.rejectReason}
+                            </div>
+                            ` : ''}
+                        </div>
+                        <div class="flex flex-col items-end gap-3">
+                            ${item.status === 'pending' || item.status === 'reviewing' ? `
+                            <div class="flex items-center gap-2">
+                                <button onclick="approveItem(${item.id})" class="px-4 py-2 bg-accent-green text-white rounded-lg hover:bg-green-600 transition-colors">
+                                    <i class="fas fa-check mr-1"></i>通过
+                                </button>
+                                <button onclick="openRejectModal(${item.id})" class="px-4 py-2 border border-accent-red text-accent-red rounded-lg hover:bg-accent-red/10 transition-colors">
+                                    <i class="fas fa-times mr-1"></i>驳回
+                                </button>
+                            </div>
+                            ` : ''}
+                            <button onclick="previewItem(${item.id})" class="text-text-secondary hover:text-text-primary text-sm">
+                                <i class="fas fa-eye mr-1"></i>预览
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            // 绑定复选框事件
+            document.querySelectorAll('.review-checkbox').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const id = parseInt(e.target.closest('.review-item').dataset.id);
+                    if (e.target.checked) {
+                        selectedIds.add(id);
+                    } else {
+                        selectedIds.delete(id);
+                    }
+                    updateBatchButtons();
+                });
+            });
+        }
+
+        // ========== 渲染分页 ==========
+        function renderPagination() {
+            const pagination = document.getElementById('pagination');
+            const filtered = getFilteredData();
+            const totalPages = Math.ceil(filtered.length / pageSize);
+
+            if (totalPages <= 1) {
+                pagination.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            html += `<button onclick="goToPage(${currentPage - 1})" class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm ${currentPage === 1 ? 'opacity-50 pointer-events-none' : ''}">
+                <i class="fas fa-chevron-left"></i>
+            </button>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                html += `<button onclick="goToPage(${i})" class="px-3 py-1 rounded text-sm ${i === currentPage ? 'bg-accent-blue text-white' : 'border border-border-dark text-text-muted hover:text-text-primary'}">${i}</button>`;
+            }
+
+            html += `<button onclick="goToPage(${currentPage + 1})" class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm ${currentPage === totalPages ? 'opacity-50 pointer-events-none' : ''}">
+                <i class="fas fa-chevron-right"></i>
+            </button>`;
+
+            pagination.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            const filtered = getFilteredData();
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderReviewList();
+            renderPagination();
+        }
+
+        // ========== Tab切换 ==========
+        function switchTab(status) {
+            currentTab = status;
+            currentPage = 1;
+            selectedIds.clear();
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => {
+                if (btn.dataset.status === status) {
+                    btn.classList.add('bg-accent-blue', 'text-white');
+                    btn.classList.remove('text-text-secondary', 'hover:text-text-primary');
+                } else {
+                    btn.classList.remove('bg-accent-blue', 'text-white');
+                    btn.classList.add('text-text-secondary', 'hover:text-text-primary');
+                }
+            });
+
+            renderReviewList();
+            renderPagination();
+        }
+
+        // ========== 分类筛选 ==========
+        function initCategoryFilter() {
+            const filter = document.getElementById('categoryFilter');
+            filter.addEventListener('change', (e) => {
+                currentCategory = e.target.value;
+                currentPage = 1;
+                selectedIds.clear();
+                renderReviewList();
+                renderPagination();
+            });
+        }
+
+        // ========== 批量操作 ==========
+        function updateBatchButtons() {
+            const count = selectedIds.size;
+            const approveBtn = document.getElementById('batchApproveBtn');
+            const rejectBtn = document.getElementById('batchRejectBtn');
+            const approveCount = document.getElementById('batchApproveCount');
+            const rejectCount = document.getElementById('batchRejectCount');
+
+            approveCount.textContent = count;
+            rejectCount.textContent = count;
+
+            if (count > 0) {
+                approveBtn.classList.remove('opacity-50', 'pointer-events-none');
+                rejectBtn.classList.remove('opacity-50', 'pointer-events-none');
+            } else {
+                approveBtn.classList.add('opacity-50', 'pointer-events-none');
+                rejectBtn.classList.add('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        document.getElementById('batchApproveBtn').addEventListener('click', () => {
+            if (selectedIds.size === 0) return;
+            selectedIds.forEach(id => {
+                const item = reviewData.find(d => d.id === id);
+                if (item && (item.status === 'pending' || item.status === 'reviewing')) {
+                    item.status = 'approved';
+                }
+            });
+            selectedIds.clear();
+            updateStats();
+            updateBatchButtons();
+            renderReviewList();
+            renderPagination();
+            showToast('批量通过成功');
+        });
+
+        document.getElementById('batchRejectBtn').addEventListener('click', () => {
+            if (selectedIds.size === 0) return;
+            document.getElementById('batchRejectNum').textContent = selectedIds.size;
+            document.getElementById('batchRejectNum2').textContent = selectedIds.size;
+            openModal('batchRejectModal');
+        });
+
+        function confirmBatchReject() {
+            const reason = document.getElementById('batchRejectReason').value;
+            if (!reason) {
+                showToast('请选择驳回原因', 'error');
+                return;
+            }
+
+            selectedIds.forEach(id => {
+                const item = reviewData.find(d => d.id === id);
+                if (item) {
+                    item.status = 'rejected';
+                    item.rejectReason = reason;
+                }
+            });
+            selectedIds.clear();
+            closeModal('batchRejectModal');
+            document.getElementById('batchRejectReason').value = '';
+            document.getElementById('batchRejectDetail').value = '';
+            updateStats();
+            updateBatchButtons();
+            renderReviewList();
+            renderPagination();
+            showToast('批量驳回成功');
+        }
+
+        // ========== 单个审核操作 ==========
+        function approveItem(id) {
+            const item = reviewData.find(d => d.id === id);
+            if (item) {
+                item.status = 'approved';
+                updateStats();
+                renderReviewList();
+                renderPagination();
+                showToast('已通过：' + item.title);
+            }
+        }
+
+        function openRejectModal(id) {
+            currentRejectId = id;
+            const item = reviewData.find(d => d.id === id);
+            if (item) {
+                document.getElementById('rejectItemCover').src = item.cover;
+                document.getElementById('rejectItemTitle').textContent = item.title;
+                document.getElementById('rejectItemAuthor').textContent = item.author;
+            }
+            openModal('rejectModal');
+        }
+
+        function confirmReject() {
+            const reason = document.getElementById('rejectReason').value;
+            if (!reason) {
+                showToast('请选择驳回原因', 'error');
+                return;
+            }
+
+            const item = reviewData.find(d => d.id === currentRejectId);
+            if (item) {
+                item.status = 'rejected';
+                item.rejectReason = reason + (document.getElementById('rejectDetail').value ? ' - ' + document.getElementById('rejectDetail').value : '');
+                updateStats();
+                renderReviewList();
+                renderPagination();
+                showToast('已驳回：' + item.title);
+            }
+            closeModal('rejectModal');
+            document.getElementById('rejectReason').value = '';
+            document.getElementById('rejectDetail').value = '';
+            currentRejectId = null;
+        }
+
+        // ========== 预览 ==========
+        function previewItem(id) {
+            const item = reviewData.find(d => d.id === id);
+            if (!item) return;
+
+            document.getElementById('previewCover').src = item.cover;
+            document.getElementById('previewTitle').textContent = item.title;
+            document.getElementById('previewAuthor').textContent = item.author;
+            document.getElementById('previewCategory').textContent = item.category;
+            document.getElementById('previewTime').textContent = item.submitTime;
+            document.getElementById('previewSummary').textContent = item.summary;
+            document.getElementById('previewContent').textContent = item.content;
+
+            const tagsHtml = item.tags.map(tag =>
+                `<span class="px-2 py-1 bg-accent-blue/20 text-accent-blue text-xs rounded">${tag}</span>`
+            ).join('');
+            document.getElementById('previewTags').innerHTML = tagsHtml;
+
+            openModal('previewModal');
+        }
+
+        // ========== Tab按钮事件 ==========
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.status);
+            });
+        });
+
+        // ========== 初始化 ==========
+        function init() {
+            updateStats();
+            renderReviewList();
+            renderPagination();
+            initCategoryFilter();
+        }
+
+        init();
     </script>
 </body>
 </html>

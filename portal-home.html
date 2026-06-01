@@ -29,15 +29,28 @@
     </script>
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #030714; }
+        ::-webkit-scrollbar-thumb { background: #1a2744; border-radius: 3px; }
         .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
         .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
-        .module-item { transition: all 0.2s; }
-        .module-item:hover { transform: scale(1.02); }
-        .drag-handle { cursor: move; }
-        .drop-zone { border: 2px dashed #3b82f6; }
+        .component-item { transition: all 0.2s; cursor: grab; }
+        .component-item:active { cursor: grabbing; }
+        .component-item[draggable="true"]:active { opacity: 0.6; }
+        .canvas-module { transition: all 0.2s; }
+        .canvas-module:hover { border-color: rgba(59, 130, 246, 0.5); }
+        .canvas-module.selected { border: 2px solid #3b82f6 !important; box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
+        .drop-zone-active { border: 2px dashed #3b82f6 !important; background: rgba(59, 130, 246, 0.05); }
+        .dragging { opacity: 0.5; transform: scale(0.95); }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .preview-iframe { transition: width 0.3s ease; }
+        #dropArea { position: relative; }
+        #dropArea.drag-over { background: rgba(59, 130, 246, 0.05); }
     </style>
 </head>
 <body class="bg-primary-bg text-text-primary min-h-screen">
+    <!-- 顶部导航 -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
         <div class="flex items-center gap-3">
             <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
@@ -66,6 +79,7 @@
         </div>
     </header>
 
+    <!-- 左侧菜单 -->
     <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
         <nav class="py-4">
             <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
@@ -95,22 +109,6 @@
                 <span>发布管理</span>
             </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
-            <a href="portal-home.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-home w-5 text-accent-blue"></i>
-                <span>首页装修</span>
-            </a>
-            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-image w-5 text-text-secondary"></i>
-                <span>Banner管理</span>
-            </a>
-            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-columns w-5 text-text-secondary"></i>
-                <span>栏目管理</span>
-            </a>
-            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
-                <span>专题管理</span>
-            </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
             <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-newspaper w-5 text-text-secondary"></i>
@@ -162,23 +160,42 @@
         </nav>
     </aside>
 
+    <!-- 主内容区 -->
     <main class="ml-[220px] mt-16 p-6">
+        <!-- 页面标题栏 -->
         <div class="flex items-center justify-between mb-6">
-            <div>
-                <h1 class="text-2xl font-semibold">首页装修</h1>
-                <p class="text-text-muted mt-1">可视化编辑首页布局，拖拽组件快速搭建</p>
+            <div class="flex items-center gap-4">
+                <div>
+                    <h1 class="text-2xl font-semibold">首页装修</h1>
+                    <p class="text-text-muted mt-1">可视化编辑首页布局，拖拽组件快速搭建</p>
+                </div>
+                <select id="pageSelector" class="bg-card-bg border border-border-dark rounded-xl px-4 py-2 text-sm focus:border-accent-blue focus:outline-none">
+                    <option value="home">首页</option>
+                    <option value="list">列表页</option>
+                    <option value="detail">详情页</option>
+                </select>
             </div>
             <div class="flex items-center gap-3">
-                <button class="px-4 py-2 border border-border-dark rounded-xl hover:border-text-muted transition-colors">
+                <button onclick="undo()" id="undoBtn" class="px-4 py-2 border border-border-dark rounded-xl hover:border-accent-blue transition-colors disabled:opacity-50" disabled>
                     <i class="fas fa-undo mr-2"></i>撤销
                 </button>
-                <button class="px-4 py-2 border border-border-dark rounded-xl hover:border-text-muted transition-colors">
+                <button onclick="redo()" id="redoBtn" class="px-4 py-2 border border-border-dark rounded-xl hover:border-accent-blue transition-colors disabled:opacity-50" disabled>
                     <i class="fas fa-redo mr-2"></i>重做
                 </button>
-                <button class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
-                    <i class="fas fa-desktop mr-2"></i>预览
+                <button onclick="openPreview()" class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
+                    <i class="fas fa-eye mr-2"></i>预览
                 </button>
-                <button class="px-5 py-2 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
+                <label class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors cursor-pointer">
+                    <i class="fas fa-upload mr-2"></i>导入
+                    <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importConfig(this.files[0])">
+                </label>
+                <button onclick="exportConfig()" class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
+                    <i class="fas fa-download mr-2"></i>导出
+                </button>
+                <button onclick="clearCanvas()" class="px-4 py-2 bg-primary-bg border border-accent-red/50 text-accent-red rounded-xl hover:bg-accent-red/10 transition-colors">
+                    <i class="fas fa-trash-alt mr-2"></i>清空
+                </button>
+                <button onclick="savePage()" class="px-5 py-2 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
                     <i class="fas fa-save mr-2"></i>保存
                 </button>
             </div>
@@ -188,8 +205,12 @@
             <!-- 组件面板 -->
             <div class="col-span-1 bg-card-bg rounded-xl border border-border-dark p-4">
                 <h3 class="text-lg font-medium mb-4">组件库</h3>
-                <div class="space-y-3">
-                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                <div class="relative mb-4">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                    <input type="text" id="componentSearch" placeholder="搜索组件..." oninput="filterComponents(this.value)" class="w-full bg-primary-bg border border-border-dark rounded-lg pl-10 pr-4 py-2 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div id="componentPanel" class="space-y-3">
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="banner">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded bg-accent-blue/20 flex items-center justify-center">
                                 <i class="fas fa-image text-accent-blue"></i>
@@ -200,18 +221,29 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="carousel">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded bg-accent-cyan/20 flex items-center justify-center">
-                                <i class="fas fa-th text-accent-cyan"></i>
+                                <i class="fas fa-images text-accent-cyan"></i>
                             </div>
                             <div>
-                                <div class="font-medium text-sm">信息流</div>
-                                <div class="text-xs text-text-muted">图文列表展示</div>
+                                <div class="font-medium text-sm">图片 carousel</div>
+                                <div class="text-xs text-text-muted">多图轮播展示</div>
                             </div>
                         </div>
                     </div>
-                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="news">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-accent-green/20 flex items-center justify-center">
+                                <i class="fas fa-newspaper text-accent-green"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">新闻列表</div>
+                                <div class="text-xs text-text-muted">资讯文章列表</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="card">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded bg-accent-green/20 flex items-center justify-center">
                                 <i class="fas fa-square text-accent-green"></i>
@@ -222,7 +254,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="notice">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded bg-accent-amber/20 flex items-center justify-center">
                                 <i class="fas fa-bullhorn text-accent-amber"></i>
@@ -233,10 +265,43 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="title">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded bg-purple-500/20 flex items-center justify-center">
-                                <i class="fas fa-link text-purple-400"></i>
+                                <i class="fas fa-heading text-purple-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">标题组件</div>
+                                <div class="text-xs text-text-muted">大标题/副标题</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="tabs">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-pink-500/20 flex items-center justify-center">
+                                <i class="fas fa-th-large text-pink-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">Tab标签</div>
+                                <div class="text-xs text-text-muted">标签页切换</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="divider">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-gray-500/20 flex items-center justify-center">
+                                <i class="fas fa-minus text-gray-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">分隔线</div>
+                                <div class="text-xs text-text-muted">页面分隔/留白</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="footer">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-indigo-500/20 flex items-center justify-center">
+                                <i class="fas fa-th text-indigo-400"></i>
                             </div>
                             <div>
                                 <div class="font-medium text-sm">快捷入口</div>
@@ -244,7 +309,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors">
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="video">
                         <div class="flex items-center gap-3">
                             <div class="w-10 h-10 rounded bg-red-500/20 flex items-center justify-center">
                                 <i class="fas fa-play text-red-400"></i>
@@ -252,6 +317,17 @@
                             <div>
                                 <div class="font-medium text-sm">视频模块</div>
                                 <div class="text-xs text-text-muted">视频内容播放</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="component-item p-3 bg-primary-bg rounded-lg border border-border-dark cursor-pointer hover:border-accent-blue transition-colors" draggable="true" data-type="topic">
+                        <div class="flex items-center gap-3">
+                            <div class="w-10 h-10 rounded bg-orange-500/20 flex items-center justify-center">
+                                <i class="fas fa-layer-group text-orange-400"></i>
+                            </div>
+                            <div>
+                                <div class="font-medium text-sm">专题模块</div>
+                                <div class="text-xs text-text-muted">专题内容展示</div>
                             </div>
                         </div>
                     </div>
@@ -264,73 +340,51 @@
                     <!-- 设备切换 -->
                     <div class="flex items-center justify-between px-4 py-3 border-b border-border-dark bg-primary-bg/50">
                         <div class="flex items-center gap-2">
-                            <button class="p-2 bg-accent-blue/20 text-accent-blue rounded-lg">
+                            <button onclick="setDevice('pc')" id="devicePc" class="p-2 bg-accent-blue/20 text-accent-blue rounded-lg">
                                 <i class="fas fa-desktop"></i>
                             </button>
-                            <button class="p-2 text-text-muted hover:text-text-primary rounded-lg">
+                            <button onclick="setDevice('tablet')" id="deviceTablet" class="p-2 text-text-muted hover:text-text-primary rounded-lg">
                                 <i class="fas fa-tablet-alt"></i>
                             </button>
-                            <button class="p-2 text-text-muted hover:text-text-primary rounded-lg">
+                            <button onclick="setDevice('mobile')" id="deviceMobile" class="p-2 text-text-muted hover:text-text-primary rounded-lg">
                                 <i class="fas fa-mobile-alt"></i>
                             </button>
                         </div>
-                        <span class="text-sm text-text-muted">PC端 - 1920 x 1080</span>
+                        <div class="flex items-center gap-4">
+                            <span id="deviceLabel" class="text-sm text-text-muted">PC端 - 1920 x 1080</span>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="checkbox" id="gridShow" checked class="accent-accent-blue">
+                                <span class="text-sm text-text-muted">网格</span>
+                            </label>
+                        </div>
                     </div>
                     <!-- 画布内容 -->
-                    <div class="p-4 min-h-[600px]" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
-                        <!-- 顶部导航 -->
-                        <div class="bg-card-bg rounded-lg p-3 mb-4 flex items-center justify-between border border-border-dark">
-                            <div class="flex items-center gap-4">
-                                <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=120&h=30&fit=crop" class="h-6 object-cover rounded">
-                                <div class="flex items-center gap-2 text-sm">
-                                    <a href="#" class="text-text-primary hover:text-accent-blue">首页</a>
-                                    <a href="#" class="text-text-secondary hover:text-accent-blue">新闻</a>
-                                    <a href="#" class="text-text-secondary hover:text-accent-blue">政策</a>
-                                    <a href="#" class="text-text-secondary hover:text-accent-blue">专题</a>
-                                    <a href="#" class="text-text-secondary hover:text-accent-blue">关于</a>
+                    <div id="canvasWrapper" class="p-4 overflow-auto" style="background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);">
+                        <div id="canvas" class="bg-card-bg rounded-lg p-4 mx-auto transition-all duration-300" style="width: 1200px;">
+                            <!-- 导航栏 -->
+                            <div class="flex items-center justify-between mb-4 pb-4 border-b border-border-dark">
+                                <div class="flex items-center gap-6">
+                                    <div class="w-32 h-8 bg-primary-bg rounded flex items-center justify-center">
+                                        <span class="text-sm font-medium">Logo</span>
+                                    </div>
+                                    <div class="flex items-center gap-4 text-sm">
+                                        <a href="#" class="text-text-primary hover:text-accent-blue">首页</a>
+                                        <a href="#" class="text-text-secondary hover:text-accent-blue">新闻</a>
+                                        <a href="#" class="text-text-secondary hover:text-accent-blue">政策</a>
+                                        <a href="#" class="text-text-secondary hover:text-accent-blue">专题</a>
+                                        <a href="#" class="text-text-secondary hover:text-accent-blue">关于</a>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-3">
+                                    <i class="fas fa-search text-text-muted cursor-pointer"></i>
+                                    <i class="fas fa-user text-text-muted cursor-pointer"></i>
                                 </div>
                             </div>
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-search text-text-muted"></i>
-                                <i class="fas fa-user text-text-muted"></i>
-                            </div>
-                        </div>
-                        <!-- 拖放区域 -->
-                        <div id="dropArea" class="min-h-[500px] relative" ondrop="handleDrop(event)" ondragover="handleDragOver(event)">
-                            <!-- 已添加的模块 -->
-                            <div class="module-item bg-card-bg rounded-lg p-4 mb-4 border-2 border-dashed border-accent-blue/50 relative">
-                                <div class="absolute top-2 right-2 flex items-center gap-1">
-                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-arrows-alt text-xs"></i></button>
-                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-edit text-xs"></i></button>
-                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-trash text-xs"></i></button>
-                                </div>
-                                <div class="text-xs text-accent-blue mb-2"><i class="fas fa-image mr-1"></i>Banner轮播 - 已配置</div>
-                                <div class="flex gap-2">
-                                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=300&h=120&fit=crop" class="w-32 h-16 rounded object-cover">
-                                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=300&h=120&fit=crop" class="w-32 h-16 rounded object-cover">
-                                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=300&h=120&fit=crop" class="w-32 h-16 rounded object-cover">
-                                </div>
-                            </div>
-                            <div class="module-item bg-card-bg rounded-lg p-4 mb-4 border-2 border-dashed border-accent-blue/50 relative">
-                                <div class="absolute top-2 right-2 flex items-center gap-1">
-                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-arrows-alt text-xs"></i></button>
-                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-edit text-xs"></i></button>
-                                    <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted"><i class="fas fa-trash text-xs"></i></button>
-                                </div>
-                                <div class="text-xs text-accent-cyan mb-2"><i class="fas fa-th mr-1"></i>信息流 - 已配置</div>
-                                <div class="grid grid-cols-3 gap-3">
-                                    <div class="bg-primary-bg rounded p-2">
-                                        <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=100&h=60&fit=crop" class="w-full h-12 rounded object-cover mb-2">
-                                        <div class="text-xs">数字化转型工作进展报告</div>
-                                    </div>
-                                    <div class="bg-primary-bg rounded p-2">
-                                        <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=100&h=60&fit=crop" class="w-full h-12 rounded object-cover mb-2">
-                                        <div class="text-xs">智慧城市建设成果展示</div>
-                                    </div>
-                                    <div class="bg-primary-bg rounded p-2">
-                                        <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=100&h=60&fit=crop" class="w-full h-12 rounded object-cover mb-2">
-                                        <div class="text-xs">第一季度工作规划部署</div>
-                                    </div>
+                            <!-- 拖放区域 -->
+                            <div id="dropArea" class="min-h-[400px]" ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                                <div id="emptyTip" class="h-[400px] flex flex-col items-center justify-center text-text-muted">
+                                    <i class="fas fa-plus text-4xl mb-4 opacity-50"></i>
+                                    <p>从左侧拖拽组件到这里</p>
                                 </div>
                             </div>
                         </div>
@@ -341,64 +395,1091 @@
             <!-- 属性面板 -->
             <div class="col-span-1 bg-card-bg rounded-xl border border-border-dark p-4">
                 <h3 class="text-lg font-medium mb-4">属性配置</h3>
-                <div class="space-y-4">
-                    <div>
-                        <label class="block text-sm text-text-secondary mb-2">模块名称</label>
-                        <input type="text" value="Banner轮播" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                <div id="propertyPanel">
+                    <div id="noSelection" class="text-center py-12 text-text-muted">
+                        <i class="fas fa-mouse-pointer text-4xl mb-4 opacity-30"></i>
+                        <p>选择组件以编辑属性</p>
                     </div>
-                    <div>
-                        <label class="block text-sm text-text-secondary mb-2">轮播间隔</label>
-                        <input type="number" value="3" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-                        <span class="text-xs text-text-muted mt-1">单位：秒</span>
-                    </div>
-                    <div>
-                        <label class="block text-sm text-text-secondary mb-2">显示指示器</label>
-                        <div class="flex items-center gap-4">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="indicator" checked class="accent-accent-blue">
-                                <span class="text-sm">是</span>
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="indicator" class="accent-accent-blue">
-                                <span class="text-sm">否</span>
-                            </label>
+                    <div id="propertyContent" class="hidden space-y-4">
+                        <div>
+                            <label class="block text-sm text-text-secondary mb-2">模块名称</label>
+                            <input type="text" id="propName" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
                         </div>
-                    </div>
-                    <div>
-                        <label class="block text-sm text-text-secondary mb-2">自动播放</label>
-                        <div class="flex items-center gap-4">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="autoplay" checked class="accent-accent-blue">
-                                <span class="text-sm">是</span>
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="autoplay" class="accent-accent-blue">
-                                <span class="text-sm">否</span>
-                            </label>
+                        <div id="propInterval" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">轮播间隔</label>
+                            <div class="flex items-center gap-2">
+                                <input type="number" id="propIntervalValue" value="3" min="1" max="10" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                                <span class="text-sm text-text-muted">秒</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="pt-4 border-t border-border-dark">
-                        <label class="block text-sm text-text-secondary mb-2">关联内容</label>
-                        <select class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-                            <option>选择内容分类</option>
-                            <option>新闻资讯</option>
-                            <option>政策文件</option>
-                            <option selected>通知公告</option>
-                        </select>
+                        <div id="propAutoPlay" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">自动播放</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="propAutoPlay" value="true" checked class="accent-accent-blue">
+                                    <span class="text-sm">是</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="propAutoPlay" value="false" class="accent-accent-blue">
+                                    <span class="text-sm">否</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="propIndicator" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">显示指示器</label>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="propIndicator" value="true" checked class="accent-accent-blue">
+                                    <span class="text-sm">是</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer">
+                                    <input type="radio" name="propIndicator" value="false" class="accent-accent-blue">
+                                    <span class="text-sm">否</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="propHeight" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">高度</label>
+                            <input type="number" id="propHeightValue" value="400" min="100" max="800" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                        </div>
+                        <div id="propBgColor" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">背景颜色</label>
+                            <div class="flex items-center gap-2">
+                                <input type="color" id="propBgColorValue" value="#0a1628" class="w-10 h-10 rounded border border-border-dark cursor-pointer">
+                                <input type="text" id="propBgColorText" value="#0a1628" class="flex-1 bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                            </div>
+                        </div>
+                        <div id="propPadding" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">内边距</label>
+                            <input type="number" id="propPaddingValue" value="16" min="0" max="48" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                        </div>
+                        <div id="propContentType" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">关联内容</label>
+                            <select id="propContentTypeValue" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                                <option value="">自动选择</option>
+                                <option>新闻资讯</option>
+                                <option>政策文件</option>
+                                <option>通知公告</option>
+                                <option>专题活动</option>
+                            </select>
+                        </div>
+                        <div id="propCount" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">显示数量</label>
+                            <input type="number" id="propCountValue" value="6" min="1" max="20" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                        </div>
+                        <div id="propTitle" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">标题文字</label>
+                            <input type="text" id="propTitleValue" placeholder="请输入标题" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                        </div>
+                        <div id="propSubtitle" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">副标题</label>
+                            <input type="text" id="propSubtitleValue" placeholder="请输入副标题" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                        </div>
+                        <div id="propText" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">公告内容</label>
+                            <textarea id="propTextValue" rows="3" placeholder="请输入公告内容" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                        </div>
+                        <div id="propTopic" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">关联专题</label>
+                            <select id="propTopicValue" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                                <option value="">自动选择</option>
+                            </select>
+                        </div>
+                        <div id="propDisplayMode" class="hidden">
+                            <label class="block text-sm text-text-secondary mb-2">显示模式</label>
+                            <select id="propDisplayModeValue" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                                <option value="grid">网格模式</option>
+                                <option value="carousel">轮播模式</option>
+                                <option value="list">列表模式</option>
+                            </select>
+                        </div>
+                        <!-- 操作按钮 -->
+                        <div class="pt-4 border-t border-border-dark flex gap-2">
+                            <button onclick="copySelected()" class="flex-1 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors">
+                                <i class="fas fa-copy mr-1"></i>复制
+                            </button>
+                            <button onclick="moveUpSelected()" class="flex-1 py-2 text-sm text-text-secondary hover:text-accent-blue rounded-lg transition-colors">
+                                <i class="fas fa-arrow-up mr-1"></i>上移
+                            </button>
+                            <button onclick="moveDownSelected()" class="flex-1 py-2 text-sm text-text-secondary hover:text-accent-blue rounded-lg transition-colors">
+                                <i class="fas fa-arrow-down mr-1"></i>下移
+                            </button>
+                            <button onclick="deleteSelected()" class="flex-1 py-2 text-sm text-accent-red hover:bg-accent-red/10 rounded-lg transition-colors">
+                                <i class="fas fa-trash mr-1"></i>删除
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- 全屏预览弹窗 -->
+    <div id="previewModal" class="fixed inset-0 bg-black z-50 hidden items-center justify-center">
+        <div class="absolute top-4 right-4 flex items-center gap-3">
+            <div class="flex items-center gap-2 bg-card-bg/90 rounded-lg p-1">
+                <button onclick="setPreviewDevice('pc')" id="previewDevicePc" class="px-3 py-1.5 bg-accent-blue text-white rounded text-sm">PC</button>
+                <button onclick="setPreviewDevice('tablet')" id="previewDeviceTablet" class="px-3 py-1.5 text-text-muted hover:text-white rounded text-sm">平板</button>
+                <button onclick="setPreviewDevice('mobile')" id="previewDeviceMobile" class="px-3 py-1.5 text-text-muted hover:text-white rounded text-sm">手机</button>
+            </div>
+            <button onclick="closePreview()" class="w-10 h-10 bg-card-bg/90 rounded-lg flex items-center justify-center hover:bg-card-bg text-white transition-colors">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div id="previewFrame" class="bg-card-bg rounded-lg overflow-hidden transition-all duration-300" style="width: 1200px; height: 80vh;">
+            <iframe id="previewIframe" class="w-full h-full border-0" src="about:blank"></iframe>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[400px] border border-border-dark shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+                <div class="w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认删除</h3>
+                    <p class="text-sm text-text-muted mt-1">删除后无法恢复</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-text-secondary">确定要删除这个组件吗？</p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeDeleteModal()" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="confirmDelete()" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        // 初始化 - 加载样例数据
+        let modules = [
+            {
+                id: 'mod_sample_1',
+                type: 'banner',
+                name: '首页Banner',
+                locked: false,
+                height: 400,
+                interval: 4,
+                autoplay: true,
+                indicator: true,
+                bgColor: '#0a1628',
+                padding: 16,
+                images: [
+                    'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=400&fit=crop',
+                    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=400&fit=crop',
+                    'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop'
+                ]
+            },
+            {
+                id: 'mod_sample_2',
+                type: 'title',
+                name: '专区标题',
+                locked: false,
+                title: '新闻资讯',
+                subtitle: '了解最新动态',
+                bgColor: '#0a1628',
+                padding: 16
+            },
+            {
+                id: 'mod_sample_3',
+                type: 'news',
+                name: '新闻列表',
+                locked: false,
+                title: '新闻资讯',
+                subtitle: '最新资讯动态',
+                count: 6,
+                contentType: '',
+                bgColor: '#0a1628',
+                padding: 16
+            },
+            {
+                id: 'mod_sample_4',
+                type: 'notice',
+                name: '系统公告',
+                locked: false,
+                text: '欢迎访问内容中台系统，这里提供最新的资讯和服务',
+                bgColor: '#0a1628',
+                padding: 16
+            }
+        ];
+        let selectedModuleId = null;
+        let history = [];
+        let historyIndex = -1;
+        let currentDevice = 'pc';
+        let draggedType = null;
+        const StatusMap = {
+            published: '已上线',
+            ongoing: '进行中',
+            draft: '草稿',
+            archived: '已归档'
+        };
+
+        const deviceSizes = {
+            pc: { width: 1200, label: 'PC端 - 1920 x 1080' },
+            tablet: { width: 768, label: '平板端 - 768 x 1024' },
+            mobile: { width: 375, label: '移动端 - 375 x 812' }
+        };
+
+        const componentTemplates = {
+            banner: {
+                type: 'banner',
+                name: 'Banner轮播',
+                height: 400,
+                interval: 3,
+                autoplay: true,
+                indicator: true,
+                bgColor: '#0a1628',
+                padding: 16,
+                images: [
+                    'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=1200&h=400&fit=crop',
+                    'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=1200&h=400&fit=crop',
+                    'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=400&fit=crop'
+                ]
+            },
+            carousel: {
+                type: 'carousel',
+                name: '图片carousel',
+                height: 300,
+                autoplay: true,
+                bgColor: '#0a1628',
+                padding: 16,
+                images: [
+                    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop',
+                    'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop'
+                ]
+            },
+            news: {
+                type: 'news',
+                name: '新闻列表',
+                title: '新闻资讯',
+                subtitle: '最新资讯动态',
+                count: 6,
+                contentType: '',
+                bgColor: '#0a1628',
+                padding: 16
+            },
+            card: {
+                type: 'card',
+                name: '卡片模块',
+                title: '精选推荐',
+                count: 4,
+                bgColor: '#0a1628',
+                padding: 16
+            },
+            notice: {
+                type: 'notice',
+                name: '公告模块',
+                text: '欢迎访问内容中台系统，这里提供最新的资讯和服务',
+                bgColor: '#0a1628',
+                padding: 16
+            },
+            title: {
+                type: 'title',
+                name: '标题组件',
+                title: '新闻中心',
+                subtitle: '了解最新动态',
+                bgColor: '#0a1628',
+                padding: 16
+            },
+            tabs: {
+                type: 'tabs',
+                name: 'Tab标签',
+                titles: ['Tab 1', 'Tab 2', 'Tab 3'],
+                contentType: '',
+                bgColor: '#0a1628',
+                padding: 16
+            },
+            divider: {
+                type: 'divider',
+                name: '分隔线',
+                height: 40,
+                bgColor: 'transparent',
+                padding: 0
+            },
+            footer: {
+                type: 'footer',
+                name: '快捷入口',
+                title: '快捷服务',
+                links: ['新闻资讯', '政策文件', '专题活动', '帮助中心'],
+                bgColor: '#0a1628',
+                padding: 16
+            },
+            video: {
+                type: 'video',
+                name: '视频模块',
+                title: '精彩视频',
+                videoUrl: '',
+                bgColor: '#0a1628',
+                padding: 16
+            },
+            topic: {
+                type: 'topic',
+                name: '专题模块',
+                title: '专题活动',
+                topicId: '',
+                displayMode: 'grid',
+                count: 4,
+                bgColor: '#0a1628',
+                padding: 16
+            }
+        };
+
+        // 渲染模块列表
+        function renderModules() {
+            const dropArea = document.getElementById('dropArea');
+
+            if (modules.length === 0) {
+                dropArea.innerHTML = `
+                    <div id="emptyTip" class="h-[400px] flex flex-col items-center justify-center text-text-muted">
+                        <i class="fas fa-plus text-4xl mb-4 opacity-50"></i>
+                        <p>从左侧拖拽组件到这里</p>
+                    </div>
+                `;
+                return;
+            }
+
+            dropArea.innerHTML = modules.map((mod, index) => `
+                <div class="canvas-module mb-4 p-4 border-2 border-dashed border-accent-blue/50 rounded-lg ${selectedModuleId === mod.id ? 'selected' : ''} ${mod.locked ? 'opacity-60 cursor-not-allowed' : ''}" data-id="${mod.id}" draggable="${!mod.locked}" ondragstart="${mod.locked ? '' : `handleCanvasDragStart(event, '${mod.id}')`}" ondragover="${mod.locked ? '' : `handleCanvasDragOver(event, '${mod.id}')`}" ondrop="${mod.locked ? '' : `handleCanvasDrop(event, '${mod.id}')`}" ondragend="handleCanvasDragEnd(event)" onclick="${mod.locked ? '' : `selectModule('${mod.id}', event)`}">
+                    <div class="absolute top-2 right-2 flex items-center gap-1">
+                        <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted hover:text-white text-xs" onclick="event.stopPropagation(); moveUp('${mod.id}')" title="上移" ${mod.locked ? 'disabled' : ''}>
+                            <i class="fas fa-arrow-up"></i>
+                        </button>
+                        <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted hover:text-white text-xs" onclick="event.stopPropagation(); moveDown('${mod.id}')" title="下移" ${mod.locked ? 'disabled' : ''}>
+                            <i class="fas fa-arrow-down"></i>
+                        </button>
+                        <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted hover:text-white text-xs" onclick="event.stopPropagation(); duplicateModule('${mod.id}')" title="复制" ${mod.locked ? 'disabled' : ''}>
+                            <i class="fas fa-copy"></i>
+                        </button>
+                        <button class="p-1.5 bg-primary-bg rounded hover:bg-border-dark text-text-muted hover:text-white text-xs" onclick="event.stopPropagation(); copyToClipboard('${mod.id}')" title="复制到剪贴板" ${mod.locked ? 'disabled' : ''}>
+                            <i class="fas fa-clipboard"></i>
+                        </button>
+                        <button class="p-1.5 bg-primary-bg rounded hover:bg-accent-amber/50 text-text-muted hover:text-accent-amber text-xs" onclick="event.stopPropagation(); toggleLock('${mod.id}')" title="${mod.locked ? '解锁' : '锁定'}">
+                            <i class="fas fa-${mod.locked ? 'lock' : 'unlock'}"></i>
+                        </button>
+                        <button class="p-1.5 bg-primary-bg rounded hover:bg-accent-red/50 text-text-muted hover:text-accent-red text-xs" onclick="event.stopPropagation(); openDeleteModal('${mod.id}')" title="删除" ${mod.locked ? 'disabled' : ''}>
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                    ${renderModulePreview(mod)}
+                </div>
+            `).join('');
+        }
+
+        function renderModulePreview(mod) {
+            switch(mod.type) {
+                case 'banner':
+                    return `
+                        <div class="text-xs text-accent-blue mb-2"><i class="fas fa-image mr-1"></i>${mod.name}</div>
+                        <div class="flex gap-2 overflow-hidden rounded">
+                            ${mod.images.map(img => `<img src="${img}" class="h-32 object-cover rounded">`).join('')}
+                        </div>
+                    `;
+                case 'carousel':
+                    return `
+                        <div class="text-xs text-accent-cyan mb-2"><i class="fas fa-images mr-1"></i>${mod.name}</div>
+                        <div class="flex gap-2 overflow-hidden rounded">
+                            ${mod.images.map(img => `<img src="${img}" class="h-24 object-cover rounded">`).join('')}
+                        </div>
+                    `;
+                case 'news':
+                    return `
+                        <div class="text-xs text-accent-green mb-2"><i class="fas fa-newspaper mr-1"></i>${mod.name}</div>
+                        <div class="grid grid-cols-3 gap-3">
+                            ${[1,2,3].map(() => `
+                                <div class="bg-primary-bg rounded p-2">
+                                    <div class="h-16 bg-border-dark rounded mb-2"></div>
+                                    <div class="h-3 bg-border-dark rounded w-3/4 mb-1"></div>
+                                    <div class="h-2 bg-border-dark rounded w-1/2"></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                case 'card':
+                    return `
+                        <div class="text-xs text-accent-green mb-2"><i class="fas fa-square mr-1"></i>${mod.name}</div>
+                        <div class="grid grid-cols-4 gap-3">
+                            ${[1,2,3,4].map(() => `
+                                <div class="bg-primary-bg rounded p-2">
+                                    <div class="h-20 bg-border-dark rounded mb-2"></div>
+                                    <div class="h-3 bg-border-dark rounded w-3/4"></div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `;
+                case 'notice':
+                    return `
+                        <div class="text-xs text-accent-amber mb-2"><i class="fas fa-bullhorn mr-1"></i>${mod.name}</div>
+                        <div class="bg-primary-bg rounded p-3 flex items-center gap-3">
+                            <i class="fas fa-bullhorn text-accent-amber"></i>
+                            <span class="text-sm truncate">${mod.text}</span>
+                        </div>
+                    `;
+                case 'title':
+                    return `
+                        <div class="text-xs text-purple-400 mb-2"><i class="fas fa-heading mr-1"></i>${mod.name}</div>
+                        <div class="text-center py-4">
+                            <div class="text-xl font-bold">${mod.title}</div>
+                            <div class="text-sm text-text-muted mt-1">${mod.subtitle}</div>
+                        </div>
+                    `;
+                case 'tabs':
+                    return `
+                        <div class="text-xs text-pink-400 mb-2"><i class="fas fa-th-large mr-1"></i>${mod.name}</div>
+                        <div class="flex gap-2 mb-2">
+                            ${mod.titles.map(t => `<span class="px-3 py-1 bg-primary-bg rounded text-xs">${t}</span>`).join('')}
+                        </div>
+                        <div class="bg-primary-bg rounded p-4 h-16"></div>
+                    `;
+                case 'divider':
+                    return `
+                        <div class="text-xs text-gray-400 mb-2"><i class="fas fa-minus mr-1"></i>${mod.name}</div>
+                        <div class="border-t border-dashed border-border-dark my-2"></div>
+                    `;
+                case 'footer':
+                    return `
+                        <div class="text-xs text-indigo-400 mb-2"><i class="fas fa-th mr-1"></i>${mod.name}</div>
+                        <div class="flex justify-center gap-4">
+                            ${mod.links.map(link => `<span class="px-3 py-1 bg-primary-bg rounded text-xs">${link}</span>`).join('')}
+                        </div>
+                    `;
+                case 'video':
+                    return `
+                        <div class="text-xs text-red-400 mb-2"><i class="fas fa-play mr-1"></i>${mod.name}</div>
+                        <div class="bg-primary-bg rounded aspect-video flex items-center justify-center">
+                            <i class="fas fa-play-circle text-4xl text-text-muted"></i>
+                        </div>
+                    `;
+                case 'topic':
+                    return `
+                        <div class="text-xs text-orange-400 mb-2"><i class="fas fa-layer-group mr-1"></i>${mod.name}</div>
+                        <div class="bg-primary-bg rounded p-3">
+                            <div class="flex items-center justify-between mb-2">
+                                <span class="font-medium text-sm">${mod.title || '专题活动'}</span>
+                                <span class="text-xs text-text-muted">${mod.displayMode === 'carousel' ? '轮播' : mod.displayMode === 'list' ? '列表' : '网格'}模式</span>
+                            </div>
+                            ${mod.topicId ? `<div class="text-xs text-text-muted mb-2">关联专题: ${getTopicName(mod.topicId)}</div>` : '<div class="text-xs text-orange-400 mb-2">请在属性面板选择专题</div>'}
+                            <div class="grid grid-cols-${Math.min(mod.count || 4, 4)} gap-2">
+                                ${[...Array(Math.min(mod.count || 4, 4))].map(() => `
+                                    <div class="bg-border-dark rounded p-2">
+                                        <div class="h-12 bg-primary-bg rounded mb-1"></div>
+                                        <div class="h-2 bg-primary-bg rounded w-3/4"></div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    `;
+                default:
+                    return `<div class="text-xs text-text-muted">${mod.name}</div>`;
+            }
+        }
+
+        // 选择模块
+        function selectModule(id, event) {
+            event.stopPropagation();
+            selectedModuleId = id;
+            const mod = modules.find(m => m.id === id);
+            if (!mod) return;
+
+            renderModules();
+            showPropertyPanel(mod);
+        }
+
+        // 显示属性面板
+        function showPropertyPanel(mod) {
+            document.getElementById('noSelection').classList.add('hidden');
+            document.getElementById('propertyContent').classList.remove('hidden');
+
+            document.getElementById('propName').value = mod.name;
+            document.getElementById('propName').oninput = (e) => {
+                mod.name = e.target.value;
+                renderModules();
+            };
+
+            // 显示/隐藏属性字段
+            document.getElementById('propInterval').classList.toggle('hidden', !['banner'].includes(mod.type));
+            document.getElementById('propAutoPlay').classList.toggle('hidden', !['banner', 'carousel'].includes(mod.type));
+            document.getElementById('propIndicator').classList.toggle('hidden', !['banner'].includes(mod.type));
+            document.getElementById('propHeight').classList.toggle('hidden', !['banner', 'carousel', 'video'].includes(mod.type));
+            document.getElementById('propBgColor').classList.toggle('hidden', mod.type === 'divider');
+            document.getElementById('propPadding').classList.toggle('hidden', mod.type === 'divider');
+            document.getElementById('propContentType').classList.toggle('hidden', !['news', 'card', 'tabs'].includes(mod.type));
+            document.getElementById('propCount').classList.toggle('hidden', !['news', 'card'].includes(mod.type));
+            document.getElementById('propTitle').classList.toggle('hidden', !['title', 'card', 'video'].includes(mod.type));
+            document.getElementById('propSubtitle').classList.toggle('hidden', !['title'].includes(mod.type));
+            document.getElementById('propText').classList.toggle('hidden', !['notice'].includes(mod.type));
+            document.getElementById('propTopic').classList.toggle('hidden', !['topic'].includes(mod.type));
+            document.getElementById('propDisplayMode').classList.toggle('hidden', !['topic'].includes(mod.type));
+            if (mod.type === 'topic') {
+                populateTopicSelect();
+            }
+
+            // 绑定属性值
+            if (mod.interval !== undefined) {
+                document.getElementById('propIntervalValue').value = mod.interval;
+                document.getElementById('propIntervalValue').oninput = (e) => {
+                    mod.interval = parseInt(e.target.value);
+                    renderModules();
+                };
+            }
+            if (mod.height !== undefined) {
+                document.getElementById('propHeightValue').value = mod.height;
+                document.getElementById('propHeightValue').oninput = (e) => {
+                    mod.height = parseInt(e.target.value);
+                    renderModules();
+                };
+            }
+            if (mod.title !== undefined) {
+                document.getElementById('propTitleValue').value = mod.title;
+                document.getElementById('propTitleValue').oninput = (e) => {
+                    mod.title = e.target.value;
+                    renderModules();
+                };
+            }
+            if (mod.subtitle !== undefined) {
+                document.getElementById('propSubtitleValue').value = mod.subtitle;
+                document.getElementById('propSubtitleValue').oninput = (e) => {
+                    mod.subtitle = e.target.value;
+                    renderModules();
+                };
+            }
+            if (mod.text !== undefined) {
+                document.getElementById('propTextValue').value = mod.text;
+                document.getElementById('propTextValue').oninput = (e) => {
+                    mod.text = e.target.value;
+                    renderModules();
+                };
+            }
+            if (mod.bgColor !== undefined) {
+                document.getElementById('propBgColorValue').value = mod.bgColor;
+                document.getElementById('propBgColorText').value = mod.bgColor;
+                document.getElementById('propBgColorValue').oninput = (e) => {
+                    mod.bgColor = e.target.value;
+                    document.getElementById('propBgColorText').value = e.target.value;
+                    renderModules();
+                };
+                document.getElementById('propBgColorText').oninput = (e) => {
+                    mod.bgColor = e.target.value;
+                    document.getElementById('propBgColorValue').value = e.target.value;
+                    renderModules();
+                };
+            }
+            if (mod.padding !== undefined) {
+                document.getElementById('propPaddingValue').value = mod.padding;
+                document.getElementById('propPaddingValue').oninput = (e) => {
+                    mod.padding = parseInt(e.target.value);
+                    renderModules();
+                };
+            }
+            if (mod.count !== undefined) {
+                document.getElementById('propCountValue').value = mod.count;
+                document.getElementById('propCountValue').oninput = (e) => {
+                    mod.count = parseInt(e.target.value);
+                    renderModules();
+                };
+            }
+            if (mod.topicId !== undefined) {
+                const topicSelect = document.getElementById('propTopicValue');
+                topicSelect.value = mod.topicId;
+                topicSelect.onchange = (e) => {
+                    mod.topicId = e.target.value;
+                    renderModules();
+                };
+            }
+            if (mod.displayMode !== undefined) {
+                document.getElementById('propDisplayModeValue').value = mod.displayMode;
+                document.getElementById('propDisplayModeValue').onchange = (e) => {
+                    mod.displayMode = e.target.value;
+                    renderModules();
+                };
+            }
+        }
+
+        // 专题数据管理
+        function loadTopicsFromStorage() {
+            try {
+                const data = localStorage.getItem('topics_data');
+                return data ? JSON.parse(data) : [];
+            } catch {
+                return [];
+            }
+        }
+
+        function getTopicName(topicId) {
+            const topics = loadTopicsFromStorage();
+            const topic = topics.find(t => t.id === topicId);
+            return topic ? topic.name : '未找到专题';
+        }
+
+        function populateTopicSelect() {
+            const select = document.getElementById('propTopicValue');
+            if (!select) return;
+            const topics = loadTopicsFromStorage();
+            const currentValue = select.value;
+            select.innerHTML = '<option value="">自动选择</option>' +
+                topics.map(t => `<option value="${t.id}">${t.name} (${StatusMap[t.status] || t.status})</option>`).join('');
+            select.value = currentValue;
+        }
+
+        // 拖拽处理
         function handleDragOver(e) {
             e.preventDefault();
-            e.currentTarget.classList.add('drop-zone');
+            e.dataTransfer.dropEffect = 'copy';
+            e.currentTarget.classList.add('drop-zone-active');
         }
+
+        function handleDragLeave(e) {
+            e.currentTarget.classList.remove('drop-zone-active');
+        }
+
         function handleDrop(e) {
             e.preventDefault();
-            e.currentTarget.classList.remove('drop-zone');
+            e.stopPropagation();
+            e.currentTarget.classList.remove('drop-zone-active');
+            const type = e.dataTransfer.getData('type') || e.dataTransfer.getData('text/plain');
+            if (type && componentTemplates[type]) {
+                addModule(type);
+            }
+        }
+
+        // 双击组件添加到画布
+        document.addEventListener('dblclick', function(e) {
+            const item = e.target.closest('.component-item');
+            if (item && item.dataset.type) {
+                addModule(item.dataset.type);
+            }
+        });
+
+        // 添加模块
+        function addModule(type) {
+            const template = componentTemplates[type];
+            if (!template) return;
+
+            const newModule = {
+                ...template,
+                id: 'mod_' + Date.now()
+            };
+            modules.push(newModule);
+
+            saveHistory();
+            renderModules();
+            selectModule(newModule.id, { stopPropagation: () => {} });
+            showToast('组件已添加', 'success');
+        }
+
+        // 复制模块
+        function copySelected() {
+            if (!selectedModuleId) return;
+            duplicateModule(selectedModuleId);
+        }
+
+        function duplicateModule(id) {
+            const mod = modules.find(m => m.id === id);
+            if (!mod) return;
+
+            const newModule = JSON.parse(JSON.stringify(mod));
+            newModule.id = 'mod_' + Date.now();
+            newModule.name = mod.name + ' (副本)';
+
+            const index = modules.findIndex(m => m.id === id);
+            modules.splice(index + 1, 0, newModule);
+
+            saveHistory();
+            renderModules();
+            selectModule(newModule.id, { stopPropagation: () => {} });
+            showToast('组件已复制', 'success');
+        }
+
+        // 移动模块
+        function moveUpSelected() {
+            if (!selectedModuleId) return;
+            moveUp(selectedModuleId);
+        }
+
+        function moveDownSelected() {
+            if (!selectedModuleId) return;
+            moveDown(selectedModuleId);
+        }
+
+        function moveUp(id) {
+            const index = modules.findIndex(m => m.id === id);
+            if (index > 0) {
+                [modules[index - 1], modules[index]] = [modules[index], modules[index - 1]];
+                saveHistory();
+                renderModules();
+                selectModule(id, { stopPropagation: () => {} });
+            }
+        }
+
+        function moveDown(id) {
+            const index = modules.findIndex(m => m.id === id);
+            if (index < modules.length - 1) {
+                [modules[index], modules[index + 1]] = [modules[index + 1], modules[index]];
+                saveHistory();
+                renderModules();
+                selectModule(id, { stopPropagation: () => {} });
+            }
+        }
+
+        // 锁定/解锁模块
+        function toggleLock(id) {
+            const mod = modules.find(m => m.id === id);
+            if (mod) {
+                mod.locked = !mod.locked;
+                if (mod.locked && selectedModuleId === id) {
+                    selectedModuleId = null;
+                    document.getElementById('noSelection')?.classList.remove('hidden');
+                    document.getElementById('propertyContent')?.classList.add('hidden');
+                }
+                saveHistory();
+                renderModules();
+                showToast(mod.locked ? '组件已锁定' : '组件已解锁', 'success');
+            }
+        }
+
+        // 删除模块
+        function deleteSelected() {
+            if (!selectedModuleId) return;
+            openDeleteModal(selectedModuleId);
+        }
+
+        function openDeleteModal(id) {
+            window.deleteTargetId = id;
+            document.getElementById('deleteModal').classList.remove('hidden');
+            document.getElementById('deleteModal').classList.add('flex');
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.add('hidden');
+            document.getElementById('deleteModal').classList.remove('flex');
+            window.deleteTargetId = null;
+        }
+
+        function confirmDelete() {
+            if (window.deleteTargetId) {
+                modules = modules.filter(m => m.id !== window.deleteTargetId);
+                if (selectedModuleId === window.deleteTargetId) {
+                    selectedModuleId = null;
+                    document.getElementById('noSelection').classList.remove('hidden');
+                    document.getElementById('propertyContent').classList.add('hidden');
+                }
+                saveHistory();
+                renderModules();
+                showToast('组件已删除', 'success');
+            }
+            closeDeleteModal();
+        }
+
+        // 点击画布空白取消选择
+        document.getElementById('dropArea').addEventListener('click', (e) => {
+            if (e.target.id === 'dropArea' || e.target.id === 'emptyTip') {
+                selectedModuleId = null;
+                document.getElementById('noSelection').classList.remove('hidden');
+                document.getElementById('propertyContent').classList.add('hidden');
+                renderModules();
+            }
+        });
+
+        // 历史管理
+        function saveHistory() {
+            history = history.slice(0, historyIndex + 1);
+            history.push(JSON.stringify(modules));
+            historyIndex++;
+            updateHistoryButtons();
+        }
+
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                modules = JSON.parse(history[historyIndex]);
+                selectedModuleId = null;
+                document.getElementById('noSelection').classList.remove('hidden');
+                document.getElementById('propertyContent').classList.add('hidden');
+                renderModules();
+                updateHistoryButtons();
+                showToast('已撤销', 'success');
+            }
+        }
+
+        function redo() {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                modules = JSON.parse(history[historyIndex]);
+                renderModules();
+                updateHistoryButtons();
+                showToast('已重做', 'success');
+            }
+        }
+
+        function updateHistoryButtons() {
+            document.getElementById('undoBtn').disabled = historyIndex <= 0;
+            document.getElementById('redoBtn').disabled = historyIndex >= history.length - 1;
+        }
+
+        // 设备切换
+        function setDevice(device) {
+            currentDevice = device;
+            const size = deviceSizes[device];
+            const canvas = document.getElementById('canvas');
+            canvas.style.width = size.width + 'px';
+
+            document.getElementById('deviceLabel').textContent = size.label;
+            document.getElementById('devicePc').className = device === 'pc' ? 'p-2 bg-accent-blue/20 text-accent-blue rounded-lg' : 'p-2 text-text-muted hover:text-text-primary rounded-lg';
+            document.getElementById('deviceTablet').className = device === 'tablet' ? 'p-2 bg-accent-blue/20 text-accent-blue rounded-lg' : 'p-2 text-text-muted hover:text-text-primary rounded-lg';
+            document.getElementById('deviceMobile').className = device === 'mobile' ? 'p-2 bg-accent-blue/20 text-accent-blue rounded-lg' : 'p-2 text-text-muted hover:text-text-primary rounded-lg';
+        }
+
+        // 预览
+        function openPreview() {
+            const modal = document.getElementById('previewModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setPreviewDevice('pc');
+        }
+
+        function closePreview() {
+            document.getElementById('previewModal').classList.add('hidden');
+            document.getElementById('previewModal').classList.remove('flex');
+        }
+
+        function setPreviewDevice(device) {
+            const size = deviceSizes[device];
+            const frame = document.getElementById('previewFrame');
+            frame.style.width = size.width + 'px';
+            frame.style.height = device === 'mobile' ? '80vh' : '90vh';
+
+            document.getElementById('previewDevicePc').className = device === 'pc' ? 'px-3 py-1.5 bg-accent-blue text-white rounded text-sm' : 'px-3 py-1.5 text-text-muted hover:text-white rounded text-sm';
+            document.getElementById('previewDeviceTablet').className = device === 'tablet' ? 'px-3 py-1.5 bg-accent-blue text-white rounded text-sm' : 'px-3 py-1.5 text-text-muted hover:text-white rounded text-sm';
+            document.getElementById('previewDeviceMobile').className = device === 'mobile' ? 'px-3 py-1.5 bg-accent-blue text-white rounded text-sm' : 'px-3 py-1.5 text-text-muted hover:text-white rounded text-sm';
+        }
+
+        // 保存
+        function savePage() {
+            saveHistory();
+            showToast('页面已保存', 'success');
+        }
+
+        // Toast提示
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-accent-green' : 'bg-accent-red';
+            toast.className = `toast ${bgColor} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2`;
+            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : 'times-circle'}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // 初始化 - 加载样例数据
+        saveHistory();
+        renderModules();
+
+        // 初始化拖拽
+        document.querySelectorAll('.component-item').forEach(item => {
+            item.addEventListener('dragstart', (e) => {
+                const type = item.dataset.type;
+                e.dataTransfer.setData('type', type);
+                e.dataTransfer.setData('text/plain', type);
+                e.dataTransfer.effectAllowed = 'copy';
+            });
+        });
+
+        // 搜索过滤组件
+        function filterComponents(keyword) {
+            const items = document.querySelectorAll('.component-item');
+            const kw = keyword.toLowerCase().trim();
+            items.forEach(item => {
+                const name = item.querySelector('.font-medium')?.textContent?.toLowerCase() || '';
+                const desc = item.querySelector('.text-xs')?.textContent?.toLowerCase() || '';
+                const type = item.dataset.type?.toLowerCase() || '';
+                if (!kw || name.includes(kw) || desc.includes(kw) || type.includes(kw)) {
+                    item.style.display = '';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+        }
+
+        // 导入配置
+        function importConfig(file) {
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const config = JSON.parse(e.target.result);
+                    if (!config.modules || !Array.isArray(config.modules)) {
+                        throw new Error('Invalid format');
+                    }
+                    if (confirm(`确定要导入 ${config.modules.length} 个组件吗？当前画布内容将被替换。`)) {
+                        modules = config.modules.map(m => ({
+                            ...m,
+                            id: 'mod_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9)
+                        }));
+                        selectedModuleId = null;
+                        saveHistory();
+                        renderModules();
+                        showToast('配置已导入', 'success');
+                    }
+                } catch (err) {
+                    showToast('导入失败：' + err.message, 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // 导出配置
+        function exportConfig() {
+            const config = {
+                version: '1.0',
+                exportTime: new Date().toISOString(),
+                pageId: document.getElementById('pageSelector')?.value || 'home',
+                modules: modules
+            };
+            const jsonStr = JSON.stringify(config, null, 2);
+            const blob = new Blob([jsonStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `home-decoration-${Date.now()}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('配置已导出', 'success');
+        }
+
+        // 清空画布
+        function clearCanvas() {
+            if (modules.length === 0) {
+                showToast('画布已是空的', 'error');
+                return;
+            }
+            if (confirm('确定要清空画布吗？所有组件将被删除。')) {
+                modules = [];
+                selectedModuleId = null;
+                document.getElementById('noSelection')?.classList.remove('hidden');
+                document.getElementById('propertyContent')?.classList.add('hidden');
+                saveHistory();
+                renderModules();
+                showToast('画布已清空', 'success');
+            }
+        }
+
+        // 剪贴板
+        let clipboardModule = null;
+
+        function copyToClipboard(moduleId) {
+            const mod = modules.find(m => m.id === moduleId);
+            if (mod) {
+                clipboardModule = JSON.parse(JSON.stringify(mod));
+                showToast('已复制到剪贴板', 'success');
+            }
+        }
+
+        function pasteFromClipboard() {
+            if (!clipboardModule) {
+                showToast('剪贴板为空', 'error');
+                return;
+            }
+            const newModule = {
+                ...clipboardModule,
+                id: 'mod_' + Date.now(),
+                name: clipboardModule.name + ' (粘贴)'
+            };
+            const insertIndex = selectedModuleId
+                ? modules.findIndex(m => m.id === selectedModuleId) + 1
+                : modules.length;
+            modules.splice(insertIndex, 0, newModule);
+            saveHistory();
+            renderModules();
+            selectModule(newModule.id, { stopPropagation: () => {} });
+            showToast('组件已粘贴', 'success');
+        }
+
+        // 键盘快捷键
+        document.addEventListener('keydown', function(e) {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+            const ctrlKey = e.metaKey || e.ctrlKey;
+
+            if ((e.key === 'Delete' || e.key === 'Backspace') && selectedModuleId) {
+                e.preventDefault();
+                openDeleteModal(selectedModuleId);
+            }
+            if (ctrlKey && e.key === 'z' && !e.shiftKey) {
+                e.preventDefault();
+                undo();
+            }
+            if (ctrlKey && (e.key === 'y' || (e.key === 'z' && e.shiftKey))) {
+                e.preventDefault();
+                redo();
+            }
+            if (ctrlKey && e.key === 'c' && selectedModuleId) {
+                e.preventDefault();
+                copyToClipboard(selectedModuleId);
+            }
+            if (ctrlKey && e.key === 'v') {
+                e.preventDefault();
+                pasteFromClipboard();
+            }
+            if (ctrlKey && e.key === 's') {
+                e.preventDefault();
+                savePage();
+            }
+            if (e.key === 'Escape') {
+                selectedModuleId = null;
+                document.getElementById('noSelection')?.classList.remove('hidden');
+                document.getElementById('propertyContent')?.classList.add('hidden');
+                renderModules();
+            }
+            if (e.key === 'ArrowUp' && selectedModuleId) {
+                e.preventDefault();
+                moveUp(selectedModuleId);
+            }
+            if (e.key === 'ArrowDown' && selectedModuleId) {
+                e.preventDefault();
+                moveDown(selectedModuleId);
+            }
+        });
+
+        // 画布内组件拖拽排序
+        let canvasDraggedId = null;
+
+        function handleCanvasDragStart(e, moduleId) {
+            canvasDraggedId = moduleId;
+            e.dataTransfer.setData('canvas-module', moduleId);
+            e.dataTransfer.effectAllowed = 'move';
+            e.target.closest('.canvas-module')?.classList.add('dragging');
+        }
+
+        function handleCanvasDragOver(e, moduleId) {
+            e.preventDefault();
+            if (!canvasDraggedId || canvasDraggedId === moduleId) return;
+            e.dataTransfer.dropEffect = 'move';
+        }
+
+        function handleCanvasDrop(e, targetModuleId) {
+            e.preventDefault();
+            if (!canvasDraggedId || canvasDraggedId === targetModuleId) return;
+
+            const fromIndex = modules.findIndex(m => m.id === canvasDraggedId);
+            const toIndex = modules.findIndex(m => m.id === targetModuleId);
+            if (fromIndex === -1 || toIndex === -1) return;
+
+            const [movedModule] = modules.splice(fromIndex, 1);
+            const insertIndex = toIndex > fromIndex ? toIndex - 1 : toIndex;
+            modules.splice(insertIndex, 0, movedModule);
+
+            saveHistory();
+            renderModules();
+            canvasDraggedId = null;
+        }
+
+        function handleCanvasDragEnd(e) {
+            canvasDraggedId = null;
+            document.querySelectorAll('.canvas-module').forEach(el => el.classList.remove('dragging'));
         }
     </script>
 </body>

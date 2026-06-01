@@ -35,38 +35,31 @@
         .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
         .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
         .table-row:hover { background: #1a2744; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(59, 130, 246, 0.15); }
-        .card-hover { transition: all 0.3s; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .sort-icon.active { color: #3b82f6; }
     </style>
 </head>
 <body class="bg-primary-bg text-text-primary min-h-screen">
     <!-- 顶部导航 -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+                <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
         <div class="flex items-center gap-4">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
-                    <i class="fas fa-cube text-white text-lg"></i>
-                </div>
-                <span class="text-lg font-semibold text-text-primary">内容中台</span>
-            </div>
-        </div>
-        <div class="flex-1 max-w-xl mx-8">
-            <div class="relative">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none transition-colors">
-            </div>
-        </div>
-        <div class="flex items-center gap-6">
             <button class="relative text-text-secondary hover:text-text-primary transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
+            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
                     <span class="text-xs text-text-muted">超级管理员</span>
                 </div>
+                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
             </div>
         </div>
     </header>
@@ -101,54 +94,6 @@
                 <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
-            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-home w-5 text-text-secondary"></i>
-                <span>首页装修</span>
-            </a>
-            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-image w-5 text-text-secondary"></i>
-                <span>Banner管理</span>
-            </a>
-            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-columns w-5 text-text-secondary"></i>
-                <span>栏目管理</span>
-            </a>
-            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
-                <span>专题管理</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
-            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
-                <span>新闻资讯</span>
-            </a>
-            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
-                <span>公告通知</span>
-            </a>
-            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
-                <span>政策文件</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">帮助支持</div>
-            <a href="help-faq.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-question-circle w-5 text-text-secondary"></i>
-                <span>FAQ</span>
-            </a>
-            <a href="help-docs.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-book w-5 text-text-secondary"></i>
-                <span>文档中心</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
-            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
-                <span>数据概览</span>
-            </a>
-            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
-                <span>内容分析</span>
-            </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-images w-5 text-text-secondary"></i>
@@ -162,6 +107,17 @@
                 <i class="fas fa-video w-5 text-text-secondary"></i>
                 <span>视频管理</span>
             </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-users-cog w-5 text-text-secondary"></i>
@@ -171,6 +127,11 @@
                 <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
                 <span>角色权限</span>
             </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <span>日志管理</span>
+            </a>
+
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-cog w-5 text-text-secondary"></i>
                 <span>系统设置</span>
@@ -186,39 +147,47 @@
                 <h1 class="text-2xl font-semibold">内容管理</h1>
                 <p class="text-text-muted mt-1">管理所有内容文章，支持创建、编辑、删除和批量操作</p>
             </div>
-            <button onclick="openModal('createModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
-                <i class="fas fa-plus"></i>
-                创建内容
-            </button>
+            <div class="flex items-center gap-3">
+                <button onclick="refreshList()" class="px-4 py-2.5 border border-border-dark rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
+                    <i class="fas fa-sync-alt"></i>
+                    刷新
+                </button>
+                <button onclick="openModal('createModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    创建内容
+                </button>
+            </div>
         </div>
 
         <!-- 筛选栏 -->
         <div class="bg-card-bg rounded-xl p-4 mb-6 border border-border-dark">
             <div class="flex items-center gap-4 flex-wrap">
                 <div class="flex items-center gap-2">
-                    <select class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
-                        <option>全部分类</option>
-                        <option>新闻资讯</option>
-                        <option>政策文件</option>
-                        <option>通知公告</option>
+                    <select id="filterCategory" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                        <option value="">全部分类</option>
                     </select>
-                    <select class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
-                        <option>全部状态</option>
-                        <option>已发布</option>
-                        <option>草稿</option>
-                        <option>待审核</option>
+                    <select id="filterStatus" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                        <option value="">全部状态</option>
+                        <option value="published">已发布</option>
+                        <option value="pending">待审核</option>
+                        <option value="draft">草稿</option>
+                        <option value="scheduled">待发布</option>
+                        <option value="archived">已归档</option>
+                        <option value="offline">已下架</option>
                     </select>
-                    <select class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
-                        <option>全部作者</option>
+                    <select id="filterAuthor" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                        <option value="">全部作者</option>
                         <option>张明远</option>
                         <option>李晓华</option>
                         <option>王建国</option>
+                        <option>陈思远</option>
+                        <option>周明杰</option>
                     </select>
                 </div>
                 <div class="flex-1"></div>
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                    <input type="text" placeholder="搜索标题、关键词..." class="bg-primary-bg border border-border-dark rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none w-64">
+                    <input type="text" id="searchInput" placeholder="搜索标题、关键词..." class="bg-primary-bg border border-border-dark rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none w-64">
                 </div>
             </div>
         </div>
@@ -228,12 +197,13 @@
             <div class="flex items-center gap-2">
                 <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
                 <label for="selectAll" class="text-sm text-text-secondary">全选</label>
-                <span class="text-sm text-text-muted ml-4">已选择 3 项</span>
+                <span id="selectedCount" class="text-sm text-text-muted ml-4">已选择 0 项</span>
             </div>
             <div class="flex items-center gap-3">
-                <button class="px-4 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors">批量发布</button>
-                <button class="px-4 py-2 text-sm text-accent-amber hover:bg-accent-amber/10 rounded-lg transition-colors">批量归档</button>
-                <button class="px-4 py-2 text-sm text-accent-red hover:bg-accent-red/10 rounded-lg transition-colors">批量删除</button>
+                <button onclick="batchPublish()" class="px-4 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors">批量发布</button>
+                <button onclick="batchArchive()" class="px-4 py-2 text-sm text-accent-amber hover:bg-accent-amber/10 rounded-lg transition-colors">批量归档</button>
+                <button onclick="batchOffline()" class="px-4 py-2 text-sm text-purple-400 hover:bg-purple-400/10 rounded-lg transition-colors">批量下架</button>
+                <button onclick="batchDelete()" class="px-4 py-2 text-sm text-accent-red hover:bg-accent-red/10 rounded-lg transition-colors">批量删除</button>
             </div>
         </div>
 
@@ -243,151 +213,56 @@
                 <thead>
                     <tr class="text-left text-text-muted text-sm border-b border-border-dark bg-primary-bg/50">
                         <th class="px-4 py-3 font-medium w-10"></th>
-                        <th class="px-4 py-3 font-medium">标题</th>
+                        <th class="px-4 py-3 font-medium cursor-pointer hover:text-accent-blue" onclick="sortBy('title')">
+                            <span class="flex items-center gap-1">
+                                标题
+                                <i class="fas fa-sort text-xs sort-icon"></i>
+                            </span>
+                        </th>
                         <th class="px-4 py-3 font-medium w-24">分类</th>
                         <th class="px-4 py-3 font-medium w-20">作者</th>
                         <th class="px-4 py-3 font-medium w-24">状态</th>
-                        <th class="px-4 py-3 font-medium w-32">发布时间</th>
-                        <th class="px-4 py-3 font-medium w-28">阅读量</th>
-                        <th class="px-4 py-3 font-medium w-36 text-right">操作</th>
+                        <th class="px-4 py-3 font-medium cursor-pointer hover:text-accent-blue w-36" onclick="sortBy('publishTime')">
+                            <span class="flex items-center gap-1">
+                                发布时间
+                                <i class="fas fa-sort text-xs sort-icon"></i>
+                            </span>
+                        </th>
+                        <th class="px-4 py-3 font-medium cursor-pointer hover:text-accent-blue w-28" onclick="sortBy('views')">
+                            <span class="flex items-center gap-1">
+                                阅读量
+                                <i class="fas fa-sort text-xs sort-icon"></i>
+                            </span>
+                        </th>
+                        <th class="px-4 py-3 font-medium w-48 text-right">操作</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="table-row border-b border-border-dark/50 transition-colors">
-                        <td class="px-4 py-3"><input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue item-checkbox"></td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=60&h=40&fit=crop" class="w-12 h-8 rounded object-cover">
-                                <span class="text-sm font-medium hover:text-accent-blue cursor-pointer">关于开展2024年度工作总结的通知</span>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">通知公告</td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">李晓华</td>
-                        <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">已发布</span></td>
-                        <td class="px-4 py-3 text-sm text-text-muted">2024-01-15</td>
-                        <td class="px-4 py-3 text-sm text-text-muted">2,847</td>
-                        <td class="px-4 py-3">
-                            <button class="text-text-secondary hover:text-accent-blue text-sm mr-2">编辑</button>
-                            <button class="text-text-secondary hover:text-accent-amber text-sm mr-2">归档</button>
-                            <button class="text-text-secondary hover:text-accent-red text-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr class="table-row border-b border-border-dark/50 transition-colors">
-                        <td class="px-4 py-3"><input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue item-checkbox"></td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=60&h=40&fit=crop" class="w-12 h-8 rounded object-cover">
-                                <span class="text-sm font-medium hover:text-accent-blue cursor-pointer">数字化转型工作进展报告</span>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">新闻资讯</td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">王建国</td>
-                        <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-blue/20 text-accent-blue text-xs rounded">待审核</span></td>
-                        <td class="px-4 py-3 text-sm text-text-muted">2024-01-14</td>
-                        <td class="px-4 py-3 text-sm text-text-muted">1,523</td>
-                        <td class="px-4 py-3">
-                            <button class="text-text-secondary hover:text-accent-blue text-sm mr-2">编辑</button>
-                            <button class="text-text-secondary hover:text-accent-amber text-sm mr-2">归档</button>
-                            <button class="text-text-secondary hover:text-accent-red text-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr class="table-row border-b border-border-dark/50 transition-colors">
-                        <td class="px-4 py-3"><input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue item-checkbox"></td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=60&h=40&fit=crop" class="w-12 h-8 rounded object-cover">
-                                <span class="text-sm font-medium hover:text-accent-blue cursor-pointer">安全生产知识竞赛活动方案</span>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">政策文件</td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">陈思远</td>
-                        <td class="px-4 py-3"><span class="px-2 py-1 bg-text-muted/20 text-text-muted text-xs rounded">草稿</span></td>
-                        <td class="px-4 py-3 text-sm text-text-muted">-</td>
-                        <td class="px-4 py-3 text-sm text-text-muted">-</td>
-                        <td class="px-4 py-3">
-                            <button class="text-text-secondary hover:text-accent-blue text-sm mr-2">编辑</button>
-                            <button class="text-text-secondary hover:text-accent-amber text-sm mr-2">归档</button>
-                            <button class="text-text-secondary hover:text-accent-red text-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr class="table-row border-b border-border-dark/50 transition-colors">
-                        <td class="px-4 py-3"><input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue item-checkbox"></td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=60&h=40&fit=crop" class="w-12 h-8 rounded object-cover">
-                                <span class="text-sm font-medium hover:text-accent-blue cursor-pointer">第一季度工作规划部署会议纪要</span>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">新闻资讯</td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">周明杰</td>
-                        <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">已发布</span></td>
-                        <td class="px-4 py-3 text-sm text-text-muted">2024-01-12</td>
-                        <td class="px-4 py-3 text-sm text-text-muted">986</td>
-                        <td class="px-4 py-3">
-                            <button class="text-text-secondary hover:text-accent-blue text-sm mr-2">编辑</button>
-                            <button class="text-text-secondary hover:text-accent-amber text-sm mr-2">归档</button>
-                            <button class="text-text-secondary hover:text-accent-red text-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr class="table-row border-b border-border-dark/50 transition-colors">
-                        <td class="px-4 py-3"><input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue item-checkbox"></td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=60&h=40&fit=crop" class="w-12 h-8 rounded object-cover">
-                                <span class="text-sm font-medium hover:text-accent-blue cursor-pointer">智慧城市建设成果展示</span>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">专题活动</td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">吴晓燕</td>
-                        <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">已发布</span></td>
-                        <td class="px-4 py-3 text-sm text-text-muted">2024-01-10</td>
-                        <td class="px-4 py-3 text-sm text-text-muted">3,256</td>
-                        <td class="px-4 py-3">
-                            <button class="text-text-secondary hover:text-accent-blue text-sm mr-2">编辑</button>
-                            <button class="text-text-secondary hover:text-accent-amber text-sm mr-2">归档</button>
-                            <button class="text-text-secondary hover:text-accent-red text-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr class="table-row transition-colors">
-                        <td class="px-4 py-3"><input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue item-checkbox"></td>
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=60&h=40&fit=crop" class="w-12 h-8 rounded object-cover">
-                                <span class="text-sm font-medium hover:text-accent-blue cursor-pointer">两会专题报道：民生改善篇</span>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">专题活动</td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">赵志远</td>
-                        <td class="px-4 py-3"><span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">待发布</span></td>
-                        <td class="px-4 py-3 text-sm text-text-muted">2024-01-20</td>
-                        <td class="px-4 py-3 text-sm text-text-muted">-</td>
-                        <td class="px-4 py-3">
-                            <button class="text-text-secondary hover:text-accent-blue text-sm mr-2">编辑</button>
-                            <button class="text-text-secondary hover:text-accent-amber text-sm mr-2">归档</button>
-                            <button class="text-text-secondary hover:text-accent-red text-sm">删除</button>
-                        </td>
-                    </tr>
+                <tbody id="contentTableBody">
+                    <!-- 内容行将通过JS渲染 -->
                 </tbody>
             </table>
             <!-- 分页 -->
             <div class="flex items-center justify-between px-4 py-3 border-t border-border-dark">
-                <span class="text-sm text-text-muted">显示 1-6 条，共 86 条</span>
+                <span id="paginationInfo" class="text-sm text-text-muted">显示 1-6 条，共 86 条</span>
                 <div class="flex items-center gap-2">
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">上一页</button>
-                    <button class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">2</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">3</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">...</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">15</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">下一页</button>
+                    <button id="prevPage" onclick="goToPage(currentPage - 1)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">上一页</button>
+                    <button id="page1" onclick="goToPage(1)" class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
+                    <button id="page2" onclick="goToPage(2)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">2</button>
+                    <button id="page3" onclick="goToPage(3)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">3</button>
+                    <span class="px-2 text-text-muted">...</span>
+                    <button id="page15" onclick="goToPage(15)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">15</button>
+                    <button id="nextPage" onclick="goToPage(currentPage + 1)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">下一页</button>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
     <!-- 创建内容弹窗 -->
     <div id="createModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[800px] max-h-[90vh] overflow-hidden border border-border-dark shadow-2xl">
+        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[90vh] overflow-hidden border border-border-dark shadow-2xl">
             <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
                 <h3 class="text-lg font-medium">创建内容</h3>
                 <button onclick="closeModal('createModal')" class="text-text-muted hover:text-text-primary">
@@ -398,91 +273,1274 @@
                 <div class="grid grid-cols-2 gap-6">
                     <div class="col-span-2">
                         <label class="block text-sm text-text-secondary mb-2">标题 <span class="text-accent-red">*</span></label>
-                        <input type="text" placeholder="请输入内容标题" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
+                        <input type="text" id="createTitle" placeholder="请输入内容标题" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-sm text-text-secondary mb-2">分类 <span class="text-accent-red">*</span></label>
-                        <select class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
-                            <option>请选择分类</option>
-                            <option>新闻资讯</option>
-                            <option>政策文件</option>
-                            <option>通知公告</option>
-                            <option>专题活动</option>
+                        <select id="createCategory" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                            <option value="">请选择分类</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm text-text-secondary mb-2">标签</label>
-                        <input type="text" placeholder="多个标签用逗号分隔" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
+                        <input type="text" id="createTags" placeholder="多个标签用逗号分隔" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
                     </div>
                     <div class="col-span-2">
                         <label class="block text-sm text-text-secondary mb-2">封面图片</label>
-                        <div class="border-2 border-dashed border-border-dark rounded-xl p-8 text-center hover:border-accent-blue transition-colors cursor-pointer">
-                            <i class="fas fa-cloud-upload-alt text-4xl text-text-muted mb-3"></i>
-                            <p class="text-sm text-text-secondary">点击或拖拽上传封面图片</p>
-                            <p class="text-xs text-text-muted mt-1">支持 JPG、PNG，建议尺寸 800x450</p>
+                        <div id="createCoverArea" class="border-2 border-dashed border-border-dark rounded-xl p-6">
+                            <div id="createCoverEmpty" class="text-center">
+                                <div class="flex items-center justify-center gap-4 mb-4">
+                                    <div onclick="openResourcePicker('cover', 'single')" class="flex-1 bg-primary-bg rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
+                                        <i class="fas fa-images text-2xl text-accent-blue mb-2"></i>
+                                        <p class="text-sm font-medium">📌 从资源中心选择</p>
+                                        <p class="text-xs text-text-muted mt-1">已有封面图库</p>
+                                    </div>
+                                    <div class="text-text-muted text-xl">/</div>
+                                    <div onclick="triggerCoverUpload()" class="flex-1 bg-primary-bg rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
+                                        <i class="fas fa-cloud-upload-alt text-2xl text-text-secondary mb-2"></i>
+                                        <p class="text-sm font-medium">⬆️ 上传新资源</p>
+                                        <p class="text-xs text-text-muted mt-1">直接本地上传</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="createCoverPreview" class="hidden mt-3 flex items-center gap-3 p-3 bg-primary-bg rounded-xl">
+                                <img id="createCoverImg" src="" class="w-32 h-20 rounded object-cover">
+                                <div class="flex-1">
+                                    <p id="createCoverName" class="text-sm font-medium"></p>
+                                    <p id="createCoverSize" class="text-xs text-text-muted"></p>
+                                </div>
+                                <button onclick="removeCreateCover()" class="text-accent-red hover:text-red-400 text-sm px-3 py-1 border border-accent-red/30 rounded-lg">移除</button>
+                                <button onclick="openResourcePicker('cover', 'single')" class="text-accent-blue hover:text-blue-400 text-sm px-3 py-1 border border-accent-blue/30 rounded-lg">更换</button>
+                            </div>
+                            <input type="file" id="coverFileInput" accept="image/*" class="hidden" onchange="handleCoverFileUpload(this)">
                         </div>
                     </div>
                     <div class="col-span-2">
                         <label class="block text-sm text-text-secondary mb-2">内容摘要</label>
-                        <textarea rows="3" placeholder="请输入内容摘要，简短描述内容要点" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                        <textarea id="createSummary" rows="2" placeholder="请输入内容摘要，简短描述内容要点" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none resize-none"></textarea>
                     </div>
                     <div class="col-span-2">
                         <label class="block text-sm text-text-secondary mb-2">正文内容 <span class="text-accent-red">*</span></label>
                         <div class="bg-primary-bg border border-border-dark rounded-xl overflow-hidden">
                             <div class="flex items-center gap-1 px-4 py-2 border-b border-border-dark bg-card-bg">
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary"><i class="fas fa-bold"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary"><i class="fas fa-italic"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary"><i class="fas fa-underline"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="加粗"><i class="fas fa-bold"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="斜体"><i class="fas fa-italic"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="下划线"><i class="fas fa-underline"></i></button>
                                 <span class="w-px h-6 bg-border-dark mx-2"></span>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary"><i class="fas fa-list-ul"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary"><i class="fas fa-list-ol"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary"><i class="fas fa-link"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary"><i class="fas fa-image"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="无序列表"><i class="fas fa-list-ul"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="有序列表"><i class="fas fa-list-ol"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="链接"><i class="fas fa-link"></i></button>
+                                <button onclick="openResourcePicker('content', 'multiple')" class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="插入图片"><i class="fas fa-image"></i></button>
+                                <button onclick="openResourcePicker('content', 'multiple')" class="w-8 h-8 rounded hover:bg-accent-cyan flex items-center justify-center text-accent-cyan" title="插入资源">
+                                    <i class="fas fa-folder-open"></i>
+                                </button>
                             </div>
-                            <textarea rows="8" placeholder="请输入正文内容..." class="w-full px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:outline-none resize-none bg-transparent"></textarea>
+                            <div id="createEditorArea" class="min-h-[200px] px-4 py-3 text-sm text-text-primary focus:outline-none overflow-auto">
+                                <div id="createContentDisplay" class="whitespace-pre-wrap leading-relaxed"></div>
+                                <textarea id="createContent" rows="8" placeholder="请输入正文内容...\n\n提示：点击工具栏📁资源按钮可插入图片/文件/视频" class="w-full h-[200px] text-sm text-text-primary placeholder-text-muted focus:outline-none resize-none bg-transparent"></textarea>
+                            </div>
                         </div>
                     </div>
-                    <div>
+                    <div class="col-span-2">
                         <label class="block text-sm text-text-secondary mb-2">发布形式</label>
-                        <div class="flex gap-4">
+                        <div class="flex gap-6">
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="publishType" value="now" checked class="accent-accent-blue">
+                                <input type="radio" name="createPublishType" value="now" checked class="accent-accent-blue">
                                 <span class="text-sm">立即发布</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="publishType" value="schedule" class="accent-accent-blue">
+                                <input type="radio" name="createPublishType" value="schedule" class="accent-accent-blue">
                                 <span class="text-sm">定时发布</span>
                             </label>
                             <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="publishType" value="draft" class="accent-accent-blue">
+                                <input type="radio" name="createPublishType" value="draft" class="accent-accent-blue">
                                 <span class="text-sm">存为草稿</span>
                             </label>
                         </div>
+                    </div>
+                    <div id="scheduleTimeGroup" class="col-span-2 hidden">
+                        <label class="block text-sm text-text-secondary mb-2">定时发布时间</label>
+                        <input type="datetime-local" id="createScheduleTime" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
                     </div>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark bg-primary-bg/50">
                 <button onclick="closeModal('createModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary hover:border-text-muted transition-colors">取消</button>
-                <button class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存</button>
+                <button onclick="saveContent('create')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑内容弹窗 -->
+    <div id="editModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[90vh] overflow-hidden border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">编辑内容</h3>
+                <button onclick="closeModal('editModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+                <input type="hidden" id="editId">
+                <div class="grid grid-cols-2 gap-6">
+                    <div class="col-span-2">
+                        <label class="block text-sm text-text-secondary mb-2">标题 <span class="text-accent-red">*</span></label>
+                        <input type="text" id="editTitle" placeholder="请输入内容标题" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">分类 <span class="text-accent-red">*</span></label>
+                        <select id="editCategory" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                            <option value="">请选择分类</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-text-secondary mb-2">标签</label>
+                        <input type="text" id="editTags" placeholder="多个标签用逗号分隔" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm text-text-secondary mb-2">封面图片</label>
+                        <div id="editCoverArea" class="border-2 border-dashed border-border-dark rounded-xl p-6">
+                            <div id="editCoverEmpty" class="text-center">
+                                <div class="flex items-center justify-center gap-4 mb-4">
+                                    <div onclick="openResourcePicker('editCover', 'single')" class="flex-1 bg-primary-bg rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
+                                        <i class="fas fa-images text-2xl text-accent-blue mb-2"></i>
+                                        <p class="text-sm font-medium">📌 从资源中心选择</p>
+                                        <p class="text-xs text-text-muted mt-1">已有封面图库</p>
+                                    </div>
+                                    <div class="text-text-muted text-xl">/</div>
+                                    <div onclick="triggerEditCoverUpload()" class="flex-1 bg-primary-bg rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
+                                        <i class="fas fa-cloud-upload-alt text-2xl text-text-secondary mb-2"></i>
+                                        <p class="text-sm font-medium">⬆️ 上传新资源</p>
+                                        <p class="text-xs text-text-muted mt-1">直接本地上传</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="editCoverPreview" class="hidden mt-3 flex items-center gap-3 p-3 bg-primary-bg rounded-xl">
+                                <img id="editCoverImgDisplay" src="" class="w-32 h-20 rounded object-cover">
+                                <div class="flex-1">
+                                    <p id="editCoverName" class="text-sm font-medium"></p>
+                                    <p id="editCoverSize" class="text-xs text-text-muted"></p>
+                                </div>
+                                <button onclick="removeEditCover()" class="text-accent-red hover:text-red-400 text-sm px-3 py-1 border border-accent-red/30 rounded-lg">移除</button>
+                                <button onclick="openResourcePicker('editCover', 'single')" class="text-accent-blue hover:text-blue-400 text-sm px-3 py-1 border border-accent-blue/30 rounded-lg">更换</button>
+                            </div>
+                            <input type="file" id="editCoverFileInput" accept="image/*" class="hidden" onchange="handleEditCoverFileUpload(this)">
+                        </div>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm text-text-secondary mb-2">内容摘要</label>
+                        <textarea id="editSummary" rows="2" placeholder="请输入内容摘要" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                    </div>
+                    <div class="col-span-2">
+                        <label class="block text-sm text-text-secondary mb-2">正文内容 <span class="text-accent-red">*</span></label>
+                        <div class="bg-primary-bg border border-border-dark rounded-xl overflow-hidden">
+                            <div class="flex items-center gap-1 px-4 py-2 border-b border-border-dark bg-card-bg">
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="加粗"><i class="fas fa-bold"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="斜体"><i class="fas fa-italic"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="下划线"><i class="fas fa-underline"></i></button>
+                                <span class="w-px h-6 bg-border-dark mx-2"></span>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="无序列表"><i class="fas fa-list-ul"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="有序列表"><i class="fas fa-list-ol"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="链接"><i class="fas fa-link"></i></button>
+                                <button onclick="openResourcePicker('editContent', 'multiple')" class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="插入图片"><i class="fas fa-image"></i></button>
+                                <button onclick="openResourcePicker('editContent', 'multiple')" class="w-8 h-8 rounded hover:bg-accent-cyan flex items-center justify-center text-accent-cyan" title="插入资源">
+                                    <i class="fas fa-folder-open"></i>
+                                </button>
+                            </div>
+                            <div id="editEditorArea" class="min-h-[200px] px-4 py-3 text-sm text-text-primary focus:outline-none overflow-auto">
+                                <div id="editContentDisplay" class="whitespace-pre-wrap leading-relaxed"></div>
+                                <textarea id="editContent" rows="8" placeholder="请输入正文内容...\n\n提示：点击工具栏📁资源按钮可插入图片/文件/视频" class="w-full h-[200px] text-sm text-text-primary placeholder-text-muted focus:outline-none resize-none bg-transparent"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark bg-primary-bg/50">
+                <button onclick="closeModal('editModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="saveContent('edit')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 查看详情弹窗 -->
+    <div id="viewModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[800px] max-h-[90vh] overflow-hidden border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">内容详情</h3>
+                <button onclick="closeModal('viewModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+                <div id="viewCover" class="mb-4">
+                    <img id="viewCoverImg" src="" class="w-full h-48 rounded-xl object-cover">
+                </div>
+                <h2 id="viewTitle" class="text-xl font-semibold mb-4"></h2>
+                <div class="flex items-center gap-4 mb-6 text-sm text-text-muted">
+                    <span><i class="fas fa-folder mr-1"></i><span id="viewCategory"></span></span>
+                    <span><i class="fas fa-user mr-1"></i><span id="viewAuthor"></span></span>
+                    <span><i class="fas fa-clock mr-1"></i><span id="viewTime"></span></span>
+                    <span><i class="fas fa-eye mr-1"></i><span id="viewViews"></span></span>
+                </div>
+                <div class="mb-4">
+                    <span id="viewStatus" class="px-3 py-1 text-xs rounded-full"></span>
+                    <span id="viewTags" class="ml-2 text-xs text-text-muted"></span>
+                </div>
+                <div class="border-t border-border-dark pt-4">
+                    <h4 class="text-sm font-medium text-text-muted mb-2">内容摘要</h4>
+                    <p id="viewSummary" class="text-sm text-text-secondary mb-4"></p>
+                    <h4 class="text-sm font-medium text-text-muted mb-2">正文内容</h4>
+                    <div id="viewContent" class="text-sm text-text-primary leading-relaxed whitespace-pre-wrap"></div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark bg-primary-bg/50">
+                <button onclick="closeModal('viewModal'); openEditModal(currentContentId)" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
+                    <i class="fas fa-edit mr-2"></i>编辑
+                </button>
+                <button onclick="closeModal('viewModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认删除弹窗 -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+                <div class="w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认删除</h3>
+                    <p id="deleteTip" class="text-sm text-text-muted mt-1">删除后无法恢复，请谨慎操作</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-text-secondary">确定要删除以下内容吗？</p>
+                <p id="deleteTitle" class="text-sm font-medium mt-2 text-text-primary"></p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('deleteModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button id="confirmDeleteBtn" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认归档弹窗 -->
+    <div id="archiveModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+                <div class="w-12 h-12 rounded-full bg-accent-amber/20 flex items-center justify-center">
+                    <i class="fas fa-inbox text-accent-amber text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认归档</h3>
+                    <p class="text-sm text-text-muted mt-1">归档后可在归档管理中恢复</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-text-secondary">确定要归档以下内容吗？</p>
+                <p id="archiveTitle" class="text-sm font-medium mt-2 text-text-primary"></p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('archiveModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button id="confirmArchiveBtn" class="px-5 py-2.5 bg-accent-amber text-white rounded-xl hover:bg-amber-600 transition-colors">确认归档</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 下架确认弹窗 -->
+    <div id="offlineModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+                <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
+                    <i class="fas fa-arrow-down text-purple-400 text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认下架</h3>
+                    <p class="text-sm text-text-muted mt-1">下架后内容将从门户移除</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-text-secondary">确定要下架以下内容吗？</p>
+                <p id="offlineTitle" class="text-sm font-medium mt-2 text-text-primary"></p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('offlineModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button id="confirmOfflineBtn" class="px-5 py-2.5 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors">确认下架</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 移动分类弹窗 -->
+    <div id="moveModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">移动分类</h3>
+                <button onclick="closeModal('moveModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-text-secondary mb-4">选择要移动到的分类：</p>
+                <select id="moveCategory" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                    <option value="">请选择分类</option>
+                    <option>新闻资讯</option>
+                    <option>政策文件</option>
+                    <option>通知公告</option>
+                    <option>专题活动</option>
+                </select>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('moveModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button id="confirmMoveBtn" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认移动</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量操作确认弹窗 -->
+    <div id="batchModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+                <div id="batchModalIcon" class="w-12 h-12 rounded-full bg-accent-blue/20 flex items-center justify-center">
+                    <i class="fas fa-check text-accent-blue text-xl"></i>
+                </div>
+                <div>
+                    <h3 id="batchModalTitle" class="text-lg font-medium">批量操作</h3>
+                    <p id="batchModalTip" class="text-sm text-text-muted mt-1"></p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p id="batchModalDesc" class="text-sm text-text-secondary"></p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('batchModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button id="confirmBatchBtn" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 资源选择弹窗 -->
+    <div id="resourcePickerModal" class="fixed inset-0 bg-black/70 z-[60] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[85vh] overflow-hidden border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">📌 选择资源</h3>
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2 text-sm text-text-muted">
+                        <span id="resourcePickerStatus"></span>
+                    </div>
+                    <button onclick="closeResourcePicker()" class="text-text-muted hover:text-text-primary">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- 标签页 -->
+            <div class="flex border-b border-border-dark">
+                <button onclick="switchResourceTab('image')" id="resourceTab-image" class="px-6 py-3 text-sm font-medium border-b-2 border-accent-blue text-accent-blue">
+                    <i class="fas fa-images mr-2"></i>图片
+                </button>
+                <button onclick="switchResourceTab('file')" id="resourceTab-file" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-text-secondary hover:text-text-primary">
+                    <i class="fas fa-file-alt mr-2"></i>文件
+                </button>
+                <button onclick="switchResourceTab('video')" id="resourceTab-video" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-text-secondary hover:text-text-primary">
+                    <i class="fas fa-video mr-2"></i>视频
+                </button>
+            </div>
+            <!-- 搜索 -->
+            <div class="px-6 py-3 border-b border-border-dark bg-primary-bg/30">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"></i>
+                    <input type="text" id="resourceSearchInput" placeholder="搜索资源名称..." class="w-full bg-primary-bg border border-border-dark rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none" oninput="filterResources()">
+                </div>
+            </div>
+            <!-- 资源列表 -->
+            <div class="p-6 overflow-y-auto max-h-[400px]">
+                <div id="resourceList" class="grid grid-cols-5 gap-4">
+                    <!-- 动态渲染 -->
+                </div>
+            </div>
+            <!-- 分页 -->
+            <div class="flex items-center justify-between px-6 py-3 border-t border-border-dark bg-primary-bg/30">
+                <span id="resourcePaginationInfo" class="text-sm text-text-muted">显示 0 条</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="prevResourcePage()" id="resourcePrevBtn" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span id="resourcePageInfo" class="px-3 text-sm text-text-muted">1 / 1</span>
+                    <button onclick="nextResourcePage()" id="resourceNextBtn" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- 底部操作 -->
+            <div class="flex items-center justify-between px-6 py-4 border-t border-border-dark bg-primary-bg/50">
+                <div id="selectedResourceInfo" class="text-sm text-text-muted">
+                    请选择资源
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="closeResourcePicker()" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary hover:border-text-muted transition-colors">取消</button>
+                    <button onclick="confirmResourceSelection()" id="confirmResourceBtn" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>确认选择</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // 内容数据
+        let contents = [
+            { id: 1, title: '关于开展2024年度工作总结的通知', category: '通知公告', author: '李晓华', status: 'published', publishTime: '2024-01-15', views: 2847, cover: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=60&h=40&fit=crop', tags: ['时政', '年度总结'], summary: '各部门、直属单位：为全面总结2024年度工作情况，认真谋划2025年重点工作，现就开展年度工作总结有关事项通知...', content: '各部门、直属单位：\n\n为全面总结2024年度工作情况，认真谋划2025年重点工作，现就开展年度工作总结有关事项通知如下：\n\n一、总结内容\n1. 年度工作目标完成情况\n2. 主要工作成效和亮点\n3. 存在的问题和不足\n4. 下年度工作思路和举措\n\n二、时间要求\n请各部门于2024年1月20日前完成总结并提交。\n\n三、格式要求\n总结报告控制在3000字以内，重点突出数据和工作成果。' },
+            { id: 2, title: '数字化转型工作进展报告', category: '新闻资讯', author: '王建国', status: 'pending', publishTime: '2024-01-14', views: 1523, cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=60&h=40&fit=crop', tags: ['科技', '数字化'], summary: '摘要：本文总结了2024年度数字化转型工作的进展情况，重点介绍了智慧政务平台建设、数据共享交换体系建设等方面的成果...', content: '一、数字化转型工作进展\n\n2024年度数字化转型工作按照既定计划稳步推进，在以下方面取得重要进展：\n\n1. 智慧政务平台建设\n已完成平台核心功能开发，进入测试阶段。\n\n2. 数据共享交换体系\n完成首批12个部门的数据接入，累计交换数据超过500万条。\n\n3. 智能化办公应用\n引入AI辅助写作、智能归档等功能，提升办公效率30%。' },
+            { id: 3, title: '安全生产知识竞赛活动方案', category: '政策文件', author: '陈思远', status: 'draft', publishTime: '-', views: 0, cover: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=60&h=40&fit=crop', tags: ['安全', '专题'], summary: '为深入贯彻落实安全生产法律法规，普及安全生产知识，提高全员安全意识，特举办本次安全生产知识竞赛...', content: '一、活动目的\n为深入贯彻落实安全生产法律法规，普及安全生产知识，提高全员安全意识，特举办本次安全生产知识竞赛。\n\n二、活动时间\n2024年2月1日-15日\n\n三、参赛对象\n全体员工\n\n四、竞赛内容\n1. 安全生产法律法规\n2. 安全操作规程\n3. 应急处置知识' },
+            { id: 4, title: '第一季度工作规划部署会议纪要', category: '新闻资讯', author: '周明杰', status: 'published', publishTime: '2024-01-12', views: 986, cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=60&h=40&fit=crop', tags: ['会议', '规划'], summary: '会议时间：2024年1月5日，会议地点：行政楼三楼会议室，参会人员：各部门负责人。会议就第一季度重点工作进行了部署...', content: '会议时间：2024年1月5日\n会议地点：行政楼三楼会议室\n参会人员：各部门负责人\n\n会议议题：\n1. 通报2023年度工作总结\n2. 部署2024年第一季度重点工作\n3. 讨论年度考核方案\n\n会议决议：\n1. 成立数字化转型领导小组\n2. 加快智慧政务平台上线\n3. 完善数据安全管理制度' },
+            { id: 5, title: '智慧城市建设成果展示', category: '专题活动', author: '吴晓燕', status: 'published', publishTime: '2024-01-10', views: 3256, cover: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=60&h=40&fit=crop', tags: ['科技', '智慧城市'], summary: '展示智慧城市建设的规划与成果，包括智能交通、智慧环保、智慧医疗等多个领域...', content: '智慧城市建设成果展示\n\n一、智能交通\n建成智能信号控制系统，实现主干道通行效率提升25%。\n\n二、智慧环保\n部署空气质量监测站点200个，实现重点区域全覆盖。\n\n三、智慧医疗\n建立区域医疗信息平台，实现电子病历互联互通。\n\n四、智慧教育\n建成在线教育平台，惠及师生超过10万人。' },
+            { id: 6, title: '两会专题报道：民生改善篇', category: '专题活动', author: '赵志远', status: 'scheduled', publishTime: '2024-01-20', views: 0, cover: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=60&h=40&fit=crop', tags: ['时政', '两会'], summary: '深入报道两会期间关于民生改善的政策解读和代表建议，聚焦教育、医疗、养老等热点...', content: '两会专题报道：民生改善篇\n\n教育领域：\n推进义务教育优质均衡发展，新建改扩建学校50所。\n\n医疗领域：\n深化医药卫生体制改革，提高基本医保财政补助标准。\n\n养老领域：\n加快构建居家社区机构相协调的养老服务体系。' }
+        ];
+
+        let currentPage = 1;
+        let currentContentId = null;
+        let selectedIds = [];
+
+        // 渲染内容列表
+        function renderContentList() {
+            const tbody = document.getElementById('contentTableBody');
+            tbody.innerHTML = contents.map(content => {
+                const statusMap = {
+                    'published': { text: '已发布', class: 'bg-accent-green/20 text-accent-green' },
+                    'pending': { text: '待审核', class: 'bg-accent-blue/20 text-accent-blue' },
+                    'draft': { text: '草稿', class: 'bg-text-muted/20 text-text-muted' },
+                    'scheduled': { text: '待发布', class: 'bg-accent-amber/20 text-accent-amber' },
+                    'archived': { text: '已归档', class: 'bg-purple-500/20 text-purple-400' },
+                    'offline': { text: '已下架', class: 'bg-red-500/20 text-red-400' }
+                };
+                const status = statusMap[content.status] || statusMap['draft'];
+                const isChecked = selectedIds.includes(content.id);
+
+                return `
+                    <tr class="table-row border-b border-border-dark/50 transition-colors">
+                        <td class="px-4 py-3"><input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue item-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSelect(${content.id})"></td>
+                        <td class="px-4 py-3">
+                            <div class="flex items-center gap-3">
+                                <img src="${content.cover}" class="w-12 h-8 rounded object-cover cursor-pointer" onclick="viewDetail(${content.id})">
+                                <span class="text-sm font-medium hover:text-accent-blue cursor-pointer" onclick="viewDetail(${content.id})">${content.title}</span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-text-secondary">${content.category}</td>
+                        <td class="px-4 py-3 text-sm text-text-secondary">${content.author}</td>
+                        <td class="px-4 py-3"><span class="px-2 py-1 ${status.class} text-xs rounded">${status.text}</span></td>
+                        <td class="px-4 py-3 text-sm text-text-muted">${content.publishTime}</td>
+                        <td class="px-4 py-3 text-sm text-text-muted">${content.views > 0 ? content.views.toLocaleString() : '-'}</td>
+                        <td class="px-4 py-3 text-right">
+                            <button onclick="viewDetail(${content.id})" class="text-text-secondary hover:text-accent-blue text-sm mr-2">查看</button>
+                            <button onclick="openEditModal(${content.id})" class="text-text-secondary hover:text-accent-blue text-sm mr-2">编辑</button>
+                            <button onclick="openMoveModal(${content.id})" class="text-text-secondary hover:text-cyan-400 text-sm mr-2">移动</button>
+                            ${content.status === 'published' ? `<button onclick="openOfflineModal(${content.id})" class="text-purple-400 hover:text-purple-300 text-sm mr-2">下架</button>` : ''}
+                            ${content.status !== 'archived' ? `<button onclick="openArchiveModal(${content.id})" class="text-accent-amber hover:text-amber-400 text-sm mr-2">归档</button>` : ''}
+                            <button onclick="copyContent(${content.id})" class="text-text-secondary hover:text-accent-green text-sm mr-2">复制</button>
+                            <button onclick="openDeleteModal(${content.id})" class="text-text-secondary hover:text-accent-red text-sm">删除</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+
+            updateSelectedCount();
+        }
+
+        // 全选/取消全选
+        document.getElementById('selectAll').addEventListener('change', function() {
+            if (this.checked) {
+                selectedIds = contents.map(c => c.id);
+            } else {
+                selectedIds = [];
+            }
+            renderContentList();
+        });
+
+        function toggleSelect(id) {
+            if (selectedIds.includes(id)) {
+                selectedIds = selectedIds.filter(i => i !== id);
+            } else {
+                selectedIds.push(id);
+            }
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = `已选择 ${selectedIds.length} 项`;
+        }
+
+        // Toast提示
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-accent-green' : type === 'error' ? 'bg-accent-red' : 'bg-accent-amber';
+            toast.className = `toast ${bgColor} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2`;
+            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'exclamation-circle'}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // 打开弹窗
         function openModal(id) {
             document.getElementById(id).classList.remove('hidden');
             document.getElementById(id).classList.add('flex');
         }
+
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
             document.getElementById(id).classList.remove('flex');
         }
-        document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-            cb.addEventListener('change', function() {
-                const checked = document.querySelectorAll('.item-checkbox:checked').length;
-                document.querySelector('.text-sm.text-text-muted').textContent = '已选择 ' + checked + ' 项';
+
+        // 定时发布时间显示
+        document.querySelectorAll('input[name="createPublishType"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                document.getElementById('scheduleTimeGroup').classList.toggle('hidden', this.value !== 'schedule');
             });
         });
+
+        // 查看详情
+        function viewDetail(id) {
+            const content = contents.find(c => c.id === id);
+            if (!content) return;
+            currentContentId = id;
+
+            const statusMap = {
+                'published': { text: '已发布', class: 'bg-accent-green/20 text-accent-green' },
+                'pending': { text: '待审核', class: 'bg-accent-blue/20 text-accent-blue' },
+                'draft': { text: '草稿', class: 'bg-text-muted/20 text-text-muted' },
+                'scheduled': { text: '待发布', class: 'bg-accent-amber/20 text-accent-amber' },
+                'archived': { text: '已归档', class: 'bg-purple-500/20 text-purple-400' },
+                'offline': { text: '已下架', class: 'bg-red-500/20 text-red-400' }
+            };
+
+            document.getElementById('viewCoverImg').src = content.cover;
+            document.getElementById('viewTitle').textContent = content.title;
+            document.getElementById('viewCategory').textContent = content.category;
+            document.getElementById('viewAuthor').textContent = content.author;
+            document.getElementById('viewTime').textContent = content.publishTime;
+            document.getElementById('viewViews').textContent = content.views > 0 ? content.views.toLocaleString() : '-';
+
+            const status = statusMap[content.status];
+            document.getElementById('viewStatus').className = `px-3 py-1 text-xs rounded-full ${status.class}`;
+            document.getElementById('viewStatus').textContent = status.text;
+            document.getElementById('viewTags').textContent = content.tags.join('、');
+            document.getElementById('viewSummary').textContent = content.summary;
+            document.getElementById('viewContent').textContent = content.content;
+
+            openModal('viewModal');
+        }
+
+        // 打开编辑弹窗
+        function openEditModal(id) {
+            const content = contents.find(c => c.id === id);
+            if (!content) return;
+
+            document.getElementById('editId').value = id;
+            document.getElementById('editTitle').value = content.title;
+            document.getElementById('editCategory').value = content.category;
+            document.getElementById('editTags').value = content.tags.join(',');
+            document.getElementById('editSummary').value = content.summary;
+            document.getElementById('editContent').value = content.content;
+            document.getElementById('editCoverImg').src = content.cover;
+            document.getElementById('editCoverPreview').classList.remove('hidden');
+            document.getElementById('editCoverUpload').classList.add('hidden');
+
+            openModal('editModal');
+        }
+
+        // 打开删除弹窗
+        function openDeleteModal(id) {
+            const content = contents.find(c => c.id === id);
+            if (!content) return;
+
+            document.getElementById('deleteTitle').textContent = content.title;
+            document.getElementById('confirmDeleteBtn').onclick = () => doDelete(id);
+            openModal('deleteModal');
+        }
+
+        function doDelete(id) {
+            contents = contents.filter(c => c.id !== id);
+            closeModal('deleteModal');
+            renderContentList();
+            showToast('内容已删除', 'success');
+        }
+
+        // 打开归档弹窗
+        function openArchiveModal(id) {
+            const content = contents.find(c => c.id === id);
+            if (!content) return;
+
+            document.getElementById('archiveTitle').textContent = content.title;
+            document.getElementById('confirmArchiveBtn').onclick = () => doArchive(id);
+            openModal('archiveModal');
+        }
+
+        function doArchive(id) {
+            const content = contents.find(c => c.id === id);
+            if (content) {
+                content.status = 'archived';
+                closeModal('archiveModal');
+                renderContentList();
+                showToast('内容已归档', 'success');
+            }
+        }
+
+        // 打开下架弹窗
+        function openOfflineModal(id) {
+            const content = contents.find(c => c.id === id);
+            if (!content) return;
+
+            document.getElementById('offlineTitle').textContent = content.title;
+            document.getElementById('confirmOfflineBtn').onclick = () => doOffline(id);
+            openModal('offlineModal');
+        }
+
+        function doOffline(id) {
+            const content = contents.find(c => c.id === id);
+            if (content) {
+                content.status = 'offline';
+                closeModal('offlineModal');
+                renderContentList();
+                showToast('内容已下架', 'success');
+            }
+        }
+
+        // 移动分类
+        function openMoveModal(id) {
+            const content = contents.find(c => c.id === id);
+            if (!content) return;
+
+            document.getElementById('moveCategory').value = '';
+            document.getElementById('confirmMoveBtn').onclick = () => doMove(id);
+            openModal('moveModal');
+        }
+
+        function doMove(id) {
+            const newCategory = document.getElementById('moveCategory').value;
+            if (!newCategory) {
+                showToast('请选择分类', 'error');
+                return;
+            }
+            const content = contents.find(c => c.id === id);
+            if (content) {
+                content.category = newCategory;
+                closeModal('moveModal');
+                renderContentList();
+                showToast('内容已移动到' + newCategory, 'success');
+            }
+        }
+
+        // 复制内容
+        function copyContent(id) {
+            const content = contents.find(c => c.id === id);
+            if (!content) return;
+
+            const newContent = {
+                ...content,
+                id: Date.now(),
+                title: content.title + ' (副本)',
+                status: 'draft',
+                publishTime: '-',
+                views: 0
+            };
+            contents.unshift(newContent);
+            renderContentList();
+            showToast('内容已复制', 'success');
+        }
+
+        // 保存内容
+        function saveContent(type) {
+            let title, category, tags, summary, content;
+
+            if (type === 'create') {
+                title = document.getElementById('createTitle').value;
+                category = document.getElementById('createCategory').value;
+                tags = document.getElementById('createTags').value;
+                summary = document.getElementById('createSummary').value;
+                content = document.getElementById('createContent').value;
+            } else {
+                const id = parseInt(document.getElementById('editId').value);
+                title = document.getElementById('editTitle').value;
+                category = document.getElementById('editCategory').value;
+                tags = document.getElementById('editTags').value;
+                summary = document.getElementById('editSummary').value;
+                content = document.getElementById('editContent').value;
+
+                const existing = contents.find(c => c.id === id);
+                if (existing) {
+                    existing.title = title;
+                    existing.category = category;
+                    existing.tags = tags.split(',').map(t => t.trim());
+                    existing.summary = summary;
+                    existing.content = content;
+                }
+            }
+
+            if (!title || !category || !content) {
+                showToast('请填写必填项', 'error');
+                return;
+            }
+
+            if (type === 'create') {
+                const publishType = document.querySelector('input[name="createPublishType"]:checked').value;
+                const newContent = {
+                    id: Date.now(),
+                    title,
+                    category,
+                    author: '张明远',
+                    status: publishType === 'draft' ? 'draft' : publishType === 'schedule' ? 'scheduled' : 'published',
+                    publishTime: publishType === 'draft' ? '-' : publishType === 'schedule' ? document.getElementById('createScheduleTime').value.slice(0, 10) : new Date().toISOString().slice(0, 10),
+                    views: 0,
+                    cover: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=60&h=40&fit=crop',
+                    tags: tags ? tags.split(',').map(t => t.trim()) : [],
+                    summary,
+                    content
+                };
+                contents.unshift(newContent);
+                closeModal('createModal');
+                document.getElementById('createTitle').value = '';
+                document.getElementById('createCategory').value = '';
+                document.getElementById('createTags').value = '';
+                document.getElementById('createSummary').value = '';
+                document.getElementById('createContent').value = '';
+            } else {
+                closeModal('editModal');
+            }
+
+            renderContentList();
+            showToast(type === 'create' ? '内容已创建' : '内容已保存', 'success');
+        }
+
+        // 批量操作
+        function batchPublish() {
+            if (selectedIds.length === 0) {
+                showToast('请先选择内容', 'error');
+                return;
+            }
+            document.getElementById('batchModalTitle').textContent = '批量发布';
+            document.getElementById('batchModalTip').textContent = '将选中的内容批量发布';
+            document.getElementById('batchModalDesc').textContent = `确定要发布选中的 ${selectedIds.length} 条内容吗？`;
+            document.getElementById('confirmBatchBtn').onclick = () => {
+                selectedIds.forEach(id => {
+                    const content = contents.find(c => c.id === id);
+                    if (content && content.status !== 'archived') {
+                        content.status = 'published';
+                        content.publishTime = new Date().toISOString().slice(0, 10);
+                    }
+                });
+                selectedIds = [];
+                closeModal('batchModal');
+                renderContentList();
+                showToast('已批量发布', 'success');
+            };
+            openModal('batchModal');
+        }
+
+        function batchArchive() {
+            if (selectedIds.length === 0) {
+                showToast('请先选择内容', 'error');
+                return;
+            }
+            document.getElementById('batchModalTitle').textContent = '批量归档';
+            document.getElementById('batchModalTip').textContent = '将选中的内容批量归档';
+            document.getElementById('batchModalDesc').textContent = `确定要归档选中的 ${selectedIds.length} 条内容吗？`;
+            document.getElementById('confirmBatchBtn').onclick = () => {
+                selectedIds.forEach(id => {
+                    const content = contents.find(c => c.id === id);
+                    if (content) content.status = 'archived';
+                });
+                selectedIds = [];
+                closeModal('batchModal');
+                renderContentList();
+                showToast('已批量归档', 'success');
+            };
+            openModal('batchModal');
+        }
+
+        function batchOffline() {
+            if (selectedIds.length === 0) {
+                showToast('请先选择内容', 'error');
+                return;
+            }
+            document.getElementById('batchModalTitle').textContent = '批量下架';
+            document.getElementById('batchModalTip').textContent = '将选中的内容批量下架';
+            document.getElementById('batchModalDesc').textContent = `确定要下架选中的 ${selectedIds.length} 条内容吗？`;
+            document.getElementById('confirmBatchBtn').onclick = () => {
+                selectedIds.forEach(id => {
+                    const content = contents.find(c => c.id === id);
+                    if (content && content.status === 'published') {
+                        content.status = 'offline';
+                    }
+                });
+                selectedIds = [];
+                closeModal('batchModal');
+                renderContentList();
+                showToast('已批量下架', 'success');
+            };
+            openModal('batchModal');
+        }
+
+        function batchDelete() {
+            if (selectedIds.length === 0) {
+                showToast('请先选择内容', 'error');
+                return;
+            }
+            document.getElementById('batchModalTitle').textContent = '批量删除';
+            document.getElementById('batchModalTip').textContent = '删除后无法恢复，请谨慎操作';
+            document.getElementById('batchModalDesc').textContent = `确定要删除选中的 ${selectedIds.length} 条内容吗？`;
+            document.getElementById('confirmBatchBtn').className = 'px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors';
+            document.getElementById('confirmBatchBtn').onclick = () => {
+                contents = contents.filter(c => !selectedIds.includes(c.id));
+                selectedIds = [];
+                closeModal('batchModal');
+                renderContentList();
+                showToast('已批量删除', 'success');
+            };
+            openModal('batchModal');
+        }
+
+        // 刷新
+        function refreshList() {
+            renderContentList();
+            showToast('列表已刷新', 'success');
+        }
+
+        // 排序
+        function sortBy(field) {
+            contents.sort((a, b) => {
+                if (field === 'title') return a.title.localeCompare(b.title);
+                if (field === 'publishTime') return (b.publishTime || '').localeCompare(a.publishTime || '');
+                if (field === 'views') return b.views - a.views;
+                return 0;
+            });
+            renderContentList();
+        }
+
+        // 分页
+        function goToPage(page) {
+            currentPage = page;
+            // 简化分页逻辑
+            document.querySelectorAll('[id^="page"]').forEach(btn => {
+                btn.className = btn.textContent == page ? 'px-3 py-1 rounded bg-accent-blue text-white text-sm' : 'px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm';
+            });
+        }
+
+        // 初始渲染
+        renderContentList();
+        initCategoryFilter();
+
+        // ==================== 分类联动 ====================
+        // 分类数据（与分类管理同步）
+        const categoryOptions = [
+            { id: 1, name: '新闻资讯', children: [
+                { id: 11, name: '时政要闻' },
+                { id: 12, name: '社会民生' },
+                { id: 13, name: '经济建设' }
+            ]},
+            { id: 2, name: '政策文件', children: [
+                { id: 21, name: '政策法规' },
+                { id: 22, name: '通知公告' }
+            ]},
+            { id: 3, name: '专题活动', children: [
+                { id: 31, name: '两会专题' },
+                { id: 32, name: '安全生产月' }
+            ]}
+        ];
+
+        // 初始化分类筛选下拉
+        function initCategoryFilter() {
+            // 筛选栏分类
+            const filterSelect = document.getElementById('filterCategory');
+            if (filterSelect) {
+                filterSelect.innerHTML = '<option value="">全部分类</option>';
+                categoryOptions.forEach(cat => {
+                    const group = document.createElement('optgroup');
+                    group.label = cat.name;
+                    group.innerHTML = `<option value="${cat.name}">全部${cat.name}</option>`;
+                    if (cat.children) {
+                        cat.children.forEach(child => {
+                            const opt = document.createElement('option');
+                            opt.value = child.name;
+                            opt.textContent = `  ${child.name}`;
+                            group.appendChild(opt);
+                        });
+                    }
+                    filterSelect.appendChild(group);
+                });
+            }
+
+            // 创建内容分类
+            const createSelect = document.getElementById('createCategory');
+            if (createSelect) {
+                createSelect.innerHTML = '<option value="">请选择分类</option>';
+                categoryOptions.forEach(cat => {
+                    const group = document.createElement('optgroup');
+                    group.label = cat.name;
+                    if (cat.children) {
+                        cat.children.forEach(child => {
+                            const opt = document.createElement('option');
+                            opt.value = child.name;
+                            opt.textContent = child.name;
+                            group.appendChild(opt);
+                        });
+                    }
+                    createSelect.appendChild(group);
+                });
+            }
+        }
+
+        // ==================== 资源选择器相关 ====================
+
+        // Mock资源数据
+        const mockResources = {
+            image: [
+                { id: 1, name: '会议现场.jpg', url: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop', size: '2.3MB', width: 1920, height: 1080 },
+                { id: 2, name: '工作汇报.png', url: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop', size: '1.8MB', width: 1920, height: 1080 },
+                { id: 3, name: '活动现场.jpg', url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop', size: '3.1MB', width: 1920, height: 1080 },
+                { id: 4, name: '数据展示.png', url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop', size: '2.5MB', width: 1920, height: 1080 },
+                { id: 5, name: '城市夜景.jpg', url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop', size: '4.2MB', width: 1920, height: 1080 },
+                { id: 6, name: '科技创新.jpg', url: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop', size: '2.8MB', width: 1920, height: 1080 },
+                { id: 7, name: '团队建设.jpg', url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop', size: '3.5MB', width: 1920, height: 1080 },
+                { id: 8, name: '企业文化.png', url: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop', size: '1.9MB', width: 1920, height: 1080 },
+                { id: 9, name: '安全生产.jpg', url: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=400&h=300&fit=crop', size: '2.7MB', width: 1920, height: 1080 },
+                { id: 10, name: '智慧城市.png', url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&h=300&fit=crop', size: '3.3MB', width: 1920, height: 1080 },
+            ],
+            file: [
+                { id: 101, name: '年度工作报告.pdf', url: '#', size: '2.3MB', type: 'pdf', icon: 'fa-file-pdf' },
+                { id: 102, name: '数字化转型方案.docx', url: '#', size: '1.8MB', type: 'docx', icon: 'fa-file-word' },
+                { id: 103, name: '数据统计表.xlsx', url: '#', size: '890KB', type: 'xlsx', icon: 'fa-file-excel' },
+                { id: 104, name: '项目计划书.pdf', url: '#', size: '3.1MB', type: 'pdf', icon: 'fa-file-pdf' },
+                { id: 105, name: '产品介绍.pptx', url: '#', size: '15.6MB', type: 'pptx', icon: 'fa-file-powerpoint' },
+                { id: 106, name: '用户手册.pdf', url: '#', size: '4.2MB', type: 'pdf', icon: 'fa-file-pdf' },
+                { id: 107, name: '技术架构图.vsdx', url: '#', size: '2.8MB', type: 'vsdx', icon: 'fa-file-alt' },
+                { id: 108, name: '会议纪要.docx', url: '#', size: '520KB', type: 'docx', icon: 'fa-file-word' },
+            ],
+            video: [
+                { id: 201, name: '产品演示视频.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', size: '25.3MB', duration: '5:30', poster: 'https://images.unsplash.com/photo-1574717024653-61fd2cf7d944?w=400&h=300&fit=crop' },
+                { id: 202, name: '培训教程.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', size: '128.5MB', duration: '45:20', poster: 'https://images.unsplash.com/photo-1516321318423-f06f85b5f7c1?w=400&h=300&fit=crop' },
+                { id: 203, name: '活动回顾.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', size: '89.2MB', duration: '12:45', poster: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop' },
+                { id: 204, name: '功能介绍.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', size: '45.8MB', duration: '8:15', poster: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=300&fit=crop' },
+            ]
+        };
+
+        let resourcePickerConfig = {
+            target: '',      // cover, editCover, content, editContent
+            mode: 'single',  // single, multiple
+            currentTab: 'image',
+            currentPage: 1,
+            pageSize: 10,
+            selected: [],    // 当前选中的资源
+            searchKeyword: ''
+        };
+
+        // 打开资源选择器
+        function openResourcePicker(target, mode) {
+            resourcePickerConfig.target = target;
+            resourcePickerConfig.mode = mode;
+            resourcePickerConfig.currentTab = 'image';
+            resourcePickerConfig.currentPage = 1;
+            resourcePickerConfig.selected = [];
+            resourcePickerConfig.searchKeyword = '';
+
+            document.getElementById('resourceSearchInput').value = '';
+            updateResourcePickerStatus();
+            renderResourceList();
+            document.getElementById('resourcePickerModal').classList.remove('hidden');
+            document.getElementById('resourcePickerModal').classList.add('flex');
+        }
+
+        // 关闭资源选择器
+        function closeResourcePicker() {
+            document.getElementById('resourcePickerModal').classList.add('hidden');
+            document.getElementById('resourcePickerModal').classList.remove('flex');
+        }
+
+        // 切换资源标签页
+        function switchResourceTab(tab) {
+            resourcePickerConfig.currentTab = tab;
+            resourcePickerConfig.currentPage = 1;
+            resourcePickerConfig.selected = [];
+            document.getElementById('resourceSearchInput').value = '';
+            resourcePickerConfig.searchKeyword = '';
+
+            ['image', 'file', 'video'].forEach(t => {
+                const btn = document.getElementById('resourceTab-' + t);
+                if (t === tab) {
+                    btn.className = 'px-6 py-3 text-sm font-medium border-b-2 border-accent-blue text-accent-blue';
+                } else {
+                    btn.className = 'px-6 py-3 text-sm font-medium border-b-2 border-transparent text-text-secondary hover:text-text-primary';
+                }
+            });
+
+            updateResourcePickerStatus();
+            renderResourceList();
+        }
+
+        // 筛选资源
+        function filterResources() {
+            resourcePickerConfig.searchKeyword = document.getElementById('resourceSearchInput').value;
+            resourcePickerConfig.currentPage = 1;
+            renderResourceList();
+        }
+
+        // 渲染资源列表
+        function renderResourceList() {
+            const list = document.getElementById('resourceList');
+            const type = resourcePickerConfig.currentTab;
+            let resources = mockResources[type] || [];
+
+            // 搜索过滤
+            if (resourcePickerConfig.searchKeyword) {
+                const keyword = resourcePickerConfig.searchKeyword.toLowerCase();
+                resources = resources.filter(r => r.name.toLowerCase().includes(keyword));
+            }
+
+            // 分页
+            const pageSize = resourcePickerConfig.pageSize;
+            const start = (resourcePickerConfig.currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageResources = resources.slice(start, end);
+            const total = resources.length;
+            const totalPages = Math.ceil(total / pageSize);
+
+            if (pageResources.length === 0) {
+                list.innerHTML = `
+                    <div class="col-span-5 text-center py-12 text-text-muted">
+                        <i class="fas fa-folder-open text-4xl mb-3 opacity-50"></i>
+                        <p>暂无资源</p>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = pageResources.map(r => {
+                    const isSelected = resourcePickerConfig.selected.some(s => s.id === r.id);
+                    const selectedClass = isSelected ? 'border-accent-cyan bg-accent-cyan/10' : 'border-border-dark hover:border-accent-blue/50';
+
+                    if (type === 'image') {
+                        return `
+                            <div class="cursor-pointer rounded-xl border-2 ${selectedClass} overflow-hidden transition-all ${isSelected ? 'ring-2 ring-accent-cyan' : ''}"
+                                 onclick="toggleResourceSelection(${r.id}, '${r.name}', '${r.url}', '${r.size}', '${type}')">
+                                <div class="relative aspect-[4/3] bg-primary-bg">
+                                    <img src="${r.url}" class="w-full h-full object-cover">
+                                    ${isSelected ? '<div class="absolute top-2 right-2 w-5 h-5 bg-accent-cyan rounded-full flex items-center justify-center"><i class="fas fa-check text-white text-xs"></i></div>' : ''}
+                                </div>
+                                <div class="p-2 text-xs">
+                                    <p class="text-text-primary truncate">${r.name}</p>
+                                    <p class="text-text-muted">${r.size}</p>
+                                </div>
+                            </div>
+                        `;
+                    } else if (type === 'file') {
+                        return `
+                            <div class="cursor-pointer rounded-xl border-2 ${selectedClass} p-4 transition-all ${isSelected ? 'ring-2 ring-accent-cyan' : ''}"
+                                 onclick="toggleResourceSelection(${r.id}, '${r.name}', '${r.url}', '${r.size}', '${type}')">
+                                <div class="flex flex-col items-center text-center">
+                                    <i class="fas ${r.icon} text-3xl text-accent-amber mb-2"></i>
+                                    <p class="text-xs text-text-primary truncate w-full">${r.name}</p>
+                                    <p class="text-xs text-text-muted">${r.size}</p>
+                                </div>
+                                ${isSelected ? '<div class="absolute top-2 right-2 w-5 h-5 bg-accent-cyan rounded-full flex items-center justify-center"><i class="fas fa-check text-white text-xs"></i></div>' : ''}
+                            </div>
+                        `;
+                    } else if (type === 'video') {
+                        return `
+                            <div class="cursor-pointer rounded-xl border-2 ${selectedClass} overflow-hidden transition-all ${isSelected ? 'ring-2 ring-accent-cyan' : ''}"
+                                 onclick="toggleResourceSelection(${r.id}, '${r.name}', '${r.url}', '${r.size}', '${type}')">
+                                <div class="relative aspect-[4/3] bg-primary-bg">
+                                    <img src="${r.poster}" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
+                                        <i class="fas fa-play-circle text-3xl text-white"></i>
+                                    </div>
+                                    <div class="absolute bottom-2 right-2 px-2 py-0.5 bg-black/60 text-white text-xs rounded">${r.duration}</div>
+                                    ${isSelected ? '<div class="absolute top-2 right-2 w-5 h-5 bg-accent-cyan rounded-full flex items-center justify-center"><i class="fas fa-check text-white text-xs"></i></div>' : ''}
+                                </div>
+                                <div class="p-2 text-xs">
+                                    <p class="text-text-primary truncate">${r.name}</p>
+                                    <p class="text-text-muted">${r.size}</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }).join('');
+            }
+
+            // 更新分页信息
+            document.getElementById('resourcePaginationInfo').textContent = `显示 ${total} 条`;
+            document.getElementById('resourcePageInfo').textContent = `${resourcePickerConfig.currentPage} / ${totalPages || 1}`;
+            document.getElementById('resourcePrevBtn').disabled = resourcePickerConfig.currentPage <= 1;
+            document.getElementById('resourceNextBtn').disabled = resourcePickerConfig.currentPage >= totalPages;
+        }
+
+        // 切换资源选中状态
+        function toggleResourceSelection(id, name, url, size, type) {
+            const isSelected = resourcePickerConfig.selected.some(s => s.id === id);
+
+            if (resourcePickerConfig.mode === 'single') {
+                resourcePickerConfig.selected = isSelected ? [] : [{ id, name, url, size, type }];
+            } else {
+                if (isSelected) {
+                    resourcePickerConfig.selected = resourcePickerConfig.selected.filter(s => s.id !== id);
+                } else {
+                    resourcePickerConfig.selected.push({ id, name, url, size, type });
+                }
+            }
+
+            updateResourcePickerStatus();
+            renderResourceList();
+        }
+
+        // 更新选择器状态显示
+        function updateResourcePickerStatus() {
+            const count = resourcePickerConfig.selected.length;
+            const statusEl = document.getElementById('resourcePickerStatus');
+            const infoEl = document.getElementById('selectedResourceInfo');
+            const confirmBtn = document.getElementById('confirmResourceBtn');
+
+            if (count === 0) {
+                statusEl.textContent = '';
+                infoEl.textContent = '请选择资源';
+                confirmBtn.disabled = true;
+            } else {
+                const name = resourcePickerConfig.selected[0].name;
+                statusEl.textContent = `已选择: ${name}${count > 1 ? ' 等' + count + '个' : ''}`;
+                infoEl.textContent = `已选择: ${name}${count > 1 ? ' 等' + count + '个' : ''}`;
+                confirmBtn.disabled = false;
+            }
+        }
+
+        // 上一页
+        function prevResourcePage() {
+            if (resourcePickerConfig.currentPage > 1) {
+                resourcePickerConfig.currentPage--;
+                renderResourceList();
+            }
+        }
+
+        // 下一页
+        function nextResourcePage() {
+            resourcePickerConfig.currentPage++;
+            renderResourceList();
+        }
+
+        // 确认选择
+        function confirmResourceSelection() {
+            const selected = resourcePickerConfig.selected;
+            if (selected.length === 0) return;
+
+            const target = resourcePickerConfig.target;
+
+            if (target === 'cover' || target === 'editCover') {
+                // 封面图
+                const r = selected[0];
+                if (target === 'cover') {
+                    document.getElementById('createCoverImg').src = r.url;
+                    document.getElementById('createCoverName').textContent = r.name;
+                    document.getElementById('createCoverSize').textContent = r.size;
+                    document.getElementById('createCoverEmpty').classList.add('hidden');
+                    document.getElementById('createCoverPreview').classList.remove('hidden');
+                } else {
+                    document.getElementById('editCoverImgDisplay').src = r.url;
+                    document.getElementById('editCoverName').textContent = r.name;
+                    document.getElementById('editCoverSize').textContent = r.size;
+                    document.getElementById('editCoverEmpty').classList.add('hidden');
+                    document.getElementById('editCoverPreview').classList.remove('hidden');
+                }
+            } else {
+                // 正文插入资源
+                selected.forEach(r => {
+                    if (target === 'content' || target === 'editContent') {
+                        const textareaId = target === 'content' ? 'createContent' : 'editContent';
+                        const displayId = target === 'content' ? 'createContentDisplay' : 'editContentDisplay';
+                        insertResourceToEditor(textareaId, displayId, r);
+                    }
+                });
+            }
+
+            closeResourcePicker();
+            showToast(`已选择: ${selected[0].name}${selected.length > 1 ? ' 等' + selected.length + '个' : ''}`);
+        }
+
+        // 插入资源到编辑器
+        function insertResourceToEditor(textareaId, displayId, resource) {
+            const textarea = document.getElementById(textareaId);
+            const display = document.getElementById(displayId);
+
+            if (!textarea || !display) return;
+
+            let insertHtml = '';
+            if (resource.type === 'image') {
+                insertHtml = `\n[📷 图片: ${resource.name}]\n`;
+            } else if (resource.type === 'file') {
+                insertHtml = `\n[📄 文件: ${resource.name} (${resource.size})]\n`;
+            } else if (resource.type === 'video') {
+                insertHtml = `\n[🎬 视频: ${resource.name} (${resource.size})]\n`;
+            }
+
+            // 追加到内容
+            textarea.value += insertHtml;
+            display.innerHTML = textarea.value.replace(/\n/g, '<br>');
+        }
+
+        // 封面图上传触发
+        function triggerCoverUpload() {
+            document.getElementById('coverFileInput').click();
+        }
+
+        // 封面图上传处理
+        function handleCoverFileUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('createCoverImg').src = e.target.result;
+                    document.getElementById('createCoverName').textContent = file.name;
+                    document.getElementById('createCoverSize').textContent = formatFileSize(file.size);
+                    document.getElementById('createCoverEmpty').classList.add('hidden');
+                    document.getElementById('createCoverPreview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 移除封面图
+        function removeCreateCover() {
+            document.getElementById('createCoverImg').src = '';
+            document.getElementById('createCoverEmpty').classList.remove('hidden');
+            document.getElementById('createCoverPreview').classList.add('hidden');
+        }
+
+        // 编辑封面图上传触发
+        function triggerEditCoverUpload() {
+            document.getElementById('editCoverFileInput').click();
+        }
+
+        // 编辑封面图上传处理
+        function handleEditCoverFileUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('editCoverImgDisplay').src = e.target.result;
+                    document.getElementById('editCoverName').textContent = file.name;
+                    document.getElementById('editCoverSize').textContent = formatFileSize(file.size);
+                    document.getElementById('editCoverEmpty').classList.add('hidden');
+                    document.getElementById('editCoverPreview').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // 移除编辑封面图
+        function removeEditCover() {
+            document.getElementById('editCoverImgDisplay').src = '';
+            document.getElementById('editCoverEmpty').classList.remove('hidden');
+            document.getElementById('editCoverPreview').classList.add('hidden');
+        }
+
+        // 格式化文件大小
+        function formatFileSize(bytes) {
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+            if (bytes < 1024 * 1024 * 1024) return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+            return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
+        }
     </script>
 </body>
 </html>

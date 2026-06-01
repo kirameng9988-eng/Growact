@@ -29,38 +29,37 @@
     </script>
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #030714; }
+        ::-webkit-scrollbar-thumb { background: #1a2744; border-radius: 3px; }
         .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
         .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
         .tree-item:hover { background: rgba(59, 130, 246, 0.05); }
-        .tree-item.active { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); }
+        .tree-item.active { background: rgba(59, 130, 246, 0.1); border-left: 3px solid #3b82f6; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
     </style>
 </head>
 <body class="bg-primary-bg text-text-primary min-h-screen">
     <!-- 顶部导航 -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
-                <i class="fas fa-cube text-white text-lg"></i>
-            </div>
-            <span class="text-lg font-semibold">内容中台</span>
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
         </div>
-        <div class="flex-1 max-w-xl mx-8">
-            <div class="relative">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-            </div>
-        </div>
-        <div class="flex items-center gap-6">
-            <button class="relative text-text-secondary hover:text-text-primary">
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
                     <span class="text-xs text-text-muted">超级管理员</span>
                 </div>
+                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
             </div>
         </div>
     </header>
@@ -94,45 +93,6 @@
                 <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
-            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-home w-5 text-text-secondary"></i>
-                <span>首页装修</span>
-            </a>
-            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-image w-5 text-text-secondary"></i>
-                <span>Banner管理</span>
-            </a>
-            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-columns w-5 text-text-secondary"></i>
-                <span>栏目管理</span>
-            </a>
-            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
-                <span>专题管理</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
-            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
-                <span>新闻资讯</span>
-            </a>
-            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
-                <span>公告通知</span>
-            </a>
-            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
-                <span>政策文件</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
-            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
-                <span>数据概览</span>
-            </a>
-            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
-                <span>内容分析</span>
-            </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-images w-5 text-text-secondary"></i>
@@ -146,6 +106,17 @@
                 <i class="fas fa-video w-5 text-text-secondary"></i>
                 <span>视频管理</span>
             </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-users-cog w-5 text-text-secondary"></i>
@@ -155,6 +126,11 @@
                 <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
                 <span>角色权限</span>
             </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <span>日志管理</span>
+            </a>
+
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-cog w-5 text-text-secondary"></i>
                 <span>系统设置</span>
@@ -169,7 +145,7 @@
                 <h1 class="text-2xl font-semibold">分类管理</h1>
                 <p class="text-text-muted mt-1">管理内容分类体系，支持树形结构展示和拖拽排序</p>
             </div>
-            <button onclick="openModal('addModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+            <button onclick="openAddModal()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
                 <i class="fas fa-plus"></i>
                 新增分类
             </button>
@@ -181,192 +157,75 @@
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium">分类结构</h3>
                     <div class="flex items-center gap-2">
-                        <button class="p-2 text-text-muted hover:text-text-primary hover:bg-primary-bg rounded-lg transition-colors" title="展开全部">
+                        <button onclick="expandAll()" class="p-2 text-text-muted hover:text-text-primary hover:bg-primary-bg rounded-lg transition-colors" title="展开全部">
                             <i class="fas fa-angle-double-down"></i>
                         </button>
-                        <button class="p-2 text-text-muted hover:text-text-primary hover:bg-primary-bg rounded-lg transition-colors" title="折叠全部">
+                        <button onclick="collapseAll()" class="p-2 text-text-muted hover:text-text-primary hover:bg-primary-bg rounded-lg transition-colors" title="折叠全部">
                             <i class="fas fa-angle-double-up"></i>
                         </button>
                     </div>
                 </div>
-                <div class="border border-border-dark rounded-xl overflow-hidden">
-                    <!-- 一级分类 -->
-                    <div class="tree-item flex items-center justify-between p-4 border-b border-border-dark bg-primary-bg/30 cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-chevron-down text-text-muted text-xs"></i>
-                            <i class="fas fa-folder text-accent-amber"></i>
-                            <span class="font-medium">新闻资讯</span>
-                            <span class="text-xs text-text-muted">（128篇）</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <button class="p-1.5 text-text-muted hover:text-accent-blue rounded"><i class="fas fa-plus"></i></button>
-                            <button class="p-1.5 text-text-muted hover:text-accent-blue rounded"><i class="fas fa-edit"></i></button>
-                            <button class="p-1.5 text-text-muted hover:text-accent-red rounded"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <!-- 二级分类 -->
-                    <div class="pl-8 border-b border-border-dark">
-                        <div class="tree-item flex items-center justify-between p-3 pl-4 border-l-2 border-accent-blue/30 cursor-pointer hover:bg-primary-bg/50">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-folder-open text-text-secondary"></i>
-                                <span class="text-sm">时政要闻</span>
-                                <span class="text-xs text-text-muted">（56篇）</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button class="p-1.5 text-text-muted hover:text-accent-blue rounded text-xs"><i class="fas fa-edit"></i></button>
-                                <button class="p-1.5 text-text-muted hover:text-accent-red rounded text-xs"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                        <div class="tree-item flex items-center justify-between p-3 pl-4 border-l-2 border-border-dark cursor-pointer hover:bg-primary-bg/50">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-folder-open text-text-secondary"></i>
-                                <span class="text-sm">社会民生</span>
-                                <span class="text-xs text-text-muted">（42篇）</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button class="p-1.5 text-text-muted hover:text-accent-blue rounded text-xs"><i class="fas fa-edit"></i></button>
-                                <button class="p-1.5 text-text-muted hover:text-accent-red rounded text-xs"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                        <div class="tree-item flex items-center justify-between p-3 pl-4 border-l-2 border-border-dark cursor-pointer hover:bg-primary-bg/50">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-folder-open text-text-secondary"></i>
-                                <span class="text-sm">经济建设</span>
-                                <span class="text-xs text-text-muted">（30篇）</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button class="p-1.5 text-text-muted hover:text-accent-blue rounded text-xs"><i class="fas fa-edit"></i></button>
-                                <button class="p-1.5 text-text-muted hover:text-accent-red rounded text-xs"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 一级分类 -->
-                    <div class="tree-item flex items-center justify-between p-4 border-b border-border-dark cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-chevron-right text-text-muted text-xs"></i>
-                            <i class="fas fa-folder text-accent-cyan"></i>
-                            <span class="font-medium">政策文件</span>
-                            <span class="text-xs text-text-muted">（86篇）</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <button class="p-1.5 text-text-muted hover:text-accent-blue rounded"><i class="fas fa-plus"></i></button>
-                            <button class="p-1.5 text-text-muted hover:text-accent-blue rounded"><i class="fas fa-edit"></i></button>
-                            <button class="p-1.5 text-text-muted hover:text-accent-red rounded"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <div class="pl-8 border-b border-border-dark">
-                        <div class="tree-item flex items-center justify-between p-3 pl-4 border-l-2 border-accent-cyan/30 cursor-pointer hover:bg-primary-bg/50">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-folder text-text-secondary"></i>
-                                <span class="text-sm">政策法规</span>
-                                <span class="text-xs text-text-muted">（45篇）</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button class="p-1.5 text-text-muted hover:text-accent-blue rounded text-xs"><i class="fas fa-edit"></i></button>
-                                <button class="p-1.5 text-text-muted hover:text-accent-red rounded text-xs"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                        <div class="tree-item flex items-center justify-between p-3 pl-4 border-l-2 border-border-dark cursor-pointer hover:bg-primary-bg/50">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-folder text-text-secondary"></i>
-                                <span class="text-sm">通知公告</span>
-                                <span class="text-xs text-text-muted">（41篇）</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button class="p-1.5 text-text-muted hover:text-accent-blue rounded text-xs"><i class="fas fa-edit"></i></button>
-                                <button class="p-1.5 text-text-muted hover:text-accent-red rounded text-xs"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- 一级分类 -->
-                    <div class="tree-item flex items-center justify-between p-4 border-b border-border-dark cursor-pointer">
-                        <div class="flex items-center gap-3">
-                            <i class="fas fa-chevron-right text-text-muted text-xs"></i>
-                            <i class="fas fa-folder text-accent-green"></i>
-                            <span class="font-medium">专题活动</span>
-                            <span class="text-xs text-text-muted">（32篇）</span>
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <button class="p-1.5 text-text-muted hover:text-accent-blue rounded"><i class="fas fa-plus"></i></button>
-                            <button class="p-1.5 text-text-muted hover:text-accent-blue rounded"><i class="fas fa-edit"></i></button>
-                            <button class="p-1.5 text-text-muted hover:text-accent-red rounded"><i class="fas fa-trash"></i></button>
-                        </div>
-                    </div>
-                    <div class="pl-8">
-                        <div class="tree-item flex items-center justify-between p-3 pl-4 border-l-2 border-accent-green/30 cursor-pointer hover:bg-primary-bg/50">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-folder text-text-secondary"></i>
-                                <span class="text-sm">两会专题</span>
-                                <span class="text-xs text-text-muted">（18篇）</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button class="p-1.5 text-text-muted hover:text-accent-blue rounded text-xs"><i class="fas fa-edit"></i></button>
-                                <button class="p-1.5 text-text-muted hover:text-accent-red rounded text-xs"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                        <div class="tree-item flex items-center justify-between p-3 pl-4 border-l-2 border-border-dark cursor-pointer hover:bg-primary-bg/50">
-                            <div class="flex items-center gap-3">
-                                <i class="fas fa-folder text-text-secondary"></i>
-                                <span class="text-sm">安全生产月</span>
-                                <span class="text-xs text-text-muted">（14篇）</span>
-                            </div>
-                            <div class="flex items-center gap-2">
-                                <button class="p-1.5 text-text-muted hover:text-accent-blue rounded text-xs"><i class="fas fa-edit"></i></button>
-                                <button class="p-1.5 text-text-muted hover:text-accent-red rounded text-xs"><i class="fas fa-trash"></i></button>
-                            </div>
-                        </div>
-                    </div>
+                <div id="categoryTree" class="border border-border-dark rounded-xl overflow-hidden">
+                    <!-- 动态渲染分类树 -->
                 </div>
             </div>
 
             <!-- 分类详情 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark p-5">
+            <div id="categoryDetail" class="bg-card-bg rounded-xl border border-border-dark p-5">
                 <h3 class="text-lg font-medium mb-4">分类详情</h3>
-                <div class="space-y-4">
+                <div id="detailEmpty" class="text-center py-12 text-text-muted">
+                    <i class="fas fa-mouse-pointer text-4xl mb-3 opacity-50"></i>
+                    <p>点击左侧分类查看详情</p>
+                </div>
+                <div id="detailForm" class="space-y-4 hidden">
                     <div>
                         <label class="block text-sm text-text-muted mb-2">分类名称</label>
-                        <input type="text" value="时政要闻" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                        <input type="text" id="detailName" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-sm text-text-muted mb-2">上级分类</label>
-                        <select class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-                            <option>新闻资讯</option>
-                            <option>政策文件</option>
-                            <option>专题活动</option>
+                        <select id="detailParent" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                            <option value="">无（顶级分类）</option>
                         </select>
                     </div>
                     <div>
                         <label class="block text-sm text-text-muted mb-2">分类图标</label>
-                        <div class="flex items-center gap-3 p-3 bg-primary-bg rounded-lg">
+                        <div id="detailIconDisplay" class="flex items-center gap-3 p-3 bg-primary-bg rounded-lg">
                             <div class="w-10 h-10 rounded-lg bg-accent-amber/20 flex items-center justify-center">
                                 <i class="fas fa-folder text-accent-amber"></i>
                             </div>
-                            <button class="text-sm text-accent-blue hover:underline">更换图标</button>
+                            <button onclick="showIconPicker()" class="text-sm text-accent-blue hover:underline">更换图标</button>
+                        </div>
+                        <div id="detailIconPicker" class="hidden grid grid-cols-8 gap-2 p-4 bg-primary-bg rounded-lg mt-2">
+                            <!-- 动态渲染图标选择 -->
                         </div>
                     </div>
                     <div>
                         <label class="block text-sm text-text-muted mb-2">分类描述</label>
-                        <textarea rows="3" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none resize-none">播报重要时政新闻、地方动态、国际局势等内容</textarea>
+                        <textarea id="detailDesc" rows="3" class="w-full bg-primary-bg border border-border-dark rounded-lg px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
                     </div>
                     <div>
                         <label class="block text-sm text-text-muted mb-2">内容数量</label>
-                        <span class="text-2xl font-bold text-accent-blue">56</span>
+                        <span id="detailContentCount" class="text-2xl font-bold text-accent-blue">0</span>
                         <span class="text-sm text-text-muted ml-1">篇</span>
                     </div>
                     <div class="flex items-center gap-2 pt-4 border-t border-border-dark">
-                        <button class="flex-1 py-2.5 bg-accent-blue text-white rounded-lg hover:bg-blue-600 transition-colors">保存</button>
-                        <button class="flex-1 py-2.5 border border-border-dark rounded-lg hover:border-text-muted transition-colors">取消</button>
+                        <button onclick="saveCategory()" class="flex-1 py-2.5 bg-accent-blue text-white rounded-lg hover:bg-blue-600 transition-colors">保存</button>
+                        <button onclick="cancelEdit()" class="flex-1 py-2.5 border border-border-dark rounded-lg hover:border-text-muted transition-colors">取消</button>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
     <!-- 新增分类弹窗 -->
     <div id="addModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
         <div class="bg-card-bg rounded-2xl w-[500px] border border-border-dark shadow-2xl">
             <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
-                <h3 class="text-lg font-medium">新增分类</h3>
+                <h3 id="addModalTitle" class="text-lg font-medium">新增分类</h3>
                 <button onclick="closeModal('addModal')" class="text-text-muted hover:text-text-primary">
                     <i class="fas fa-times text-xl"></i>
                 </button>
@@ -374,68 +233,529 @@
             <div class="p-6 space-y-4">
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">分类名称 <span class="text-accent-red">*</span></label>
-                    <input type="text" placeholder="请输入分类名称" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <input type="text" id="addName" placeholder="请输入分类名称" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">上级分类</label>
-                    <select class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
-                        <option>无（顶级分类）</option>
-                        <option>新闻资讯</option>
-                        <option selected>时政要闻</option>
-                        <option>社会民生</option>
-                        <option>政策文件</option>
+                    <select id="addParent" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="">无（顶级分类）</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">分类图标</label>
-                    <div class="grid grid-cols-8 gap-2 p-4 bg-primary-bg rounded-xl">
-                        <div class="w-10 h-10 rounded-lg bg-accent-blue/20 flex items-center justify-center cursor-pointer hover:ring-2 ring-accent-blue">
-                            <i class="fas fa-folder text-accent-blue"></i>
-                        </div>
-                        <div class="w-10 h-10 rounded-lg bg-primary-bg flex items-center justify-center cursor-pointer border border-border-dark hover:border-accent-blue">
-                            <i class="fas fa-newspaper text-text-muted"></i>
-                        </div>
-                        <div class="w-10 h-10 rounded-lg bg-primary-bg flex items-center justify-center cursor-pointer border border-border-dark hover:border-accent-blue">
-                            <i class="fas fa-bullhorn text-text-muted"></i>
-                        </div>
-                        <div class="w-10 h-10 rounded-lg bg-primary-bg flex items-center justify-center cursor-pointer border border-border-dark hover:border-accent-blue">
-                            <i class="fas fa-file-alt text-text-muted"></i>
-                        </div>
-                        <div class="w-10 h-10 rounded-lg bg-primary-bg flex items-center justify-center cursor-pointer border border-border-dark hover:border-accent-blue">
-                            <i class="fas fa-gavel text-text-muted"></i>
-                        </div>
-                        <div class="w-10 h-10 rounded-lg bg-primary-bg flex items-center justify-center cursor-pointer border border-border-dark hover:border-accent-blue">
-                            <i class="fas fa-award text-text-muted"></i>
-                        </div>
-                        <div class="w-10 h-10 rounded-lg bg-primary-bg flex items-center justify-center cursor-pointer border border-border-dark hover:border-accent-blue">
-                            <i class="fas fa-calendar text-text-muted"></i>
-                        </div>
-                        <div class="w-10 h-10 rounded-lg bg-primary-bg flex items-center justify-center cursor-pointer border border-border-dark hover:border-accent-blue">
-                            <i class="fas fa-ellipsis-h text-text-muted"></i>
-                        </div>
+                    <div id="addIconPicker" class="grid grid-cols-8 gap-2 p-4 bg-primary-bg rounded-xl">
+                        <!-- 动态渲染图标选择 -->
                     </div>
                 </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">排序</label>
-                    <input type="number" value="1" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <input type="number" id="addSort" value="1" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
             </div>
             <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
                 <button onclick="closeModal('addModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
-                <button class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认添加</button>
+                <button onclick="confirmAddCategory()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+                <div class="w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认删除</h3>
+                    <p id="deleteTip" class="text-sm text-text-muted mt-1">删除后无法恢复，请谨慎操作</p>
+                </div>
+            </div>
+            <div id="deleteContent" class="p-6 hidden">
+                <p class="text-sm text-text-secondary">该分类下有 <span id="deleteChildCount" class="font-medium text-accent-red">0</span> 个子分类和 <span id="deleteContentCount" class="font-medium text-accent-red">0</span> 篇内容</p>
+                <p class="text-sm text-accent-amber mt-2">建议：先移动或删除子分类和内容后再删除</p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('deleteModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="confirmDeleteCategory()" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
             </div>
         </div>
     </div>
 
     <script>
+        // 图标配置
+        const iconOptions = [
+            { icon: 'fa-folder', color: 'accent-amber' },
+            { icon: 'fa-newspaper', color: 'accent-blue' },
+            { icon: 'fa-bullhorn', color: 'accent-cyan' },
+            { icon: 'fa-file-alt', color: 'text-secondary' },
+            { icon: 'fa-gavel', color: 'accent-green' },
+            { icon: 'fa-award', color: 'accent-amber' },
+            { icon: 'fa-calendar', color: 'accent-cyan' },
+            { icon: 'fa-landmark', color: 'accent-blue' },
+            { icon: 'fa-briefcase', color: 'accent-green' },
+            { icon: 'fa-graduation-cap', color: 'accent-cyan' },
+            { icon: 'fa-heart', color: 'accent-red' },
+            { icon: 'fa-star', color: 'accent-amber' },
+        ];
+
+        // 分类数据
+        let categories = [
+            {
+                id: 1,
+                name: '新闻资讯',
+                icon: 'fa-folder',
+                iconColor: 'accent-amber',
+                parentId: null,
+                sort: 1,
+                description: '播报重要时政新闻、地方动态、国际局势等内容',
+                contentCount: 128,
+                expanded: true,
+                children: [
+                    { id: 11, name: '时政要闻', parentId: 1, icon: 'fa-newspaper', iconColor: 'accent-blue', sort: 1, contentCount: 56, children: [] },
+                    { id: 12, name: '社会民生', parentId: 1, icon: 'fa-bullhorn', iconColor: 'accent-cyan', sort: 2, contentCount: 42, children: [] },
+                    { id: 13, name: '经济建设', parentId: 1, icon: 'fa-briefcase', iconColor: 'accent-green', sort: 3, contentCount: 30, children: [] },
+                ]
+            },
+            {
+                id: 2,
+                name: '政策文件',
+                icon: 'fa-landmark',
+                iconColor: 'accent-blue',
+                parentId: null,
+                sort: 2,
+                description: '政策法规、通知公告等内容管理',
+                contentCount: 86,
+                expanded: false,
+                children: [
+                    { id: 21, name: '政策法规', parentId: 2, icon: 'fa-gavel', iconColor: 'accent-green', sort: 1, contentCount: 45, children: [] },
+                    { id: 22, name: '通知公告', parentId: 2, icon: 'fa-bullhorn', iconColor: 'accent-cyan', sort: 2, contentCount: 41, children: [] },
+                ]
+            },
+            {
+                id: 3,
+                name: '专题活动',
+                icon: 'fa-calendar',
+                iconColor: 'accent-cyan',
+                parentId: null,
+                sort: 3,
+                description: '各类专题报道、活动策划与执行',
+                contentCount: 32,
+                expanded: false,
+                children: [
+                    { id: 31, name: '两会专题', parentId: 3, icon: 'fa-star', iconColor: 'accent-amber', sort: 1, contentCount: 18, children: [] },
+                    { id: 32, name: '安全生产月', parentId: 3, icon: 'fa-shield-alt', iconColor: 'accent-green', sort: 2, contentCount: 14, children: [] },
+                ]
+            }
+        ];
+
+        let selectedCategory = null;
+        let currentEditingCategory = null;
+        let deleteTargetId = null;
+        let selectedIcon = { icon: 'fa-folder', color: 'accent-amber' };
+
+        // 初始化
+        function init() {
+            renderCategoryTree();
+            renderIconPickers();
+        }
+
+        // 渲染分类树
+        function renderCategoryTree() {
+            const container = document.getElementById('categoryTree');
+            container.innerHTML = categories.map(cat => renderTreeNode(cat, 0)).join('');
+        }
+
+        function renderTreeNode(cat, level) {
+            const hasChildren = cat.children && cat.children.length > 0;
+            const isSelected = selectedCategory && selectedCategory.id === cat.id;
+            const paddingLeft = level * 24 + 16;
+            const chevronClass = cat.expanded ? 'fa-chevron-down' : 'fa-chevron-right';
+            const folderClass = cat.expanded ? 'fa-folder-open' : 'fa-folder';
+
+            let html = `
+                <div class="tree-item flex items-center justify-between p-3 border-b border-border-dark cursor-pointer ${isSelected ? 'active bg-accent-blue/10' : ''}"
+                     style="padding-left: ${paddingLeft}px"
+                     onclick="selectCategory(${cat.id})">
+                    <div class="flex items-center gap-3">
+                        ${hasChildren ? `<i onclick="toggleExpand(event, ${cat.id})" class="fas ${chevronClass} text-text-muted text-xs hover:text-accent-blue"></i>` : '<span class="w-4"></span>'}
+                        <i class="fas ${folderClass} text-${cat.iconColor}"></i>
+                        <span class="font-medium">${cat.name}</span>
+                        <span class="text-xs text-text-muted">（${cat.contentCount}篇）</span>
+                    </div>
+                    <div class="flex items-center gap-1" onclick="event.stopPropagation()">
+                        ${level < 2 ? `<button onclick="openAddSubModal(${cat.id})" class="p-1.5 text-text-muted hover:text-accent-blue rounded" title="添加子分类"><i class="fas fa-plus"></i></button>` : ''}
+                        <button onclick="openEditModal(${cat.id})" class="p-1.5 text-text-muted hover:text-accent-blue rounded" title="编辑"><i class="fas fa-edit"></i></button>
+                        <button onclick="openDeleteModal(${cat.id})" class="p-1.5 text-text-muted hover:text-accent-red rounded" title="删除"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+
+            // 渲染子分类
+            if (hasChildren && cat.expanded) {
+                html += cat.children.map(child => renderTreeNode(child, level + 1)).join('');
+            }
+
+            return html;
+        }
+
+        // 切换展开/折叠
+        function toggleExpand(event, id) {
+            event.stopPropagation();
+            toggleCategoryExpand(id, categories);
+            renderCategoryTree();
+        }
+
+        function toggleCategoryExpand(id, cats) {
+            for (let cat of cats) {
+                if (cat.id === id) {
+                    cat.expanded = !cat.expanded;
+                    return true;
+                }
+                if (cat.children && toggleCategoryExpand(id, cat.children)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // 展开全部
+        function expandAll() {
+            setAllExpanded(categories, true);
+            renderCategoryTree();
+        }
+
+        // 折叠全部
+        function collapseAll() {
+            setAllExpanded(categories, false);
+            renderCategoryTree();
+        }
+
+        function setAllExpanded(cats, expanded) {
+            for (let cat of cats) {
+                cat.expanded = expanded;
+                if (cat.children) {
+                    setAllExpanded(cat.children, expanded);
+                }
+            }
+        }
+
+        // 选中分类
+        function selectCategory(id) {
+            selectedCategory = findCategory(id, categories);
+            if (selectedCategory) {
+                showCategoryDetail(selectedCategory);
+            }
+            renderCategoryTree();
+        }
+
+        function findCategory(id, cats) {
+            for (let cat of cats) {
+                if (cat.id === id) return cat;
+                if (cat.children) {
+                    const found = findCategory(id, cat.children);
+                    if (found) return found;
+                }
+            }
+            return null;
+        }
+
+        // 显示分类详情
+        function showCategoryDetail(cat) {
+            document.getElementById('detailEmpty').classList.add('hidden');
+            document.getElementById('detailForm').classList.remove('hidden');
+
+            document.getElementById('detailName').value = cat.name;
+            document.getElementById('detailDesc').value = cat.description || '';
+            document.getElementById('detailContentCount').textContent = cat.contentCount;
+
+            // 更新上级分类下拉
+            const parentSelect = document.getElementById('detailParent');
+            parentSelect.innerHTML = '<option value="">无（顶级分类）</option>';
+            categories.forEach(c => {
+                if (c.id !== cat.id && !isChildOf(c.id, cat.id)) {
+                    const hasChild = cat.children && cat.children.some(child => child.id === c.id);
+                    if (!hasChild) {
+                        const opt = document.createElement('option');
+                        opt.value = c.id;
+                        opt.textContent = c.name;
+                        if (cat.parentId === c.id) opt.selected = true;
+                        parentSelect.appendChild(opt);
+                    }
+                }
+            });
+            parentSelect.value = cat.parentId || '';
+
+            // 更新图标显示
+            const iconDisplay = document.getElementById('detailIconDisplay');
+            iconDisplay.innerHTML = `
+                <div class="w-10 h-10 rounded-lg bg-${cat.iconColor}/20 flex items-center justify-center">
+                    <i class="fas ${cat.icon} text-${cat.iconColor}"></i>
+                </div>
+                <button onclick="showIconPicker()" class="text-sm text-accent-blue hover:underline">更换图标</button>
+            `;
+
+            selectedIcon = { icon: cat.icon, color: cat.iconColor };
+            document.getElementById('detailIconPicker').classList.add('hidden');
+        }
+
+        function isChildOf(childId, parentId) {
+            const parent = findCategory(parentId, categories);
+            if (parent && parent.children) {
+                return parent.children.some(c => c.id === childId);
+            }
+            return false;
+        }
+
+        // 显示图标选择器
+        function showIconPicker() {
+            const picker = document.getElementById('detailIconPicker');
+            picker.classList.toggle('hidden');
+            renderIconPicker(picker, selectedIcon);
+        }
+
+        // 渲染图标选择器
+        function renderIconPickers() {
+            const addPicker = document.getElementById('addIconPicker');
+            renderIconPicker(addPicker, selectedIcon);
+
+            const detailPicker = document.getElementById('detailIconPicker');
+            renderIconPicker(detailPicker, selectedIcon);
+        }
+
+        function renderIconPicker(container, current) {
+            container.innerHTML = iconOptions.map(opt => `
+                <div onclick="selectIcon('${opt.icon}', '${opt.color}')"
+                     class="w-10 h-10 rounded-lg flex items-center justify-center cursor-pointer hover:ring-2 ring-accent-blue transition-all
+                            ${current.icon === opt.icon ? 'bg-' + opt.color + '/20' : 'bg-primary-bg border border-border-dark hover:border-accent-blue'}">
+                    <i class="fas ${opt.icon} text-${opt.color}"></i>
+                </div>
+            `).join('');
+        }
+
+        function selectIcon(icon, color) {
+            selectedIcon = { icon, color };
+            // 更新显示
+            document.querySelectorAll('[id$="IconPicker"]').forEach(picker => {
+                if (!picker.classList.contains('hidden')) {
+                    renderIconPicker(picker, selectedIcon);
+                }
+            });
+        }
+
+        // 打开新增弹窗
+        function openAddModal() {
+            currentEditingCategory = null;
+            document.getElementById('addModalTitle').textContent = '新增分类';
+            document.getElementById('addName').value = '';
+            document.getElementById('addSort').value = categories.length + 1;
+            selectedIcon = { icon: 'fa-folder', color: 'accent-amber' };
+            renderIconPickers();
+
+            // 填充上级分类
+            const parentSelect = document.getElementById('addParent');
+            parentSelect.innerHTML = '<option value="">无（顶级分类）</option>';
+            categories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat.id;
+                opt.textContent = cat.name;
+                parentSelect.appendChild(opt);
+            });
+
+            openModal('addModal');
+        }
+
+        // 打开新增子分类弹窗
+        function openAddSubModal(parentId) {
+            openAddModal();
+            document.getElementById('addModalTitle').textContent = '新增子分类';
+            document.getElementById('addParent').value = parentId;
+        }
+
+        // 打开编辑弹窗
+        function openEditModal(id) {
+            const cat = findCategory(id, categories);
+            if (!cat) return;
+
+            currentEditingCategory = cat;
+            document.getElementById('addModalTitle').textContent = '编辑分类';
+            document.getElementById('addName').value = cat.name;
+            document.getElementById('addSort').value = cat.sort;
+            selectedIcon = { icon: cat.icon, color: cat.iconColor };
+            renderIconPickers();
+
+            // 填充上级分类
+            const parentSelect = document.getElementById('addParent');
+            parentSelect.innerHTML = '<option value="">无（顶级分类）</option>';
+            categories.forEach(c => {
+                if (c.id !== cat.id) {
+                    const opt = document.createElement('option');
+                    opt.value = c.id;
+                    opt.textContent = c.name;
+                    if (cat.parentId === c.id) opt.selected = true;
+                    parentSelect.appendChild(opt);
+                }
+            });
+
+            openModal('addModal');
+        }
+
+        // 确认添加/编辑分类
+        function confirmAddCategory() {
+            const name = document.getElementById('addName').value.trim();
+            const parentId = document.getElementById('addParent').value;
+            const sort = parseInt(document.getElementById('addSort').value) || 1;
+
+            if (!name) {
+                showToast('请输入分类名称', 'error');
+                return;
+            }
+
+            if (currentEditingCategory) {
+                // 编辑模式
+                currentEditingCategory.name = name;
+                currentEditingCategory.parentId = parentId || null;
+                currentEditingCategory.sort = sort;
+                currentEditingCategory.icon = selectedIcon.icon;
+                currentEditingCategory.iconColor = selectedIcon.color;
+                showToast('分类已更新');
+            } else {
+                // 新增模式
+                const newCategory = {
+                    id: Date.now(),
+                    name,
+                    icon: selectedIcon.icon,
+                    iconColor: selectedIcon.color,
+                    parentId: parentId || null,
+                    sort,
+                    description: '',
+                    contentCount: 0,
+                    expanded: false,
+                    children: []
+                };
+
+                if (parentId) {
+                    // 添加为子分类
+                    const parent = findCategory(parseInt(parentId), categories);
+                    if (parent) {
+                        if (!parent.children) parent.children = [];
+                        parent.children.push(newCategory);
+                        parent.expanded = true;
+                    }
+                } else {
+                    categories.push(newCategory);
+                }
+                showToast('分类已添加');
+            }
+
+            closeModal('addModal');
+            renderCategoryTree();
+            if (selectedCategory) {
+                selectedCategory = findCategory(selectedCategory.id, categories);
+                if (selectedCategory) showCategoryDetail(selectedCategory);
+            }
+        }
+
+        // 打开删除弹窗
+        function openDeleteModal(id) {
+            const cat = findCategory(id, categories);
+            if (!cat) return;
+
+            deleteTargetId = id;
+            const childCount = cat.children ? cat.children.length : 0;
+
+            document.getElementById('deleteTip').textContent = '删除后无法恢复，请谨慎操作';
+            const deleteContent = document.getElementById('deleteContent');
+
+            if (childCount > 0 || cat.contentCount > 0) {
+                document.getElementById('deleteChildCount').textContent = childCount;
+                document.getElementById('deleteContentCount').textContent = cat.contentCount;
+                deleteContent.classList.remove('hidden');
+            } else {
+                deleteContent.classList.add('hidden');
+            }
+
+            openModal('deleteModal');
+        }
+
+        // 确认删除
+        function confirmDeleteCategory() {
+            if (!deleteTargetId) return;
+
+            deleteCategory(deleteTargetId, categories);
+            deleteTargetId = null;
+            closeModal('deleteModal');
+            renderCategoryTree();
+
+            if (selectedCategory && !findCategory(selectedCategory.id, categories)) {
+                selectedCategory = null;
+                document.getElementById('detailEmpty').classList.remove('hidden');
+                document.getElementById('detailForm').classList.add('hidden');
+            } else if (selectedCategory) {
+                showCategoryDetail(selectedCategory);
+            }
+
+            showToast('分类已删除');
+        }
+
+        function deleteCategory(id, cats) {
+            for (let i = 0; i < cats.length; i++) {
+                if (cats[i].id === id) {
+                    cats.splice(i, 1);
+                    return true;
+                }
+                if (cats[i].children && deleteCategory(id, cats[i].children)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // 保存分类
+        function saveCategory() {
+            if (!selectedCategory) return;
+
+            selectedCategory.name = document.getElementById('detailName').value.trim();
+            selectedCategory.parentId = document.getElementById('detailParent').value || null;
+            selectedCategory.description = document.getElementById('detailDesc').value;
+            selectedCategory.icon = selectedIcon.icon;
+            selectedCategory.iconColor = selectedIcon.color;
+
+            renderCategoryTree();
+            showToast('分类已保存');
+        }
+
+        // 取消编辑
+        function cancelEdit() {
+            if (selectedCategory) {
+                showCategoryDetail(selectedCategory);
+            }
+        }
+
+        // 弹窗控制
         function openModal(id) {
             document.getElementById(id).classList.remove('hidden');
             document.getElementById(id).classList.add('flex');
         }
+
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
             document.getElementById(id).classList.remove('flex');
         }
+
+        // Toast提示
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-accent-green' : type === 'error' ? 'bg-accent-red' : 'bg-accent-amber';
+            toast.className = `toast ${bgColor} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2`;
+            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'exclamation-circle'}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // 初始化
+        init();
     </script>
 </body>
 </html>

@@ -34,30 +34,25 @@
     </style>
 </head>
 <body class="bg-primary-bg text-text-primary min-h-screen">
+        <!-- 顶部导航 -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
-                <i class="fas fa-cube text-white text-lg"></i>
-            </div>
-            <span class="text-lg font-semibold">内容中台</span>
+                <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
         </div>
-        <div class="flex-1 max-w-xl mx-8">
-            <div class="relative">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-            </div>
-        </div>
-        <div class="flex items-center gap-6">
-            <button class="relative text-text-secondary hover:text-text-primary">
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
                     <span class="text-xs text-text-muted">超级管理员</span>
                 </div>
+                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
             </div>
         </div>
     </header>
@@ -90,45 +85,6 @@
                 <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
-            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-home w-5 text-text-secondary"></i>
-                <span>首页装修</span>
-            </a>
-            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-image w-5 text-text-secondary"></i>
-                <span>Banner管理</span>
-            </a>
-            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-columns w-5 text-text-secondary"></i>
-                <span>栏目管理</span>
-            </a>
-            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
-                <span>专题管理</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
-            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
-                <span>新闻资讯</span>
-            </a>
-            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
-                <span>公告通知</span>
-            </a>
-            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
-                <span>政策文件</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
-            <a href="data-overview.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-accent-blue"></i>
-                <span>数据概览</span>
-            </a>
-            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
-                <span>内容分析</span>
-            </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-images w-5 text-text-secondary"></i>
@@ -142,6 +98,17 @@
                 <i class="fas fa-video w-5 text-text-secondary"></i>
                 <span>视频管理</span>
             </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-accent-blue"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-users-cog w-5 text-text-secondary"></i>
@@ -151,6 +118,11 @@
                 <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
                 <span>角色权限</span>
             </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <span>日志管理</span>
+            </a>
+
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-cog w-5 text-text-secondary"></i>
                 <span>系统设置</span>
@@ -164,67 +136,80 @@
                 <h1 class="text-2xl font-semibold">数据概览</h1>
                 <p class="text-text-muted mt-1">内容数据统计与分析</p>
             </div>
-            <button class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
+            <button id="exportBtn" class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
                 <i class="fas fa-download mr-2"></i>导出报表
             </button>
         </div>
 
+        <!-- 时间筛选 -->
+        <div class="bg-card-bg rounded-xl p-4 mb-6 border border-border-dark">
+            <div class="flex items-center gap-2">
+                <span class="text-sm text-text-muted mr-2">时间范围：</span>
+                <div id="timeFilterBtns" class="flex gap-2">
+                    <button class="time-btn px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-lg text-sm" data-period="today">今日</button>
+                    <button class="time-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="week">本周</button>
+                    <button class="time-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="month">本月</button>
+                    <button class="time-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="year">本年</button>
+                </div>
+            </div>
+        </div>
+
         <!-- 概览统计 -->
         <div class="grid grid-cols-4 gap-5 mb-6">
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+            <div class="bg-card-bg rounded-xl p-5 border border-border-dark stat-card" data-type="content">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
                         <i class="fas fa-file-alt text-accent-blue text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">2,847</div>
+                        <div id="statContent" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">内容总量</div>
                     </div>
                 </div>
-                <div class="mt-3 text-sm text-accent-green flex items-center gap-1">
-                    <i class="fas fa-arrow-up text-xs"></i>较上月 +12.5%
+                <div id="statContentTrend" class="mt-3 text-sm text-accent-green flex items-center gap-1">
+                    <i class="fas fa-arrow-up text-xs"></i>较上期 +0%
                 </div>
             </div>
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+            <div class="bg-card-bg rounded-xl p-5 border border-border-dark stat-card" data-type="views">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-cyan/20 flex items-center justify-center">
                         <i class="fas fa-eye text-accent-cyan text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">158.6万</div>
+                        <div id="statViews" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">总阅读量</div>
                     </div>
                 </div>
-                <div class="mt-3 text-sm text-accent-green flex items-center gap-1">
-                    <i class="fas fa-arrow-up text-xs"></i>较上月 +8.3%
+                <div id="statViewsTrend" class="mt-3 text-sm text-accent-green flex items-center gap-1">
+                    <i class="fas fa-arrow-up text-xs"></i>较上期 +0%
                 </div>
             </div>
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+            <div class="bg-card-bg rounded-xl p-5 border border-border-dark stat-card" data-type="likes">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-amber/20 flex items-center justify-center">
                         <i class="fas fa-thumbs-up text-accent-amber text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">12,847</div>
+                        <div id="statLikes" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">总点赞量</div>
                     </div>
                 </div>
-                <div class="mt-3 text-sm text-accent-green flex items-center gap-1">
-                    <i class="fas fa-arrow-up text-xs"></i>较上月 +15.2%
+                <div id="statLikesTrend" class="mt-3 text-sm text-accent-green flex items-center gap-1">
+                    <i class="fas fa-arrow-up text-xs"></i>较上期 +0%
                 </div>
             </div>
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+            <div class="bg-card-bg rounded-xl p-5 border border-border-dark stat-card" data-type="users">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-green/20 flex items-center justify-center">
                         <i class="fas fa-users text-accent-green text-xl"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">48.5万</div>
+                        <div id="statUsers" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">访问用户</div>
                     </div>
                 </div>
-                <div class="mt-3 text-sm text-accent-green flex items-center gap-1">
-                    <i class="fas fa-arrow-up text-xs"></i>较上月 +6.8%
+                <div id="statUsersTrend" class="mt-3 text-sm text-accent-green flex items-center gap-1">
+                    <i class="fas fa-arrow-up text-xs"></i>较上期 +0%
                 </div>
             </div>
         </div>
@@ -235,40 +220,27 @@
             <div class="col-span-2 bg-card-bg rounded-xl p-5 border border-border-dark">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium">内容数据趋势</h3>
-                    <div class="flex gap-2">
-                        <button class="px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-lg text-sm">本周</button>
-                        <button class="px-4 py-2 text-text-muted hover:text-text-primary text-sm">本月</button>
-                        <button class="px-4 py-2 text-text-muted hover:text-text-primary text-sm">本年</button>
+                    <div id="chartPeriodBtns" class="flex gap-2">
+                        <button class="chart-period-btn px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-lg text-sm" data-period="week">本周</button>
+                        <button class="chart-period-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="month">本月</button>
+                        <button class="chart-period-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="year">本年</button>
                     </div>
                 </div>
-                <div class="h-64 flex items-end gap-2">
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 45%"></div>
-                        <span class="text-text-muted text-xs">周一</span>
+                <div id="trendChart" class="h-64 flex items-end gap-2">
+                    <!-- 动态渲染 -->
+                </div>
+                <div class="flex items-center justify-center gap-6 mt-4 text-sm">
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded bg-accent-blue"></span>
+                        <span class="text-text-muted">发布量</span>
                     </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 60%"></div>
-                        <span class="text-text-muted text-xs">周二</span>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded bg-accent-cyan"></span>
+                        <span class="text-text-muted">阅读量</span>
                     </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 35%"></div>
-                        <span class="text-text-muted text-xs">周三</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 55%"></div>
-                        <span class="text-text-muted text-xs">周四</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 70%"></div>
-                        <span class="text-text-muted text-xs">周五</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 85%"></div>
-                        <span class="text-text-muted text-xs">周六</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg" style="height: 50%"></div>
-                        <span class="text-text-muted text-xs">周日</span>
+                    <div class="flex items-center gap-2">
+                        <span class="w-3 h-3 rounded bg-accent-amber"></span>
+                        <span class="text-text-muted">点赞量</span>
                     </div>
                 </div>
             </div>
@@ -276,43 +248,8 @@
             <!-- 分类分布 -->
             <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
                 <h3 class="text-lg font-medium mb-4">内容分类分布</h3>
-                <div class="space-y-4">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm">新闻资讯</span>
-                            <span class="text-sm text-text-muted">45%</span>
-                        </div>
-                        <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
-                            <div class="h-full bg-accent-blue rounded-full" style="width: 45%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm">政策文件</span>
-                            <span class="text-sm text-text-muted">25%</span>
-                        </div>
-                        <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
-                            <div class="h-full bg-accent-cyan rounded-full" style="width: 25%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm">通知公告</span>
-                            <span class="text-sm text-text-muted">15%</span>
-                        </div>
-                        <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
-                            <div class="h-full bg-accent-green rounded-full" style="width: 15%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm">专题活动</span>
-                            <span class="text-sm text-text-muted">15%</span>
-                        </div>
-                        <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
-                            <div class="h-full bg-accent-amber rounded-full" style="width: 15%"></div>
-                        </div>
-                    </div>
+                <div id="categoryDist" class="space-y-4">
+                    <!-- 动态渲染 -->
                 </div>
             </div>
         </div>
@@ -321,56 +258,320 @@
         <div class="bg-card-bg rounded-xl border border-border-dark p-5 mt-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-medium">热门内容 TOP 5</h3>
-                <a href="#" class="text-sm text-accent-blue hover:underline">查看全部</a>
+                <a href="content-list.html" class="text-sm text-accent-blue hover:underline">查看全部</a>
             </div>
-            <div class="grid grid-cols-5 gap-4">
-                <div class="bg-primary-bg rounded-xl p-4">
-                    <div class="w-8 h-8 rounded-full bg-accent-amber/20 flex items-center justify-center mb-3">
-                        <span class="text-accent-amber font-bold">1</span>
-                    </div>
-                    <h4 class="text-sm font-medium mb-2 line-clamp-2">关于开展2024年度工作总结的通知</h4>
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
-                        <span><i class="fas fa-eye"></i> 12.8k</span>
-                    </div>
-                </div>
-                <div class="bg-primary-bg rounded-xl p-4">
-                    <div class="w-8 h-8 rounded-full bg-text-muted/20 flex items-center justify-center mb-3">
-                        <span class="text-text-muted font-bold">2</span>
-                    </div>
-                    <h4 class="text-sm font-medium mb-2 line-clamp-2">数字化转型工作进展报告</h4>
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
-                        <span><i class="fas fa-eye"></i> 8.9k</span>
-                    </div>
-                </div>
-                <div class="bg-primary-bg rounded-xl p-4">
-                    <div class="w-8 h-8 rounded-full bg-orange-700/20 flex items-center justify-center mb-3">
-                        <span class="text-orange-400 font-bold">3</span>
-                    </div>
-                    <h4 class="text-sm font-medium mb-2 line-clamp-2">智慧城市建设成果展示</h4>
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
-                        <span><i class="fas fa-eye"></i> 6.5k</span>
-                    </div>
-                </div>
-                <div class="bg-primary-bg rounded-xl p-4">
-                    <div class="w-8 h-8 rounded-full bg-primary-bg/50 flex items-center justify-center mb-3 border border-border-dark">
-                        <span class="text-text-muted font-bold">4</span>
-                    </div>
-                    <h4 class="text-sm font-medium mb-2 line-clamp-2">两会专题报道：民生改善篇</h4>
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
-                        <span><i class="fas fa-eye"></i> 5.6k</span>
-                    </div>
-                </div>
-                <div class="bg-primary-bg rounded-xl p-4">
-                    <div class="w-8 h-8 rounded-full bg-primary-bg/50 flex items-center justify-center mb-3 border border-border-dark">
-                        <span class="text-text-muted font-bold">5</span>
-                    </div>
-                    <h4 class="text-sm font-medium mb-2 line-clamp-2">安全生产知识竞赛活动方案</h4>
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
-                        <span><i class="fas fa-eye"></i> 4.2k</span>
-                    </div>
-                </div>
+            <div id="hotContentList" class="grid grid-cols-5 gap-4">
+                <!-- 动态渲染 -->
             </div>
         </div>
     </main>
+
+    <!-- Toast 提示 -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-accent-green text-white px-6 py-3 rounded-xl shadow-lg hidden z-50">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toastText">操作成功</span>
+    </div>
+
+    <script>
+        // ========== Mock数据 ==========
+        const mockData = {
+            today: {
+                stats: {
+                    content: 12,
+                    views: 12580,
+                    likes: 456,
+                    users: 3850,
+                    contentTrend: 0,
+                    viewsTrend: 0,
+                    likesTrend: 0,
+                    usersTrend: 0
+                },
+                trend: [
+                    { label: '今日', publish: 12, views: 12580, likes: 456 }
+                ]
+            },
+            week: {
+                stats: {
+                    content: 86,
+                    views: 98650,
+                    likes: 3256,
+                    users: 28500,
+                    contentTrend: 12.5,
+                    viewsTrend: 8.3,
+                    likesTrend: 15.2,
+                    usersTrend: 6.8
+                },
+                trend: [
+                    { label: '周一', publish: 12, views: 45000, likes: 820 },
+                    { label: '周二', publish: 18, views: 62000, likes: 1100 },
+                    { label: '周三', publish: 15, views: 38000, likes: 680 },
+                    { label: '周四', publish: 22, views: 55000, likes: 920 },
+                    { label: '周五', publish: 8, views: 72000, likes: 1280 },
+                    { label: '周六', publish: 6, views: 85000, likes: 1450 },
+                    { label: '周日', publish: 5, views: 48000, likes: 780 }
+                ]
+            },
+            month: {
+                stats: {
+                    content: 347,
+                    views: 486200,
+                    likes: 12847,
+                    users: 142500,
+                    contentTrend: 18.2,
+                    viewsTrend: 12.5,
+                    likesTrend: 22.3,
+                    usersTrend: 9.6
+                },
+                trend: [
+                    { label: '第1周', publish: 86, views: 98650, likes: 3256 },
+                    { label: '第2周', publish: 92, views: 112000, likes: 3680 },
+                    { label: '第3周', publish: 78, views: 89500, likes: 2890 },
+                    { label: '第4周', publish: 91, views: 186050, likes: 3021 }
+                ]
+            },
+            year: {
+                stats: {
+                    content: 2847,
+                    views: 1586000,
+                    likes: 12847,
+                    users: 485000,
+                    contentTrend: 15.8,
+                    viewsTrend: 8.3,
+                    likesTrend: 15.2,
+                    usersTrend: 6.8
+                },
+                trend: [
+                    { label: '1月', publish: 186, views: 125600, likes: 4280 },
+                    { label: '2月', publish: 245, views: 156800, likes: 5120 },
+                    { label: '3月', publish: 312, views: 198500, likes: 6850 },
+                    { label: '4月', publish: 278, views: 165200, likes: 5690 },
+                    { label: '5月', publish: 325, views: 215600, likes: 7240 },
+                    { label: '6月', publish: 356, views: 248900, likes: 8120 },
+                    { label: '7月', publish: 412, views: 285600, likes: 9680 },
+                    { label: '8月', publish: 289, views: 198200, likes: 5890 },
+                    { label: '9月', publish: 334, views: 225800, likes: 7120 },
+                    { label: '10月', publish: 378, views: 265400, likes: 8920 },
+                    { label: '11月', publish: 356, views: 248900, likes: 8120 },
+                    { label: '12月', publish: 386, views: 272000, likes: 9240 }
+                ]
+            }
+        };
+
+        // 分类分布数据
+        const categoryData = [
+            { name: '新闻资讯', count: 1282, percent: 45, color: 'accent-blue' },
+            { name: '政策文件', count: 712, percent: 25, color: 'accent-cyan' },
+            { name: '通知公告', count: 427, percent: 15, color: 'accent-green' },
+            { name: '专题活动', count: 426, percent: 15, color: 'accent-amber' }
+        ];
+
+        // 热门内容数据
+        const hotContentData = [
+            { id: 1, title: '关于开展2024年度工作总结的通知', views: 12800, likes: 456 },
+            { id: 2, title: '数字化转型工作进展报告', views: 8900, likes: 312 },
+            { id: 3, title: '智慧城市建设成果展示', views: 6500, likes: 278 },
+            { id: 4, title: '两会专题报道：民生改善篇', views: 5600, likes: 245 },
+            { id: 5, title: '安全生产知识竞赛活动方案', views: 4200, likes: 189 }
+        ];
+
+        // ========== 状态管理 ==========
+        let currentPeriod = 'week';
+
+        // ========== 工具函数 ==========
+        function formatNumber(num) {
+            if (num >= 10000) {
+                return (num / 10000).toFixed(1) + '万';
+            }
+            return num.toLocaleString();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2000);
+        }
+
+        // ========== 渲染统计卡片 ==========
+        function renderStats() {
+            const data = mockData[currentPeriod].stats;
+            const periodText = currentPeriod === 'today' ? '较昨日' : '较上期';
+
+            document.getElementById('statContent').textContent = formatNumber(data.content);
+            document.getElementById('statViews').textContent = formatNumber(data.views);
+            document.getElementById('statLikes').textContent = formatNumber(data.likes);
+            document.getElementById('statUsers').textContent = formatNumber(data.users);
+
+            // 趋势
+            updateTrend('Content', data.contentTrend, periodText);
+            updateTrend('Views', data.viewsTrend, periodText);
+            updateTrend('Likes', data.likesTrend, periodText);
+            updateTrend('Users', data.usersTrend, periodText);
+        }
+
+        function updateTrend(type, trend, periodText) {
+            const el = document.getElementById('stat' + type + 'Trend');
+            if (trend > 0) {
+                el.className = 'mt-3 text-sm text-accent-green flex items-center gap-1';
+                el.innerHTML = `<i class="fas fa-arrow-up text-xs"></i>${periodText} +${trend}%`;
+            } else if (trend < 0) {
+                el.className = 'mt-3 text-sm text-accent-red flex items-center gap-1';
+                el.innerHTML = `<i class="fas fa-arrow-down text-xs"></i>${periodText} ${trend}%`;
+            } else {
+                el.className = 'mt-3 text-sm text-text-muted flex items-center gap-1';
+                el.innerHTML = `${periodText} 持平`;
+            }
+        }
+
+        // ========== 渲染趋势图 ==========
+        function renderTrendChart() {
+            const chart = document.getElementById('trendChart');
+            const data = mockData[currentPeriod].trend;
+
+            // 计算最大值用于比例
+            const maxPublish = Math.max(...data.map(d => d.publish));
+            const maxViews = Math.max(...data.map(d => d.views));
+            const maxLikes = Math.max(...data.map(d => d.likes));
+            const maxVal = Math.max(maxPublish, maxViews / 100, maxLikes * 10);
+
+            chart.innerHTML = data.map(d => {
+                const publishHeight = (d.publish / maxVal * 100).toFixed(1);
+                const viewsHeight = (d.views / maxVal / 100 * 100).toFixed(1);
+                const likesHeight = (d.likes * 10 / maxVal * 100).toFixed(1);
+
+                return `
+                <div class="flex-1 flex flex-col items-center gap-2">
+                    <div class="w-full flex items-end justify-center gap-1 h-56">
+                        <div class="w-4 bg-accent-blue rounded-t-lg transition-all" style="height: ${publishHeight}%" title="发布: ${d.publish}"></div>
+                        <div class="w-4 bg-accent-cyan rounded-t-lg transition-all" style="height: ${viewsHeight}%" title="阅读: ${d.views}"></div>
+                        <div class="w-4 bg-accent-amber rounded-t-lg transition-all" style="height: ${likesHeight}%" title="点赞: ${d.likes}"></div>
+                    </div>
+                    <span class="text-text-muted text-xs">${d.label}</span>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // ========== 渲染分类分布 ==========
+        function renderCategoryDist() {
+            const container = document.getElementById('categoryDist');
+            container.innerHTML = categoryData.map(cat => {
+                const bgColor = `bg-${cat.color}`;
+                const textColor = `text-${cat.color}`;
+                return `
+                <div class="category-item cursor-pointer hover:bg-primary-bg/50 rounded-lg p-2 -m-2 transition-colors" data-category="${cat.name}">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm">${cat.name}</span>
+                        <span class="text-sm text-text-muted">${cat.count}篇 (${cat.percent}%)</span>
+                    </div>
+                    <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
+                        <div class="h-full ${bgColor} rounded-full transition-all" style="width: ${cat.percent}%"></div>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            // 绑定点击事件
+            document.querySelectorAll('.category-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const category = item.dataset.category;
+                    showToast(`查看 ${category} 分类内容`);
+                    // 可扩展为跳转到内容列表并筛选该分类
+                });
+            });
+        }
+
+        // ========== 渲染热门内容 ==========
+        function renderHotContent() {
+            const container = document.getElementById('hotContentList');
+            const colors = ['accent-amber', 'text-muted', 'orange-700', 'primary-bg', 'primary-bg'];
+            const borderColors = ['', '', '', 'border-border-dark', 'border-border-dark'];
+
+            container.innerHTML = hotContentData.map((content, index) => {
+                const rankColor = index === 0 ? 'accent-amber' : (index === 1 ? 'text-muted' : (index === 2 ? 'orange-400' : 'text-muted'));
+                const border = index >= 3 ? 'border border-border-dark' : '';
+                const bg = index >= 3 ? 'bg-primary-bg' : '';
+
+                return `
+                <div class="bg-card-bg rounded-xl p-4 border border-border-dark hover:border-accent-blue transition-colors cursor-pointer content-item" data-id="${content.id}">
+                    <div class="w-8 h-8 rounded-full ${index === 0 ? 'bg-accent-amber/20' : (index === 1 ? 'bg-text-muted/20' : (index === 2 ? 'bg-orange-700/20' : 'bg-primary-bg'))} flex items-center justify-center mb-3">
+                        <span class="${index === 0 ? 'text-accent-amber' : (index === 1 ? 'text-text-muted' : (index === 2 ? 'text-orange-400' : 'text-text-muted'))} font-bold">${index + 1}</span>
+                    </div>
+                    <h4 class="text-sm font-medium mb-2 line-clamp-2">${content.title}</h4>
+                    <div class="flex items-center gap-3 text-xs text-text-muted">
+                        <span><i class="fas fa-eye"></i> ${formatNumber(content.views)}</span>
+                        <span><i class="fas fa-heart"></i> ${content.likes}</span>
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            // 绑定点击事件
+            document.querySelectorAll('.content-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    const id = item.dataset.id;
+                    showToast(`查看内容详情 #${id}`);
+                    // 可扩展为跳转到内容详情页
+                });
+            });
+        }
+
+        // ========== 时间筛选 ==========
+        function initTimeFilter() {
+            const btns = document.querySelectorAll('.time-btn');
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    currentPeriod = btn.dataset.period;
+                    btns.forEach(b => {
+                        b.classList.remove('bg-accent-blue/20', 'text-accent-blue');
+                        b.classList.add('text-text-muted', 'hover:text-text-primary');
+                    });
+                    btn.classList.add('bg-accent-blue/20', 'text-accent-blue');
+                    btn.classList.remove('text-text-muted', 'hover:text-text-primary');
+                    renderStats();
+                });
+            });
+        }
+
+        // ========== 图表周期筛选 ==========
+        function initChartPeriodFilter() {
+            const btns = document.querySelectorAll('.chart-period-btn');
+            btns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const period = btn.dataset.period;
+                    btns.forEach(b => {
+                        b.classList.remove('bg-accent-blue/20', 'text-accent-blue');
+                        b.classList.add('text-text-muted', 'hover:text-text-primary');
+                    });
+                    btn.classList.add('bg-accent-blue/20', 'text-accent-blue');
+                    btn.classList.remove('text-text-muted', 'hover:text-text-primary');
+                    renderTrendChart();
+                });
+            });
+        }
+
+        // ========== 导出功能 ==========
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            showToast('报表正在生成，请稍候...');
+            setTimeout(() => {
+                showToast('报表导出成功');
+            }, 1500);
+        });
+
+        // ========== 初始化 ==========
+        function init() {
+            currentPeriod = 'week';
+            renderStats();
+            renderTrendChart();
+            renderCategoryDist();
+            renderHotContent();
+            initTimeFilter();
+            initChartPeriodFilter();
+        }
+
+        init();
+    </script>
 </body>
 </html>

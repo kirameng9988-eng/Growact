@@ -1,0 +1,858 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>权限配置 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#030714',
+                        'card-bg': '#0a1628',
+                        'border-dark': '#1a2744',
+                        'accent-blue': '#3b82f6',
+                        'accent-cyan': '#06b6d4',
+                        'accent-green': '#10b981',
+                        'accent-amber': '#f59e0b',
+                        'accent-red': '#ef4444',
+                        'text-primary': '#f1f5f9',
+                        'text-secondary': '#94a3b8',
+                        'text-muted': '#475569'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #030714; }
+        ::-webkit-scrollbar-thumb { background: #1a2744; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
+        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .permission-tag {
+            transition: all 0.15s;
+            cursor: pointer;
+            user-select: none;
+        }
+        .permission-tag:hover {
+            background: rgba(59, 130, 246, 0.15);
+        }
+        .permission-tag.selected {
+            background: rgba(59, 130, 246, 0.25);
+            border-color: #3b82f6;
+            color: #3b82f6;
+        }
+        .category-row {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%);
+        }
+        .category-row.collapsed {
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
+        }
+    </style>
+</head>
+<body class="bg-primary-bg text-text-primary min-h-screen">
+        <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+                <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium">张明远</span>
+                    <span class="text-xs text-text-muted">超级管理员</span>
+                </div>
+                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <span>工作台</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <span>审核中心</span>
+            </a>
+            <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <span>发布管理</span>
+            </a>
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <span>视频管理</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="ml-[220px] mt-16">
+        <!-- 顶部操作栏 -->
+        <div class="bg-card-bg border-b border-border-dark px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <a href="system-role.html" class="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>返回角色列表</span>
+                    </a>
+                    <div class="w-px h-6 bg-border-dark"></div>
+                    <div>
+                        <h1 class="text-xl font-semibold">权限配置</h1>
+                        <p class="text-sm text-text-muted mt-0.5">为角色分配功能权限</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="resetPermissions()" class="px-4 py-2 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary hover:border-accent-blue transition-colors">
+                        <i class="fas fa-undo mr-2"></i>重置
+                    </button>
+                    <button onclick="savePermissions()" class="px-5 py-2 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-save mr-2"></i>保存配置
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 角色信息卡片 -->
+        <div class="px-6 py-4 bg-card-bg/50 border-b border-border-dark">
+            <div class="flex items-center gap-6">
+                <div class="flex items-center gap-3">
+                    <div id="roleIcon" class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
+                        <i class="fas fa-user-tag text-accent-blue text-xl"></i>
+                    </div>
+                    <div>
+                        <div id="roleName" class="text-lg font-medium">角色名称</div>
+                        <div id="roleCode" class="text-sm text-text-muted">role_code</div>
+                    </div>
+                </div>
+                <div class="w-px h-10 bg-border-dark"></div>
+                <div>
+                    <div class="text-sm text-text-muted">角色描述</div>
+                    <div id="roleDesc" class="text-sm mt-0.5">角色描述信息</div>
+                </div>
+                <div class="w-px h-10 bg-border-dark"></div>
+                <div>
+                    <div class="text-sm text-text-muted">用户数</div>
+                    <div id="userCount" class="text-sm font-medium mt-0.5">0</div>
+                </div>
+                <div class="flex-1"></div>
+                <div class="text-sm text-text-muted">
+                    已选 <span id="selectedCount" class="text-accent-blue font-medium">0</span> 项权限
+                </div>
+            </div>
+        </div>
+
+        <!-- 权限配置表格 -->
+        <div class="p-6">
+            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden">
+                <!-- 表头 -->
+                <div class="flex items-center bg-primary-bg/50 px-6 py-3 text-sm text-text-muted font-medium border-b border-border-dark">
+                    <div class="w-[120px]">分类</div>
+                    <div class="w-[180px]">功能菜单</div>
+                    <div class="flex-1">按钮权限</div>
+                    <div class="w-[80px] text-center">全选</div>
+                </div>
+
+                <!-- 权限内容 -->
+                <div id="permissionTable" class="divide-y divide-border-dark">
+                    <!-- 动态渲染 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- 保存成功弹窗 -->
+    <div id="successModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl p-8 border border-border-dark shadow-2xl text-center">
+            <div class="w-16 h-16 rounded-full bg-accent-green/20 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-check text-accent-green text-2xl"></i>
+            </div>
+            <h3 class="text-lg font-medium mb-2">保存成功</h3>
+            <p class="text-sm text-text-muted mb-6">权限配置已更新</p>
+            <button onclick="closeSuccessModal()" class="px-6 py-2 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
+                确定
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // 角色数据（从 localStorage 获取或使用默认数据）
+        let roles = [
+            { id: 1, name: '超级管理员', code: 'admin', type: 'system', status: 'enabled', userCount: 1, desc: '拥有系统所有权限，可进行系统配置和用户管理', permissions: ['*'] },
+            { id: 2, name: '内容编辑', code: 'editor', type: 'custom', status: 'enabled', userCount: 12, desc: '可创建、编辑内容，提交审核申请', permissions: ['workbench.view', 'content.view', 'content.create', 'content.edit', 'category.view', 'tag.view', 'tag.create', 'image.view', 'image.upload', 'file.view', 'file.upload'] },
+            { id: 3, name: '审核员', code: 'reviewer', type: 'system', status: 'enabled', userCount: 5, desc: '可审核内容，进行批准或驳回操作', permissions: ['workbench.view', 'content.view', 'review.view', 'review.pass', 'review.reject', 'publish.view', 'publish.execute'] },
+            { id: 4, name: '运营人员', code: 'operator', type: 'custom', status: 'enabled', userCount: 8, desc: '可进行页面装修、Banner管理等运营操作', permissions: ['workbench.view', 'home.view', 'home.edit', 'home.publish', 'banner.view', 'banner.create', 'banner.edit', 'banner.publish', 'column.view', 'column.create', 'topic.view', 'topic.create', 'news.view', 'announce.view'] },
+            { id: 5, name: '数据分析师', code: 'analyst', type: 'custom', status: 'enabled', userCount: 3, desc: '可查看和导出各类数据报表', permissions: ['workbench.view', 'stats.overview.view', 'stats.overview.export', 'stats.content.view', 'stats.content.export'] },
+            { id: 6, name: '访客', code: 'guest', type: 'system', status: 'disabled', userCount: 0, desc: '只读权限，可查看部分内容', permissions: ['workbench.view', 'content.view', 'news.view'] }
+        ];
+
+        // 权限矩阵定义
+        const permissionMatrix = {
+            workbench: {
+                category: '工作台',
+                icon: 'th-large',
+                color: 'accent-blue',
+                menus: [
+                    {
+                        key: 'dashboard',
+                        name: '工作台',
+                        icon: 'th-large',
+                        buttons: [
+                            { key: 'view', name: '查看' }
+                        ]
+                    }
+                ]
+            },
+            content: {
+                category: '内容中心',
+                icon: 'file-alt',
+                color: 'accent-blue',
+                menus: [
+                    {
+                        key: 'content',
+                        name: '内容管理',
+                        icon: 'file-alt',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'detail', name: '查看详情' },
+                            { key: 'audit', name: '审核' },
+                            { key: 'publish', name: '发布' },
+                            { key: 'offline', name: '下线' },
+                            { key: 'import', name: '导入' },
+                            { key: 'export', name: '导出' }
+                        ]
+                    },
+                    {
+                        key: 'category',
+                        name: '分类管理',
+                        icon: 'folder-tree',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' }
+                        ]
+                    },
+                    {
+                        key: 'tag',
+                        name: '标签管理',
+                        icon: 'tags',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' }
+                        ]
+                    },
+                    {
+                        key: 'review',
+                        name: '审核中心',
+                        icon: 'check-circle',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'pass', name: '审核通过' },
+                            { key: 'reject', name: '驳回' },
+                            { key: 'batch', name: '批量审核' }
+                        ]
+                    },
+                    {
+                        key: 'publish',
+                        name: '发布管理',
+                        icon: 'paper-plane',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'execute', name: '发布' },
+                            { key: 'offline', name: '下线' }
+                        ]
+                    }
+                ]
+            },
+            portal: {
+                category: '门户运营',
+                icon: 'home',
+                color: 'accent-cyan',
+                menus: [
+                    {
+                        key: 'home',
+                        name: '首页装修',
+                        icon: 'home',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'publish', name: '发布' },
+                            { key: 'withdraw', name: '撤回' },
+                            { key: 'save_draft', name: '保存草稿' }
+                        ]
+                    },
+                    {
+                        key: 'banner',
+                        name: 'Banner管理',
+                        icon: 'image',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'publish', name: '发布' }
+                        ]
+                    },
+                    {
+                        key: 'column',
+                        name: '栏目管理',
+                        icon: 'columns',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'sort', name: '排序' }
+                        ]
+                    },
+                    {
+                        key: 'topic',
+                        name: '专题管理',
+                        icon: 'layer-group',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'publish', name: '发布' }
+                        ]
+                    }
+                ]
+            },
+            news: {
+                category: '资讯公告',
+                icon: 'newspaper',
+                color: 'accent-green',
+                menus: [
+                    {
+                        key: 'news',
+                        name: '新闻资讯',
+                        icon: 'newspaper',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'publish', name: '发布' },
+                            { key: 'offline', name: '下线' }
+                        ]
+                    },
+                    {
+                        key: 'announce',
+                        name: '公告通知',
+                        icon: 'bullhorn',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'publish', name: '发布' },
+                            { key: 'offline', name: '下线' }
+                        ]
+                    },
+                    {
+                        key: 'policy',
+                        name: '政策文件',
+                        icon: 'file-contract',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'publish', name: '发布' },
+                            { key: 'offline', name: '下线' }
+                        ]
+                    }
+                ]
+            },
+            data_product: {
+                category: '数据产品内容',
+                icon: 'database',
+                color: 'accent-amber',
+                menus: [
+                    {
+                        key: 'data_product',
+                        name: '数据产品内容',
+                        icon: 'database',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'publish', name: '发布' }
+                        ]
+                    }
+                ]
+            },
+            resource: {
+                category: '资源中心',
+                icon: 'folder-open',
+                color: 'accent-green',
+                menus: [
+                    {
+                        key: 'image',
+                        name: '图片管理',
+                        icon: 'images',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'upload', name: '上传' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'download', name: '下载' }
+                        ]
+                    },
+                    {
+                        key: 'file',
+                        name: '文件管理',
+                        icon: 'folder-open',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'upload', name: '上传' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'download', name: '下载' }
+                        ]
+                    },
+                    {
+                        key: 'video',
+                        name: '视频管理',
+                        icon: 'video',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'upload', name: '上传' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'download', name: '下载' }
+                        ]
+                    }
+                ]
+            },
+            stats: {
+                category: '数据分析',
+                icon: 'chart-line',
+                color: 'accent-cyan',
+                menus: [
+                    {
+                        key: 'overview',
+                        name: '数据概览',
+                        icon: 'chart-pie',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'export', name: '导出' }
+                        ]
+                    },
+                    {
+                        key: 'content',
+                        name: '内容分析',
+                        icon: 'chart-line',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'export', name: '导出' }
+                        ]
+                    }
+                ]
+            },
+            system: {
+                category: '系统管理',
+                icon: 'cog',
+                color: 'accent-red',
+                menus: [
+                    {
+                        key: 'user',
+                        name: '用户管理',
+                        icon: 'users-cog',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'reset_pwd', name: '重置密码' }
+                        ]
+                    },
+                    {
+                        key: 'role',
+                        name: '角色权限',
+                        icon: 'shield-alt',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'create', name: '新增' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'delete', name: '删除' },
+                            { key: 'config', name: '权限配置' }
+                        ]
+                    },
+                    {
+                        key: 'system',
+                        name: '系统设置',
+                        icon: 'cog',
+                        buttons: [
+                            { key: 'view', name: '查看' },
+                            { key: 'edit', name: '编辑' },
+                            { key: 'save', name: '保存' }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // 当前编辑的角色
+        let currentRole = null;
+        let selectedPermissions = [];
+        let originalPermissions = [];
+
+        // 获取 URL 参数
+        function getRoleIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            return parseInt(params.get('roleId')) || 2;
+        }
+
+        // 初始化页面
+        function initPage() {
+            const roleId = getRoleIdFromUrl();
+            currentRole = roles.find(r => r.id === roleId) || roles[0];
+
+            document.getElementById('roleName').textContent = currentRole.name;
+            document.getElementById('roleCode').textContent = currentRole.code;
+            document.getElementById('roleDesc').textContent = currentRole.desc;
+            document.getElementById('userCount').textContent = currentRole.userCount;
+
+            // 设置角色图标颜色
+            const iconEl = document.getElementById('roleIcon');
+            iconEl.className = `w-12 h-12 rounded-xl flex items-center justify-center ${currentRole.type === 'system' ? 'bg-accent-blue/20' : 'bg-accent-cyan/20'}`;
+            iconEl.innerHTML = `<i class="fas fa-${currentRole.type === 'system' ? 'cog' : 'user-tag'} text-${currentRole.type === 'system' ? 'accent-blue' : 'accent-cyan'} text-xl"></i>`;
+
+            // 复制权限
+            originalPermissions = [...currentRole.permissions];
+            selectedPermissions = currentRole.permissions.includes('*')
+                ? getAllPermissionKeys()
+                : [...currentRole.permissions];
+
+            renderPermissionTable();
+            updateSelectedCount();
+        }
+
+        // 获取所有权限key
+        function getAllPermissionKeys() {
+            const keys = [];
+            Object.entries(permissionMatrix).forEach(([catKey, category]) => {
+                category.menus.forEach(menu => {
+                    menu.buttons.forEach(btn => {
+                        keys.push(`${catKey}.${menu.key}.${btn.key}`);
+                    });
+                });
+            });
+            return keys;
+        }
+
+        // 渲染权限表格
+        function renderPermissionTable() {
+            const table = document.getElementById('permissionTable');
+            let html = '';
+
+            Object.entries(permissionMatrix).forEach(([catKey, category]) => {
+                // 分类行（合并所有菜单）
+                const categoryRowspan = category.menus.reduce((sum, m) => sum + m.buttons.length, 0) + category.menus.length - 1;
+
+                html += `
+                <div class="flex category-row border-b border-border-dark">
+                    <div class="w-[120px] py-3 px-4 flex items-center border-r border-border-dark">
+                        <div class="w-8 h-8 rounded-lg bg-${category.color}/20 flex items-center justify-center mr-3">
+                            <i class="fas fa-${category.icon} text-${category.color}"></i>
+                        </div>
+                        <span class="font-medium text-sm">${category.category}</span>
+                    </div>
+                    <div class="flex-1 py-2">
+                        ${category.menus.map((menu, menuIdx) => {
+                            const permKey = `${catKey}.${menu.key}`;
+                            const isMenuSelected = isMenuAllSelected(catKey, menu.key);
+
+                            return `
+                            <div class="flex items-start border-b border-border-dark/50 ${menuIdx === category.menus.length - 1 ? 'border-b-0' : ''}">
+                                <div class="w-[180px] py-2 px-4 flex items-center gap-2 border-r border-border-dark/50">
+                                    <label class="flex items-center gap-2 cursor-pointer flex-shrink-0">
+                                        <input type="checkbox"
+                                            class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue menu-checkbox"
+                                            data-category="${catKey}"
+                                            data-menu="${menu.key}"
+                                            ${isMenuSelected ? 'checked' : ''}
+                                            onchange="toggleMenu('${catKey}', '${menu.key}')">
+                                        <span class="text-sm">${menu.name}</span>
+                                    </label>
+                                </div>
+                                <div class="flex-1 py-2 px-4 flex flex-wrap gap-2">
+                                    ${menu.buttons.map(btn => {
+                                        const btnKey = `${catKey}.${menu.key}.${btn.key}`;
+                                        const isSelected = selectedPermissions.includes(btnKey);
+                                        return `
+                                        <span class="permission-tag px-3 py-1.5 rounded-lg border border-border-dark text-sm ${isSelected ? 'selected' : 'text-text-secondary'}"
+                                            data-key="${btnKey}"
+                                            onclick="togglePermission('${btnKey}', this)">
+                                            <i class="fas fa-${isSelected ? '-check-square' : 'square'} mr-1"></i>
+                                            ${btn.name}
+                                        </span>
+                                        `;
+                                    }).join('')}
+                                </div>
+                                <div class="w-[80px] py-2 flex items-center justify-center border-l border-border-dark/50">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="checkbox"
+                                            class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue select-all-checkbox"
+                                            data-category="${catKey}"
+                                            data-menu="${menu.key}"
+                                            ${isMenuSelected ? 'checked' : ''}
+                                            onchange="toggleSelectAll('${catKey}', '${menu.key}', this.checked)">
+                                    </label>
+                                </div>
+                            </div>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+                `;
+            });
+
+            table.innerHTML = html;
+        }
+
+        // 检查菜单是否全选
+        function isMenuAllSelected(catKey, menuKey) {
+            const category = permissionMatrix[catKey];
+            const menu = category.menus.find(m => m.key === menuKey);
+            if (!menu) return false;
+
+            return menu.buttons.every(btn => {
+                const btnKey = `${catKey}.${menuKey}.${btn.key}`;
+                return selectedPermissions.includes(btnKey);
+            });
+        }
+
+        // 切换菜单权限
+        function toggleMenu(catKey, menuKey) {
+            const category = permissionMatrix[catKey];
+            const menu = category.menus.find(m => m.key === menuKey);
+            if (!menu) return;
+
+            const permKey = `${catKey}.${menuKey}`;
+            const viewKey = `${catKey}.${menuKey}.view`;
+            const isMenuSelected = isMenuAllSelected(catKey, menuKey);
+
+            if (isMenuSelected) {
+                // 取消菜单时，移除所有按钮权限
+                menu.buttons.forEach(btn => {
+                    const btnKey = `${catKey}.${menuKey}.${btn.key}`;
+                    const idx = selectedPermissions.indexOf(btnKey);
+                    if (idx > -1) {
+                        selectedPermissions.splice(idx, 1);
+                    }
+                });
+            } else {
+                // 勾选菜单时，自动勾选查看权限
+                if (!selectedPermissions.includes(viewKey)) {
+                    selectedPermissions.push(viewKey);
+                }
+                // 勾选所有按钮
+                menu.buttons.forEach(btn => {
+                    const btnKey = `${catKey}.${menuKey}.${btn.key}`;
+                    if (!selectedPermissions.includes(btnKey)) {
+                        selectedPermissions.push(btnKey);
+                    }
+                });
+            }
+
+            renderPermissionTable();
+            updateSelectedCount();
+        }
+
+        // 切换单个权限
+        function togglePermission(key, element) {
+            const idx = selectedPermissions.indexOf(key);
+            if (idx > -1) {
+                selectedPermissions.splice(idx, 1);
+            } else {
+                selectedPermissions.push(key);
+            }
+
+            // 更新 Tag 样式
+            const isSelected = selectedPermissions.includes(key);
+            element.classList.toggle('selected', isSelected);
+            element.querySelector('i').className = `fas fa-${isSelected ? 'check-square' : 'square'} mr-1`;
+
+            // 更新菜单复选框状态
+            const parts = key.split('.');
+            if (parts.length === 3) {
+                updateMenuCheckbox(parts[0], parts[1]);
+            }
+
+            updateSelectedCount();
+        }
+
+        // 更新菜单复选框状态
+        function updateMenuCheckbox(catKey, menuKey) {
+            const menuCheckbox = document.querySelector(`.menu-checkbox[data-category="${catKey}"][data-menu="${menuKey}"]`);
+            if (menuCheckbox) {
+                menuCheckbox.checked = isMenuAllSelected(catKey, menuKey);
+            }
+
+            const selectAllCheckbox = document.querySelector(`.select-all-checkbox[data-category="${catKey}"][data-menu="${menuKey}"]`);
+            if (selectAllCheckbox) {
+                selectAllCheckbox.checked = isMenuAllSelected(catKey, menuKey);
+            }
+        }
+
+        // 全选/取消全选
+        function toggleSelectAll(catKey, menuKey, checked) {
+            const category = permissionMatrix[catKey];
+            const menu = category.menus.find(m => m.key === menuKey);
+            if (!menu) return;
+
+            if (checked) {
+                // 全选：添加所有按钮权限
+                if (!selectedPermissions.includes(`${catKey}.${menuKey}.view`)) {
+                    selectedPermissions.push(`${catKey}.${menuKey}.view`);
+                }
+                menu.buttons.forEach(btn => {
+                    const btnKey = `${catKey}.${menuKey}.${btn.key}`;
+                    if (!selectedPermissions.includes(btnKey)) {
+                        selectedPermissions.push(btnKey);
+                    }
+                });
+            } else {
+                // 取消全选：移除所有按钮权限
+                menu.buttons.forEach(btn => {
+                    const btnKey = `${catKey}.${menuKey}.${btn.key}`;
+                    const idx = selectedPermissions.indexOf(btnKey);
+                    if (idx > -1) {
+                        selectedPermissions.splice(idx, 1);
+                    }
+                });
+            }
+
+            renderPermissionTable();
+            updateSelectedCount();
+        }
+
+        // 更新已选数量
+        function updateSelectedCount() {
+            document.getElementById('selectedCount').textContent = selectedPermissions.length;
+        }
+
+        // 重置权限
+        function resetPermissions() {
+            selectedPermissions = [...originalPermissions];
+            if (currentRole.permissions.includes('*')) {
+                selectedPermissions = getAllPermissionKeys();
+            }
+            renderPermissionTable();
+            updateSelectedCount();
+            showToast('已重置为初始状态');
+        }
+
+        // 保存权限
+        function savePermissions() {
+            if (currentRole) {
+                currentRole.permissions = selectedPermissions;
+                showSuccessModal();
+            }
+        }
+
+        // 显示成功弹窗
+        function showSuccessModal() {
+            document.getElementById('successModal').classList.remove('hidden');
+            document.getElementById('successModal').classList.add('flex');
+        }
+
+        // 关闭成功弹窗
+        function closeSuccessModal() {
+            document.getElementById('successModal').classList.add('hidden');
+            document.getElementById('successModal').classList.remove('flex');
+            // 返回角色列表
+            window.location.href = 'system-role.html';
+        }
+
+        // Toast提示
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-accent-green' : 'bg-accent-red';
+            toast.className = `toast ${bgColor} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2`;
+            toast.innerHTML = `<i class="fas fa-check-circle"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // 初始化
+        initPage();
+    </script>
+</body>
+</html>

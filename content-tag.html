@@ -29,41 +29,43 @@
     </script>
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #030714; }
+        ::-webkit-scrollbar-thumb { background: #1a2744; border-radius: 3px; }
         .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
         .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
-        .tag-item:hover { transform: translateY(-2px); }
-        .tag-item { transition: all 0.2s; }
+        .tag-item:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
+        .tag-item { transition: all 0.2s; cursor: pointer; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .sort-btn.active { color: #3b82f6; }
     </style>
 </head>
 <body class="bg-primary-bg text-text-primary min-h-screen">
+    <!-- 顶部导航 -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
-                <i class="fas fa-cube text-white text-lg"></i>
-            </div>
-            <span class="text-lg font-semibold">内容中台</span>
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
         </div>
-        <div class="flex-1 max-w-xl mx-8">
-            <div class="relative">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-            </div>
-        </div>
-        <div class="flex items-center gap-6">
-            <button class="relative text-text-secondary hover:text-text-primary">
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
                     <span class="text-xs text-text-muted">超级管理员</span>
                 </div>
+                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
             </div>
         </div>
     </header>
 
+    <!-- 左侧菜单 -->
     <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
         <nav class="py-4">
             <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
@@ -92,45 +94,6 @@
                 <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
-            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-home w-5 text-text-secondary"></i>
-                <span>首页装修</span>
-            </a>
-            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-image w-5 text-text-secondary"></i>
-                <span>Banner管理</span>
-            </a>
-            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-columns w-5 text-text-secondary"></i>
-                <span>栏目管理</span>
-            </a>
-            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
-                <span>专题管理</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
-            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
-                <span>新闻资讯</span>
-            </a>
-            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
-                <span>公告通知</span>
-            </a>
-            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
-                <span>政策文件</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
-            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
-                <span>数据概览</span>
-            </a>
-            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
-                <span>内容分析</span>
-            </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-images w-5 text-text-secondary"></i>
@@ -144,6 +107,17 @@
                 <i class="fas fa-video w-5 text-text-secondary"></i>
                 <span>视频管理</span>
             </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <span>内容分析</span>
+            </a>
+
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-users-cog w-5 text-text-secondary"></i>
@@ -153,6 +127,11 @@
                 <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
                 <span>角色权限</span>
             </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <span>日志管理</span>
+            </a>
+
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-cog w-5 text-text-secondary"></i>
                 <span>系统设置</span>
@@ -160,13 +139,14 @@
         </nav>
     </aside>
 
+    <!-- 主内容区 -->
     <main class="ml-[220px] mt-16 p-6">
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-2xl font-semibold">标签管理</h1>
                 <p class="text-text-muted mt-1">管理内容标签，支持标签的创建、编辑、合并和删除</p>
             </div>
-            <button onclick="openModal('addModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+            <button onclick="openAddModal()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
                 <i class="fas fa-plus"></i>
                 创建标签
             </button>
@@ -180,7 +160,7 @@
                         <i class="fas fa-tags text-accent-blue"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">156</div>
+                        <div id="statTotal" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">标签总数</div>
                     </div>
                 </div>
@@ -191,7 +171,7 @@
                         <i class="fas fa-check-circle text-accent-green"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">142</div>
+                        <div id="statUsed" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">使用中</div>
                     </div>
                 </div>
@@ -202,7 +182,7 @@
                         <i class="fas fa-clock text-accent-amber"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">14</div>
+                        <div id="statUnused" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">未使用</div>
                     </div>
                 </div>
@@ -213,7 +193,7 @@
                         <i class="fas fa-file-alt text-accent-cyan"></i>
                     </div>
                     <div>
-                        <div class="text-2xl font-bold">2,847</div>
+                        <div id="statReferences" class="text-2xl font-bold">0</div>
                         <div class="text-sm text-text-muted">内容引用</div>
                     </div>
                 </div>
@@ -224,12 +204,12 @@
         <div class="bg-card-bg rounded-xl p-4 mb-6 border border-border-dark flex items-center gap-4">
             <div class="relative flex-1">
                 <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                <input type="text" placeholder="搜索标签名称..." class="w-full bg-primary-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                <input type="text" id="searchInput" placeholder="搜索标签名称..." class="w-full bg-primary-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none" oninput="filterTags()">
             </div>
-            <select class="bg-primary-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm">
-                <option>全部类型</option>
-                <option>使用中</option>
-                <option>未使用</option>
+            <select id="filterStatus" class="bg-primary-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none" onchange="filterTags()">
+                <option value="">全部类型</option>
+                <option value="used">使用中</option>
+                <option value="unused">未使用</option>
             </select>
         </div>
 
@@ -239,221 +219,507 @@
                 <h3 class="text-lg font-medium">标签列表</h3>
                 <div class="flex items-center gap-2 text-sm text-text-muted">
                     <span>排序:</span>
-                    <button class="text-accent-blue hover:underline">引用量</button>
+                    <button id="sortByCount" onclick="setSort('count')" class="sort-btn active hover:text-accent-blue hover:underline">引用量</button>
                     <span>|</span>
-                    <button class="hover:text-text-primary">名称</button>
+                    <button id="sortByName" onclick="setSort('name')" class="sort-btn hover:text-text-primary hover:underline">名称</button>
                     <span>|</span>
-                    <button class="hover:text-text-primary">创建时间</button>
+                    <button id="sortByTime" onclick="setSort('time')" class="sort-btn hover:text-text-primary hover:underline">创建时间</button>
                 </div>
             </div>
-            <div class="flex flex-wrap gap-3">
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-accent-blue/20 text-accent-blue text-xs rounded">时政</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">时政要闻</div>
-                    <div class="text-xs text-text-muted">引用 486 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">经济</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">经济建设</div>
-                    <div class="text-xs text-text-muted">引用 324 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-accent-cyan/20 text-accent-cyan text-xs rounded">民生</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">社会民生</div>
-                    <div class="text-xs text-text-muted">引用 298 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">政策</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">政策解读</div>
-                    <div class="text-xs text-text-muted">引用 256 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-purple-500/20 text-purple-400 text-xs rounded">专题</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">两会专题</div>
-                    <div class="text-xs text-text-muted">引用 198 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-red-500/20 text-red-400 text-xs rounded">安全</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">安全生产</div>
-                    <div class="text-xs text-text-muted">引用 167 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-blue-500/20 text-blue-400 text-xs rounded">科技</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">科技创新</div>
-                    <div class="text-xs text-text-muted">引用 145 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-pink-500/20 text-pink-400 text-xs rounded">文化</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">文化建设</div>
-                    <div class="text-xs text-text-muted">引用 123 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-teal-500/20 text-teal-400 text-xs rounded">环保</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">环境保护</div>
-                    <div class="text-xs text-text-muted">引用 98 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded">教育</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">教育改革</div>
-                    <div class="text-xs text-text-muted">引用 87 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded">党建</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">党建工作</div>
-                    <div class="text-xs text-text-muted">引用 76 篇文章</div>
-                </div>
-                <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] cursor-pointer hover:border-accent-blue/50 opacity-50">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="px-2 py-1 bg-gray-500/20 text-gray-400 text-xs rounded">其他</span>
-                        <div class="flex items-center gap-1 text-text-muted">
-                            <button class="hover:text-accent-blue"><i class="fas fa-edit text-xs"></i></button>
-                            <button class="hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
-                        </div>
-                    </div>
-                    <div class="font-medium mb-1">其他</div>
-                    <div class="text-xs text-text-muted">引用 0 篇文章</div>
-                </div>
+            <div id="tagList" class="flex flex-wrap gap-3">
+                <!-- 动态渲染 -->
             </div>
             <!-- 分页 -->
             <div class="flex items-center justify-between mt-6 pt-4 border-t border-border-dark">
-                <span class="text-sm text-text-muted">显示 1-12 条，共 156 条</span>
+                <span id="paginationInfo" class="text-sm text-text-muted">显示 0 条，共 0 条</span>
                 <div class="flex items-center gap-2">
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">上一页</button>
-                    <button class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">2</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">3</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">...</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">13</button>
-                    <button class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm">下一页</button>
+                    <button id="prevPage" onclick="goToPage(currentPage - 1)" class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm hover:text-text-primary hover:border-accent-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div id="pageNumbers" class="flex items-center gap-1">
+                        <!-- 动态渲染 -->
+                    </div>
+                    <button id="nextPage" onclick="goToPage(currentPage + 1)" class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm hover:text-text-primary hover:border-accent-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </main>
 
-    <!-- 创建标签弹窗 -->
-    <div id="addModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- 创建/编辑标签弹窗 -->
+    <div id="tagModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
         <div class="bg-card-bg rounded-2xl w-[480px] border border-border-dark shadow-2xl">
             <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
-                <h3 class="text-lg font-medium">创建标签</h3>
-                <button onclick="closeModal('addModal')" class="text-text-muted hover:text-text-primary">
+                <h3 id="tagModalTitle" class="text-lg font-medium">创建标签</h3>
+                <button onclick="closeModal('tagModal')" class="text-text-muted hover:text-text-primary">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <div class="p-6 space-y-4">
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">标签名称 <span class="text-accent-red">*</span></label>
-                    <input type="text" placeholder="请输入标签名称" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <input type="text" id="tagName" placeholder="请输入标签名称" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">标签类型</label>
-                    <select class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
-                        <option>时政</option>
-                        <option>经济</option>
-                        <option>民生</option>
-                        <option>政策</option>
-                        <option>专题</option>
-                        <option>其他</option>
-                    </select>
+                    <input type="text" id="tagType" placeholder="请输入标签类型" list="typeList" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <datalist id="typeList">
+                        <option value="时政">
+                        <option value="经济">
+                        <option value="民生">
+                        <option value="政策">
+                        <option value="专题">
+                        <option value="安全">
+                        <option value="科技">
+                        <option value="文化">
+                        <option value="环保">
+                        <option value="教育">
+                        <option value="党建">
+                        <option value="其他">
+                    </datalist>
                 </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">标签颜色</label>
                     <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-lg bg-accent-blue cursor-pointer ring-2 ring-accent-blue"></div>
-                        <div class="w-8 h-8 rounded-lg bg-accent-green cursor-pointer hover:ring-2 hover:ring-accent-green"></div>
-                        <div class="w-8 h-8 rounded-lg bg-accent-cyan cursor-pointer hover:ring-2 hover:ring-accent-cyan"></div>
-                        <div class="w-8 h-8 rounded-lg bg-accent-amber cursor-pointer hover:ring-2 hover:ring-accent-amber"></div>
-                        <div class="w-8 h-8 rounded-lg bg-accent-red cursor-pointer hover:ring-2 hover:ring-accent-red"></div>
-                        <div class="w-8 h-8 rounded-lg bg-purple-500 cursor-pointer hover:ring-2 hover:ring-purple-500"></div>
-                        <div class="w-8 h-8 rounded-lg bg-pink-500 cursor-pointer hover:ring-2 hover:ring-pink-500"></div>
+                        <div onclick="selectColor('accent-blue')" class="w-8 h-8 rounded-lg bg-accent-blue cursor-pointer hover:ring-2 hover:ring-accent-blue color-option" data-color="accent-blue"></div>
+                        <div onclick="selectColor('accent-green')" class="w-8 h-8 rounded-lg bg-accent-green cursor-pointer hover:ring-2 hover:ring-accent-green color-option" data-color="accent-green"></div>
+                        <div onclick="selectColor('accent-cyan')" class="w-8 h-8 rounded-lg bg-accent-cyan cursor-pointer hover:ring-2 hover:ring-accent-cyan color-option" data-color="accent-cyan"></div>
+                        <div onclick="selectColor('accent-amber')" class="w-8 h-8 rounded-lg bg-accent-amber cursor-pointer hover:ring-2 hover:ring-accent-amber color-option" data-color="accent-amber"></div>
+                        <div onclick="selectColor('accent-red')" class="w-8 h-8 rounded-lg bg-accent-red cursor-pointer hover:ring-2 hover:ring-accent-red color-option" data-color="accent-red"></div>
+                        <div onclick="selectColor('purple-500')" class="w-8 h-8 rounded-lg bg-purple-500 cursor-pointer hover:ring-2 hover:ring-purple-500 color-option" data-color="purple-500"></div>
+                        <div onclick="selectColor('pink-500')" class="w-8 h-8 rounded-lg bg-pink-500 cursor-pointer hover:ring-2 hover:ring-pink-500 color-option" data-color="pink-500"></div>
+                        <div onclick="selectColor('teal-500')" class="w-8 h-8 rounded-lg bg-teal-500 cursor-pointer hover:ring-2 hover:ring-teal-500 color-option" data-color="teal-500"></div>
                     </div>
                 </div>
                 <div>
                     <label class="block text-sm text-text-secondary mb-2">备注</label>
-                    <textarea rows="2" placeholder="请输入备注信息" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                    <textarea id="tagRemark" rows="2" placeholder="请输入备注信息" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('addModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
-                <button class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认创建</button>
+                <button onclick="closeModal('tagModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="confirmTag()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+                <div class="w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认删除</h3>
+                    <p id="deleteTip" class="text-sm text-text-muted mt-1">删除后无法恢复，请谨慎操作</p>
+                </div>
+            </div>
+            <div id="deleteWarning" class="p-6 hidden">
+                <p class="text-sm text-text-secondary">该标签已被 <span id="deleteRefCount" class="font-medium text-accent-red">0</span> 篇文章引用，删除后这些文章将取消该标签</p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('deleteModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="confirmDelete()" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 合并标签弹窗 -->
+    <div id="mergeModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[480px] border border-border-dark shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+                <h3 class="text-lg font-medium">合并标签</h3>
+                <button onclick="closeModal('mergeModal')" class="text-text-muted hover:text-text-primary">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-4">
+                <p class="text-sm text-text-secondary">选择一个目标标签，<span id="mergeSourceName" class="font-medium text-accent-blue"></span> 将被合并到目标标签，其引用的文章将使用目标标签</p>
+                <div>
+                    <label class="block text-sm text-text-secondary mb-2">目标标签 <span class="text-accent-red">*</span></label>
+                    <select id="mergeTarget" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="">请选择目标标签</option>
+                    </select>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
+                <button onclick="closeModal('mergeModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+                <button onclick="confirmMerge()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认合并</button>
             </div>
         </div>
     </div>
 
     <script>
+        // 颜色配置
+        const colorOptions = [
+            { name: 'accent-blue', bgClass: 'bg-accent-blue/20', textClass: 'text-accent-blue' },
+            { name: 'accent-green', bgClass: 'bg-accent-green/20', textClass: 'text-accent-green' },
+            { name: 'accent-cyan', bgClass: 'bg-accent-cyan/20', textClass: 'text-accent-cyan' },
+            { name: 'accent-amber', bgClass: 'bg-accent-amber/20', textClass: 'text-accent-amber' },
+            { name: 'accent-red', bgClass: 'bg-accent-red/20', textClass: 'text-accent-red' },
+            { name: 'purple-500', bgClass: 'bg-purple-500/20', textClass: 'text-purple-400' },
+            { name: 'pink-500', bgClass: 'bg-pink-500/20', textClass: 'text-pink-400' },
+            { name: 'teal-500', bgClass: 'bg-teal-500/20', textClass: 'text-teal-400' },
+        ];
+
+        // 标签数据
+        let tags = [
+            { id: 1, name: '时政要闻', type: '时政', color: 'accent-blue', contentCount: 486, createdAt: '2024-01-10', remark: '' },
+            { id: 2, name: '经济建设', type: '经济', color: 'accent-green', contentCount: 324, createdAt: '2024-01-08', remark: '' },
+            { id: 3, name: '社会民生', type: '民生', color: 'accent-cyan', contentCount: 298, createdAt: '2024-01-12', remark: '' },
+            { id: 4, name: '政策解读', type: '政策', color: 'accent-amber', contentCount: 256, createdAt: '2024-01-05', remark: '' },
+            { id: 5, name: '两会专题', type: '专题', color: 'purple-500', contentCount: 198, createdAt: '2024-01-15', remark: '' },
+            { id: 6, name: '安全生产', type: '安全', color: 'accent-red', contentCount: 167, createdAt: '2024-01-03', remark: '' },
+            { id: 7, name: '科技创新', type: '科技', color: 'accent-blue', contentCount: 145, createdAt: '2024-01-09', remark: '' },
+            { id: 8, name: '文化建设', type: '文化', color: 'pink-500', contentCount: 123, createdAt: '2024-01-11', remark: '' },
+            { id: 9, name: '环境保护', type: '环保', color: 'teal-500', contentCount: 98, createdAt: '2024-01-07', remark: '' },
+            { id: 10, name: '教育改革', type: '教育', color: 'accent-amber', contentCount: 87, createdAt: '2024-01-06', remark: '' },
+            { id: 11, name: '党建工作', type: '党建', color: 'accent-red', contentCount: 76, createdAt: '2024-01-04', remark: '' },
+            { id: 12, name: '其他', type: '其他', color: 'text-muted', contentCount: 0, createdAt: '2024-01-02', remark: '' },
+        ];
+
+        let currentPage = 1;
+        let pageSize = 12;
+        let sortField = 'count';
+        let sortAsc = false;
+        let searchKeyword = '';
+        let filterStatus = '';
+        let editingTag = null;
+        let deleteTagId = null;
+        let mergeSourceId = null;
+        let selectedColor = 'accent-blue';
+
+        // 初始化
+        function init() {
+            updateStats();
+            filterTags();
+        }
+
+        // 更新统计
+        function updateStats() {
+            const total = tags.length;
+            const used = tags.filter(t => t.contentCount > 0).length;
+            const unused = total - used;
+            const references = tags.reduce((sum, t) => sum + t.contentCount, 0);
+
+            document.getElementById('statTotal').textContent = total;
+            document.getElementById('statUsed').textContent = used;
+            document.getElementById('statUnused').textContent = unused;
+            document.getElementById('statReferences').textContent = references.toLocaleString();
+        }
+
+        // 筛选标签
+        function filterTags() {
+            searchKeyword = document.getElementById('searchInput').value.toLowerCase();
+            filterStatus = document.getElementById('filterStatus').value;
+
+            let filtered = tags.filter(tag => {
+                // 搜索过滤
+                if (searchKeyword && !tag.name.toLowerCase().includes(searchKeyword)) {
+                    return false;
+                }
+                // 状态过滤
+                if (filterStatus === 'used' && tag.contentCount === 0) return false;
+                if (filterStatus === 'unused' && tag.contentCount > 0) return false;
+                return true;
+            });
+
+            // 排序
+            filtered.sort((a, b) => {
+                if (sortField === 'count') return sortAsc ? a.contentCount - b.contentCount : b.contentCount - a.contentCount;
+                if (sortField === 'name') return sortAsc ? a.name.localeCompare(b.name) : b.name.localeCompare(a.name);
+                if (sortField === 'time') return sortAsc ? a.createdAt.localeCompare(b.createdAt) : b.createdAt.localeCompare(a.createdAt);
+                return 0;
+            });
+
+            renderTagList(filtered);
+            renderPagination(filtered.length);
+        }
+
+        // 设置排序
+        function setSort(field) {
+            if (sortField === field) {
+                sortAsc = !sortAsc;
+            } else {
+                sortField = field;
+                sortAsc = false;
+            }
+
+            // 更新按钮样式
+            document.querySelectorAll('.sort-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('hover:text-text-primary');
+            });
+            const activeBtn = document.getElementById('sortBy' + field.charAt(0).toUpperCase() + field.slice(1));
+            if (activeBtn) {
+                activeBtn.classList.add('active');
+                activeBtn.classList.remove('hover:text-text-primary');
+            }
+
+            filterTags();
+        }
+
+        // 渲染标签列表
+        function renderTagList(filteredTags) {
+            const container = document.getElementById('tagList');
+            const start = (currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageTags = filteredTags.slice(start, end);
+
+            if (pageTags.length === 0) {
+                container.innerHTML = `
+                    <div class="w-full text-center py-12 text-text-muted">
+                        <i class="fas fa-tags text-4xl mb-3 opacity-50"></i>
+                        <p>暂无标签</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = pageTags.map(tag => {
+                const colorConfig = colorOptions.find(c => c.name === tag.color) || colorOptions[0];
+                const isUnused = tag.contentCount === 0;
+
+                return `
+                    <div class="tag-item bg-primary-bg border border-border-dark rounded-xl p-4 w-[200px] ${isUnused ? 'opacity-60' : ''}">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-1 ${colorConfig.bgClass} ${colorConfig.textClass} text-xs rounded">${tag.type}</span>
+                            <div class="flex items-center gap-1 text-text-muted">
+                                <button onclick="openMergeModal(${tag.id})" class="p-1 hover:text-accent-cyan rounded" title="合并">
+                                    <i class="fas fa-compress-alt text-xs"></i>
+                                </button>
+                                <button onclick="openEditModal(${tag.id})" class="p-1 hover:text-accent-blue rounded" title="编辑">
+                                    <i class="fas fa-edit text-xs"></i>
+                                </button>
+                                <button onclick="openDeleteModal(${tag.id})" class="p-1 hover:text-accent-red rounded" title="删除">
+                                    <i class="fas fa-trash text-xs"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="font-medium mb-1">${tag.name}</div>
+                        <div class="text-xs text-text-muted">引用 ${tag.contentCount} 篇文章</div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 渲染分页
+        function renderPagination(totalCount) {
+            const totalPages = Math.ceil(totalCount / pageSize);
+            const pageNumbers = document.getElementById('pageNumbers');
+
+            document.getElementById('paginationInfo').textContent = `显示 ${(currentPage - 1) * pageSize + 1}-${Math.min(currentPage * pageSize, totalCount)} 条，共 ${totalCount} 条`;
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+
+            if (totalPages <= 1) {
+                pageNumbers.innerHTML = `<button class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>`;
+                return;
+            }
+
+            let html = '';
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<button onclick="goToPage(${i})" class="px-3 py-1 rounded ${i === currentPage ? 'bg-accent-blue text-white' : 'border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue'} text-sm">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<span class="px-2 text-text-muted">...</span>`;
+                }
+            }
+            pageNumbers.innerHTML = html;
+        }
+
+        // 跳转页码
+        function goToPage(page) {
+            const totalPages = Math.ceil(tags.length / pageSize);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            filterTags();
+        }
+
+        // 打开新增弹窗
+        function openAddModal() {
+            editingTag = null;
+            document.getElementById('tagModalTitle').textContent = '创建标签';
+            document.getElementById('tagName').value = '';
+            document.getElementById('tagType').value = '';
+            document.getElementById('tagRemark').value = '';
+            selectedColor = 'accent-blue';
+            updateColorSelection();
+            openModal('tagModal');
+        }
+
+        // 打开编辑弹窗
+        function openEditModal(id) {
+            const tag = tags.find(t => t.id === id);
+            if (!tag) return;
+
+            editingTag = tag;
+            document.getElementById('tagModalTitle').textContent = '编辑标签';
+            document.getElementById('tagName').value = tag.name;
+            document.getElementById('tagType').value = tag.type;
+            document.getElementById('tagRemark').value = tag.remark || '';
+            selectedColor = tag.color;
+            updateColorSelection();
+            openModal('tagModal');
+        }
+
+        // 选择颜色
+        function selectColor(color) {
+            selectedColor = color;
+            updateColorSelection();
+        }
+
+        function updateColorSelection() {
+            document.querySelectorAll('.color-option').forEach(el => {
+                const color = el.dataset.color;
+                if (color === selectedColor) {
+                    el.classList.add('ring-2', 'ring-white');
+                } else {
+                    el.classList.remove('ring-2', 'ring-white');
+                }
+            });
+        }
+
+        // 确认标签操作
+        function confirmTag() {
+            const name = document.getElementById('tagName').value.trim();
+            const type = document.getElementById('tagType').value.trim();
+            const remark = document.getElementById('tagRemark').value.trim();
+
+            if (!name) {
+                showToast('请输入标签名称', 'error');
+                return;
+            }
+
+            if (editingTag) {
+                // 编辑
+                editingTag.name = name;
+                editingTag.type = type;
+                editingTag.color = selectedColor;
+                editingTag.remark = remark;
+                showToast('标签已更新');
+            } else {
+                // 新增
+                tags.push({
+                    id: Date.now(),
+                    name,
+                    type,
+                    color: selectedColor,
+                    contentCount: 0,
+                    createdAt: new Date().toISOString().slice(0, 10),
+                    remark
+                });
+                showToast('标签已创建');
+            }
+
+            closeModal('tagModal');
+            updateStats();
+            filterTags();
+        }
+
+        // 打开删除弹窗
+        function openDeleteModal(id) {
+            const tag = tags.find(t => t.id === id);
+            if (!tag) return;
+
+            deleteTagId = id;
+            const warning = document.getElementById('deleteWarning');
+            if (tag.contentCount > 0) {
+                document.getElementById('deleteRefCount').textContent = tag.contentCount;
+                warning.classList.remove('hidden');
+            } else {
+                warning.classList.add('hidden');
+            }
+            openModal('deleteModal');
+        }
+
+        // 确认删除
+        function confirmDelete() {
+            if (!deleteTagId) return;
+
+            tags = tags.filter(t => t.id !== deleteTagId);
+            deleteTagId = null;
+            closeModal('deleteModal');
+            updateStats();
+            filterTags();
+            showToast('标签已删除');
+        }
+
+        // 打开合并弹窗
+        function openMergeModal(sourceId) {
+            const source = tags.find(t => t.id === sourceId);
+            if (!source) return;
+
+            mergeSourceId = sourceId;
+            document.getElementById('mergeSourceName').textContent = source.name;
+
+            // 填充目标标签下拉
+            const select = document.getElementById('mergeTarget');
+            select.innerHTML = '<option value="">请选择目标标签</option>';
+            tags.filter(t => t.id !== sourceId).forEach(t => {
+                const opt = document.createElement('option');
+                opt.value = t.id;
+                opt.textContent = `${t.name} (${t.contentCount}篇)`;
+                select.appendChild(opt);
+            });
+
+            openModal('mergeModal');
+        }
+
+        // 确认合并
+        function confirmMerge() {
+            const targetId = document.getElementById('mergeTarget').value;
+            if (!targetId) {
+                showToast('请选择目标标签', 'error');
+                return;
+            }
+
+            const source = tags.find(t => t.id === mergeSourceId);
+            const target = tags.find(t => t.id === parseInt(targetId));
+            if (!source || !target) return;
+
+            // 将源标签的引用数合并到目标标签
+            target.contentCount += source.contentCount;
+
+            // 删除源标签
+            tags = tags.filter(t => t.id !== mergeSourceId);
+            mergeSourceId = null;
+
+            closeModal('mergeModal');
+            updateStats();
+            filterTags();
+            showToast(`已合并到「${target.name}」`);
+        }
+
+        // 弹窗控制
         function openModal(id) {
             document.getElementById(id).classList.remove('hidden');
             document.getElementById(id).classList.add('flex');
         }
+
         function closeModal(id) {
             document.getElementById(id).classList.add('hidden');
             document.getElementById(id).classList.remove('flex');
         }
+
+        // Toast提示
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-accent-green' : type === 'error' ? 'bg-accent-red' : 'bg-accent-amber';
+            toast.className = `toast ${bgColor} text-white px-6 py-3 rounded-xl shadow-lg flex items-center gap-2`;
+            toast.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'exclamation-circle'}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // 初始化
+        init();
     </script>
 </body>
 </html>

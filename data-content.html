@@ -34,30 +34,25 @@
     </style>
 </head>
 <body class="bg-primary-bg text-text-primary min-h-screen">
+    <!-- 顶部导航 -->
     <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
         <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
-                <i class="fas fa-cube text-white text-lg"></i>
-            </div>
-            <span class="text-lg font-semibold">内容中台</span>
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
         </div>
-        <div class="flex-1 max-w-xl mx-8">
-            <div class="relative">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-            </div>
-        </div>
-        <div class="flex items-center gap-6">
-            <button class="relative text-text-secondary hover:text-text-primary">
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-6 border-l border-border-dark">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
                     <span class="text-xs text-text-muted">超级管理员</span>
                 </div>
+                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
             </div>
         </div>
     </header>
@@ -90,45 +85,6 @@
                 <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">门户运营</div>
-            <a href="portal-home.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-home w-5 text-text-secondary"></i>
-                <span>首页装修</span>
-            </a>
-            <a href="portal-banner.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-image w-5 text-text-secondary"></i>
-                <span>Banner管理</span>
-            </a>
-            <a href="portal-column.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-columns w-5 text-text-secondary"></i>
-                <span>栏目管理</span>
-            </a>
-            <a href="portal-topic.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-layer-group w-5 text-text-secondary"></i>
-                <span>专题管理</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资讯公告</div>
-            <a href="news-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-newspaper w-5 text-text-secondary"></i>
-                <span>新闻资讯</span>
-            </a>
-            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-bullhorn w-5 text-text-secondary"></i>
-                <span>公告通知</span>
-            </a>
-            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-contract w-5 text-text-secondary"></i>
-                <span>政策文件</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
-            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
-                <span>数据概览</span>
-            </a>
-            <a href="data-content.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-accent-blue"></i>
-                <span>内容分析</span>
-            </a>
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-images w-5 text-text-secondary"></i>
@@ -142,6 +98,17 @@
                 <i class="fas fa-video w-5 text-text-secondary"></i>
                 <span>视频管理</span>
             </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-accent-blue"></i>
+                <span>内容分析</span>
+            </a>
+
             <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-users-cog w-5 text-text-secondary"></i>
@@ -151,6 +118,11 @@
                 <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
                 <span>角色权限</span>
             </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <span>日志管理</span>
+            </a>
+
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-cog w-5 text-text-secondary"></i>
                 <span>系统设置</span>
@@ -165,12 +137,12 @@
                 <p class="text-text-muted mt-1">分析内容阅读、互动数据</p>
             </div>
             <div class="flex items-center gap-2">
-                <select class="bg-card-bg border border-border-dark rounded-xl px-4 py-2 text-sm">
-                    <option>近7天</option>
-                    <option>近30天</option>
-                    <option>近90天</option>
+                <select id="timeRangeSelect" class="bg-card-bg border border-border-dark rounded-xl px-4 py-2 text-sm">
+                    <option value="7">近7天</option>
+                    <option value="30">近30天</option>
+                    <option value="90">近90天</option>
                 </select>
-                <button class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
+                <button id="exportBtn" class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
                     <i class="fas fa-download mr-2"></i>导出
                 </button>
             </div>
@@ -178,36 +150,19 @@
 
         <!-- 阅读量趋势 -->
         <div class="bg-card-bg rounded-xl p-5 border border-border-dark mb-6">
-            <h3 class="text-lg font-medium mb-4">阅读量趋势</h3>
-            <div class="h-48 flex items-end gap-4">
-                <div class="flex-1 flex flex-col items-center gap-2">
-                    <div class="w-full bg-accent-blue/80 rounded-t" style="height: 60%"></div>
-                    <span class="text-text-muted text-xs">周一</span>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium">阅读量趋势</h3>
+                <div id="metricBtns" class="flex gap-2">
+                    <button class="metric-btn px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-lg text-sm" data-metric="views">阅读量</button>
+                    <button class="metric-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-metric="likes">点赞量</button>
+                    <button class="metric-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-metric="shares">分享量</button>
                 </div>
-                <div class="flex-1 flex flex-col items-center gap-2">
-                    <div class="w-full bg-accent-blue/80 rounded-t" style="height: 75%"></div>
-                    <span class="text-text-muted text-xs">周二</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-2">
-                    <div class="w-full bg-accent-blue/80 rounded-t" style="height: 45%"></div>
-                    <span class="text-text-muted text-xs">周三</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-2">
-                    <div class="w-full bg-accent-blue/80 rounded-t" style="height: 80%"></div>
-                    <span class="text-text-muted text-xs">周四</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-2">
-                    <div class="w-full bg-accent-blue/80 rounded-t" style="height: 55%"></div>
-                    <span class="text-text-muted text-xs">周五</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-2">
-                    <div class="w-full bg-accent-blue/80 rounded-t" style="height: 90%"></div>
-                    <span class="text-text-muted text-xs">周六</span>
-                </div>
-                <div class="flex-1 flex flex-col items-center gap-2">
-                    <div class="w-full bg-accent-blue/80 rounded-t" style="height: 70%"></div>
-                    <span class="text-text-muted text-xs">周日</span>
-                </div>
+            </div>
+            <div id="trendChart" class="h-48 flex items-end gap-4">
+                <!-- 动态渲染 -->
+            </div>
+            <div class="flex items-center justify-center mt-4 text-sm text-text-muted">
+                <span id="trendTip">显示近7天数据，点击柱子查看详情</span>
             </div>
         </div>
 
@@ -224,7 +179,10 @@
                             </div>
                             <span class="text-sm">总阅读量</span>
                         </div>
-                        <span class="text-lg font-bold">158.6万</span>
+                        <div class="text-right">
+                            <span id="totalViews" class="text-lg font-bold">0</span>
+                            <span id="viewsTrend" class="text-sm text-accent-green ml-2"></span>
+                        </div>
                     </div>
                     <div class="flex items-center justify-between p-3 bg-primary-bg rounded-lg">
                         <div class="flex items-center gap-3">
@@ -233,16 +191,10 @@
                             </div>
                             <span class="text-sm">总点赞量</span>
                         </div>
-                        <span class="text-lg font-bold">12,847</span>
-                    </div>
-                    <div class="flex items-center justify-between p-3 bg-primary-bg rounded-lg">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-accent-cyan/20 flex items-center justify-center">
-                                <i class="fas fa-comment text-accent-cyan"></i>
-                            </div>
-                            <span class="text-sm">总评论量</span>
+                        <div class="text-right">
+                            <span id="totalLikes" class="text-lg font-bold">0</span>
+                            <span id="likesTrend" class="text-sm text-accent-green ml-2"></span>
                         </div>
-                        <span class="text-lg font-bold">3,258</span>
                     </div>
                     <div class="flex items-center justify-between p-3 bg-primary-bg rounded-lg">
                         <div class="flex items-center gap-3">
@@ -251,7 +203,10 @@
                             </div>
                             <span class="text-sm">总分享量</span>
                         </div>
-                        <span class="text-lg font-bold">5,632</span>
+                        <div class="text-right">
+                            <span id="totalShares" class="text-lg font-bold">0</span>
+                            <span id="sharesTrend" class="text-sm text-accent-green ml-2"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -259,46 +214,387 @@
             <!-- 转化漏斗 -->
             <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
                 <h3 class="text-lg font-medium mb-4">内容转化漏斗</h3>
-                <div class="space-y-4">
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm">曝光</span>
-                            <span class="text-sm font-bold">258.6万</span>
-                        </div>
-                        <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full" style="width: 100%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm">点击</span>
-                            <span class="text-sm font-bold">158.6万</span>
-                        </div>
-                        <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full" style="width: 61%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm">阅读</span>
-                            <span class="text-sm font-bold">86.2万</span>
-                        </div>
-                        <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full" style="width: 33%"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-sm">互动</span>
-                            <span class="text-sm font-bold">21.7万</span>
-                        </div>
-                        <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
-                            <div class="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full" style="width: 8%"></div>
-                        </div>
-                    </div>
+                <div id="funnelContainer" class="space-y-4">
+                    <!-- 动态渲染 -->
                 </div>
             </div>
         </div>
+
+        <!-- 内容详情列表 -->
+        <div class="bg-card-bg rounded-xl border border-border-dark p-5 mt-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="text-lg font-medium">内容详情 TOP 10</h3>
+                <div class="flex items-center gap-2 text-sm">
+                    <span class="text-text-muted">排序：</span>
+                    <select id="sortSelect" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-1 text-sm">
+                        <option value="views">按阅读量</option>
+                        <option value="likes">按点赞量</option>
+                        <option value="shares">按分享量</option>
+                    </select>
+                </div>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-border-dark">
+                            <th class="text-left py-3 px-4 text-sm font-medium text-text-muted">内容标题</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-text-muted">分类</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">阅读量</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">点赞量</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">分享量</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">阅读时长</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">完成率</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contentTableBody">
+                        <!-- 动态渲染 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </main>
+
+    <!-- Toast 提示 -->
+    <div id="toast" class="fixed bottom-6 right-6 bg-accent-green text-white px-6 py-3 rounded-xl shadow-lg hidden z-50">
+        <i class="fas fa-check-circle mr-2"></i>
+        <span id="toastText">操作成功</span>
+    </div>
+
+    <script>
+        // ========== Mock数据 ==========
+        const mockData = {
+            views: {
+                7: [
+                    { date: '周一', value: 45000 },
+                    { date: '周二', value: 62000 },
+                    { date: '周三', value: 38000 },
+                    { date: '周四', value: 55000 },
+                    { date: '周五', value: 72000 },
+                    { date: '周六', value: 85000 },
+                    { date: '周日', value: 48000 }
+                ],
+                30: [
+                    { date: '第1周', value: 320000 },
+                    { date: '第2周', value: 385000 },
+                    { date: '第3周', value: 298000 },
+                    { date: '第4周', value: 562000 }
+                ],
+                90: [
+                    { date: '1月', value: 1256000 },
+                    { date: '2月', value: 1568000 },
+                    { date: '3月', value: 1985000 }
+                ]
+            },
+            likes: {
+                7: [
+                    { date: '周一', value: 820 },
+                    { date: '周二', value: 1100 },
+                    { date: '周三', value: 680 },
+                    { date: '周四', value: 920 },
+                    { date: '周五', value: 1280 },
+                    { date: '周六', value: 1450 },
+                    { date: '周日', value: 780 }
+                ],
+                30: [
+                    { date: '第1周', value: 5680 },
+                    { date: '第2周', value: 6450 },
+                    { date: '第3周', value: 4890 },
+                    { date: '第4周', value: 9820 }
+                ],
+                90: [
+                    { date: '1月', value: 22800 },
+                    { date: '2月', value: 31200 },
+                    { date: '3月', value: 42800 }
+                ]
+            },
+            shares: {
+                7: [
+                    { date: '周一', value: 230 },
+                    { date: '周二', value: 380 },
+                    { date: '周三', value: 195 },
+                    { date: '周四', value: 290 },
+                    { date: '周五', value: 420 },
+                    { date: '周六', value: 510 },
+                    { date: '周日', value: 265 }
+                ],
+                30: [
+                    { date: '第1周', value: 1680 },
+                    { date: '第2周', value: 1920 },
+                    { date: '第3周', value: 1450 },
+                    { date: '第4周', value: 2580 }
+                ],
+                90: [
+                    { date: '1月', value: 6850 },
+                    { date: '2月', value: 8920 },
+                    { date: '3月', value: 12480 }
+                ]
+            },
+            interaction: {
+                7: {
+                    views: 405000,
+                    likes: 7030,
+                    shares: 2290,
+                    trends: { views: 12.5, likes: 8.3, shares: 15.2 }
+                },
+                30: {
+                    views: 1565000,
+                    likes: 26840,
+                    shares: 7630,
+                    trends: { views: 18.2, likes: 12.8, shares: 22.6 }
+                },
+                90: {
+                    views: 4809000,
+                    likes: 76840,
+                    shares: 28250,
+                    trends: { views: 25.6, likes: 18.4, shares: 32.1 }
+                }
+            },
+            funnel: {
+                7: {
+                    exposure: 680000,
+                    click: 405000,
+                    read: 220000,
+                    interact: 9320
+                },
+                30: {
+                    exposure: 2580000,
+                    click: 1565000,
+                    read: 862000,
+                    interact: 34470
+                },
+                90: {
+                    exposure: 8250000,
+                    click: 4809000,
+                    read: 2650000,
+                    interact: 105090
+                }
+            }
+        };
+
+        const contentDetail = [
+            { id: 1, title: '关于开展2024年度工作总结的通知', category: '通知公告', views: 12800, likes: 456, shares: 120, duration: '3分20秒', completionRate: 78 },
+            { id: 2, title: '数字化转型工作进展报告', category: '新闻资讯', views: 8900, likes: 312, shares: 85, duration: '4分45秒', completionRate: 85 },
+            { id: 3, title: '智慧城市建设成果展示', category: '政策文件', views: 6500, likes: 278, shares: 62, duration: '2分30秒', completionRate: 65 },
+            { id: 4, title: '两会专题报道：民生改善篇', category: '新闻资讯', views: 5600, likes: 245, shares: 48, duration: '5分10秒', completionRate: 92 },
+            { id: 5, title: '安全生产知识竞赛活动方案', category: '专题活动', views: 4200, likes: 189, shares: 35, duration: '2分15秒', completionRate: 58 },
+            { id: 6, title: '第一季度工作规划部署会议纪要', category: '文件', views: 3800, likes: 156, shares: 28, duration: '3分05秒', completionRate: 72 },
+            { id: 7, title: '青年文明号创建工作计划', category: '专题活动', views: 3200, likes: 128, shares: 22, duration: '1分50秒', completionRate: 45 },
+            { id: 8, title: '节能降耗倡议书', category: '通知公告', views: 2800, likes: 98, shares: 18, duration: '1分20秒', completionRate: 38 },
+            { id: 9, title: '年度考核工作实施方案', category: '文件', views: 2400, likes: 76, shares: 15, duration: '4分30秒', completionRate: 88 },
+            { id: 10, title: '新春团拜会活动策划方案', category: '专题活动', views: 1950, likes: 65, shares: 12, duration: '2分45秒', completionRate: 62 }
+        ];
+
+        // ========== 状态管理 ==========
+        let currentRange = '7';
+        let currentMetric = 'views';
+        let currentSort = 'views';
+
+        // ========== 工具函数 ==========
+        function formatNumber(num) {
+            if (num >= 10000) {
+                return (num / 10000).toFixed(1) + '万';
+            }
+            return num.toLocaleString();
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastText').textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2000);
+        }
+
+        // ========== 渲染趋势图 ==========
+        function renderTrendChart() {
+            const chart = document.getElementById('trendChart');
+            const data = mockData[currentMetric][currentRange];
+            const maxVal = Math.max(...data.map(d => d.value));
+
+            const rangeText = currentRange === '7' ? '近7天' : (currentRange === '30' ? '近30天' : '近90天');
+            document.getElementById('trendTip').textContent = `显示${rangeText}数据，点击柱子查看详情`;
+
+            chart.innerHTML = data.map(d => {
+                const height = (d.value / maxVal * 100).toFixed(1);
+                const metricColor = currentMetric === 'views' ? 'bg-accent-blue' : (currentMetric === 'likes' ? 'bg-accent-green' : 'bg-accent-amber');
+                return `
+                <div class="flex-1 flex flex-col items-center gap-2 chart-bar cursor-pointer" data-date="${d.date}" data-value="${d.value}">
+                    <div class="w-full flex items-end justify-center h-44">
+                        <div class="w-8 ${metricColor} rounded-t-lg transition-all hover:opacity-80" style="height: ${height}%"></div>
+                    </div>
+                    <span class="text-text-muted text-xs">${d.date}</span>
+                </div>
+                `;
+            }).join('');
+
+            // 绑定点击事件
+            document.querySelectorAll('.chart-bar').forEach(bar => {
+                bar.addEventListener('click', () => {
+                    const date = bar.dataset.date;
+                    const value = bar.dataset.value;
+                    showToast(`${date} ${getMetricName()}: ${formatNumber(parseInt(value))}`);
+                });
+            });
+        }
+
+        function getMetricName() {
+            return currentMetric === 'views' ? '阅读量' : (currentMetric === 'likes' ? '点赞量' : '分享量');
+        }
+
+        // ========== 渲染互动数据 ==========
+        function renderInteraction() {
+            const data = mockData.interaction[currentRange];
+            const trends = data.trends;
+
+            document.getElementById('totalViews').textContent = formatNumber(data.views);
+            document.getElementById('totalLikes').textContent = formatNumber(data.likes);
+            document.getElementById('totalShares').textContent = formatNumber(data.shares);
+
+            updateTrend('views', trends.views);
+            updateTrend('likes', trends.likes);
+            updateTrend('shares', trends.shares);
+        }
+
+        function updateTrend(type, value) {
+            const el = document.getElementById(type + 'Trend');
+            if (value > 0) {
+                el.className = 'text-sm text-accent-green ml-2';
+                el.textContent = '↑' + value + '%';
+            } else if (value < 0) {
+                el.className = 'text-sm text-accent-red ml-2';
+                el.textContent = '↓' + Math.abs(value) + '%';
+            } else {
+                el.className = 'text-sm text-text-muted ml-2';
+                el.textContent = '持平';
+            }
+        }
+
+        // ========== 渲染转化漏斗 ==========
+        function renderFunnel() {
+            const container = document.getElementById('funnelContainer');
+            const data = mockData.funnel[currentRange];
+
+            const clickRate = ((data.click / data.exposure) * 100).toFixed(1);
+            const readRate = ((data.read / data.click) * 100).toFixed(1);
+            const interactRate = ((data.interact / data.read) * 100).toFixed(1);
+
+            container.innerHTML = `
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm">曝光</span>
+                        <span class="text-sm font-bold">${formatNumber(data.exposure)}</span>
+                    </div>
+                    <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm">点击 <span class="text-text-muted text-xs">(${clickRate}%)</span></span>
+                        <span class="text-sm font-bold">${formatNumber(data.click)}</span>
+                    </div>
+                    <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full" style="width: ${clickRate}"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm">阅读 <span class="text-text-muted text-xs">(${readRate}%)</span></span>
+                        <span class="text-sm font-bold">${formatNumber(data.read)}</span>
+                    </div>
+                    <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full" style="width: ${readRate}"></div>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="text-sm">互动 <span class="text-text-muted text-xs">(${interactRate}%)</span></span>
+                        <span class="text-sm font-bold">${formatNumber(data.interact)}</span>
+                    </div>
+                    <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
+                        <div class="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full" style="width: ${interactRate}"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ========== 渲染内容详情 ==========
+        function renderContentDetail() {
+            const tbody = document.getElementById('contentTableBody');
+            const sorted = [...contentDetail].sort((a, b) => b[currentSort] - a[currentSort]);
+
+            tbody.innerHTML = sorted.map(item => `
+                <tr class="border-b border-border-dark/50 hover:bg-primary-bg/50 cursor-pointer" data-id="${item.id}">
+                    <td class="py-3 px-4">
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm font-medium truncate max-w-[200px]">${item.title}</span>
+                        </div>
+                    </td>
+                    <td class="py-3 px-4 text-sm text-text-secondary">${item.category}</td>
+                    <td class="py-3 px-4 text-sm text-right">${formatNumber(item.views)}</td>
+                    <td class="py-3 px-4 text-sm text-right">${formatNumber(item.likes)}</td>
+                    <td class="py-3 px-4 text-sm text-right">${formatNumber(item.shares)}</td>
+                    <td class="py-3 px-4 text-sm text-right text-text-muted">${item.duration}</td>
+                    <td class="py-3 px-4 text-sm text-right">
+                        <span class="${item.completionRate >= 80 ? 'text-accent-green' : (item.completionRate >= 60 ? 'text-accent-amber' : 'text-accent-red')}">${item.completionRate}%</span>
+                    </td>
+                </tr>
+            `).join('');
+
+            // 绑定点击事件
+            document.querySelectorAll('#contentTableBody tr').forEach(row => {
+                row.addEventListener('click', () => {
+                    const id = row.dataset.id;
+                    showToast(`查看内容详情 #${id}`);
+                });
+            });
+        }
+
+        // ========== 时间范围筛选 ==========
+        document.getElementById('timeRangeSelect').addEventListener('change', (e) => {
+            currentRange = e.target.value;
+            renderAll();
+        });
+
+        // ========== 指标切换 ==========
+        document.querySelectorAll('.metric-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                currentMetric = btn.dataset.metric;
+                document.querySelectorAll('.metric-btn').forEach(b => {
+                    b.classList.remove('bg-accent-blue/20', 'text-accent-blue');
+                    b.classList.add('text-text-muted', 'hover:text-text-primary');
+                });
+                btn.classList.add('bg-accent-blue/20', 'text-accent-blue');
+                btn.classList.remove('text-text-muted', 'hover:text-text-primary');
+                renderTrendChart();
+            });
+        });
+
+        // ========== 排序切换 ==========
+        document.getElementById('sortSelect').addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            renderContentDetail();
+        });
+
+        // ========== 导出功能 ==========
+        document.getElementById('exportBtn').addEventListener('click', () => {
+            showToast('正在生成报表，请稍候...');
+            setTimeout(() => {
+                showToast('报表导出成功');
+            }, 1500);
+        });
+
+        // ========== 渲染全部 ==========
+        function renderAll() {
+            renderTrendChart();
+            renderInteraction();
+            renderFunnel();
+            renderContentDetail();
+        }
+
+        // ========== 初始化 ==========
+        renderAll();
+    </script>
 </body>
 </html>
