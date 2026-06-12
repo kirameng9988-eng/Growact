@@ -11,17 +11,17 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-bg': '#030714',
-                        'card-bg': '#0a1628',
-                        'border-dark': '#1a2744',
-                        'accent-blue': '#3b82f6',
-                        'accent-cyan': '#06b6d4',
-                        'accent-green': '#10b981',
-                        'accent-amber': '#f59e0b',
-                        'accent-red': '#ef4444',
-                        'text-primary': '#f1f5f9',
-                        'text-secondary': '#94a3b8',
-                        'text-muted': '#475569'
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
                     }
                 }
             }
@@ -29,8 +29,8 @@
     </script>
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
-        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
-        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
         .config-tab { transition: all 0.2s; }
         .config-tab:hover { color: #3b82f6; }
         .config-tab.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
@@ -39,98 +39,122 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
-<body class="bg-primary-bg text-text-primary min-h-screen">
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
         <!-- 顶部导航 -->
-    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
                 <div class="flex items-center gap-3">
             <img src="images/logo.png" alt="logo" class="h-9">
-            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
         </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
-            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
-                    <span class="text-xs text-text-muted">超级管理员</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
                 </div>
-                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
             </div>
         </div>
     </header>
 
-    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
         <nav class="py-4">
-            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
             <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <i class="fas fa-th-large w-5 text-gray-600"></i>
                 <span>工作台</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
             <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-file-alt w-5 text-gray-600"></i>
                 <span>内容管理</span>
             </a>
             <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-tree w-5 text-gray-600"></i>
                 <span>分类管理</span>
             </a>
             <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <i class="fas fa-tags w-5 text-gray-600"></i>
                 <span>标签管理</span>
             </a>
             <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
                 <span>审核中心</span>
             </a>
             <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <i class="fas fa-paper-plane w-5 text-gray-600"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-calendar-alt w-5 text-gray-600"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users w-5 text-gray-600"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-clipboard-check w-5 text-gray-600"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>活动统计</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <i class="fas fa-images w-5 text-gray-600"></i>
                 <span>图片管理</span>
             </a>
             <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
                 <span>文件管理</span>
             </a>
             <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <i class="fas fa-video w-5 text-gray-600"></i>
                 <span>视频管理</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
             <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
                 <span>数据概览</span>
             </a>
             <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
                 <span>内容分析</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
                 <span>用户管理</span>
             </a>
             <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
                 <span>角色权限</span>
             </a>
             <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <i class="fas fa-history w-5 text-gray-600"></i>
                 <span>日志管理</span>
             </a>
 
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-cog w-5 text-gray-600"></i>
                 <span>系统设置</span>
             </a>
         </nav>
@@ -139,49 +163,49 @@
     <main class="ml-[220px] mt-16 p-6">
         <div class="mb-6">
             <h1 class="text-2xl font-semibold">系统设置</h1>
-            <p class="text-text-muted mt-1">配置系统基本参数和高级选项</p>
+            <p class="text-gray-500 mt-1">配置系统基本参数和高级选项</p>
         </div>
 
         <!-- 页签导航 -->
-        <div class="bg-card-bg rounded-xl border border-border-dark mb-6">
-            <div class="flex border-b border-border-dark">
+        <div class="bg-white rounded-xl border border-[#E2E8F0] mb-6">
+            <div class="flex border-b border-[#E2E8F0]">
                 <button onclick="switchTab('basic')" id="tab-basic" class="config-tab active px-6 py-4 text-sm font-medium">基本设置</button>
-                <button onclick="switchTab('content')" id="tab-content" class="config-tab px-6 py-4 text-sm font-medium text-text-secondary">内容设置</button>
-                <button onclick="switchTab('security')" id="tab-security" class="config-tab px-6 py-4 text-sm font-medium text-text-secondary">安全设置</button>
-                <button onclick="switchTab('review')" id="tab-review" class="config-tab px-6 py-4 text-sm font-medium text-text-secondary">审核设置</button>
-                <button onclick="switchTab('system')" id="tab-system" class="config-tab px-6 py-4 text-sm font-medium text-text-secondary">系统信息</button>
+                <button onclick="switchTab('content')" id="tab-content" class="config-tab px-6 py-4 text-sm font-medium text-gray-600">内容设置</button>
+                <button onclick="switchTab('security')" id="tab-security" class="config-tab px-6 py-4 text-sm font-medium text-gray-600">安全设置</button>
+                <button onclick="switchTab('review')" id="tab-review" class="config-tab px-6 py-4 text-sm font-medium text-gray-600">审核设置</button>
+                <button onclick="switchTab('system')" id="tab-system" class="config-tab px-6 py-4 text-sm font-medium text-gray-600">系统信息</button>
             </div>
 
             <!-- 基本设置 -->
             <div id="content-basic" class="tab-content active p-6">
                 <div class="grid grid-cols-1 gap-6">
                     <div class="bg-primary-bg/50 rounded-lg p-5">
-                        <h4 class="text-sm font-medium text-text-secondary mb-4">基本信息</h4>
+                        <h4 class="text-sm font-medium text-gray-600 mb-4">基本信息</h4>
                         <div class="grid grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm text-text-muted mb-2">系统名称</label>
-                                <input type="text" value="内容中台系统" class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                                <label class="block text-sm text-gray-500 mb-2">系统名称</label>
+                                <input type="text" value="内容中台系统" class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                             </div>
                             <div>
-                                <label class="block text-sm text-text-muted mb-2">系统版本</label>
-                                <input type="text" value="v2.0.5" class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" disabled>
+                                <label class="block text-sm text-gray-500 mb-2">系统版本</label>
+                                <input type="text" value="v2.0.5" class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none" disabled>
                             </div>
                         </div>
                     </div>
                     <div class="bg-primary-bg/50 rounded-lg p-5">
-                        <h4 class="text-sm font-medium text-text-secondary mb-4">系统描述与Logo</h4>
+                        <h4 class="text-sm font-medium text-gray-600 mb-4">系统描述与Logo</h4>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm text-text-muted mb-2">系统描述</label>
-                                <textarea rows="2" class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none">面向政务和企业级用户的内容管理平台</textarea>
+                                <label class="block text-sm text-gray-500 mb-2">系统描述</label>
+                                <textarea rows="2" class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none">面向政务和企业级用户的内容管理平台</textarea>
                             </div>
                             <div>
-                                <label class="block text-sm text-text-muted mb-2">Logo设置</label>
+                                <label class="block text-sm text-gray-500 mb-2">Logo设置</label>
                                 <div class="flex items-center gap-4">
-                                    <div class="w-16 h-16 rounded-xl bg-card-bg border border-border-dark flex items-center justify-center">
+                                    <div class="w-16 h-16 rounded-xl bg-card-bg border border-[#E2E8F0] flex items-center justify-center">
                                         <i class="fas fa-cube text-accent-blue text-2xl"></i>
                                     </div>
-                                    <button class="px-4 py-2 border border-border-dark rounded-xl hover:border-accent-blue transition-colors text-sm">更换Logo</button>
+                                    <button class="px-4 py-2 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors text-sm">更换Logo</button>
                                 </div>
                             </div>
                         </div>
@@ -193,11 +217,11 @@
             <div id="content-content" class="tab-content p-6">
                 <div class="grid grid-cols-1 gap-6">
                     <div class="bg-primary-bg/50 rounded-lg p-5">
-                        <h4 class="text-sm font-medium text-text-secondary mb-4">列表与保存</h4>
+                        <h4 class="text-sm font-medium text-gray-600 mb-4">列表与保存</h4>
                         <div class="grid grid-cols-2 gap-6">
                             <div>
-                                <label class="block text-sm text-text-muted mb-2">每页默认条数</label>
-                                <select class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                                <label class="block text-sm text-gray-500 mb-2">每页默认条数</label>
+                                <select class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                                     <option>10</option>
                                     <option selected>20</option>
                                     <option>50</option>
@@ -205,8 +229,8 @@
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm text-text-muted mb-2">自动保存间隔</label>
-                                <select class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                                <label class="block text-sm text-gray-500 mb-2">自动保存间隔</label>
+                                <select class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                                     <option>30秒</option>
                                     <option selected>1分钟</option>
                                     <option>2分钟</option>
@@ -216,20 +240,20 @@
                         </div>
                     </div>
                     <div class="bg-primary-bg/50 rounded-lg p-5">
-                        <h4 class="text-sm font-medium text-text-secondary mb-4">上传限制</h4>
+                        <h4 class="text-sm font-medium text-gray-600 mb-4">上传限制</h4>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm text-text-muted mb-2">允许上传的文件类型</label>
-                                <input type="text" value=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.mp4" class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                                <label class="block text-sm text-gray-500 mb-2">允许上传的文件类型</label>
+                                <input type="text" value=".jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx,.ppt,.pptx,.mp4" class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                             </div>
                             <div class="grid grid-cols-2 gap-6">
                                 <div>
-                                    <label class="block text-sm text-text-muted mb-2">图片大小限制 (MB)</label>
-                                    <input type="number" value="10" class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                                    <label class="block text-sm text-gray-500 mb-2">图片大小限制 (MB)</label>
+                                    <input type="number" value="10" class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                                 </div>
                                 <div>
-                                    <label class="block text-sm text-text-muted mb-2">视频大小限制 (MB)</label>
-                                    <input type="number" value="500" class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                                    <label class="block text-sm text-gray-500 mb-2">视频大小限制 (MB)</label>
+                                    <input type="number" value="500" class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                                 </div>
                             </div>
                         </div>
@@ -241,16 +265,16 @@
             <div id="content-security" class="tab-content p-6">
                 <div class="grid grid-cols-1 gap-6">
                     <div class="bg-primary-bg/50 rounded-lg p-5">
-                        <h4 class="text-sm font-medium text-text-secondary mb-4">会话与认证</h4>
+                        <h4 class="text-sm font-medium text-gray-600 mb-4">会话与认证</h4>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm text-text-muted mb-2">会话超时 (分钟)</label>
-                                <input type="number" value="30" class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                                <label class="block text-sm text-gray-500 mb-2">会话超时 (分钟)</label>
+                                <input type="number" value="30" class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                             </div>
                             <div class="flex items-center justify-between py-2">
                                 <div>
                                     <span class="text-sm">双因子认证</span>
-                                    <p class="text-xs text-text-muted mt-1">启用后登录需要手机验证码</p>
+                                    <p class="text-xs text-gray-500 mt-1">启用后登录需要手机验证码</p>
                                 </div>
                                 <div class="relative">
                                     <input type="checkbox" id="twoFactor" class="sr-only peer">
@@ -263,7 +287,7 @@
                             <div class="flex items-center justify-between py-2">
                                 <div>
                                     <span class="text-sm">登录日志记录</span>
-                                    <p class="text-xs text-text-muted mt-1">记录所有用户登录行为</p>
+                                    <p class="text-xs text-gray-500 mt-1">记录所有用户登录行为</p>
                                 </div>
                                 <div class="relative">
                                     <input type="checkbox" id="loginLog" checked class="sr-only peer">
@@ -276,12 +300,12 @@
                         </div>
                     </div>
                     <div class="bg-primary-bg/50 rounded-lg p-5">
-                        <h4 class="text-sm font-medium text-text-secondary mb-4">安全策略</h4>
+                        <h4 class="text-sm font-medium text-gray-600 mb-4">安全策略</h4>
                         <div class="space-y-4">
                             <div class="flex items-center justify-between py-2">
                                 <div>
                                     <span class="text-sm">密码复杂度要求</span>
-                                    <p class="text-xs text-text-muted mt-1">至少8位，包含字母和数字</p>
+                                    <p class="text-xs text-gray-500 mt-1">至少8位，包含字母和数字</p>
                                 </div>
                                 <div class="relative">
                                     <input type="checkbox" id="pwdPolicy" checked class="sr-only peer">
@@ -294,7 +318,7 @@
                             <div class="flex items-center justify-between py-2">
                                 <div>
                                     <span class="text-sm">IP访问限制</span>
-                                    <p class="text-xs text-text-muted mt-1">仅允许指定IP访问管理后台</p>
+                                    <p class="text-xs text-gray-500 mt-1">仅允许指定IP访问管理后台</p>
                                 </div>
                                 <div class="relative">
                                     <input type="checkbox" id="ipLimit" class="sr-only peer">
@@ -313,11 +337,11 @@
             <div id="content-review" class="tab-content p-6">
                 <div class="grid grid-cols-1 gap-6">
                     <div class="bg-primary-bg/50 rounded-lg p-5">
-                        <h4 class="text-sm font-medium text-text-secondary mb-4">审核流程</h4>
+                        <h4 class="text-sm font-medium text-gray-600 mb-4">审核流程</h4>
                         <div class="space-y-4">
                             <div>
-                                <label class="block text-sm text-text-muted mb-2">审核模式</label>
-                                <select class="w-full bg-card-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                                <label class="block text-sm text-gray-500 mb-2">审核模式</label>
+                                <select class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                                     <option>人工审核</option>
                                     <option>自动审核</option>
                                     <option>免审核</option>
@@ -326,7 +350,7 @@
                             <div class="flex items-center justify-between py-2">
                                 <div>
                                     <span class="text-sm">提交自动通知</span>
-                                    <p class="text-xs text-text-muted mt-1">内容提交时自动通知审核人员</p>
+                                    <p class="text-xs text-gray-500 mt-1">内容提交时自动通知审核人员</p>
                                 </div>
                                 <div class="relative">
                                     <input type="checkbox" id="submitNotify" checked class="sr-only peer">
@@ -339,7 +363,7 @@
                             <div class="flex items-center justify-between py-2">
                                 <div>
                                     <span class="text-sm">驳回自动通知</span>
-                                    <p class="text-xs text-text-muted mt-1">内容驳回时自动通知提交人</p>
+                                    <p class="text-xs text-gray-500 mt-1">内容驳回时自动通知提交人</p>
                                 </div>
                                 <div class="relative">
                                     <input type="checkbox" id="rejectNotify" checked class="sr-only peer">
@@ -358,40 +382,40 @@
             <div id="content-system" class="tab-content p-6">
                 <div class="grid grid-cols-1 gap-6">
                     <div class="bg-primary-bg/50 rounded-lg p-5">
-                        <h4 class="text-sm font-medium text-text-secondary mb-4">版本信息</h4>
+                        <h4 class="text-sm font-medium text-gray-600 mb-4">版本信息</h4>
                         <div class="grid grid-cols-2 gap-6">
-                            <div class="flex items-center justify-between py-3 border-b border-border-dark">
-                                <span class="text-sm text-text-muted">系统版本</span>
+                            <div class="flex items-center justify-between py-3 border-b border-[#E2E8F0]">
+                                <span class="text-sm text-gray-500">系统版本</span>
                                 <span class="text-sm font-medium">v2.0.5</span>
                             </div>
-                            <div class="flex items-center justify-between py-3 border-b border-border-dark">
-                                <span class="text-sm text-text-muted">数据库版本</span>
+                            <div class="flex items-center justify-between py-3 border-b border-[#E2E8F0]">
+                                <span class="text-sm text-gray-500">数据库版本</span>
                                 <span class="text-sm font-medium">MySQL 8.0</span>
                             </div>
-                            <div class="flex items-center justify-between py-3 border-b border-border-dark">
-                                <span class="text-sm text-text-muted">运行环境</span>
+                            <div class="flex items-center justify-between py-3 border-b border-[#E2E8F0]">
+                                <span class="text-sm text-gray-500">运行环境</span>
                                 <span class="text-sm font-medium">Nginx 1.24 + PHP 8.1</span>
                             </div>
-                            <div class="flex items-center justify-between py-3 border-b border-border-dark">
-                                <span class="text-sm text-text-muted">最后备份时间</span>
+                            <div class="flex items-center justify-between py-3 border-b border-[#E2E8F0]">
+                                <span class="text-sm text-gray-500">最后备份时间</span>
                                 <span class="text-sm font-medium">2024-01-15 03:00</span>
                             </div>
                         </div>
                     </div>
                     <div class="bg-primary-bg/50 rounded-lg p-5">
-                        <h4 class="text-sm font-medium text-text-secondary mb-4">系统状态</h4>
+                        <h4 class="text-sm font-medium text-gray-600 mb-4">系统状态</h4>
                         <div class="grid grid-cols-3 gap-4">
                             <div class="bg-card-bg rounded-lg p-4 text-center">
                                 <div class="text-2xl font-bold text-accent-green mb-1">正常</div>
-                                <div class="text-xs text-text-muted">服务状态</div>
+                                <div class="text-xs text-gray-500">服务状态</div>
                             </div>
                             <div class="bg-card-bg rounded-lg p-4 text-center">
                                 <div class="text-2xl font-bold text-accent-blue mb-1">99.9%</div>
-                                <div class="text-xs text-text-muted">运行时间</div>
+                                <div class="text-xs text-gray-500">运行时间</div>
                             </div>
                             <div class="bg-card-bg rounded-lg p-4 text-center">
                                 <div class="text-2xl font-bold text-accent-cyan mb-1">128</div>
-                                <div class="text-xs text-text-muted">在线用户</div>
+                                <div class="text-xs text-gray-500">在线用户</div>
                             </div>
                         </div>
                     </div>
@@ -400,7 +424,7 @@
         </div>
 
         <div class="mt-6 flex justify-end gap-3">
-            <button class="px-6 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">恢复默认</button>
+            <button class="px-6 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">恢复默认</button>
             <button onclick="showToast('设置已保存')" class="px-6 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存设置</button>
         </div>
     </main>
@@ -416,10 +440,10 @@
             // Update tab buttons
             document.querySelectorAll('.config-tab').forEach(tab => {
                 tab.classList.remove('active');
-                tab.classList.add('text-text-secondary');
+                tab.classList.add('text-gray-600');
             });
             document.getElementById('tab-' + tabId).classList.add('active');
-            document.getElementById('tab-' + tabId).classList.remove('text-text-secondary');
+            document.getElementById('tab-' + tabId).classList.remove('text-gray-600');
 
             // Update content
             document.querySelectorAll('.tab-content').forEach(content => {

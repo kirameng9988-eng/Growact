@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热门活动配置 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'secondary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #F8FAFC; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .sidebar-menu-item.active i { color: #0A61FF; }
+        .table-row:hover { background: #F8FAFC; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .drag-handle { cursor: grab; }
+        .drag-handle:active { cursor: grabbing; }
+        .drag-over { background: rgba(10, 97, 255, 0.1) !important; }
+        .sortable-ghost { opacity: 0.4; }
+    </style>
+</head>
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium text-white">张明远</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- 左侧菜单 -->
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-th-large w-5 text-gray-500"></i>
+                <span>工作台</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-file-alt w-5 text-gray-500"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-tree w-5 text-gray-500"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-gray-600"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
+                <span>审核中心</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">12</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-calendar-alt w-5 text-gray-500"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-open w-5 text-gray-500"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-users w-5 text-gray-500"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-clipboard-check w-5 text-gray-500"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-chart-line w-5 text-gray-500"></i>
+                <span>活动统计</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">专区配置</div>
+            <a href="zone-config.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-900">
+                <i class="fas fa-cog w-5 text-accent-blue"></i>
+                <span>专区配置</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-gray-600"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-gray-600"></i>
+                <span>视频管理</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>内容分析</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-gray-600"></i>
+                <span>日志管理</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-gray-600"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="ml-[220px] mt-16 p-6">
+        <!-- 页面标题 -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">热门活动配置</h1>
+                <p class="text-gray-500 mt-1">配置门户首页展示的热门活动，支持拖拽排序</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="refreshList()" class="px-4 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
+                    <i class="fas fa-sync-alt"></i>
+                    刷新
+                </button>
+                <button onclick="openAddModal()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    添加热门活动
+                </button>
+            </div>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent-blue/20 flex items-center justify-center">
+                        <i class="fas fa-fire text-accent-blue"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900" id="totalCount">0</p>
+                        <p class="text-sm text-gray-500">已配置热门</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent-green/20 flex items-center justify-center">
+                        <i class="fas fa-check-circle text-accent-green"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900" id="activeCount">0</p>
+                        <p class="text-sm text-gray-500">展示中</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-accent-amber/20 flex items-center justify-center">
+                        <i class="fas fa-clock text-accent-amber"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900" id="pendingCount">0</p>
+                        <p class="text-sm text-gray-500">即将开始</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-gray-200 flex items-center justify-center">
+                        <i class="fas fa-times-circle text-gray-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-2xl font-bold text-gray-900" id="expiredCount">0</p>
+                        <p class="text-sm text-gray-500">已过期</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-xl p-4 mb-6 border border-[#E2E8F0]">
+            <div class="flex items-center gap-4 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <select id="filterPosition" onchange="filterList()" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                        <option value="">全部位置</option>
+                        <option value="home_featured">首页精选</option>
+                        <option value="home_banner">首页Banner</option>
+                        <option value="list_sticky">列表置顶</option>
+                    </select>
+                    <select id="filterStatus" onchange="filterList()" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                        <option value="">全部状态</option>
+                        <option value="active">展示中</option>
+                        <option value="pending">即将开始</option>
+                        <option value="expired">已过期</option>
+                    </select>
+                </div>
+                <div class="flex-1"></div>
+                <div class="text-sm text-gray-500">
+                    <span>提示：拖动左侧手柄可调整排序，权重越高越靠前</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 热门活动列表 -->
+        <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-primary-bg/50">
+                        <th class="px-4 py-3 font-medium w-12">排序</th>
+                        <th class="px-4 py-3 font-medium">活动名称</th>
+                        <th class="px-4 py-3 font-medium w-28">推荐位置</th>
+                        <th class="px-4 py-3 font-medium w-20">权重</th>
+                        <th class="px-4 py-3 font-medium w-48">展示时间</th>
+                        <th class="px-4 py-3 font-medium w-24">状态</th>
+                        <th class="px-4 py-3 font-medium w-40 text-right">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="hotActivityTableBody">
+                </tbody>
+            </table>
+            <!-- 分页 -->
+            <div class="flex items-center justify-between px-4 py-3 border-t border-[#E2E8F0]">
+                <span id="paginationInfo" class="text-sm text-gray-500">显示 0 条，共 0 条</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="goToPage(currentPage - 1)" id="prevPage" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm disabled:opacity-50">上一页</button>
+                    <button onclick="goToPage(1)" class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
+                    <button onclick="goToPage(2)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">2</button>
+                    <button onclick="goToPage(currentPage + 1)" id="nextPage" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">下一页</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- 添加/编辑弹窗 -->
+    <div id="formModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[550px] max-h-[90vh] overflow-hidden border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 id="modalTitle" class="text-lg font-medium">添加热门活动</h3>
+                <button onclick="closeModal('formModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+                <input type="hidden" id="editId">
+                <div class="space-y-5">
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">选择活动 <span class="text-accent-red">*</span></label>
+                        <div class="relative">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                            <input type="text" id="activitySearchInput" oninput="filterActivityOptions()" placeholder="搜索活动名称..." class="w-full bg-white border border-[#E2E8F0] rounded-xl pl-10 pr-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
+                        </div>
+                        <div id="activityOptions" class="mt-2 max-h-48 overflow-y-auto border border-[#E2E8F0] rounded-xl divide-y">
+                        </div>
+                        <p id="selectedActivityName" class="mt-2 text-sm text-accent-blue font-medium hidden"></p>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">推荐位置 <span class="text-accent-red">*</span></label>
+                        <select id="configPosition" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                            <option value="">请选择推荐位置</option>
+                            <option value="home_featured">首页精选</option>
+                            <option value="home_banner">首页Banner</option>
+                            <option value="list_sticky">列表置顶</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">展示权重</label>
+                        <input type="number" id="configWeight" value="50" min="1" max="100" placeholder="数字越大越靠前" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
+                        <p class="text-xs text-gray-500 mt-1">权重范围：1-100，数字越大排序越靠前</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">开始时间</label>
+                            <input type="date" id="configStartTime" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-2">结束时间</label>
+                            <input type="date" id="configEndTime" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-500">说明：设置时间后，系统将自动判断展示状态，过期后不再展示</p>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-gray-50">
+                <button onclick="closeModal('formModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="saveConfig()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
+                <div class="w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认移除</h3>
+                    <p class="text-sm text-gray-500 mt-1">从热门配置中移除，不会删除活动本身</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600">确定要移除以下热门配置吗？</p>
+                <p id="deleteActivityName" class="text-sm font-medium mt-2 text-gray-900"></p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('deleteModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button id="confirmDeleteBtn" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认移除</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 所有活动数据（用于选择器）
+        const allActivities = [
+            { id: 101, title: '2024上海数据开放创新应用大赛', category: '科技创新', status: 'published' },
+            { id: 102, title: '可信数据空间建设研讨会', category: '行业峰会', status: 'published' },
+            { id: 103, title: '数据资产入表与评估培训', category: '教育培训', status: 'published' },
+            { id: 104, title: '公共数据开放应用案例分享会', category: '文化交流', status: 'published' },
+            { id: 105, title: '数据交易合规与风险管理', category: '行业峰会', status: 'published' },
+            { id: 106, title: '企业数字化转型Workshop', category: '团建拓展', status: 'published' },
+            { id: 107, title: '数据安全与隐私保护培训', category: '教育培训', status: 'published' },
+            { id: 108, title: '智慧城市创新应用展示', category: '科技创新', status: 'pending' },
+            { id: 109, title: '年度数字化创新奖评选', category: '评选表彰', status: 'published' },
+            { id: 110, title: '数据生态合作伙伴大会', category: '行业峰会', status: 'draft' },
+        ];
+
+        // 热门活动配置（LocalStorage持久化）
+        let hotActivitiesConfig = [];
+
+        let currentPage = 1;
+        let selectedActivityId = null;
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadConfig();
+            renderTable();
+            updateStats();
+        });
+
+        // 从LocalStorage加载配置
+        function loadConfig() {
+            const saved = localStorage.getItem('hotActivitiesConfig');
+            if (saved) {
+                hotActivitiesConfig = JSON.parse(saved);
+            } else {
+                // 默认Mock数据
+                hotActivitiesConfig = [
+                    { id: 1, activityId: 101, activityTitle: '2024上海数据开放创新应用大赛', position: 'home_featured', weight: 100, startTime: '2024-10-15', endTime: '2024-12-20', status: 'active' },
+                    { id: 2, activityId: 102, activityTitle: '可信数据空间建设研讨会', position: 'home_banner', weight: 95, startTime: '2024-11-01', endTime: '2024-11-30', status: 'pending' },
+                    { id: 3, activityId: 103, activityTitle: '数据资产入表与评估培训', position: 'home_featured', weight: 90, startTime: '2024-11-10', endTime: '2024-11-25', status: 'active' },
+                    { id: 4, activityId: 104, activityTitle: '公共数据开放应用案例分享会', position: 'list_sticky', weight: 80, startTime: '2024-11-15', endTime: '2024-11-20', status: 'pending' },
+                    { id: 5, activityId: 105, activityTitle: '数据交易合规与风险管理', position: 'home_featured', weight: 70, startTime: '2024-10-01', endTime: '2024-10-31', status: 'expired' },
+                ];
+                saveConfig();
+            }
+            // 更新自动过期状态
+            updateAutoStatus();
+        }
+
+        // 保存到LocalStorage
+        function saveConfig() {
+            localStorage.setItem('hotActivitiesConfig', JSON.stringify(hotActivitiesConfig));
+        }
+
+        // 更新自动过期状态
+        function updateAutoStatus() {
+            const now = new Date().toISOString().substring(0, 10);
+            hotActivitiesConfig.forEach(config => {
+                if (config.endTime && config.endTime < now) {
+                    config.status = 'expired';
+                } else if (config.startTime && config.startTime > now) {
+                    config.status = 'pending';
+                } else {
+                    config.status = 'active';
+                }
+            });
+            saveConfig();
+        }
+
+        // 获取过滤后的配置
+        function getFilteredConfig() {
+            const position = document.getElementById('filterPosition').value;
+            const status = document.getElementById('filterStatus').value;
+
+            return hotActivitiesConfig.filter(config => {
+                if (position && config.position !== position) return false;
+                if (status && config.status !== status) return false;
+                return true;
+            }).sort((a, b) => b.weight - a.weight);
+        }
+
+        // 渲染表格
+        function renderTable() {
+            const tbody = document.getElementById('hotActivityTableBody');
+            const filtered = getFilteredConfig();
+            const start = (currentPage - 1) * 10;
+            const end = Math.min(start + 10, filtered.length);
+            const pageData = filtered.slice(start, end);
+
+            if (pageData.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-4 py-12 text-center text-gray-500">
+                            <div class="flex flex-col items-center">
+                                <i class="fas fa-fire text-4xl text-gray-300 mb-3"></i>
+                                <p>暂无热门活动配置</p>
+                                <button onclick="openAddModal()" class="mt-3 text-accent-blue hover:underline">点击添加</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = pageData.map((config, index) => `
+                    <tr class="table-row border-b border-[#E2E8F0] drag-item" data-id="${config.id}">
+                        <td class="px-4 py-3">
+                            <div class="drag-handle text-gray-400 hover:text-gray-600">
+                                <i class="fas fa-bars"></i>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="font-medium text-gray-900">${config.activityTitle}</div>
+                        </td>
+                        <td class="px-4 py-3">
+                            ${getPositionBadge(config.position)}
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600">${config.weight}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">${config.startTime} 至 ${config.endTime}</td>
+                        <td class="px-4 py-3">${getStatusBadge(config.status)}</td>
+                        <td class="px-4 py-3 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <button onclick="editConfig(${config.id})" class="text-accent-cyan hover:text-cyan-700 text-sm">编辑</button>
+                                <button onclick="deleteConfig(${config.id})" class="text-accent-red hover:text-red-700 text-sm">移除</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            document.getElementById('paginationInfo').textContent = `显示 ${filtered.length > 0 ? start + 1 : 0}-${end} 条，共 ${filtered.length} 条`;
+        }
+
+        function getPositionBadge(position) {
+            const map = {
+                'home_featured': '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">首页精选</span>',
+                'home_banner': '<span class="px-2 py-1 text-xs rounded-full bg-purple-100 text-purple-700">首页Banner</span>',
+                'list_sticky': '<span class="px-2 py-1 text-xs rounded-full bg-cyan-100 text-cyan-700">列表置顶</span>'
+            };
+            return map[position] || position;
+        }
+
+        function getStatusBadge(status) {
+            const map = {
+                'active': '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">展示中</span>',
+                'pending': '<span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">即将开始</span>',
+                'expired': '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-500">已过期</span>'
+            };
+            return map[status] || status;
+        }
+
+        function updateStats() {
+            const now = new Date().toISOString().substring(0, 10);
+            let active = 0, pending = 0, expired = 0;
+
+            hotActivitiesConfig.forEach(config => {
+                if (config.endTime < now) {
+                    expired++;
+                } else if (config.startTime > now) {
+                    pending++;
+                } else {
+                    active++;
+                }
+            });
+
+            document.getElementById('totalCount').textContent = hotActivitiesConfig.length;
+            document.getElementById('activeCount').textContent = active;
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('expiredCount').textContent = expired;
+        }
+
+        function filterList() {
+            currentPage = 1;
+            renderTable();
+        }
+
+        function goToPage(page) {
+            const filtered = getFilteredConfig();
+            const totalPages = Math.ceil(filtered.length / 10);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderTable();
+        }
+
+        function refreshList() {
+            updateAutoStatus();
+            renderTable();
+            updateStats();
+            showToast('列表已刷新', 'success');
+        }
+
+        // 打开添加弹窗
+        function openAddModal() {
+            document.getElementById('modalTitle').textContent = '添加热门活动';
+            document.getElementById('editId').value = '';
+            document.getElementById('activitySearchInput').value = '';
+            document.getElementById('configPosition').value = '';
+            document.getElementById('configWeight').value = '50';
+            document.getElementById('configStartTime').value = '';
+            document.getElementById('configEndTime').value = '';
+            selectedActivityId = null;
+            document.getElementById('selectedActivityName').classList.add('hidden');
+            document.getElementById('selectedActivityName').textContent = '';
+
+            // 渲染活动选择列表
+            renderActivityOptions(allActivities);
+
+            openModal('formModal');
+        }
+
+        // 渲染活动选择列表
+        function renderActivityOptions(activities) {
+            const container = document.getElementById('activityOptions');
+            // 过滤掉已配置的活动
+            const configuredIds = hotActivitiesConfig.map(c => c.activityId);
+            const available = activities.filter(a => !configuredIds.includes(a.id));
+
+            if (available.length === 0) {
+                container.innerHTML = '<div class="p-4 text-center text-gray-500 text-sm">所有活动都已配置过</div>';
+                return;
+            }
+
+            container.innerHTML = available.map(activity => `
+                <div class="activity-option p-3 hover:bg-blue-50 cursor-pointer flex items-center gap-3 ${selectedActivityId === activity.id ? 'bg-blue-50 border border-accent-blue' : ''}" onclick="selectActivity(${activity.id}, '${activity.title}')">
+                    <div class="w-5 h-5 rounded-full border-2 ${selectedActivityId === activity.id ? 'border-accent-blue bg-accent-blue' : 'border-gray-300'} flex items-center justify-center">
+                        ${selectedActivityId === activity.id ? '<i class="fas fa-check text-white text-xs"></i>' : ''}
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-900">${activity.title}</p>
+                        <p class="text-xs text-gray-500">${activity.category}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterActivityOptions() {
+            const search = document.getElementById('activitySearchInput').value.toLowerCase();
+            const filtered = allActivities.filter(a => a.title.toLowerCase().includes(search));
+            const configuredIds = hotActivitiesConfig.map(c => c.activityId);
+            const available = filtered.filter(a => !configuredIds.includes(a.id));
+            renderActivityOptions(available);
+        }
+
+        function selectActivity(id, title) {
+            selectedActivityId = id;
+            document.getElementById('selectedActivityName').textContent = `已选择：${title}`;
+            document.getElementById('selectedActivityName').classList.remove('hidden');
+            // 更新选项样式
+            document.querySelectorAll('.activity-option').forEach(opt => {
+                opt.classList.remove('bg-blue-50', 'border', 'border-accent-blue');
+            });
+            event.currentTarget.classList.add('bg-blue-50', 'border', 'border-accent-blue');
+            // 更新radio样式
+            document.querySelectorAll('.activity-option .fa-check').forEach(check => {
+                check.parentElement.parentElement.innerHTML = '';
+            });
+            event.currentTarget.querySelector('.w-5').innerHTML = '<i class="fas fa-check text-white text-xs"></i>';
+        }
+
+        // 编辑配置
+        function editConfig(id) {
+            const config = hotActivitiesConfig.find(c => c.id === id);
+            if (!config) return;
+
+            document.getElementById('modalTitle').textContent = '编辑热门配置';
+            document.getElementById('editId').value = id;
+            document.getElementById('configPosition').value = config.position;
+            document.getElementById('configWeight').value = config.weight;
+            document.getElementById('configStartTime').value = config.startTime;
+            document.getElementById('configEndTime').value = config.endTime;
+
+            // 显示已选活动
+            selectedActivityId = config.activityId;
+            document.getElementById('selectedActivityName').textContent = `已选择：${config.activityTitle}`;
+            document.getElementById('selectedActivityName').classList.remove('hidden');
+            document.getElementById('activitySearchInput').value = '';
+
+            // 渲染活动选项（编辑时显示当前选中的活动）
+            renderActivityOptionsForEdit(config);
+
+            openModal('formModal');
+        }
+
+        function renderActivityOptionsForEdit(currentConfig) {
+            const container = document.getElementById('activityOptions');
+            const configuredIds = hotActivitiesConfig
+                .filter(c => c.activityId !== currentConfig.activityId)
+                .map(c => c.activityId);
+
+            const available = allActivities.filter(a => !configuredIds.includes(a.id) || a.id === currentConfig.activityId);
+
+            container.innerHTML = available.map(activity => `
+                <div class="activity-option p-3 hover:bg-blue-50 cursor-pointer flex items-center gap-3 ${selectedActivityId === activity.id ? 'bg-blue-50 border border-accent-blue' : ''}" onclick="selectActivity(${activity.id}, '${activity.title}')">
+                    <div class="w-5 h-5 rounded-full border-2 ${selectedActivityId === activity.id ? 'border-accent-blue bg-accent-blue' : 'border-gray-300'} flex items-center justify-center">
+                        ${selectedActivityId === activity.id ? '<i class="fas fa-check text-white text-xs"></i>' : ''}
+                    </div>
+                    <div class="flex-1">
+                        <p class="text-sm font-medium text-gray-900">${activity.title}</p>
+                        <p class="text-xs text-gray-500">${activity.category}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 保存配置
+        function saveConfig() {
+            if (!selectedActivityId) {
+                showToast('请选择活动', 'warning');
+                return;
+            }
+
+            const position = document.getElementById('configPosition').value;
+            if (!position) {
+                showToast('请选择推荐位置', 'warning');
+                return;
+            }
+
+            const weight = parseInt(document.getElementById('configWeight').value) || 50;
+            const startTime = document.getElementById('configStartTime').value;
+            const endTime = document.getElementById('configEndTime').value;
+
+            if (!startTime || !endTime) {
+                showToast('请设置展示时间', 'warning');
+                return;
+            }
+
+            if (startTime > endTime) {
+                showToast('开始时间不能晚于结束时间', 'warning');
+                return;
+            }
+
+            const activity = allActivities.find(a => a.id === selectedActivityId);
+            const editId = document.getElementById('editId').value;
+
+            if (editId) {
+                // 编辑
+                const config = hotActivitiesConfig.find(c => c.id === parseInt(editId));
+                if (config) {
+                    config.activityId = selectedActivityId;
+                    config.activityTitle = activity.title;
+                    config.position = position;
+                    config.weight = weight;
+                    config.startTime = startTime;
+                    config.endTime = endTime;
+                }
+                showToast('配置已更新', 'success');
+            } else {
+                // 新增
+                const newId = hotActivitiesConfig.length > 0 ? Math.max(...hotActivitiesConfig.map(c => c.id)) + 1 : 1;
+                hotActivitiesConfig.push({
+                    id: newId,
+                    activityId: selectedActivityId,
+                    activityTitle: activity.title,
+                    position: position,
+                    weight: weight,
+                    startTime: startTime,
+                    endTime: endTime,
+                    status: 'pending'
+                });
+                showToast('热门活动已添加', 'success');
+            }
+
+            saveConfig();
+            updateAutoStatus();
+            closeModal('formModal');
+            renderTable();
+            updateStats();
+        }
+
+        // 删除配置
+        function deleteConfig(id) {
+            const config = hotActivitiesConfig.find(c => c.id === id);
+            if (!config) return;
+
+            document.getElementById('deleteActivityName').textContent = config.activityTitle;
+            document.getElementById('confirmDeleteBtn').onclick = function() {
+                hotActivitiesConfig = hotActivitiesConfig.filter(c => c.id !== id);
+                saveConfig();
+                closeModal('deleteModal');
+                showToast('热门配置已移除', 'success');
+                renderTable();
+                updateStats();
+            };
+            openModal('deleteModal');
+        }
+
+        // 弹窗操作
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.getElementById(modalId).classList.add('flex');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.getElementById(modalId).classList.remove('flex');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColors = {
+                success: 'bg-accent-green',
+                error: 'bg-accent-red',
+                warning: 'bg-accent-amber'
+            };
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle'
+            };
+
+            toast.className = `toast ${bgColors[type]} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `
+                <i class="fas ${icons[type]}"></i>
+                <span class="text-sm">${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

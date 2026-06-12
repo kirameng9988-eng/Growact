@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动统计 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'secondary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #F8FAFC; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .sidebar-menu-item.active i { color: #0A61FF; }
+        .stat-card { transition: all 0.3s; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(10, 97, 255, 0.15); }
+        .glow { box-shadow: 0 0 30px rgba(10, 97, 255, 0.2); }
+        .glow-green { box-shadow: 0 0 30px rgba(5, 150, 105, 0.2); }
+        .glow-amber { box-shadow: 0 0 30px rgba(217, 119, 6, 0.2); }
+        .glow-cyan { box-shadow: 0 0 30px rgba(8, 145, 178, 0.2); }
+        .chart-container { position: relative; height: 280px; }
+        .cyber-line {
+            background: linear-gradient(90deg, transparent, rgba(10, 97, 255, 0.3), transparent);
+            height: 2px;
+            animation: scan3s linear infinite;
+        }
+        @keyframes scan {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(10, 97, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10, 97, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+    </style>
+</head>
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium text-white">张明远</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- 左侧菜单 -->
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-th-large w-5 text-gray-500"></i>
+                <span>工作台</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-file-alt w-5 text-gray-500"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-tree w-5 text-gray-500"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-gray-600"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
+                <span>审核中心</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">12</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-calendar-alt w-5 text-gray-500"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-open w-5 text-gray-500"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-users w-5 text-gray-500"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-clipboard-check w-5 text-gray-500"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-chart-line w-5 text-gray-500"></i>
+                <span>活动统计</span>
+            </a>
+            <a href="activity-signin.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-qrcode w-5 text-gray-500"></i>
+                <span>活动签到</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">专区配置</div>
+            <a href="zone-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-cog w-5 text-gray-500"></i>
+                <span>专区配置</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-gray-600"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-gray-600"></i>
+                <span>视频管理</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>内容分析</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-gray-600"></i>
+                <span>日志管理</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-gray-600"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="ml-[220px] mt-16 p-6">
+        <!-- 页面标题 -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">活动统计</h1>
+                <p class="text-gray-500 mt-1">实时监控活动运营数据，掌握活动动态</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <select class="bg-white border border-[#E2E8F0] rounded-xl px-4 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                    <option>最近30天</option>
+                    <option>最近90天</option>
+                    <option>最近一年</option>
+                </select>
+                <button onclick="refreshData()" class="px-4 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
+                    <i class="fas fa-sync-alt"></i>
+                    刷新
+                </button>
+            </div>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-4 gap-6 mb-6">
+            <div class="stat-card bg-gradient-to-br from-[#0A61FF] to-[#0055FF] rounded-2xl p-6 text-white relative overflow-hidden glow">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-calendar-alt text-2xl"></i>
+                        </div>
+                        <span class="text-xs bg-white/20 px-2 py-1 rounded-full">全部</span>
+                    </div>
+                    <p class="text-3xl font-bold mb-1">48</p>
+                    <p class="text-white/80 text-sm">活动总数</p>
+                    <div class="flex items-center gap-1 mt-2 text-xs text-green-300">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>较上月 +12%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card bg-gradient-to-br from-[#059669] to-[#047857] rounded-2xl p-6 text-white relative overflow-hidden glow-green">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-users text-2xl"></i>
+                        </div>
+                        <span class="text-xs bg-white/20 px-2 py-1 rounded-full">累计</span>
+                    </div>
+                    <p class="text-3xl font-bold mb-1">2,847</p>
+                    <p class="text-white/80 text-sm">报名人数</p>
+                    <div class="flex items-center gap-1 mt-2 text-xs text-green-300">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>较上月 +28%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card bg-gradient-to-br from-[#D97706] to-[#B45309] rounded-2xl p-6 text-white relative overflow-hidden glow-amber">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-flag-checkered text-2xl"></i>
+                        </div>
+                        <span class="text-xs bg-white/20 px-2 py-1 rounded-full">已完成</span>
+                    </div>
+                    <p class="text-3xl font-bold mb-1">32</p>
+                    <p class="text-white/80 text-sm">已结束活动</p>
+                    <div class="flex items-center gap-1 mt-2 text-xs text-yellow-300">
+                        <i class="fas fa-minus"></i>
+                        <span>与上月持平</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stat-card bg-gradient-to-br from-[#0891B2] to-[#0E7490] rounded-2xl p-6 text-white relative overflow-hidden glow-cyan">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-fire text-2xl"></i>
+                        </div>
+                        <span class="text-xs bg-white/20 px-2 py-1 rounded-full">热门</span>
+                    </div>
+                    <p class="text-3xl font-bold mb-1">数字化论坛</p>
+                    <p class="text-white/80 text-sm">最热门活动</p>
+                    <div class="flex items-center gap-1 mt-2 text-xs text-cyan-300">
+                        <i class="fas fa-eye"></i>
+                        <span>328人报名</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 图表区域 -->
+        <div class="grid grid-cols-2 gap-6 mb-6">
+            <!-- 活动趋势 -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 relative overflow-hidden">
+                <div class="absolute inset-0 grid-bg"></div>
+                <div class="cyber-line"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">活动趋势</h3>
+                            <p class="text-sm text-gray-500 mt-1">每月新增活动数量</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-1 text-xs text-accent-blue"><span class="w-3 h-3 rounded bg-accent-blue"></span>活动数</span>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="activityTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 报名趋势 -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6 relative overflow-hidden">
+                <div class="absolute inset-0 grid-bg"></div>
+                <div class="cyber-line" style="animation-delay: 1s;"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">报名趋势</h3>
+                            <p class="text-sm text-gray-500 mt-1">每月新增报名人数</p>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="registrationTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 分类分布和热门活动 -->
+        <div class="grid grid-cols-2 gap-6">
+            <!-- 分类分布 -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">活动分类分布</h3>
+                        <p class="text-sm text-gray-500 mt-1">各类别活动占比</p>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <div class="w-48 h-48">
+                        <canvas id="categoryPieChart"></canvas>
+                    </div>
+                    <div class="flex-1 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-accent-blue"></span>
+                                <span class="text-sm text-gray-600">科技创新</span>
+                            </div>
+                            <span class="text-sm font-medium">35%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-accent-green"></span>
+                                <span class="text-sm text-gray-600">文化活动</span>
+                            </div>
+                            <span class="text-sm font-medium">28%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-accent-amber"></span>
+                                <span class="text-sm text-gray-600">体育运动</span>
+                            </div>
+                            <span class="text-sm font-medium">20%</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center gap-2">
+                                <span class="w-3 h-3 rounded-full bg-accent-cyan"></span>
+                                <span class="text-sm text-gray-600">教育培训</span>
+                            </div>
+                            <span class="text-sm font-medium">17%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 热门活动 -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-lg font-semibold text-gray-900">热门活动排行</h3>
+                        <p class="text-sm text-gray-500 mt-1">报名人数最多的活动</p>
+                    </div>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-cyan-500 flex items-center justify-center text-white font-bold">1</div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-900">2024数字化转型高峰论坛</p>
+                            <p class="text-xs text-gray-500">科技创新 · 328人报名</p>
+                        </div>
+                        <div class="flex items-center gap-1 text-accent-red">
+                            <i class="fas fa-fire"></i>
+                            <span class="text-sm font-medium">98%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-green to-emerald-500 flex items-center justify-center text-white font-bold">2</div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-900">新员工入职培训</p>
+                            <p class="text-xs text-gray-500">教育培训 · 45人报名</p>
+                        </div>
+                        <div class="flex items-center gap-1 text-accent-amber">
+                            <i class="fas fa-fire"></i>
+                            <span class="text-sm font-medium">90%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-amber to-orange-500 flex items-center justify-center text-white font-bold">3</div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-900">企业文化创意大赛</p>
+                            <p class="text-xs text-gray-500">文化活动 · 156人报名</p>
+                        </div>
+                        <div class="flex items-center gap-1 text-accent-amber">
+                            <i class="fas fa-fire"></i>
+                            <span class="text-sm font-medium">78%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-cyan to-teal-500 flex items-center justify-center text-white font-bold">4</div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-900">数据分析技能培训</p>
+                            <p class="text-xs text-gray-500">教育培训 · 65人报名</p>
+                        </div>
+                        <div class="flex items-center gap-1 text-gray-400">
+                            <i class="fas fa-fire"></i>
+                            <span class="text-sm font-medium">81%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+                        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center text-white font-bold">5</div>
+                        <div class="flex-1">
+                            <p class="font-medium text-gray-900">端午龙舟赛</p>
+                            <p class="text-xs text-gray-500">体育运动 · 120人报名</p>
+                        </div>
+                        <div class="flex items-center gap-1 text-gray-400">
+                            <i class="fas fa-fire"></i>
+                            <span class="text-sm font-medium">80%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // 初始化图表
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
+        });
+
+        function initCharts() {
+            // 活动趋势图
+            const activityTrendCtx = document.getElementById('activityTrendChart').getContext('2d');
+            new Chart(activityTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                    datasets: [{
+                        label: '活动数',
+                        data: [6, 8, 12, 9, 7, 6],
+                        borderColor: '#0A61FF',
+                        backgroundColor: 'rgba(10, 97, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#0A61FF',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 7
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 报名趋势图
+            const registrationTrendCtx = document.getElementById('registrationTrendChart').getContext('2d');
+            new Chart(registrationTrendCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['1月', '2月', '3月', '4月', '5月', '6月'],
+                    datasets: [{
+                        label: '报名人数',
+                        data: [420, 580, 890, 650, 380, 287],
+                        backgroundColor: 'rgba(5, 150, 105, 0.8)',
+                        borderColor: '#059669',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        hoverBackgroundColor: '#059669'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+
+            // 分类饼图
+            const categoryPieCtx = document.getElementById('categoryPieChart').getContext('2d');
+            new Chart(categoryPieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['科技创新', '文化活动', '体育运动', '教育培训'],
+                    datasets: [{
+                        data: [35, 28, 20, 17],
+                        backgroundColor: ['#0A61FF', '#059669', '#D97706', '#0891B2'],
+                        borderWidth: 0,
+                        hoverOffset: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    cutout: '65%'
+                }
+            });
+        }
+
+        function refreshData() {
+            showToast('数据已刷新', 'success');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColors = {
+                success: 'bg-accent-green',
+                error: 'bg-accent-red',
+                warning: 'bg-accent-amber'
+            };
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle'
+            };
+
+            toast.className = `toast ${bgColors[type]} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `
+                <i class="fas ${icons[type]}"></i>
+                <span class="text-sm">${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+</body>
+</html>

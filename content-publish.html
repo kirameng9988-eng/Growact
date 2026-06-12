@@ -11,17 +11,17 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-bg': '#030714',
-                        'card-bg': '#0a1628',
-                        'border-dark': '#1a2744',
-                        'accent-blue': '#3b82f6',
-                        'accent-cyan': '#06b6d4',
-                        'accent-green': '#10b981',
-                        'accent-amber': '#f59e0b',
-                        'accent-red': '#ef4444',
-                        'text-primary': '#f1f5f9',
-                        'text-secondary': '#94a3b8',
-                        'text-muted': '#475569'
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
                     }
                 }
             }
@@ -30,16 +30,16 @@
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #030714; }
-        ::-webkit-scrollbar-thumb { background: #1a2744; border-radius: 3px; }
-        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
-        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #F8FAFC; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
         .toast { animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .calendar-day { transition: all 0.2s; }
-        .calendar-day:hover { background: rgba(59, 130, 246, 0.1); }
+        .calendar-day:hover { background: rgba(10, 97, 255, 0.06); }
         .calendar-day.has-content { cursor: pointer; }
-        .calendar-day.has-content:hover { background: rgba(59, 130, 246, 0.15); }
+        .calendar-day.has-content:hover { background: rgba(10, 97, 255, 0.1); }
         .calendar-day.selected { background: rgba(59, 130, 246, 0.2) !important; border-color: #3b82f6 !important; }
         .stat-card { transition: all 0.2s; }
         .stat-card:hover { transform: translateY(-2px); border-color: rgba(59, 130, 246, 0.5); }
@@ -47,98 +47,122 @@
         .queue-item:hover { border-color: rgba(59, 130, 246, 0.5); }
     </style>
 </head>
-<body class="bg-primary-bg text-text-primary min-h-screen">
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
         <!-- 顶部导航 -->
-    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
                 <div class="flex items-center gap-3">
             <img src="images/logo.png" alt="logo" class="h-9">
-            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
         </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
-            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
-                    <span class="text-xs text-text-muted">超级管理员</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
                 </div>
-                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
             </div>
         </div>
     </header>
 
-    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
         <nav class="py-4">
-            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
             <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <i class="fas fa-th-large w-5 text-gray-600"></i>
                 <span>工作台</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
             <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-file-alt w-5 text-gray-600"></i>
                 <span>内容管理</span>
             </a>
             <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-tree w-5 text-gray-600"></i>
                 <span>分类管理</span>
             </a>
             <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <i class="fas fa-tags w-5 text-gray-600"></i>
                 <span>标签管理</span>
             </a>
             <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
                 <span>审核中心</span>
             </a>
             <a href="content-publish.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-paper-plane w-5 text-accent-blue"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-calendar-alt w-5 text-gray-600"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users w-5 text-gray-600"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-clipboard-check w-5 text-gray-600"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>活动统计</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <i class="fas fa-images w-5 text-gray-600"></i>
                 <span>图片管理</span>
             </a>
             <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
                 <span>文件管理</span>
             </a>
             <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <i class="fas fa-video w-5 text-gray-600"></i>
                 <span>视频管理</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
             <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
                 <span>数据概览</span>
             </a>
             <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
                 <span>内容分析</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
                 <span>用户管理</span>
             </a>
             <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
                 <span>角色权限</span>
             </a>
             <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <i class="fas fa-history w-5 text-gray-600"></i>
                 <span>日志管理</span>
             </a>
 
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-cog w-5 text-gray-600"></i>
                 <span>系统设置</span>
             </a>
         </nav>
@@ -149,14 +173,14 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-2xl font-semibold">发布管理</h1>
-                <p class="text-text-muted mt-1">管理内容发布计划，支持定时发布和排期管理</p>
+                <p class="text-gray-500 mt-1">管理内容发布计划，支持定时发布和排期管理</p>
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="openModal('scheduleModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
                     <i class="fas fa-plus"></i>
                     创建计划
                 </button>
-                <a href="content-publish-list.html" class="px-5 py-2.5 bg-card-bg border border-border-dark text-text-secondary rounded-xl hover:text-text-primary hover:border-accent-blue transition-colors flex items-center gap-2">
+                <a href="content-publish-list.html" class="px-5 py-2.5 bg-card-bg border border-[#E2E8F0] text-gray-600 rounded-xl hover:text-white hover:border-accent-blue transition-colors flex items-center gap-2">
                     <i class="fas fa-list"></i>
                     发布记录
                     <i class="fas fa-arrow-right text-xs"></i>
@@ -168,66 +192,66 @@
         <div class="grid grid-cols-5 gap-6 mb-6">
             <!-- 统计卡片 -->
             <div class="col-span-4 grid grid-cols-4 gap-4">
-                <div class="stat-card bg-card-bg rounded-xl border border-border-dark p-4 cursor-pointer" onclick="filterByStatus('published-today')">
+                <div class="stat-card bg-white rounded-xl border border-[#E2E8F0] p-4 cursor-pointer" onclick="filterByStatus('published-today')">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 rounded-xl bg-accent-green/20 flex items-center justify-center">
                             <i class="fas fa-check-circle text-accent-green text-xl"></i>
                         </div>
                         <div>
                             <div class="text-2xl font-bold">5</div>
-                            <div class="text-sm text-text-muted">今日发布</div>
+                            <div class="text-sm text-gray-500">今日发布</div>
                         </div>
                     </div>
                 </div>
-                <div class="stat-card bg-card-bg rounded-xl border border-border-dark p-4 cursor-pointer" onclick="filterByStatus('published-week')">
+                <div class="stat-card bg-white rounded-xl border border-[#E2E8F0] p-4 cursor-pointer" onclick="filterByStatus('published-week')">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
                             <i class="fas fa-calendar-week text-accent-blue text-xl"></i>
                         </div>
                         <div>
                             <div class="text-2xl font-bold">32</div>
-                            <div class="text-sm text-text-muted">本周发布</div>
+                            <div class="text-sm text-gray-500">本周发布</div>
                         </div>
                     </div>
                 </div>
-                <div class="stat-card bg-card-bg rounded-xl border border-border-dark p-4 cursor-pointer" onclick="filterByStatus('pending')">
+                <div class="stat-card bg-white rounded-xl border border-[#E2E8F0] p-4 cursor-pointer" onclick="filterByStatus('pending')">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 rounded-xl bg-accent-amber/20 flex items-center justify-center">
                             <i class="fas fa-clock text-accent-amber text-xl"></i>
                         </div>
                         <div>
                             <div class="text-2xl font-bold">18</div>
-                            <div class="text-sm text-text-muted">待发布</div>
+                            <div class="text-sm text-gray-500">待发布</div>
                         </div>
                     </div>
                 </div>
-                <div class="stat-card bg-card-bg rounded-xl border border-border-dark p-4 cursor-pointer" onclick="filterByStatus('offline')">
+                <div class="stat-card bg-white rounded-xl border border-[#E2E8F0] p-4 cursor-pointer" onclick="filterByStatus('offline')">
                     <div class="flex items-center gap-3">
                         <div class="w-12 h-12 rounded-xl bg-text-muted/20 flex items-center justify-center">
-                            <i class="fas fa-arrow-circle-down text-text-muted text-xl"></i>
+                            <i class="fas fa-arrow-circle-down text-gray-500 text-xl"></i>
                         </div>
                         <div>
                             <div class="text-2xl font-bold">3</div>
-                            <div class="text-sm text-text-muted">已下线</div>
+                            <div class="text-sm text-gray-500">已下线</div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- 快捷操作区 -->
-            <div class="bg-card-bg rounded-xl border border-border-dark p-4">
-                <h3 class="text-sm font-medium text-text-muted mb-3">快捷提醒</h3>
+            <div class="bg-white rounded-xl border border-[#E2E8F0] p-4">
+                <h3 class="text-sm font-medium text-gray-500 mb-3">快捷提醒</h3>
                 <div class="space-y-2">
                     <div class="flex items-center justify-between text-sm">
-                        <span class="text-text-secondary">今日发布</span>
+                        <span class="text-gray-600">今日发布</span>
                         <span class="text-accent-green font-medium">5</span>
                     </div>
                     <div class="flex items-center justify-between text-sm">
-                        <span class="text-text-secondary">紧急待处理</span>
+                        <span class="text-gray-600">紧急待处理</span>
                         <span class="text-accent-red font-medium">2</span>
                     </div>
                     <div class="flex items-center justify-between text-sm">
-                        <span class="text-text-secondary">即将过期</span>
+                        <span class="text-gray-600">即将过期</span>
                         <span class="text-accent-amber font-medium">1</span>
                     </div>
                 </div>
@@ -237,17 +261,17 @@
         <!-- 日历 + 待发布队列 -->
         <div class="grid grid-cols-5 gap-6">
             <!-- 日历视图 -->
-            <div class="col-span-3 bg-card-bg rounded-xl border border-border-dark p-5">
+            <div class="col-span-3 bg-white rounded-xl border border-[#E2E8F0] p-5">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium">
                         <i class="fas fa-calendar-alt mr-2 text-accent-blue"></i>发布日历
                     </h3>
                     <div class="flex items-center gap-2">
-                        <button onclick="changeMonth(-1)" class="p-2 hover:bg-primary-bg rounded-lg text-text-muted hover:text-text-primary transition-colors">
+                        <button onclick="changeMonth(-1)" class="p-2 hover:bg-primary-bg rounded-lg text-gray-500 hover:text-white transition-colors">
                             <i class="fas fa-chevron-left"></i>
                         </button>
                         <span id="currentMonth" class="text-lg font-medium mx-4">2024年1月</span>
-                        <button onclick="changeMonth(1)" class="p-2 hover:bg-primary-bg rounded-lg text-text-muted hover:text-text-primary transition-colors">
+                        <button onclick="changeMonth(1)" class="p-2 hover:bg-primary-bg rounded-lg text-gray-500 hover:text-white transition-colors">
                             <i class="fas fa-chevron-right"></i>
                         </button>
                     </div>
@@ -255,13 +279,13 @@
 
                 <!-- 星期标题 -->
                 <div class="grid grid-cols-7 gap-2 mb-2">
-                    <div class="text-center text-sm text-text-muted py-2">日</div>
-                    <div class="text-center text-sm text-text-muted py-2">一</div>
-                    <div class="text-center text-sm text-text-muted py-2">二</div>
-                    <div class="text-center text-sm text-text-muted py-2">三</div>
-                    <div class="text-center text-sm text-text-muted py-2">四</div>
-                    <div class="text-center text-sm text-text-muted py-2">五</div>
-                    <div class="text-center text-sm text-text-muted py-2">六</div>
+                    <div class="text-center text-sm text-gray-500 py-2">日</div>
+                    <div class="text-center text-sm text-gray-500 py-2">一</div>
+                    <div class="text-center text-sm text-gray-500 py-2">二</div>
+                    <div class="text-center text-sm text-gray-500 py-2">三</div>
+                    <div class="text-center text-sm text-gray-500 py-2">四</div>
+                    <div class="text-center text-sm text-gray-500 py-2">五</div>
+                    <div class="text-center text-sm text-gray-500 py-2">六</div>
                 </div>
 
                 <!-- 日期网格 -->
@@ -270,24 +294,24 @@
                 </div>
 
                 <!-- 图例 -->
-                <div class="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-border-dark">
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                <div class="flex items-center justify-center gap-6 mt-4 pt-4 border-t border-[#E2E8F0]">
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
                         <span class="w-2 h-2 rounded-full bg-accent-blue"></span>
                         <span>待发布</span>
                     </div>
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
                         <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
                         <span>发布中</span>
                     </div>
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
                         <span class="w-2 h-2 rounded-full bg-accent-green"></span>
                         <span>已发布</span>
                     </div>
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
                         <span class="w-2 h-2 rounded-full bg-text-muted"></span>
                         <span>已下线</span>
                     </div>
-                    <div class="flex items-center gap-2 text-xs text-text-muted">
+                    <div class="flex items-center gap-2 text-xs text-gray-500">
                         <span class="w-2 h-2 rounded-full bg-accent-amber"></span>
                         <span>已撤回</span>
                     </div>
@@ -295,7 +319,7 @@
             </div>
 
             <!-- 待发布队列 -->
-            <div class="col-span-2 bg-card-bg rounded-xl border border-border-dark p-5">
+            <div class="col-span-2 bg-white rounded-xl border border-[#E2E8F0] p-5">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium">
                         <i class="fas fa-list-ol mr-2 text-accent-cyan"></i>待发布队列
@@ -307,13 +331,13 @@
                     <!-- 动态渲染 -->
                 </div>
 
-                <div class="mt-4 pt-4 border-t border-border-dark">
+                <div class="mt-4 pt-4 border-t border-[#E2E8F0]">
                     <div class="flex items-center justify-between mb-3">
                         <label class="flex items-center gap-2 cursor-pointer">
                             <input type="checkbox" id="selectAllPending" onchange="toggleSelectAllPending()" class="accent-accent-blue">
-                            <span class="text-sm text-text-muted">全选</span>
+                            <span class="text-sm text-gray-500">全选</span>
                         </label>
-                        <span id="selectedPendingCount" class="text-sm text-text-muted">已选 0 项</span>
+                        <span id="selectedPendingCount" class="text-sm text-gray-500">已选 0 项</span>
                     </div>
                     <button onclick="batchPublish()" class="w-full py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center justify-center gap-2">
                         <i class="fas fa-rocket"></i>
@@ -329,17 +353,17 @@
 
     <!-- 创建发布计划弹窗 -->
     <div id="scheduleModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[500px] border border-border-dark shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+        <div class="bg-card-bg rounded-2xl w-[500px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">创建发布计划</h3>
-                <button onclick="closeModal('scheduleModal')" class="text-text-muted hover:text-text-primary">
+                <button onclick="closeModal('scheduleModal')" class="text-gray-500 hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">选择内容 <span class="text-accent-red">*</span></label>
-                    <select id="scheduleContent" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <label class="block text-sm text-gray-600 mb-2">选择内容 <span class="text-accent-red">*</span></label>
+                    <select id="scheduleContent" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                         <option value="">请选择要发布的内容</option>
                         <option value="1">数字化转型工作进展报告</option>
                         <option value="2">关于开展2024年度工作总结的通知</option>
@@ -349,33 +373,33 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">发布时间 <span class="text-accent-red">*</span></label>
-                    <input type="datetime-local" id="scheduleTime" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <label class="block text-sm text-gray-600 mb-2">发布时间 <span class="text-accent-red">*</span></label>
+                    <input type="datetime-local" id="scheduleTime" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">发布频道</label>
+                    <label class="block text-sm text-gray-600 mb-2">发布频道</label>
                     <div class="flex flex-wrap gap-2">
-                        <label class="flex items-center gap-2 px-3 py-2 bg-primary-bg rounded-lg cursor-pointer border border-border-dark hover:border-accent-blue/50 transition-colors">
+                        <label class="flex items-center gap-2 px-3 py-2 bg-primary-bg rounded-lg cursor-pointer border border-[#E2E8F0] hover:border-accent-blue/50 transition-colors">
                             <input type="checkbox" value="pc" class="accent-accent-blue channel-checkbox">
                             <span class="text-sm">PC网站</span>
                         </label>
-                        <label class="flex items-center gap-2 px-3 py-2 bg-primary-bg rounded-lg cursor-pointer border border-border-dark hover:border-accent-blue/50 transition-colors">
+                        <label class="flex items-center gap-2 px-3 py-2 bg-primary-bg rounded-lg cursor-pointer border border-[#E2E8F0] hover:border-accent-blue/50 transition-colors">
                             <input type="checkbox" value="mobile" class="accent-accent-blue channel-checkbox" checked>
                             <span class="text-sm">移动端</span>
                         </label>
-                        <label class="flex items-center gap-2 px-3 py-2 bg-primary-bg rounded-lg cursor-pointer border border-border-dark hover:border-accent-blue/50 transition-colors">
+                        <label class="flex items-center gap-2 px-3 py-2 bg-primary-bg rounded-lg cursor-pointer border border-[#E2E8F0] hover:border-accent-blue/50 transition-colors">
                             <input type="checkbox" value="app" class="accent-accent-blue channel-checkbox">
                             <span class="text-sm">小程序</span>
                         </label>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">备注</label>
-                    <textarea id="scheduleRemark" rows="2" placeholder="可选填写备注信息" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                    <label class="block text-sm text-gray-600 mb-2">备注</label>
+                    <textarea id="scheduleRemark" rows="2" placeholder="可选填写备注信息" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('scheduleModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('scheduleModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button onclick="createSchedule()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认创建</button>
             </div>
         </div>
@@ -383,10 +407,10 @@
 
     <!-- 日期详情弹窗 -->
     <div id="dateDetailModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[600px] max-h-[80vh] border border-border-dark shadow-2xl flex flex-col">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+        <div class="bg-card-bg rounded-2xl w-[600px] max-h-[80vh] border border-[#E2E8F0] shadow-2xl flex flex-col">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 id="dateDetailTitle" class="text-lg font-medium">2024年1月15日 发布详情</h3>
-                <button onclick="closeModal('dateDetailModal')" class="text-text-muted hover:text-text-primary">
+                <button onclick="closeModal('dateDetailModal')" class="text-gray-500 hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -395,29 +419,29 @@
                     <!-- 动态渲染 -->
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('dateDetailModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">关闭</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('dateDetailModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">关闭</button>
             </div>
         </div>
     </div>
 
     <!-- 确认发布弹窗 -->
     <div id="confirmPublishModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[400px] border border-border-dark shadow-2xl">
-            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+        <div class="bg-card-bg rounded-2xl w-[400px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
                 <div class="w-12 h-12 rounded-full bg-accent-blue/20 flex items-center justify-center">
                     <i class="fas fa-rocket text-accent-blue text-xl"></i>
                 </div>
                 <div>
                     <h3 class="text-lg font-medium">确认发布</h3>
-                    <p id="confirmPublishCount" class="text-sm text-text-muted mt-1">确定要发布选中的内容吗？</p>
+                    <p id="confirmPublishCount" class="text-sm text-gray-500 mt-1">确定要发布选中的内容吗？</p>
                 </div>
             </div>
             <div class="p-6">
-                <p id="confirmPublishDesc" class="text-sm text-text-secondary">发布后内容将在选定频道立即上线</p>
+                <p id="confirmPublishDesc" class="text-sm text-gray-600">发布后内容将在选定频道立即上线</p>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('confirmPublishModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('confirmPublishModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button onclick="confirmBatchPublish()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认发布</button>
             </div>
         </div>
@@ -480,7 +504,7 @@
             for (let i = 0; i < firstDay; i++) {
                 const prevMonthDays = new Date(currentYear, currentMonth - 1, 0).getDate();
                 const day = prevMonthDays - firstDay + i + 1;
-                html += `<div class="calendar-day p-3 rounded-lg border border-transparent text-text-muted text-sm">${day}</div>`;
+                html += `<div class="calendar-day p-3 rounded-lg border border-transparent text-gray-500 text-sm">${day}</div>`;
             }
 
             // 填充当月日期
@@ -517,7 +541,7 @@
             const totalCells = firstDay + daysInMonth;
             const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
             for (let i = 1; i <= remainingCells; i++) {
-                html += `<div class="calendar-day p-3 rounded-lg border border-transparent text-text-muted text-sm">${i}</div>`;
+                html += `<div class="calendar-day p-3 rounded-lg border border-transparent text-gray-500 text-sm">${i}</div>`;
             }
 
             grid.innerHTML = html;
@@ -553,14 +577,14 @@
 
             if (items.length === 0) {
                 document.getElementById('dateDetailContent').innerHTML = `
-                    <div class="text-center py-8 text-text-muted">
+                    <div class="text-center py-8 text-gray-500">
                         <i class="fas fa-calendar-times text-4xl mb-3 opacity-50"></i>
                         <p>当日暂无发布计划</p>
                     </div>
                 `;
             } else {
                 document.getElementById('dateDetailContent').innerHTML = `
-                    <div class="text-sm text-text-muted mb-4">共有 ${items.length} 条发布计划</div>
+                    <div class="text-sm text-gray-500 mb-4">共有 ${items.length} 条发布计划</div>
                     ${items.map(item => {
                         const status = statusConfig[item.status];
                         const channelsHtml = item.channels.map(ch => {
@@ -570,14 +594,14 @@
                         const time = item.publishTime.split(' ')[1].substring(0, 5);
 
                         return `
-                            <div class="p-4 bg-primary-bg rounded-xl border border-border-dark">
+                            <div class="p-4 bg-white rounded-xl border border-[#E2E8F0]">
                                 <div class="flex items-start justify-between mb-2">
                                     <div>
                                         <div class="flex items-center gap-2 mb-1">
                                             <span class="w-2 h-2 rounded-full bg-${status.color}"></span>
                                             <span class="font-medium">${item.title}</span>
                                         </div>
-                                        <div class="text-sm text-text-muted">
+                                        <div class="text-sm text-gray-500">
                                             ${item.typeName} · ${channelsHtml} · ${time}
                                         </div>
                                     </div>
@@ -588,16 +612,16 @@
                                         <button onclick="immediatePublish(${item.id})" class="px-3 py-1.5 bg-accent-green text-white text-xs rounded-lg hover:bg-green-600 transition-colors">
                                             <i class="fas fa-rocket mr-1"></i>立即发布
                                         </button>
-                                        <button onclick="editSchedule(${item.id})" class="px-3 py-1.5 border border-border-dark text-text-secondary text-xs rounded-lg hover:text-text-primary transition-colors">
+                                        <button onclick="editSchedule(${item.id})" class="px-3 py-1.5 border border-[#E2E8F0] text-gray-600 text-xs rounded-lg hover:text-white transition-colors">
                                             <i class="fas fa-edit mr-1"></i>编辑
                                         </button>
                                     ` : ''}
                                     ${item.status === 'published' ? `
-                                        <button onclick="offlineContent(${item.id})" class="px-3 py-1.5 border border-border-dark text-text-secondary text-xs rounded-lg hover:text-accent-red hover:border-accent-red transition-colors">
+                                        <button onclick="offlineContent(${item.id})" class="px-3 py-1.5 border border-[#E2E8F0] text-gray-600 text-xs rounded-lg hover:text-accent-red hover:border-accent-red transition-colors">
                                             <i class="fas fa-arrow-circle-down mr-1"></i>下线
                                         </button>
                                     ` : ''}
-                                    <button onclick="cancelSchedule(${item.id})" class="px-3 py-1.5 border border-border-dark text-text-secondary text-xs rounded-lg hover:text-accent-red hover:border-accent-red transition-colors">
+                                    <button onclick="cancelSchedule(${item.id})" class="px-3 py-1.5 border border-[#E2E8F0] text-gray-600 text-xs rounded-lg hover:text-accent-red hover:border-accent-red transition-colors">
                                         <i class="fas fa-times mr-1"></i>取消
                                     </button>
                                 </div>
@@ -618,7 +642,7 @@
             const container = document.getElementById('pendingQueue');
             if (pendingItems.length === 0) {
                 container.innerHTML = `
-                    <div class="text-center py-8 text-text-muted">
+                    <div class="text-center py-8 text-gray-500">
                         <i class="fas fa-check-circle text-4xl mb-3 opacity-50 text-accent-green"></i>
                         <p>暂无待发布内容</p>
                     </div>
@@ -633,12 +657,12 @@
                 const isSelected = selectedPendingItems.includes(item.id);
 
                 return `
-                    <div class="queue-item p-4 bg-primary-bg rounded-xl border border-border-dark ${isSelected ? 'border-accent-blue bg-accent-blue/5' : ''}">
+                    <div class="queue-item p-4 bg-white rounded-xl border border-[#E2E8F0] ${isSelected ? 'border-accent-blue bg-accent-blue/5' : ''}">
                         <div class="flex items-start gap-3">
                             <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="togglePendingItem(${item.id})" class="mt-1 accent-accent-blue">
                             <div class="flex-1">
                                 <div class="text-sm font-medium mb-1">${item.title}</div>
-                                <div class="flex items-center gap-2 text-xs text-text-muted">
+                                <div class="flex items-center gap-2 text-xs text-gray-500">
                                     <span class="px-2 py-0.5 bg-accent-blue/20 text-accent-blue rounded">${dateStr} ${timeStr}</span>
                                     <span>${item.typeName}</span>
                                 </div>
@@ -810,6 +834,50 @@
 
         // 初始化
         initCalendar();
+        initContentSelector();
+
+        // ==================== 内容选择器联动 ====================
+        // 从localStorage加载分类数据
+        function loadCategories() {
+            const stored = localStorage.getItem('content_categories');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {}
+            }
+            return [
+                { id: 1, name: '新闻资讯', children: [{ id: 11, name: '时政要闻' }, { id: 12, name: '社会民生' }, { id: 13, name: '经济建设' }] },
+                { id: 2, name: '政策文件', children: [{ id: 21, name: '政策法规' }, { id: 22, name: '通知公告' }] },
+                { id: 3, name: '专题活动', children: [{ id: 31, name: '两会专题' }, { id: 32, name: '安全生产月' }] }
+            ];
+        }
+
+        // 初始化内容选择器
+        function initContentSelector() {
+            const select = document.getElementById('scheduleContent');
+            if (!select) return;
+
+            const categories = loadCategories();
+            select.innerHTML = '<option value="">请选择要发布的内容</option>';
+
+            categories.forEach(cat => {
+                if (cat.children) {
+                    cat.children.forEach(child => {
+                        const opt = document.createElement('option');
+                        opt.value = child.name;
+                        opt.textContent = child.name;
+                        select.appendChild(opt);
+                    });
+                }
+            });
+
+            // 监听分类更新事件
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'content_categories') {
+                    initContentSelector();
+                }
+            });
+        }
     </script>
 </body>
 </html>

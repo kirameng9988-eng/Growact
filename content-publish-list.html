@@ -11,17 +11,17 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-bg': '#030714',
-                        'card-bg': '#0a1628',
-                        'border-dark': '#1a2744',
-                        'accent-blue': '#3b82f6',
-                        'accent-cyan': '#06b6d4',
-                        'accent-green': '#10b981',
-                        'accent-amber': '#f59e0b',
-                        'accent-red': '#ef4444',
-                        'text-primary': '#f1f5f9',
-                        'text-secondary': '#94a3b8',
-                        'text-muted': '#475569'
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
                     }
                 }
             }
@@ -30,107 +30,107 @@
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #030714; }
-        ::-webkit-scrollbar-thumb { background: #1a2744; border-radius: 3px; }
-        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
-        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #F8FAFC; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
         .toast { animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .table-row:hover { background: rgba(59, 130, 246, 0.05); }
     </style>
 </head>
-<body class="bg-primary-bg text-text-primary min-h-screen">
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
         <!-- 顶部导航 -->
-    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
                 <div class="flex items-center gap-3">
             <img src="images/logo.png" alt="logo" class="h-9">
-            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
         </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
-            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
-                    <span class="text-xs text-text-muted">超级管理员</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
                 </div>
-                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
             </div>
         </div>
     </header>
 
-    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
         <nav class="py-4">
-            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
             <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <i class="fas fa-th-large w-5 text-gray-600"></i>
                 <span>工作台</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
             <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-file-alt w-5 text-gray-600"></i>
                 <span>内容管理</span>
             </a>
             <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-tree w-5 text-gray-600"></i>
                 <span>分类管理</span>
             </a>
             <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <i class="fas fa-tags w-5 text-gray-600"></i>
                 <span>标签管理</span>
             </a>
             <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
                 <span>审核中心</span>
             </a>
             <a href="content-publish.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-paper-plane w-5 text-accent-blue"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <i class="fas fa-images w-5 text-gray-600"></i>
                 <span>图片管理</span>
             </a>
             <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
                 <span>文件管理</span>
             </a>
             <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <i class="fas fa-video w-5 text-gray-600"></i>
                 <span>视频管理</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
             <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
                 <span>数据概览</span>
             </a>
             <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
                 <span>内容分析</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
                 <span>用户管理</span>
             </a>
             <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
                 <span>角色权限</span>
             </a>
             <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <i class="fas fa-history w-5 text-gray-600"></i>
                 <span>日志管理</span>
             </a>
 
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-cog w-5 text-gray-600"></i>
                 <span>系统设置</span>
             </a>
         </nav>
@@ -140,37 +140,37 @@
         <!-- 页面标题栏 -->
         <div class="flex items-center justify-between mb-6">
             <div class="flex items-center gap-4">
-                <a href="content-publish.html" class="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors">
+                <a href="content-publish.html" class="flex items-center gap-2 text-gray-600 hover:text-white transition-colors">
                     <i class="fas fa-arrow-left"></i>
                     <span>返回发布管理</span>
                 </a>
                 <div class="w-px h-6 bg-border-dark"></div>
                 <div>
                     <h1 class="text-2xl font-semibold">发布记录</h1>
-                    <p class="text-text-muted mt-1">查看所有发布历史记录，支持筛选和导出</p>
+                    <p class="text-gray-500 mt-1">查看所有发布历史记录，支持筛选和导出</p>
                 </div>
             </div>
-            <button onclick="exportRecords()" class="px-5 py-2.5 bg-card-bg border border-border-dark text-text-secondary rounded-xl hover:text-text-primary hover:border-accent-blue transition-colors flex items-center gap-2">
+            <button onclick="exportRecords()" class="px-5 py-2.5 bg-card-bg border border-[#E2E8F0] text-gray-600 rounded-xl hover:text-white hover:border-accent-blue transition-colors flex items-center gap-2">
                 <i class="fas fa-download"></i>
                 导出
             </button>
         </div>
 
         <!-- 筛选区 -->
-        <div class="bg-card-bg rounded-xl border border-border-dark p-4 mb-6">
+        <div class="bg-white rounded-xl border border-[#E2E8F0] p-4 mb-6">
             <div class="flex items-center gap-4">
                 <div class="flex-1 relative">
-                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                    <input type="text" id="searchInput" placeholder="搜索内容标题..." oninput="filterRecords()" class="w-full bg-primary-bg border border-border-dark rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="searchInput" placeholder="搜索内容标题..." oninput="filterRecords()" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
-                <select id="typeFilter" onchange="filterRecords()" class="bg-primary-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                <select id="typeFilter" onchange="filterRecords()" class="bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
                     <option value="">全部类型</option>
                     <option value="news">新闻资讯</option>
                     <option value="announce">公告通知</option>
                     <option value="policy">政策文件</option>
                     <option value="topic">专题活动</option>
                 </select>
-                <select id="statusFilter" onchange="filterRecords()" class="bg-primary-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                <select id="statusFilter" onchange="filterRecords()" class="bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
                     <option value="">全部状态</option>
                     <option value="pending">待发布</option>
                     <option value="publishing">发布中</option>
@@ -178,25 +178,25 @@
                     <option value="offline">已下线</option>
                     <option value="withdrawn">已撤回</option>
                 </select>
-                <select id="channelFilter" onchange="filterRecords()" class="bg-primary-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                <select id="channelFilter" onchange="filterRecords()" class="bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
                     <option value="">全部频道</option>
                     <option value="pc">PC网站</option>
                     <option value="mobile">移动端</option>
                     <option value="app">小程序</option>
                 </select>
                 <div class="flex items-center gap-2">
-                    <input type="date" id="startDate" onchange="filterRecords()" class="bg-primary-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-                    <span class="text-text-muted">至</span>
-                    <input type="date" id="endDate" onchange="filterRecords()" class="bg-primary-bg border border-border-dark rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                    <input type="date" id="startDate" onchange="filterRecords()" class="bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
+                    <span class="text-gray-500">至</span>
+                    <input type="date" id="endDate" onchange="filterRecords()" class="bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
             </div>
         </div>
 
         <!-- 记录表格 -->
-        <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden">
+        <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
             <table class="w-full">
                 <thead class="bg-primary-bg/50">
-                    <tr class="text-left text-sm text-text-muted">
+                    <tr class="text-left text-sm text-gray-500">
                         <th class="px-6 py-4 font-medium w-12">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" class="accent-accent-blue">
@@ -217,12 +217,12 @@
             </table>
 
             <!-- 批量操作栏 -->
-            <div id="batchActionBar" class="hidden px-6 py-4 bg-accent-blue/10 border-t border-border-dark">
+            <div id="batchActionBar" class="hidden px-6 py-4 bg-accent-blue/10 border-t border-[#E2E8F0]">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center gap-2">
-                        <span class="text-sm text-text-secondary">已选中</span>
+                        <span class="text-sm text-gray-600">已选中</span>
                         <span id="selectedCount" class="text-sm font-medium text-accent-blue">0</span>
-                        <span class="text-sm text-text-secondary">项</span>
+                        <span class="text-sm text-gray-600">项</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <button onclick="batchPublish()" class="px-4 py-2 bg-accent-green text-white text-sm rounded-lg hover:bg-green-600 transition-colors">
@@ -231,7 +231,7 @@
                         <button onclick="batchOffline()" class="px-4 py-2 bg-text-muted text-white text-sm rounded-lg hover:bg-gray-600 transition-colors">
                             <i class="fas fa-arrow-circle-down mr-1"></i>批量下线
                         </button>
-                        <button onclick="batchCancel()" class="px-4 py-2 border border-border-dark text-text-secondary text-sm rounded-lg hover:text-accent-red hover:border-accent-red transition-colors">
+                        <button onclick="batchCancel()" class="px-4 py-2 border border-[#E2E8F0] text-gray-600 text-sm rounded-lg hover:text-accent-red hover:border-accent-red transition-colors">
                             <i class="fas fa-times mr-1"></i>批量取消
                         </button>
                     </div>
@@ -239,18 +239,18 @@
             </div>
 
             <!-- 分页 -->
-            <div class="flex items-center justify-between px-6 py-4 border-t border-border-dark bg-primary-bg/30">
-                <div class="text-sm text-text-muted">
-                    共 <span id="totalCount" class="text-text-primary">0</span> 条记录
+            <div class="flex items-center justify-between px-6 py-4 border-t border-[#E2E8F0] bg-primary-bg/30">
+                <div class="text-sm text-gray-500">
+                    共 <span id="totalCount" class="text-white">0</span> 条记录
                 </div>
                 <div class="flex items-center gap-2">
-                    <button id="prevPage" onclick="prevPage()" class="px-3 py-1.5 border border-border-dark rounded-lg text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button id="prevPage" onclick="prevPage()" class="px-3 py-1.5 border border-[#E2E8F0] rounded-lg text-gray-500 hover:text-white hover:border-accent-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <div id="paginationNumbers" class="flex items-center gap-1">
                         <!-- 动态渲染页码 -->
                     </div>
-                    <button id="nextPage" onclick="nextPage()" class="px-3 py-1.5 border border-border-dark rounded-lg text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button id="nextPage" onclick="nextPage()" class="px-3 py-1.5 border border-[#E2E8F0] rounded-lg text-gray-500 hover:text-white hover:border-accent-blue transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
@@ -263,18 +263,18 @@
 
     <!-- 确认批量操作弹窗 -->
     <div id="confirmModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[400px] border border-border-dark shadow-2xl">
-            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+        <div class="bg-card-bg rounded-2xl w-[400px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
                 <div id="confirmIcon" class="w-12 h-12 rounded-full bg-accent-blue/20 flex items-center justify-center">
                     <i class="fas fa-rocket text-accent-blue text-xl"></i>
                 </div>
                 <div>
                     <h3 id="confirmTitle" class="text-lg font-medium">确认操作</h3>
-                    <p id="confirmDesc" class="text-sm text-text-muted mt-1">确定要执行此操作吗？</p>
+                    <p id="confirmDesc" class="text-sm text-gray-500 mt-1">确定要执行此操作吗？</p>
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('confirmModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('confirmModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button id="confirmBtn" onclick="executeConfirmAction()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认</button>
             </div>
         </div>
@@ -366,7 +366,7 @@
             if (pageRecords.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="8" class="px-6 py-12 text-center text-text-muted">
+                        <td colspan="8" class="px-6 py-12 text-center text-gray-500">
                             <i class="fas fa-inbox text-4xl mb-3 opacity-50"></i>
                             <p>暂无发布记录</p>
                         </td>
@@ -383,7 +383,7 @@
                 }).join('');
 
                 return `
-                    <tr class="table-row border-t border-border-dark transition-colors">
+                    <tr class="table-row border-t border-[#E2E8F0] transition-colors">
                         <td class="px-6 py-4">
                             <input type="checkbox" ${selectedIds.includes(record.id) ? 'checked' : ''} onchange="toggleSelect(${record.id})" class="accent-accent-blue">
                         </td>
@@ -391,16 +391,16 @@
                             <span class="font-medium">${record.title}</span>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-sm text-text-secondary">${record.typeName}</span>
+                            <span class="text-sm text-gray-600">${record.typeName}</span>
                         </td>
                         <td class="px-6 py-4">
                             <div class="flex flex-wrap gap-1">${channelsHtml}</div>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-sm text-text-muted">${record.publishTime.substring(0, 16).replace(' ', '<br>')}</span>
+                            <span class="text-sm text-gray-500">${record.publishTime.substring(0, 16).replace(' ', '<br>')}</span>
                         </td>
                         <td class="px-6 py-4">
-                            <span class="text-sm text-text-secondary">${record.author}</span>
+                            <span class="text-sm text-gray-600">${record.author}</span>
                         </td>
                         <td class="px-6 py-4">
                             <span class="px-2.5 py-1 ${status.bgColor} text-${status.color} text-xs rounded flex items-center gap-1 w-fit">
@@ -416,14 +416,14 @@
                                     </button>
                                 ` : ''}
                                 ${record.status === 'published' ? `
-                                    <button onclick="offlineContent(${record.id})" class="p-2 text-text-muted hover:text-accent-red hover:bg-accent-red/10 rounded-lg transition-colors" title="下线">
+                                    <button onclick="offlineContent(${record.id})" class="p-2 text-gray-500 hover:text-accent-red hover:bg-accent-red/10 rounded-lg transition-colors" title="下线">
                                         <i class="fas fa-arrow-circle-down"></i>
                                     </button>
                                 ` : ''}
-                                <button onclick="viewDetail(${record.id})" class="p-2 text-text-muted hover:text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors" title="详情">
+                                <button onclick="viewDetail(${record.id})" class="p-2 text-gray-500 hover:text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors" title="详情">
                                     <i class="fas fa-eye"></i>
                                 </button>
-                                <button onclick="deleteRecord(${record.id})" class="p-2 text-text-muted hover:text-accent-red hover:bg-accent-red/10 rounded-lg transition-colors" title="删除">
+                                <button onclick="deleteRecord(${record.id})" class="p-2 text-gray-500 hover:text-accent-red hover:bg-accent-red/10 rounded-lg transition-colors" title="删除">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -442,7 +442,7 @@
 
             let pagesHtml = '';
             for (let i = 1; i <= totalPages; i++) {
-                pagesHtml += `<button onclick="goToPage(${i})" class="w-8 h-8 rounded-lg text-sm transition-colors ${i === currentPage ? 'bg-accent-blue text-white' : 'text-text-muted hover:text-text-primary hover:bg-primary-bg'}">${i}</button>`;
+                pagesHtml += `<button onclick="goToPage(${i})" class="w-8 h-8 rounded-lg text-sm transition-colors ${i === currentPage ? 'bg-accent-blue text-white' : 'text-gray-500 hover:text-white hover:bg-primary-bg'}">${i}</button>`;
             }
             paginationNumbers.innerHTML = pagesHtml;
 

@@ -11,17 +11,17 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-bg': '#030714',
-                        'card-bg': '#0a1628',
-                        'border-dark': '#1a2744',
-                        'accent-blue': '#3b82f6',
-                        'accent-cyan': '#06b6d4',
-                        'accent-green': '#10b981',
-                        'accent-amber': '#f59e0b',
-                        'accent-red': '#ef4444',
-                        'text-primary': '#f1f5f9',
-                        'text-secondary': '#94a3b8',
-                        'text-muted': '#475569'
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
                     }
                 }
             }
@@ -29,53 +29,53 @@
     </script>
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
-        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
-        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
-        .table-row:hover { background: #1a2744; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .table-row:hover { background: #F8FAFC; }
     </style>
 </head>
-<body class="bg-primary-bg text-text-primary min-h-screen">
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
         <!-- 顶部导航 -->
-    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
                 <div class="flex items-center gap-3">
             <img src="images/logo.png" alt="logo" class="h-9">
-            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
         </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
-            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
-                    <span class="text-xs text-text-muted">超级管理员</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
                 </div>
-                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
             </div>
         </div>
     </header>
 
-    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
         <nav class="py-4">
-            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
             <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <i class="fas fa-th-large w-5 text-gray-600"></i>
                 <span>工作台</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
             <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-file-alt w-5 text-gray-600"></i>
                 <span>内容管理</span>
             </a>
             <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-tree w-5 text-gray-600"></i>
                 <span>分类管理</span>
             </a>
             <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <i class="fas fa-tags w-5 text-gray-600"></i>
                 <span>标签管理</span>
             </a>
             <a href="content-review.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
@@ -84,49 +84,73 @@
                 <span id="sidebarReviewBadge" class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">0</span>
             </a>
             <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <i class="fas fa-paper-plane w-5 text-gray-600"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-calendar-alt w-5 text-gray-600"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users w-5 text-gray-600"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-clipboard-check w-5 text-gray-600"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>活动统计</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <i class="fas fa-images w-5 text-gray-600"></i>
                 <span>图片管理</span>
             </a>
             <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
                 <span>文件管理</span>
             </a>
             <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <i class="fas fa-video w-5 text-gray-600"></i>
                 <span>视频管理</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
             <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
                 <span>数据概览</span>
             </a>
             <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
                 <span>内容分析</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
                 <span>用户管理</span>
             </a>
             <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
                 <span>角色权限</span>
             </a>
             <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <i class="fas fa-history w-5 text-gray-600"></i>
                 <span>日志管理</span>
             </a>
 
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-cog w-5 text-gray-600"></i>
                 <span>系统设置</span>
             </a>
         </nav>
@@ -136,7 +160,7 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-2xl font-semibold">审核中心</h1>
-                <p class="text-text-muted mt-1">审核待发布内容，确保内容质量合规</p>
+                <p class="text-gray-500 mt-1">审核待发布内容，确保内容质量合规</p>
             </div>
             <div class="flex items-center gap-3">
                 <button id="batchApproveBtn" class="px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-xl hover:bg-accent-blue/30 transition-colors opacity-50 pointer-events-none">
@@ -150,63 +174,63 @@
 
         <!-- 统计卡片 -->
         <div class="grid grid-cols-4 gap-5 mb-6">
-            <div class="bg-card-bg rounded-xl p-4 border border-border-dark">
+            <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
                         <i class="fas fa-clock text-accent-blue text-xl"></i>
                     </div>
                     <div>
                         <div id="statPending" class="text-2xl font-bold">0</div>
-                        <div class="text-sm text-text-muted">待审核</div>
+                        <div class="text-sm text-gray-500">待审核</div>
                     </div>
                 </div>
             </div>
-            <div class="bg-card-bg rounded-xl p-4 border border-border-dark">
+            <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-green/20 flex items-center justify-center">
                         <i class="fas fa-check-circle text-accent-green text-xl"></i>
                     </div>
                     <div>
                         <div id="statApproved" class="text-2xl font-bold">0</div>
-                        <div class="text-sm text-text-muted">今日已审</div>
+                        <div class="text-sm text-gray-500">今日已审</div>
                     </div>
                 </div>
             </div>
-            <div class="bg-card-bg rounded-xl p-4 border border-border-dark">
+            <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-amber/20 flex items-center justify-center">
                         <i class="fas fa-hourglass-half text-accent-amber text-xl"></i>
                     </div>
                     <div>
                         <div id="statReviewing" class="text-2xl font-bold">0</div>
-                        <div class="text-sm text-text-muted">审核中</div>
+                        <div class="text-sm text-gray-500">审核中</div>
                     </div>
                 </div>
             </div>
-            <div class="bg-card-bg rounded-xl p-4 border border-border-dark">
+            <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-red/20 flex items-center justify-center">
                         <i class="fas fa-times text-accent-red text-xl"></i>
                     </div>
                     <div>
                         <div id="statRejected" class="text-2xl font-bold">0</div>
-                        <div class="text-sm text-text-muted">已驳回</div>
+                        <div class="text-sm text-gray-500">已驳回</div>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- 筛选栏 -->
-        <div class="bg-card-bg rounded-xl p-4 mb-6 border border-border-dark">
+        <div class="bg-white rounded-xl p-4 mb-6 border border-[#E2E8F0]">
             <div class="flex items-center gap-4 flex-wrap">
                 <div id="tabButtons" class="flex items-center gap-2">
                     <button class="tab-btn px-4 py-2 bg-accent-blue text-white rounded-lg text-sm" data-status="pending">待审核 (<span class="tab-count">0</span>)</button>
-                    <button class="tab-btn px-4 py-2 text-text-secondary hover:text-text-primary text-sm" data-status="reviewing">审核中 (<span class="tab-count">0</span>)</button>
-                    <button class="tab-btn px-4 py-2 text-text-secondary hover:text-text-primary text-sm" data-status="approved">已通过 (<span class="tab-count">0</span>)</button>
-                    <button class="tab-btn px-4 py-2 text-text-secondary hover:text-text-primary text-sm" data-status="rejected">已驳回 (<span class="tab-count">0</span>)</button>
+                    <button class="tab-btn px-4 py-2 text-gray-600 hover:text-white text-sm" data-status="reviewing">审核中 (<span class="tab-count">0</span>)</button>
+                    <button class="tab-btn px-4 py-2 text-gray-600 hover:text-white text-sm" data-status="approved">已通过 (<span class="tab-count">0</span>)</button>
+                    <button class="tab-btn px-4 py-2 text-gray-600 hover:text-white text-sm" data-status="rejected">已驳回 (<span class="tab-count">0</span>)</button>
                 </div>
                 <div class="flex-1"></div>
-                <select id="categoryFilter" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm">
+                <select id="categoryFilter" class="bg-primary-bg border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm">
                     <option value="">全部分类</option>
                     <option value="通知公告">通知公告</option>
                     <option value="新闻资讯">新闻资讯</option>
@@ -232,10 +256,10 @@
 
     <!-- 驳回弹窗 -->
     <div id="rejectModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[500px] border border-border-dark shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+        <div class="bg-card-bg rounded-2xl w-[500px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">驳回内容</h3>
-                <button onclick="closeModal('rejectModal')" class="text-text-muted hover:text-text-primary">
+                <button onclick="closeModal('rejectModal')" class="text-gray-500 hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -244,12 +268,12 @@
                     <img id="rejectItemCover" src="" class="w-16 h-12 rounded object-cover">
                     <div>
                         <div id="rejectItemTitle" class="font-medium"></div>
-                        <div id="rejectItemAuthor" class="text-sm text-text-muted"></div>
+                        <div id="rejectItemAuthor" class="text-sm text-gray-500"></div>
                     </div>
                 </div>
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">驳回原因 <span class="text-accent-red">*</span></label>
-                    <select id="rejectReason" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <label class="block text-sm text-gray-600 mb-2">驳回原因 <span class="text-accent-red">*</span></label>
+                    <select id="rejectReason" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                         <option value="">请选择驳回原因</option>
                         <option>内容不符合规范</option>
                         <option>信息存在错误</option>
@@ -259,12 +283,12 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">详细说明</label>
-                    <textarea id="rejectDetail" rows="4" placeholder="请输入详细说明，帮助作者了解问题所在" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                    <label class="block text-sm text-gray-600 mb-2">详细说明</label>
+                    <textarea id="rejectDetail" rows="4" placeholder="请输入详细说明，帮助作者了解问题所在" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('rejectModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('rejectModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button onclick="confirmReject()" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认驳回</button>
             </div>
         </div>
@@ -272,21 +296,21 @@
 
     <!-- 批量驳回弹窗 -->
     <div id="batchRejectModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[500px] border border-border-dark shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+        <div class="bg-card-bg rounded-2xl w-[500px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">批量驳回 (<span id="batchRejectNum">0</span> 项)</h3>
-                <button onclick="closeModal('batchRejectModal')" class="text-text-muted hover:text-text-primary">
+                <button onclick="closeModal('batchRejectModal')" class="text-gray-500 hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <div class="p-6 space-y-4">
                 <div class="flex items-center gap-3 p-3 bg-primary-bg rounded-lg">
                     <i class="fas fa-exclamation-triangle text-accent-amber"></i>
-                    <span class="text-sm text-text-secondary">将驳回选中的 <span id="batchRejectNum2">0</span> 项内容</span>
+                    <span class="text-sm text-gray-600">将驳回选中的 <span id="batchRejectNum2">0</span> 项内容</span>
                 </div>
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">驳回原因 <span class="text-accent-red">*</span></label>
-                    <select id="batchRejectReason" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <label class="block text-sm text-gray-600 mb-2">驳回原因 <span class="text-accent-red">*</span></label>
+                    <select id="batchRejectReason" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                         <option value="">请选择驳回原因</option>
                         <option>内容不符合规范</option>
                         <option>信息存在错误</option>
@@ -296,12 +320,12 @@
                     </select>
                 </div>
                 <div>
-                    <label class="block text-sm text-text-secondary mb-2">详细说明</label>
-                    <textarea id="batchRejectDetail" rows="4" placeholder="请输入详细说明，帮助作者了解问题所在" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                    <label class="block text-sm text-gray-600 mb-2">详细说明</label>
+                    <textarea id="batchRejectDetail" rows="4" placeholder="请输入详细说明，帮助作者了解问题所在" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('batchRejectModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('batchRejectModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button onclick="confirmBatchReject()" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认驳回</button>
             </div>
         </div>
@@ -309,10 +333,10 @@
 
     <!-- 预览弹窗 -->
     <div id="previewModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[90vh] border border-border-dark shadow-2xl overflow-hidden flex flex-col">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[90vh] border border-[#E2E8F0] shadow-2xl overflow-hidden flex flex-col">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">内容预览</h3>
-                <button onclick="closeModal('previewModal')" class="text-text-muted hover:text-text-primary">
+                <button onclick="closeModal('previewModal')" class="text-gray-500 hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -321,7 +345,7 @@
                     <img id="previewCover" src="" class="w-64 h-40 rounded-lg object-cover">
                     <div class="flex-1">
                         <h2 id="previewTitle" class="text-xl font-semibold mb-3"></h2>
-                        <div class="flex items-center gap-4 text-sm text-text-muted mb-4">
+                        <div class="flex items-center gap-4 text-sm text-gray-500 mb-4">
                             <span><i class="fas fa-user mr-1"></i><span id="previewAuthor"></span></span>
                             <span><i class="fas fa-folder mr-1"></i><span id="previewCategory"></span></span>
                             <span><i class="fas fa-clock mr-1"></i><span id="previewTime"></span></span>
@@ -329,16 +353,16 @@
                         <div id="previewTags" class="flex flex-wrap gap-2 mb-4">
                             <!-- 动态渲染 -->
                         </div>
-                        <p id="previewSummary" class="text-text-secondary"></p>
+                        <p id="previewSummary" class="text-gray-600"></p>
                     </div>
                 </div>
-                <div class="mt-6 pt-6 border-t border-border-dark">
-                    <h4 class="text-sm font-medium text-text-muted mb-3">正文内容</h4>
-                    <div id="previewContent" class="text-text-secondary leading-relaxed whitespace-pre-wrap"></div>
+                <div class="mt-6 pt-6 border-t border-[#E2E8F0]">
+                    <h4 class="text-sm font-medium text-gray-500 mb-3">正文内容</h4>
+                    <div id="previewContent" class="text-gray-600 leading-relaxed whitespace-pre-wrap"></div>
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('previewModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">关闭</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('previewModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">关闭</button>
             </div>
         </div>
     </div>
@@ -592,9 +616,9 @@
 
             if (pageData.length === 0) {
                 list.innerHTML = `
-                    <div class="bg-card-bg rounded-xl border border-border-dark p-12 text-center">
-                        <i class="fas fa-inbox text-4xl text-text-muted mb-4"></i>
-                        <p class="text-text-muted">暂无待审核内容</p>
+                    <div class="bg-white rounded-xl border border-[#E2E8F0] p-12 text-center">
+                        <i class="fas fa-inbox text-4xl text-gray-500 mb-4"></i>
+                        <p class="text-gray-500">暂无待审核内容</p>
                     </div>
                 `;
                 return;
@@ -614,15 +638,15 @@
                     '新闻资讯': 'accent-cyan',
                     '政策文件': 'accent-green',
                     '专题活动': 'accent-amber',
-                    '文件': 'text-text-secondary'
+                    '文件': 'text-gray-600'
                 };
-                const catColor = categoryColorMap[item.category] || 'text-text-secondary';
+                const catColor = categoryColorMap[item.category] || 'text-gray-600';
 
                 return `
-                <div class="bg-card-bg rounded-xl border border-border-dark p-5 review-item" data-id="${item.id}">
+                <div class="bg-white rounded-xl border border-[#E2E8F0] p-5 review-item" data-id="${item.id}">
                     <div class="flex items-start gap-5">
                         <div class="flex items-center pt-1">
-                            <input type="checkbox" class="review-checkbox w-5 h-5 rounded border-border-dark bg-primary-bg accent-accent-blue cursor-pointer" ${isChecked ? 'checked' : ''}>
+                            <input type="checkbox" class="review-checkbox w-5 h-5 rounded border-[#E2E8F0] bg-primary-bg accent-accent-blue cursor-pointer" ${isChecked ? 'checked' : ''}>
                         </div>
                         <img src="${item.cover}" class="w-32 h-20 rounded-lg object-cover">
                         <div class="flex-1">
@@ -631,8 +655,8 @@
                                 <span class="px-2 py-1 bg-${catColor}/20 text-${catColor} text-xs rounded">${item.category}</span>
                                 <span class="px-2 py-1 ${status.class} text-xs rounded">${status.text}</span>
                             </div>
-                            <p class="text-sm text-text-secondary mb-3 line-clamp-2">${item.summary}</p>
-                            <div class="flex items-center gap-4 text-sm text-text-muted">
+                            <p class="text-sm text-gray-600 mb-3 line-clamp-2">${item.summary}</p>
+                            <div class="flex items-center gap-4 text-sm text-gray-500">
                                 <span><i class="fas fa-user mr-1"></i>${item.author}</span>
                                 <span><i class="fas fa-clock mr-1"></i>提交于 ${item.submitTime}</span>
                                 <span><i class="fas fa-tag mr-1"></i>${item.tags.join(', ')}</span>
@@ -654,7 +678,7 @@
                                 </button>
                             </div>
                             ` : ''}
-                            <button onclick="previewItem(${item.id})" class="text-text-secondary hover:text-text-primary text-sm">
+                            <button onclick="previewItem(${item.id})" class="text-gray-600 hover:text-white text-sm">
                                 <i class="fas fa-eye mr-1"></i>预览
                             </button>
                         </div>
@@ -689,15 +713,15 @@
             }
 
             let html = '';
-            html += `<button onclick="goToPage(${currentPage - 1})" class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm ${currentPage === 1 ? 'opacity-50 pointer-events-none' : ''}">
+            html += `<button onclick="goToPage(${currentPage - 1})" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 text-sm ${currentPage === 1 ? 'opacity-50 pointer-events-none' : ''}">
                 <i class="fas fa-chevron-left"></i>
             </button>`;
 
             for (let i = 1; i <= totalPages; i++) {
-                html += `<button onclick="goToPage(${i})" class="px-3 py-1 rounded text-sm ${i === currentPage ? 'bg-accent-blue text-white' : 'border border-border-dark text-text-muted hover:text-text-primary'}">${i}</button>`;
+                html += `<button onclick="goToPage(${i})" class="px-3 py-1 rounded text-sm ${i === currentPage ? 'bg-accent-blue text-white' : 'border border-[#E2E8F0] text-gray-500 hover:text-white'}">${i}</button>`;
             }
 
-            html += `<button onclick="goToPage(${currentPage + 1})" class="px-3 py-1 rounded border border-border-dark text-text-muted text-sm ${currentPage === totalPages ? 'opacity-50 pointer-events-none' : ''}">
+            html += `<button onclick="goToPage(${currentPage + 1})" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 text-sm ${currentPage === totalPages ? 'opacity-50 pointer-events-none' : ''}">
                 <i class="fas fa-chevron-right"></i>
             </button>`;
 
@@ -723,10 +747,10 @@
             tabBtns.forEach(btn => {
                 if (btn.dataset.status === status) {
                     btn.classList.add('bg-accent-blue', 'text-white');
-                    btn.classList.remove('text-text-secondary', 'hover:text-text-primary');
+                    btn.classList.remove('text-gray-600', 'hover:text-white');
                 } else {
                     btn.classList.remove('bg-accent-blue', 'text-white');
-                    btn.classList.add('text-text-secondary', 'hover:text-text-primary');
+                    btn.classList.add('text-gray-600', 'hover:text-white');
                 }
             });
 

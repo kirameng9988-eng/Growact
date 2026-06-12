@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>热门活动 - 活动专区 - 可信数据空间门户</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'border-light': '#E2E8F0',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#06B6D4',
+                        'accent-indigo': '#6366F1',
+                        'accent-green': '#10B981',
+                        'accent-amber': '#F59E0B',
+                        'accent-red': '#EF4444',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#64748B',
+                        'text-muted': '#94A3B8',
+                        'tech-gradient-start': '#F0F9FF',
+                        'tech-gradient-end': '#E0F2FE',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+
+        .page-transition { animation: fadeSlideIn 0.4s ease-out; }
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .activity-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .activity-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(10, 97, 255, 0.12); }
+
+        .stagger-item { opacity: 0; animation: staggerFadeIn 0.5s ease-out forwards; }
+        @keyframes staggerFadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .toast { animation: toastSlide 0.4s ease-out; }
+        @keyframes toastSlide {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .city-pattern {
+            background-image:
+                radial-gradient(ellipse at 20% 80%, rgba(10, 97, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+        }
+
+        .filter-btn.active { background: linear-gradient(135deg, #0A61FF, #06B6D4); color: white; }
+    </style>
+</head>
+<body class="bg-tech-gradient-start min-h-screen city-pattern">
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] z-50 shadow-sm">
+        <div class="h-full flex items-center px-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center shadow-lg">
+                    <i class="fas fa-city text-white text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-semibold text-gray-900">公共数据授权运营</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 flex items-center justify-center gap-8 ml-16">
+                <a href="index.html" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">首页</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">数据资源</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">数据产品</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">服务专区</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">政策资讯</a>
+                <a href="index.html" class="nav-link active text-sm font-semibold text-accent-blue border-b-2 border-accent-blue pb-1">活动专区</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">个人中心</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <button class="relative text-gray-600 hover:text-accent-blue transition-colors">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center text-white">3</span>
+                </button>
+                <div class="flex items-center gap-3 pl-4 border-l border-[#E2E8F0]">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/20">
+                    <div class="flex flex-col">
+                        <span class="text-sm font-medium text-gray-900">张明远</span>
+                        <span class="text-xs text-gray-500">上海数据集团</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="pt-16 min-h-screen">
+        <div class="page-transition">
+            <!-- 顶部工具栏 -->
+            <div class="sticky top-16 z-30 bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] px-6 py-4">
+                <div class="max-w-7xl mx-auto flex items-center justify-between">
+                    <button onclick="history.back()" class="flex items-center gap-2 text-gray-600 hover:text-accent-blue transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                        <span class="text-sm">返回活动专区</span>
+                    </button>
+                    <button onclick="navigateTo('myActivities')" class="flex items-center gap-2 px-4 py-2 bg-accent-blue/10 hover:bg-accent-blue/20 text-accent-blue rounded-full transition-colors">
+                        <i class="fas fa-star text-amber-500"></i>
+                        <span class="text-sm font-medium">我的活动</span>
+                        <span class="px-2 py-0.5 bg-accent-blue/10 text-accent-blue text-xs font-semibold rounded-full">2</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 页面内容 -->
+            <div class="max-w-7xl mx-auto px-6 py-8">
+                <!-- 页面标题 -->
+                <div class="mb-8">
+                    <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                        <i class="fas fa-fire text-orange-500"></i>
+                        热门活动
+                    </h1>
+                    <p class="text-gray-500 mt-2">查看所有热门活动，找到感兴趣的活动参与</p>
+                </div>
+
+                <!-- 筛选栏 -->
+                <div class="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-4 mb-6">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <!-- 状态筛选 -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-500">活动状态：</span>
+                            <div class="flex items-center gap-2">
+                                <button onclick="filterByStatus('all')" class="filter-btn active px-4 py-2 text-sm font-medium rounded-xl transition-all border border-[#E2E8F0]">全部</button>
+                                <button onclick="filterByStatus('registration')" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl transition-all border border-[#E2E8F0] hover:border-accent-blue">报名中</button>
+                                <button onclick="filterByStatus('upcoming')" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl transition-all border border-[#E2E8F0] hover:border-accent-blue">即将开始</button>
+                                <button onclick="filterByStatus('ongoing')" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl transition-all border border-[#E2E8F0] hover:border-accent-blue">进行中</button>
+                                <button onclick="filterByStatus('ended')" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl transition-all border border-[#E2E8F0] hover:border-accent-blue">已结束</button>
+                                <button onclick="filterByStatus('review')" class="filter-btn px-4 py-2 text-sm font-medium rounded-xl transition-all border border-[#E2E8F0] hover:border-accent-blue">精彩回顾</button>
+                            </div>
+                        </div>
+
+                        <!-- 排序 -->
+                        <div class="flex items-center gap-2 ml-auto">
+                            <span class="text-sm text-gray-500">排序：</span>
+                            <select id="sortSelect" onchange="sortActivities()" class="px-4 py-2 text-sm border border-[#E2E8F0] rounded-xl focus:border-accent-blue focus:outline-none">
+                                <option value="default">默认排序</option>
+                                <option value="time">按时间</option>
+                                <option value="popular">按热度</option>
+                                <option value="deadline">按报名截止</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 搜索 -->
+                    <div class="mt-4 flex items-center gap-4">
+                        <div class="relative flex-1 max-w-md">
+                            <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                            <input type="text" id="searchInput" placeholder="搜索活动名称..." oninput="searchActivities()" class="w-full pl-12 pr-4 py-2.5 border border-[#E2E8F0] rounded-xl focus:border-accent-blue focus:outline-none">
+                        </div>
+                        <span class="text-sm text-gray-500">共<span id="activityCount" class="font-semibold text-accent-blue">0</span> 个活动</span>
+                    </div>
+                </div>
+
+                <!-- 活动列表 -->
+                <div id="activityList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    <!-- 动态渲染 -->
+                </div>
+
+                <!-- 分页 -->
+                <div id="pagination" class="flex items-center justify-center gap-2 mt-8">
+                    <!-- 动态渲染 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+    <script>
+        // Mock数据 - 所有活动覆盖所有状态
+        const allActivities = [
+            //报名中
+            { id: 101, title: '2024上海数据开放创新应用大赛', time: '2024-10-15 至 12-20', location: '上海世博中心', activityStatus: 'registration', userStatus: 'not_registered', registrations: 1256, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop', deadline: '2024-11-30' },
+            { id: 103, title: '数据资产入表与评估培训', time: '2024-11-12', location: '线上直播', activityStatus: 'registration', userStatus: 'pending', registrations: 892, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop', deadline: '2024-11-10' },
+            { id: 105, title: '数据交易合规与风险管理', time: '2024-11-18', location: '线上直播', activityStatus: 'registration', userStatus: 'approved', registrations: 634, cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop', deadline: '2024-11-15' },
+            // 报名截止
+            { id: 104, title: '公共数据开放应用案例分享会', time: '2024-11-15', location: '上海数据中心', activityStatus: 'registration_closed', userStatus: 'not_registered', registrations: 356, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop', deadline: '2024-11-12' },
+            // 即将开始
+            { id: 102, title: '可信数据空间建设研讨会', time: '2024-11-08', location: '上海国际会议中心', activityStatus: 'upcoming', userStatus: 'approved', registrations: 486, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop', deadline: '2024-11-05' },
+            { id: 106, title: '企业数字化转型Workshop', time: '2024-11-22', location: '张江高科技园区', activityStatus: 'upcoming', userStatus: 'pending_signin', registrations: 128, cover: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&h=250&fit=crop', deadline: '2024-11-20' },
+            { id: 109, title: '可信数据空间标准宣贯会', time: '2024-12-03', location: '线上+线下', activityStatus: 'upcoming', userStatus: 'not_registered', registrations: 312, cover: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=250&fit=crop', deadline: '2024-12-01' },
+            // 进行中
+            { id: 107, title: 'AI公共数据开放培训会', time: '2024-11-05 09:00', location: '上海数据交易所', activityStatus: 'ongoing', userStatus: 'pending_signin', registrations: 234, cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=250&fit=crop', deadline: '2024-11-01' },
+            { id: 110, title: '数据安全工程师认证培训', time: '2024-11-06 14:00', location: '线上直播', activityStatus: 'ongoing', userStatus: 'signed', signInTime: '09:23', registrations: 189, cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop', deadline: '2024-11-01' },
+            // 已结束
+            { id: 111, title: '2024数据要素市场建设峰会', time: '2024-09-28 09:00', location: '上海国际会议中心', activityStatus: 'ended', userStatus: 'signed', signInTime: '09:15', registrations: 356, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop', hasMaterials: true, deadline: '2024-09-20' },
+            { id: 112, title: '数据安全法实施三周年研讨会', time: '2024-09-15 14:00', location: '线上直播', activityStatus: 'ended', userStatus: 'absent', registrations: 423, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop', hasMaterials: true, deadline: '2024-09-10' },
+            { id: 113, title: '公共数据开放应用大赛颁奖典礼', time: '2024-08-20 10:00', location: '上海世博中心', activityStatus: 'ended', userStatus: 'signed', signInTime: '10:05', registrations: 856, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop', deadline: '2024-08-15' },
+            // 精彩回顾
+            { id: 115, title: '2023数据要素市场建设峰会', time: '2023-09-28', location: '上海国际会议中心', activityStatus: 'review', userStatus: 'signed', signInTime: '09:00', registrations: 456, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop', hasMaterials: true, hasVideo: true, deadline: '2023-09-20' },
+            { id: 116, title: '公共数据开放应用大赛总决赛', time: '2023-12-15', location: '上海世博中心', activityStatus: 'review', userStatus: 'signed', signInTime: '13:30', registrations: 1200, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop', hasMaterials: true, hasVideo: true, deadline: '2023-12-10' },
+        ];
+
+        let currentFilter = 'all';
+        let currentSearch = '';
+        let currentSort = 'default';
+        let currentPage = 1;
+        const pageSize = 9;
+
+        // ========== 统一动态按钮组件 ==========
+        function ActivityStatusButton({ activityStatus, userStatus, activityId, signInTime, hasMaterials, hasVideo }) {
+            const buttonBaseClass = 'flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all';
+
+            if (activityStatus === 'registration' && userStatus === 'not_registered') {
+                return `
+                    <button onclick="openRegistration(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm hover:shadow-md">
+                        <i class="fas fa-edit"></i>立即报名
+                    </button>
+                `;
+            }
+            if (activityStatus === 'registration' && userStatus === 'pending') {
+                return `<div class="${buttonBaseClass} bg-amber-50 text-amber-600 cursor-default border border-amber-200"><i class="fas fa-clock"></i>审核中</div>`;
+            }
+            if (activityStatus === 'registration' && userStatus === 'approved') {
+                return `<div class="${buttonBaseClass} bg-green-50 text-green-600 cursor-default border border-green-200"><i class="fas fa-check-circle"></i>已报名</div>`;
+            }
+            if (activityStatus === 'registration_closed' && userStatus === 'not_registered') {
+                return `<div class="${buttonBaseClass} bg-gray-100 text-gray-500 cursor-not-allowed border border-gray-200"><i class="fas fa-ban"></i>报名截止</div>`;
+            }
+            if (activityStatus === 'upcoming' && userStatus === 'approved') {
+                return `
+                    <button onclick="openSignInModal(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm hover:shadow-md">
+                        <i class="fas fa-qrcode"></i>查看签到码
+                    </button>
+                `;
+            }
+            if (activityStatus === 'ongoing' && (userStatus === 'approved' || userStatus === 'pending_signin')) {
+                return `
+                    <button onclick="openSignInModal(${activityId})" class="${buttonBaseClass} bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-sm hover:shadow-md animate-pulse">
+                        <i class="fas fa-sign-in-alt"></i>立即签到
+                    </button>
+                `;
+            }
+            if (activityStatus === 'ongoing' && userStatus === 'signed') {
+                return `<div class="${buttonBaseClass} bg-green-50 text-green-600 cursor-default border border-green-200"><i class="fas fa-check-circle"></i>已签到 ${signInTime || ''}</div>`;
+            }
+            if (activityStatus === 'ended') {
+                return `<div class="${buttonBaseClass} bg-gray-100 text-gray-500 cursor-default border border-gray-200"><i class="fas fa-calendar-times"></i>活动结束</div>`;
+            }
+            if (activityStatus === 'review') {
+                let html = `
+                    <button onclick="goToDetail(${activityId})" class="${buttonBaseClass} bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white shadow-sm hover:shadow-md">
+                        <i class="fas fa-play-circle"></i>查看回顾
+                    </button>
+                `;
+                if (hasVideo) html += `<button onclick="showToast('正在打开回放视频...', 'info')" class="${buttonBaseClass} bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white shadow-sm"><i class="fas fa-video"></i>观看回放</button>`;
+                if (hasMaterials) html += `<button onclick="showToast('资料下载中...', 'success')" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10"><i class="fas fa-download"></i>下载资料</button>`;
+                return html;
+            }
+            if (activityStatus === 'registration' && userStatus === 'rejected') {
+                return `<button onclick="openRegistration(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm"><i class="fas fa-redo"></i>重新报名</button>`;
+            }
+            if (activityStatus === 'ended' && userStatus === 'absent') {
+                return `<div class="${buttonBaseClass} bg-red-50 text-red-600 cursor-default border border-red-200"><i class="fas fa-user-slash"></i>未签到</div>`;
+            }
+            return `<button onclick="goToDetail(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm"><i class="fas fa-edit"></i>立即报名</button>`;
+        }
+
+        function getActivityStatusTag(activityStatus) {
+            const statusMap = {
+                'registration': { text: '报名中', class: 'bg-blue-100 text-blue-700 border-blue-200' },
+                'registration_closed': { text: '报名截止', class: 'bg-gray-100 text-gray-600 border-gray-200' },
+                'upcoming': { text: '即将开始', class: 'bg-amber-100 text-amber-700 border-amber-200' },
+                'ongoing': { text: '进行中', class: 'bg-green-100 text-green-700 border-green-200' },
+                'ended': { text: '已结束', class: 'bg-gray-100 text-gray-500 border-gray-200' },
+                'review': { text: '精彩回顾', class: 'bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 border-purple-200' }
+            };
+            const status = statusMap[activityStatus] || statusMap['ended'];
+            return `<span class="px-2.5 py-1 ${status.class} text-xs font-medium rounded-full border">${status.text}</span>`;
+        }
+
+        function filterActivities() {
+            let filtered = [...allActivities];
+
+            // 状态筛选
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(a => a.activityStatus === currentFilter);
+            }
+
+            // 搜索
+            if (currentSearch) {
+                filtered = filtered.filter(a => a.title.toLowerCase().includes(currentSearch.toLowerCase()));
+            }
+
+            // 排序
+            if (currentSort === 'time') {
+                filtered.sort((a, b) => new Date(a.time) - new Date(b.time));
+            } else if (currentSort === 'popular') {
+                filtered.sort((a, b) => b.registrations - a.registrations);
+            } else if (currentSort === 'deadline') {
+                filtered.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+            }
+
+            return filtered;
+        }
+
+        function renderActivityList() {
+            const filtered = filterActivities();
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            const start = (currentPage - 1) * pageSize;
+            const pageActivities = filtered.slice(start, start + pageSize);
+
+            document.getElementById('activityCount').textContent = filtered.length;
+
+            const container = document.getElementById('activityList');
+            if (pageActivities.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-1 md:col-span-2 lg:col-span-3 py-16 text-center">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                            <i class="fas fa-search text-4xl text-gray-300"></i>
+                        </div>
+                        <p class="text-gray-500">未找到符合条件的活动</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = pageActivities.map((activity, index) => `
+                    <div class="activity-card stagger-item bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E2E8F0] cursor-pointer" style="animation-delay: ${index * 0.08}s" onclick="goToDetail(${activity.id})">
+                        <div class="relative h-40 overflow-hidden">
+                            <img src="${activity.cover}" class="w-full h-full object-cover" alt="${activity.title}">
+                            <div class="absolute top-3 right-3 flex flex-col gap-2">
+                                ${getActivityStatusTag(activity.activityStatus)}
+                            </div>
+                            ${activity.activityStatus === 'registration' ? `
+                                <div class="absolute bottom-3 left-3 right-3">
+                                    <div class="h-1 bg-white/30 rounded-full overflow-hidden">
+                                        <div class="h-full bg-white/80 rounded-full" style="width: ${Math.min(activity.registrations / 1500 * 100, 100)}%"></div>
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="p-4">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">${activity.title}</h4>
+                            <div class="space-y-1.5 text-xs text-gray-500">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="far fa-calendar text-gray-400"></i>
+                                    <span>${activity.time}</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                    <span>${activity.location}</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-users text-gray-400"></i>
+                                    <span>${activity.registrations}人已报名</span>
+                                </div>
+                            </div>
+                            <div class="mt-3 pt-3 border-t border-[#E2E8F0] flex items-center justify-between">
+                                <span class="text-xs text-gray-500">截止：${activity.deadline}</span>
+                            </div>
+                            <div class="mt-3 flex items-center gap-2">
+                                ${ActivityStatusButton({
+                                    activityStatus: activity.activityStatus,
+                                    userStatus: activity.userStatus,
+                                    activityId: activity.id,
+                                    signInTime: activity.signInTime,
+                                    hasMaterials: activity.hasMaterials,
+                                    hasVideo: activity.hasVideo
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            // 渲染分页
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const container = document.getElementById('pagination');
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+
+            // 上一页
+            html += `<button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="w-10 h-10 rounded-xl border border-[#E2E8F0] flex items-center justify-center hover:border-accent-blue transition-colors ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}">
+                <i class="fas fa-chevron-left text-gray-500"></i>
+            </button>`;
+
+            // 页码
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<button onclick="goToPage(${i})" class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${i === currentPage ? 'bg-accent-blue text-white' : 'border border-[#E2E8F0] hover:border-accent-blue text-gray-600'}">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<span class="text-gray-400">...</span>`;
+                }
+            }
+
+            // 下一页
+            html += `<button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="w-10 h-10 rounded-xl border border-[#E2E8F0] flex items-center justify-center hover:border-accent-blue transition-colors ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}">
+                <i class="fas fa-chevron-right text-gray-500"></i>
+            </button>`;
+
+            container.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            const filtered = filterActivities();
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderActivityList();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterByStatus(status) {
+            currentFilter = status;
+            currentPage = 1;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderActivityList();
+        }
+
+        function sortActivities() {
+            currentSort = document.getElementById('sortSelect').value;
+            renderActivityList();
+        }
+
+        function searchActivities() {
+            currentSearch = document.getElementById('searchInput').value;
+            currentPage = 1;
+            renderActivityList();
+        }
+
+        function goToDetail(id) {
+            window.location.href = `index.html?detail=${id}`;
+        }
+
+        function openRegistration(id) {
+            showToast('请在活动详情页进行报名', 'info');
+        }
+
+        function openSignInModal(id) {
+            const activity = allActivities.find(a => a.id === id);
+            showToast(`签到码: ${activity ? activity.title : id}`, 'info');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-accent-blue';
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle';
+            toast.className = `toast ${bgColor} text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `<i class="fas fa-${icon}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderActivityList();
+        });
+    </script>
+</body>
+</html>

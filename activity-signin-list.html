@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>签到名单 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .table-row:hover { background: #F8FAFC; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium text-white">张明远</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- 左侧菜单 -->
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-th-large w-5 text-gray-500"></i>
+                <span>工作台</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-file-alt w-5 text-gray-500"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-tree w-5 text-gray-500"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-gray-600"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
+                <span>审核中心</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">12</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-calendar-alt w-5 text-gray-500"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-open w-5 text-gray-500"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-users w-5 text-gray-500"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-clipboard-check w-5 text-gray-500"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-signin.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-900">
+                <i class="fas fa-qrcode w-5 text-accent-blue"></i>
+                <span>活动签到</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-chart-line w-5 text-gray-500"></i>
+                <span>活动统计</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">专区配置</div>
+            <a href="zone-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-cog w-5 text-gray-500"></i>
+                <span>专区配置</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-gray-600"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-gray-600"></i>
+                <span>视频管理</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>内容分析</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-gray-500"></i>
+                <span>日志管理</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-gray-600"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="ml-[220px] mt-14 p-6">
+        <!-- 页面标题 -->
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center gap-4">
+                <a href="activity-signin.html" class="w-10 h-10 flex items-center justify-center rounded-lg bg-white border border-gray-200 hover:bg-gray-50 transition-colors">
+                    <i class="fas fa-arrow-left text-gray-600"></i>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-semibold text-gray-900">签到名单</h1>
+                    <p id="activityTitle" class="text-gray-500 mt-1">AI公共数据开放培训会</p>
+                </div>
+            </div>
+            <button onclick="exportList()" class="px-5 py-2.5 bg-accent-green text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors">
+                <i class="fas fa-download mr-2"></i>导出名单
+            </button>
+        </div>
+
+        <!-- 统计卡片 -->
+        <div class="grid grid-cols-4 gap-4 mb-6">
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-accent-blue/10 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-users text-accent-blue text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">报名人数</p>
+                        <p id="totalCount" class="text-2xl font-bold text-gray-900">120</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-accent-green/10 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-check text-accent-green text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">已签到</p>
+                        <p id="signedCount" class="text-2xl font-bold text-accent-green">82</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gray-100 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-user-times text-gray-400 text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">未签到</p>
+                        <p id="unsignedCount" class="text-2xl font-bold text-gray-600">38</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl p-5 shadow-sm border border-gray-100">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-accent-amber/10 rounded-xl flex items-center justify-center">
+                        <i class="fas fa-percentage text-accent-amber text-xl"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">签到率</p>
+                        <p id="signinRate" class="text-2xl font-bold text-accent-amber">68%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 搜索筛选区 -->
+        <div class="bg-white rounded-xl p-6 mb-6 shadow-sm border border-gray-100">
+            <div class="flex flex-wrap gap-4">
+                <div class="flex-1 min-w-[200px]">
+                    <label class="block text-sm text-gray-500 mb-2">搜索</label>
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="searchInput" placeholder="姓名 / 企业名称"
+                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/20">
+                    </div>
+                </div>
+                <div class="w-[160px]">
+                    <label class="block text-sm text-gray-500 mb-2">签到状态</label>
+                    <select id="signinStatus" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-accent-blue">
+                        <option value="">全部</option>
+                        <option value="signed">已签到</option>
+                        <option value="unsigned">未签到</option>
+                    </select>
+                </div>
+                <div class="flex items-end gap-3">
+                    <button onclick="filterList()" class="px-5 py-2.5 bg-accent-blue text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-search mr-2"></i>查询
+                    </button>
+                    <button onclick="resetFilters()" class="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-undo mr-2"></i>重置
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 名单表格 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">用户姓名</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">企业名称</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">手机号</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">报名时间</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">签到状态</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">签到时间</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="signinTableBody" class="divide-y divide-gray-100">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- 手动签到确认弹窗 -->
+    <div id="signinModal" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/50" onclick="closeSigninModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-[400px] overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900">确认手动签到</h3>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 bg-accent-green/10 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-check text-accent-green text-xl"></i>
+                    </div>
+                    <div>
+                        <p id="signinUserName" class="font-medium text-gray-900">李明</p>
+                        <p id="signinUserCompany" class="text-sm text-gray-500">深圳市腾讯科技有限公司</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 text-center mb-6">确认将此用户标记为已签到？</p>
+                <div class="flex gap-3">
+                    <button onclick="closeSigninModal()" class="flex-1 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                        取消
+                    </button>
+                    <button onclick="confirmSignin()" class="flex-1 px-4 py-2.5 bg-accent-green text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors">
+                        确认签到
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed top-20 right-6 z-50 hidden">
+        <div class="toast bg-gray-900 text-white px-5 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <i class="fas fa-check-circle text-accent-green"></i>
+            <span id="toastMessage">操作成功</span>
+        </div>
+    </div>
+
+    <script>
+        // Mock数据 - 签到名单
+        const signinList = [
+            { id: 1, name: '李明', company: '深圳市腾讯科技有限公司', phone: '138****1234', regTime: '2026-06-20 10:23', signed: true, signTime: '2026-06-25 08:45' },
+            { id: 2, name: '王芳', company: '广州阿里云数据有限公司', phone: '139****5678', regTime: '2026-06-20 11:05', signed: true, signTime: '2026-06-25 08:52' },
+            { id: 3, name: '张伟', company: '北京百度在线网络技术有限公司', phone: '137****9012', regTime: '2026-06-21 09:15', signed: true, signTime: '2026-06-25 09:10' },
+            { id: 4, name: '刘洋', company: '上海华为技术有限公司', phone: '136****3456', regTime: '2026-06-21 14:30', signed: false, signTime: '-' },
+            { id: 5, name: '陈静', company: '杭州阿里巴巴集团', phone: '135****7890', regTime: '2026-06-22 08:45', signed: true, signTime: '2026-06-25 08:38' },
+            { id: 6, name: '赵强', company: '深圳市腾讯科技有限公司', phone: '134****2345', regTime: '2026-06-22 10:20', signed: true, signTime: '2026-06-25 09:25' },
+            { id: 7, name: '周敏', company: '广州网易计算机系统有限公司', phone: '133****6789', regTime: '2026-06-22 15:40', signed: false, signTime: '-' },
+            { id: 8, name: '吴涛', company: '北京字节跳动科技有限公司', phone: '132****0123', regTime: '2026-06-23 09:00', signed: true, signTime: '2026-06-25 08:55' },
+            { id: 9, name: '孙丽', company: '深圳小米通信技术有限公司', phone: '131****4567', regTime: '2026-06-23 11:30', signed: true, signTime: '2026-06-25 09:30' },
+            { id: 10, name: '郑刚', company: '上海拼多多有限公司', phone: '130****8901', regTime: '2026-06-23 14:15', signed: false, signTime: '-' },
+            { id: 11, name: '王秀英', company: '南京苏宁易购电子商务有限公司', phone: '129****2345', regTime: '2026-06-24 08:30', signed: true, signTime: '2026-06-25 08:40' },
+            { id: 12, name: '刘建军', company: '成都京东世纪贸易有限公司', phone: '128****6789', regTime: '2026-06-24 10:45', signed: true, signTime: '2026-06-25 09:15' },
+            { id: 13, name: '陈志远', company: '武汉美团科技有限公司', phone: '127****0123', regTime: '2026-06-24 13:20', signed: false, signTime: '-' },
+            { id: 14, name: '黄丽华', company: '西安蚂蚁金服有限公司', phone: '126****4567', regTime: '2026-06-24 16:00', signed: true, signTime: '2026-06-25 09:05' },
+            { id: 15, name: '杨大伟', company: '重庆长安汽车股份有限公司', phone: '125****8901', regTime: '2026-06-25 07:50', signed: true, signTime: '2026-06-25 08:30' }
+        ];
+
+        let currentUser = null;
+        const activityData = {
+            1: { name: 'AI公共数据开放培训会', total: 120, signed: 82, unsigned: 38 },
+            2: { name: '数字政务创新发展论坛', total: 200, signed: 0, unsigned: 200 },
+            3: { name: '智慧城市数据应用研讨会', total: 80, signed: 80, unsigned: 0 },
+            4: { name: '数据安全与合规培训会', total: 150, signed: 45, unsigned: 105 },
+            5: { name: '公共数据开放工作推进会', total: 100, signed: 0, unsigned: 100 },
+            6: { name: '大数据分析与可视化培训', total: 60, signed: 60, unsigned: 0 },
+            7: { name: '政务数据共享交换技术培训', total: 180, signed: 120, unsigned: 60 },
+            8: { name: '数据要素市场建设专题讲座', total: 90, signed: 0, unsigned: 90 },
+            9: { name: '云计算与大数据技术交流会', total: 75, signed: 72, unsigned: 3 },
+            10: { name: '数据治理能力提升培训班', total: 130, signed: 88, unsigned: 42 }
+        };
+
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id')) || 1;
+            const activity = activityData[id] || activityData[1];
+
+            document.getElementById('activityTitle').textContent = activity.name;
+            document.getElementById('totalCount').textContent = activity.total;
+            document.getElementById('signedCount').textContent = activity.signed;
+            document.getElementById('unsignedCount').textContent = activity.unsigned;
+            document.getElementById('signinRate').textContent = Math.round((activity.signed / activity.total) * 100) + '%';
+
+            renderList(signinList);
+        }
+
+        function renderList(data) {
+            const tbody = document.getElementById('signinTableBody');
+            tbody.innerHTML = data.map(user => {
+                const statusClass = user.signed ? 'bg-accent-green/10 text-accent-green' : 'bg-gray-100 text-gray-500';
+                const statusText = user.signed ? '已签到' : '未签到';
+                const actionBtn = user.signed ?
+                    '<span class="text-gray-400 text-xs">-</span>' :
+                    `<button onclick="openSigninModal(${user.id})" class="px-3 py-1.5 text-xs font-medium text-accent-blue hover:bg-accent-blue/5 rounded-lg transition-colors"><i class="fas fa-check mr-1"></i>手动签到</button>`;
+
+                return `
+                    <tr class="table-row">
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-gray-900">${user.name}</div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${user.company}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${user.phone}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${user.regTime}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="px-3 py-1 ${statusClass} text-xs font-medium rounded-full">${statusText}</span>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${user.signTime}</td>
+                        <td class="px-6 py-4 text-center">${actionBtn}</td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function filterList() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const status = document.getElementById('signinStatus').value;
+
+            let filtered = signinList.filter(u => {
+                const matchSearch = !search || u.name.toLowerCase().includes(search) || u.company.toLowerCase().includes(search);
+                const matchStatus = !status || (status === 'signed' && u.signed) || (status === 'unsigned' && !u.signed);
+                return matchSearch && matchStatus;
+            });
+
+            renderList(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('signinStatus').value = '';
+            renderList(signinList);
+        }
+
+        function openSigninModal(userId) {
+            currentUser = signinList.find(u => u.id === userId);
+            if (!currentUser) return;
+
+            document.getElementById('signinUserName').textContent = currentUser.name;
+            document.getElementById('signinUserCompany').textContent = currentUser.company;
+            document.getElementById('signinModal').classList.remove('hidden');
+        }
+
+        function closeSigninModal() {
+            document.getElementById('signinModal').classList.add('hidden');
+            currentUser = null;
+        }
+
+        function confirmSignin() {
+            if (currentUser) {
+                currentUser.signed = true;
+                currentUser.signTime = new Date().toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }).replace(/\//g, '-');
+
+                // 更新统计数据
+                const signedEl = document.getElementById('signedCount');
+                const unsignedEl = document.getElementById('unsignedCount');
+                const rateEl = document.getElementById('signinRate');
+                const signed = parseInt(signedEl.textContent) + 1;
+                const unsigned = parseInt(unsignedEl.textContent) - 1;
+                const total = signed + unsigned;
+
+                signedEl.textContent = signed;
+                unsignedEl.textContent = unsigned;
+                rateEl.textContent = Math.round((signed / total) * 100) + '%';
+
+                renderList(signinList);
+                showToast('签到成功');
+            }
+            closeSigninModal();
+        }
+
+        function exportList() {
+            showToast('名单导出中...');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2000);
+        }
+
+        init();
+    </script>
+</body>
+</html>

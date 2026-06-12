@@ -11,17 +11,17 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-bg': '#030714',
-                        'card-bg': '#0a1628',
-                        'border-dark': '#1a2744',
-                        'accent-blue': '#3b82f6',
-                        'accent-cyan': '#06b6d4',
-                        'accent-green': '#10b981',
-                        'accent-amber': '#f59e0b',
-                        'accent-red': '#ef4444',
-                        'text-primary': '#f1f5f9',
-                        'text-secondary': '#94a3b8',
-                        'text-muted': '#475569'
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
                     }
                 }
             }
@@ -29,102 +29,126 @@
     </script>
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
-        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
-        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
     </style>
 </head>
-<body class="bg-primary-bg text-text-primary min-h-screen">
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
         <!-- 顶部导航 -->
-    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
                 <div class="flex items-center gap-3">
             <img src="images/logo.png" alt="logo" class="h-9">
-            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
         </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
-            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
-                    <span class="text-xs text-text-muted">超级管理员</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
                 </div>
-                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
             </div>
         </div>
     </header>
 
-    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
         <nav class="py-4">
-            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
             <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <i class="fas fa-th-large w-5 text-gray-600"></i>
                 <span>工作台</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
             <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-file-alt w-5 text-gray-600"></i>
                 <span>内容管理</span>
             </a>
             <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-tree w-5 text-gray-600"></i>
                 <span>分类管理</span>
             </a>
             <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <i class="fas fa-tags w-5 text-gray-600"></i>
                 <span>标签管理</span>
             </a>
             <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
                 <span>审核中心</span>
             </a>
             <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <i class="fas fa-paper-plane w-5 text-gray-600"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-calendar-alt w-5 text-gray-600"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users w-5 text-gray-600"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-clipboard-check w-5 text-gray-600"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>活动统计</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <i class="fas fa-images w-5 text-gray-600"></i>
                 <span>图片管理</span>
             </a>
             <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
                 <span>文件管理</span>
             </a>
             <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <i class="fas fa-video w-5 text-gray-600"></i>
                 <span>视频管理</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
             <a href="data-overview.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-chart-pie w-5 text-accent-blue"></i>
                 <span>数据概览</span>
             </a>
             <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
                 <span>内容分析</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
                 <span>用户管理</span>
             </a>
             <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
                 <span>角色权限</span>
             </a>
             <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <i class="fas fa-history w-5 text-gray-600"></i>
                 <span>日志管理</span>
             </a>
 
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-cog w-5 text-gray-600"></i>
                 <span>系统设置</span>
             </a>
         </nav>
@@ -134,78 +158,78 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-2xl font-semibold">数据概览</h1>
-                <p class="text-text-muted mt-1">内容数据统计与分析</p>
+                <p class="text-gray-500 mt-1">内容数据统计与分析</p>
             </div>
-            <button id="exportBtn" class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
+            <button id="exportBtn" class="px-4 py-2 bg-primary-bg border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors">
                 <i class="fas fa-download mr-2"></i>导出报表
             </button>
         </div>
 
         <!-- 时间筛选 -->
-        <div class="bg-card-bg rounded-xl p-4 mb-6 border border-border-dark">
+        <div class="bg-white rounded-xl p-4 mb-6 border border-[#E2E8F0]">
             <div class="flex items-center gap-2">
-                <span class="text-sm text-text-muted mr-2">时间范围：</span>
+                <span class="text-sm text-gray-500 mr-2">时间范围：</span>
                 <div id="timeFilterBtns" class="flex gap-2">
                     <button class="time-btn px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-lg text-sm" data-period="today">今日</button>
-                    <button class="time-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="week">本周</button>
-                    <button class="time-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="month">本月</button>
-                    <button class="time-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="year">本年</button>
+                    <button class="time-btn px-4 py-2 text-gray-500 hover:text-white text-sm" data-period="week">本周</button>
+                    <button class="time-btn px-4 py-2 text-gray-500 hover:text-white text-sm" data-period="month">本月</button>
+                    <button class="time-btn px-4 py-2 text-gray-500 hover:text-white text-sm" data-period="year">本年</button>
                 </div>
             </div>
         </div>
 
         <!-- 概览统计 -->
         <div class="grid grid-cols-4 gap-5 mb-6">
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark stat-card" data-type="content">
+            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0] stat-card" data-type="content">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
                         <i class="fas fa-file-alt text-accent-blue text-xl"></i>
                     </div>
                     <div>
                         <div id="statContent" class="text-2xl font-bold">0</div>
-                        <div class="text-sm text-text-muted">内容总量</div>
+                        <div class="text-sm text-gray-500">内容总量</div>
                     </div>
                 </div>
                 <div id="statContentTrend" class="mt-3 text-sm text-accent-green flex items-center gap-1">
                     <i class="fas fa-arrow-up text-xs"></i>较上期 +0%
                 </div>
             </div>
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark stat-card" data-type="views">
+            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0] stat-card" data-type="views">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-cyan/20 flex items-center justify-center">
                         <i class="fas fa-eye text-accent-cyan text-xl"></i>
                     </div>
                     <div>
                         <div id="statViews" class="text-2xl font-bold">0</div>
-                        <div class="text-sm text-text-muted">总阅读量</div>
+                        <div class="text-sm text-gray-500">总阅读量</div>
                     </div>
                 </div>
                 <div id="statViewsTrend" class="mt-3 text-sm text-accent-green flex items-center gap-1">
                     <i class="fas fa-arrow-up text-xs"></i>较上期 +0%
                 </div>
             </div>
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark stat-card" data-type="likes">
+            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0] stat-card" data-type="likes">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-amber/20 flex items-center justify-center">
                         <i class="fas fa-thumbs-up text-accent-amber text-xl"></i>
                     </div>
                     <div>
                         <div id="statLikes" class="text-2xl font-bold">0</div>
-                        <div class="text-sm text-text-muted">总点赞量</div>
+                        <div class="text-sm text-gray-500">总点赞量</div>
                     </div>
                 </div>
                 <div id="statLikesTrend" class="mt-3 text-sm text-accent-green flex items-center gap-1">
                     <i class="fas fa-arrow-up text-xs"></i>较上期 +0%
                 </div>
             </div>
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark stat-card" data-type="users">
+            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0] stat-card" data-type="users">
                 <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-xl bg-accent-green/20 flex items-center justify-center">
                         <i class="fas fa-users text-accent-green text-xl"></i>
                     </div>
                     <div>
                         <div id="statUsers" class="text-2xl font-bold">0</div>
-                        <div class="text-sm text-text-muted">访问用户</div>
+                        <div class="text-sm text-gray-500">访问用户</div>
                     </div>
                 </div>
                 <div id="statUsersTrend" class="mt-3 text-sm text-accent-green flex items-center gap-1">
@@ -217,13 +241,13 @@
         <!-- 图表区域 -->
         <div class="grid grid-cols-3 gap-6">
             <!-- 趋势图 -->
-            <div class="col-span-2 bg-card-bg rounded-xl p-5 border border-border-dark">
+            <div class="col-span-2 bg-white rounded-xl p-5 border border-[#E2E8F0]">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium">内容数据趋势</h3>
                     <div id="chartPeriodBtns" class="flex gap-2">
                         <button class="chart-period-btn px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-lg text-sm" data-period="week">本周</button>
-                        <button class="chart-period-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="month">本月</button>
-                        <button class="chart-period-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-period="year">本年</button>
+                        <button class="chart-period-btn px-4 py-2 text-gray-500 hover:text-white text-sm" data-period="month">本月</button>
+                        <button class="chart-period-btn px-4 py-2 text-gray-500 hover:text-white text-sm" data-period="year">本年</button>
                     </div>
                 </div>
                 <div id="trendChart" class="h-64 flex items-end gap-2">
@@ -232,21 +256,21 @@
                 <div class="flex items-center justify-center gap-6 mt-4 text-sm">
                     <div class="flex items-center gap-2">
                         <span class="w-3 h-3 rounded bg-accent-blue"></span>
-                        <span class="text-text-muted">发布量</span>
+                        <span class="text-gray-500">发布量</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="w-3 h-3 rounded bg-accent-cyan"></span>
-                        <span class="text-text-muted">阅读量</span>
+                        <span class="text-gray-500">阅读量</span>
                     </div>
                     <div class="flex items-center gap-2">
                         <span class="w-3 h-3 rounded bg-accent-amber"></span>
-                        <span class="text-text-muted">点赞量</span>
+                        <span class="text-gray-500">点赞量</span>
                     </div>
                 </div>
             </div>
 
             <!-- 分类分布 -->
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0]">
                 <h3 class="text-lg font-medium mb-4">内容分类分布</h3>
                 <div id="categoryDist" class="space-y-4">
                     <!-- 动态渲染 -->
@@ -255,7 +279,7 @@
         </div>
 
         <!-- 热门内容排行 -->
-        <div class="bg-card-bg rounded-xl border border-border-dark p-5 mt-6">
+        <div class="bg-white rounded-xl border border-[#E2E8F0] p-5 mt-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-medium">热门内容 TOP 5</h3>
                 <a href="content-list.html" class="text-sm text-accent-blue hover:underline">查看全部</a>
@@ -420,7 +444,7 @@
                 el.className = 'mt-3 text-sm text-accent-red flex items-center gap-1';
                 el.innerHTML = `<i class="fas fa-arrow-down text-xs"></i>${periodText} ${trend}%`;
             } else {
-                el.className = 'mt-3 text-sm text-text-muted flex items-center gap-1';
+                el.className = 'mt-3 text-sm text-gray-500 flex items-center gap-1';
                 el.innerHTML = `${periodText} 持平`;
             }
         }
@@ -448,7 +472,7 @@
                         <div class="w-4 bg-accent-cyan rounded-t-lg transition-all" style="height: ${viewsHeight}%" title="阅读: ${d.views}"></div>
                         <div class="w-4 bg-accent-amber rounded-t-lg transition-all" style="height: ${likesHeight}%" title="点赞: ${d.likes}"></div>
                     </div>
-                    <span class="text-text-muted text-xs">${d.label}</span>
+                    <span class="text-gray-500 text-xs">${d.label}</span>
                 </div>
                 `;
             }).join('');
@@ -464,7 +488,7 @@
                 <div class="category-item cursor-pointer hover:bg-primary-bg/50 rounded-lg p-2 -m-2 transition-colors" data-category="${cat.name}">
                     <div class="flex items-center justify-between mb-2">
                         <span class="text-sm">${cat.name}</span>
-                        <span class="text-sm text-text-muted">${cat.count}篇 (${cat.percent}%)</span>
+                        <span class="text-sm text-gray-500">${cat.count}篇 (${cat.percent}%)</span>
                     </div>
                     <div class="h-2 bg-primary-bg rounded-full overflow-hidden">
                         <div class="h-full ${bgColor} rounded-full transition-all" style="width: ${cat.percent}%"></div>
@@ -487,20 +511,20 @@
         function renderHotContent() {
             const container = document.getElementById('hotContentList');
             const colors = ['accent-amber', 'text-muted', 'orange-700', 'primary-bg', 'primary-bg'];
-            const borderColors = ['', '', '', 'border-border-dark', 'border-border-dark'];
+            const borderColors = ['', '', '', 'border-[#E2E8F0]', 'border-[#E2E8F0]'];
 
             container.innerHTML = hotContentData.map((content, index) => {
                 const rankColor = index === 0 ? 'accent-amber' : (index === 1 ? 'text-muted' : (index === 2 ? 'orange-400' : 'text-muted'));
-                const border = index >= 3 ? 'border border-border-dark' : '';
+                const border = index >= 3 ? 'border border-[#E2E8F0]' : '';
                 const bg = index >= 3 ? 'bg-primary-bg' : '';
 
                 return `
-                <div class="bg-card-bg rounded-xl p-4 border border-border-dark hover:border-accent-blue transition-colors cursor-pointer content-item" data-id="${content.id}">
+                <div class="bg-white rounded-xl p-4 border border-[#E2E8F0] hover:border-accent-blue transition-colors cursor-pointer content-item" data-id="${content.id}">
                     <div class="w-8 h-8 rounded-full ${index === 0 ? 'bg-accent-amber/20' : (index === 1 ? 'bg-text-muted/20' : (index === 2 ? 'bg-orange-700/20' : 'bg-primary-bg'))} flex items-center justify-center mb-3">
-                        <span class="${index === 0 ? 'text-accent-amber' : (index === 1 ? 'text-text-muted' : (index === 2 ? 'text-orange-400' : 'text-text-muted'))} font-bold">${index + 1}</span>
+                        <span class="${index === 0 ? 'text-accent-amber' : (index === 1 ? 'text-gray-500' : (index === 2 ? 'text-orange-400' : 'text-gray-500'))} font-bold">${index + 1}</span>
                     </div>
                     <h4 class="text-sm font-medium mb-2 line-clamp-2">${content.title}</h4>
-                    <div class="flex items-center gap-3 text-xs text-text-muted">
+                    <div class="flex items-center gap-3 text-xs text-gray-500">
                         <span><i class="fas fa-eye"></i> ${formatNumber(content.views)}</span>
                         <span><i class="fas fa-heart"></i> ${content.likes}</span>
                     </div>
@@ -526,10 +550,10 @@
                     currentPeriod = btn.dataset.period;
                     btns.forEach(b => {
                         b.classList.remove('bg-accent-blue/20', 'text-accent-blue');
-                        b.classList.add('text-text-muted', 'hover:text-text-primary');
+                        b.classList.add('text-gray-500', 'hover:text-white');
                     });
                     btn.classList.add('bg-accent-blue/20', 'text-accent-blue');
-                    btn.classList.remove('text-text-muted', 'hover:text-text-primary');
+                    btn.classList.remove('text-gray-500', 'hover:text-white');
                     renderStats();
                 });
             });
@@ -543,10 +567,10 @@
                     const period = btn.dataset.period;
                     btns.forEach(b => {
                         b.classList.remove('bg-accent-blue/20', 'text-accent-blue');
-                        b.classList.add('text-text-muted', 'hover:text-text-primary');
+                        b.classList.add('text-gray-500', 'hover:text-white');
                     });
                     btn.classList.add('bg-accent-blue/20', 'text-accent-blue');
-                    btn.classList.remove('text-text-muted', 'hover:text-text-primary');
+                    btn.classList.remove('text-gray-500', 'hover:text-white');
                     renderTrendChart();
                 });
             });

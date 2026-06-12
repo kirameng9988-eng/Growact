@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>活动签到</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#1d4ed8',
+            'primary-light': '#3b82f6',
+            success: '#10b981',
+            warning: '#f59e0b',
+            error: '#ef4444',
+          },
+          fontFamily: {
+            sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    * {
+      -webkit-tap-highlight-color: transparent;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      overscroll-behavior: none;
+    }
+
+    body {
+      background: #f1f5f9;
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #1d4ed8 0%, #3b82f6 100%);
+      box-shadow: 0 4px 16px rgba(29, 78, 216, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+      box-shadow: 0 2px 8px rgba(29, 78, 216, 0.25);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+      box-shadow: 0 4px 16px rgba(16, 185, 129, 0.35);
+      transition: all 0.2s ease;
+    }
+
+    .btn-success:active {
+      transform: scale(0.98);
+    }
+
+    .card-shadow {
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    .slide-up {
+      animation: slideUp 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes bounceIn {
+      0% { transform: scale(0); opacity: 0; }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .bounce-in {
+      animation: bounceIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .pulse {
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+
+    .status-bar {
+      padding-top: env(safe-area-inset-top);
+    }
+
+    .bottom-bar {
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+
+    .cover-img {
+      aspect-ratio: 16/9;
+      object-fit: cover;
+    }
+
+    /* Prevent pull-to-refresh */
+    .no-pull {
+      touch-action: pan-y;
+      overscroll-behavior: none;
+    }
+
+    /* Demo panel */
+    .demo-btn {
+      position: fixed;
+      bottom: calc(100px + env(safe-area-inset-bottom));
+      right: 16px;
+      z-index: 100;
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .demo-btn:active {
+      transform: scale(0.95);
+    }
+
+    .demo-panel {
+      position: fixed;
+      bottom: calc(160px + env(safe-area-inset-bottom));
+      right: 16px;
+      z-index: 99;
+      width: 200px;
+      background: white;
+      border-radius: 14px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(10px) scale(0.95);
+      pointer-events: none;
+      transition: all 0.25s ease;
+    }
+
+    .demo-panel.active {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .demo-panel-header {
+      padding: 12px 16px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      background: #f8fafc;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .demo-panel-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      font-size: 14px;
+      color: #334155;
+      transition: background 0.15s ease;
+      cursor: pointer;
+    }
+
+    .demo-panel-item:active {
+      background: #f1f5f9;
+    }
+
+    .demo-panel-item.active {
+      background: #eef2ff;
+      color: #4f46e5;
+    }
+
+    .demo-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .demo-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 98;
+      background: rgba(0, 0, 0, 0);
+      pointer-events: none;
+      transition: background 0.2s ease;
+    }
+
+    .demo-overlay.active {
+      background: rgba(0, 0, 0, 0.1);
+      pointer-events: auto;
+    }
+  </style>
+</head>
+<body class="flex flex-col min-h-screen bg-slate-100">
+  <!-- 顶部导航 -->
+  <header id="header" class="bg-white shadow-sm status-bar sticky top-0 z-50">
+    <div class="flex items-center justify-center h-14 px-4">
+      <button id="backBtn" class="absolute left-4 flex items-center text-slate-600 hover:text-slate-800 transition-colors">
+        <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        </svg>
+        <span class="text-sm">返回</span>
+      </button>
+      <h1 id="headerTitle" class="text-base font-semibold text-slate-800">活动签到</h1>
+    </div>
+  </header>
+
+  <!-- 主内容区 -->
+  <main id="mainContent" class="flex-1 overflow-y-auto no-pull px-4 pt-4 pb-2">
+
+    <!-- 加载中状态 -->
+    <div id="loadingState" class="hidden flex-col items-center justify-center min-h-96">
+      <div class="relative">
+        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center">
+          <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div class="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-green-500 flex items-center justify-center">
+          <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/>
+          </svg>
+        </div>
+      </div>
+      <p class="mt-6 text-slate-600 text-sm pulse">正在获取签到信息...</p>
+    </div>
+
+    <!-- 待签到状态 -->
+    <div id="pendingState" class="hidden flex-col gap-4 fade-in">
+      <!-- 活动卡片 -->
+      <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+        <img id="activityCover" class="w-full cover-img" src="https://picsum.photos/750/422?random=1" alt="活动封面">
+        <div class="p-5">
+          <h2 id="activityName" class="text-lg font-semibold text-slate-800 leading-tight">AI公共数据开放培训会</h2>
+          <div class="mt-4 space-y-2">
+            <div class="flex items-center text-sm text-slate-500">
+              <svg class="w-4 h-4 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+              </svg>
+              <span id="activityDate">2026-06-25 09:00-12:00</span>
+            </div>
+            <div class="flex items-center text-sm text-slate-500">
+              <svg class="w-4 h-4 mr-2 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
+              </svg>
+              <span id="activityLocation">上海数据交易所</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 用户信息卡片 -->
+      <div class="bg-white rounded-2xl card-shadow p-5">
+        <div class="flex items-center gap-4">
+          <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center text-white text-lg font-medium">
+            张
+          </div>
+          <div class="flex-1">
+            <p id="userName" class="text-base font-medium text-slate-800">张三</p>
+            <p id="userCompany" class="text-sm text-slate-500 mt-0.5">上海某科技有限公司</p>
+            <p id="userPhone" class="text-sm text-slate-400 mt-0.5">138****8888</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 状态提示 -->
+      <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+        <svg class="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+        </svg>
+        <div>
+          <p class="text-sm font-medium text-amber-800">您尚未签到</p>
+          <p class="text-sm text-amber-600 mt-0.5">请确认身份信息后完成签到</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 签到成功状态 -->
+    <div id="successState" class="hidden flex-col items-center gap-6 fade-in">
+      <!-- 成功图标 -->
+      <div class="mt-8 bounce-in">
+        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center shadow-lg">
+          <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 成功文案 -->
+      <div class="text-center">
+        <h2 class="text-2xl font-bold text-slate-800">签到成功</h2>
+        <p class="text-sm text-slate-500 mt-2">欢迎参加本次活动</p>
+      </div>
+
+      <!-- 签到信息卡片 -->
+      <div class="w-full bg-white rounded-2xl card-shadow p-5">
+        <div class="space-y-4">
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-500">活动名称</span>
+            <span id="successActivityName" class="text-sm font-medium text-slate-700">AI公共数据开放培训会</span>
+          </div>
+          <div class="h-px bg-slate-100"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-500">签到时间</span>
+            <span id="signTime" class="text-sm font-medium text-slate-700">09:23</span>
+          </div>
+          <div class="h-px bg-slate-100"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-500">签到地点</span>
+            <span class="text-sm font-medium text-slate-700">上海数据交易所</span>
+          </div>
+          <div class="h-px bg-slate-100"></div>
+          <div class="flex justify-between items-center">
+            <span class="text-sm text-slate-500">签到人</span>
+            <span class="text-sm font-medium text-slate-700">张三 · 上海某科技有限公司</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 已签到状态 -->
+    <div id="signedState" class="hidden flex-col items-center gap-6 fade-in">
+      <!-- 已签到图标 -->
+      <div class="mt-8 bounce-in">
+        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-green-400 to-green-500 flex items-center justify-center shadow-lg">
+          <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 已签到文案 -->
+      <div class="text-center">
+        <h2 class="text-2xl font-bold text-slate-800">您已完成签到</h2>
+        <p class="text-sm text-slate-500 mt-2">签到时间：<span id="signedTime">09:23</span></p>
+      </div>
+
+      <!-- 提示 -->
+      <div class="w-full bg-slate-50 rounded-xl p-4 text-center">
+        <p class="text-sm text-slate-500">无需重复签到</p>
+      </div>
+    </div>
+
+    <!-- 签到失效状态 -->
+    <div id="expiredState" class="hidden flex-col items-center gap-6 fade-in">
+      <!-- 失效图标 -->
+      <div class="mt-8">
+        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-slate-300 to-slate-400 flex items-center justify-center shadow-lg">
+          <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 失效文案 -->
+      <div class="text-center">
+        <h2 class="text-2xl font-bold text-slate-800">签到已结束</h2>
+        <p class="text-sm text-slate-500 mt-2">当前活动签到时间已截止</p>
+      </div>
+    </div>
+
+    <!-- 未登录状态 -->
+    <div id="loggedoutState" class="hidden flex-col items-center gap-6 fade-in">
+      <!-- 未登录图标 -->
+      <div class="mt-8">
+        <div class="w-24 h-24 rounded-full bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center shadow-lg">
+          <svg class="w-14 h-14 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+          </svg>
+        </div>
+      </div>
+
+      <!-- 未登录文案 -->
+      <div class="text-center">
+        <h2 class="text-xl font-bold text-slate-800">请先登录后签到</h2>
+        <p class="text-sm text-slate-500 mt-2">需要统一身份认证才能完成签到</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 底部按钮区 -->
+  <footer id="bottomBar" class="bg-white border-t border-slate-100 bottom-bar px-4 pt-4 pb-2 safe-area-bottom">
+    <!-- 待签到按钮 -->
+    <div id="pendingBtn" class="hidden">
+      <button id="confirmSignBtn" class="btn-primary w-full h-12 rounded-xl text-white font-medium text-base transition-all">
+        确认签到
+      </button>
+    </div>
+
+    <!-- 签到成功按钮 -->
+    <div id="successBtn" class="hidden">
+      <button id="backActivityBtn" class="btn-success w-full h-12 rounded-xl text-white font-medium text-base transition-all">
+        返回我的活动
+      </button>
+    </div>
+
+    <!-- 已签到按钮 -->
+    <div id="signedBtn" class="hidden">
+      <button id="backActivityBtn2" class="bg-slate-600 hover:bg-slate-700 active:bg-slate-800 w-full h-12 rounded-xl text-white font-medium text-base transition-all">
+        返回我的活动
+      </button>
+    </div>
+
+    <!-- 签到失效按钮 -->
+    <div id="expiredBtn" class="hidden">
+      <button id="viewDetailBtn" class="bg-slate-600 hover:bg-slate-700 active:bg-slate-800 w-full h-12 rounded-xl text-white font-medium text-base transition-all">
+        查看活动详情
+      </button>
+    </div>
+
+    <!-- 未登录按钮 -->
+    <div id="loggedoutBtn" class="hidden">
+      <button id="loginBtn" class="btn-primary w-full h-12 rounded-xl text-white font-medium text-base transition-all">
+        统一身份认证登录
+      </button>
+    </div>
+  </footer>
+
+  <!-- 演示面板 -->
+  <div id="demoOverlay" class="demo-overlay"></div>
+  <div id="demoPanel" class="demo-panel">
+    <div class="demo-panel-header">演示切换状态</div>
+    <div class="demo-panel-item" data-state="loading">
+      <span class="demo-dot" style="background: #94a3b8;"></span>
+      <span>加载中</span>
+    </div>
+    <div class="demo-panel-item" data-state="pending">
+      <span class="demo-dot" style="background: #f59e0b;"></span>
+      <span>待签到</span>
+    </div>
+    <div class="demo-panel-item" data-state="success">
+      <span class="demo-dot" style="background: #10b981;"></span>
+      <span>签到成功</span>
+    </div>
+    <div class="demo-panel-item" data-state="signed">
+      <span class="demo-dot" style="background: #059669;"></span>
+      <span>已签到</span>
+    </div>
+    <div class="demo-panel-item" data-state="expired">
+      <span class="demo-dot" style="background: #94a3b8;"></span>
+      <span>签到失效</span>
+    </div>
+    <div class="demo-panel-item" data-state="loggedout">
+      <span class="demo-dot" style="background: #f97316;"></span>
+      <span>未登录</span>
+    </div>
+  </div>
+  <button id="demoBtn" class="demo-btn" title="切换状态">
+    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+    </svg>
+  </button>
+
+  <script>
+    // Mock数据
+    const mockData = {
+      activity: {
+        id: 'ACT20260625001',
+        name: 'AI公共数据开放培训会',
+        cover: 'https://picsum.photos/750/422?random=1',
+        date: '2026-06-25',
+        time: '09:00-12:00',
+        location: '上海数据交易所',
+        address: '上海市浦东新区张江高科技园区'
+      },
+      user: {
+        name: '张三',
+        company: '上海某科技有限公司',
+        phone: '138****8888',
+        initials: '张'
+      },
+      signTime: '09:23'
+    };
+
+    // 状态管理
+    let currentState = 'loading';
+    let hasSigned = false;
+
+    // DOM元素
+    const states = {
+      loading: document.getElementById('loadingState'),
+      pending: document.getElementById('pendingState'),
+      success: document.getElementById('successState'),
+      signed: document.getElementById('signedState'),
+      expired: document.getElementById('expiredState'),
+      loggedout: document.getElementById('loggedoutState')
+    };
+
+    const buttons = {
+      pending: document.getElementById('pendingBtn'),
+      success: document.getElementById('successBtn'),
+      signed: document.getElementById('signedBtn'),
+      expired: document.getElementById('expiredBtn'),
+      loggedout: document.getElementById('loggedoutBtn')
+    };
+
+    // 切换状态
+    function switchState(newState) {
+      // 隐藏所有状态
+      Object.values(states).forEach(el => {
+        el.classList.add('hidden');
+        el.classList.remove('flex');
+      });
+
+      // 隐藏所有按钮
+      Object.values(buttons).forEach(el => {
+        el.classList.add('hidden');
+      });
+
+      // 显示新状态
+      if (states[newState]) {
+        states[newState].classList.remove('hidden');
+        states[newState].classList.add('flex');
+      }
+
+      // 显示对应按钮
+      if (buttons[newState]) {
+        buttons[newState].classList.remove('hidden');
+      }
+
+      currentState = newState;
+
+      // 更新页面标题
+      const titles = {
+        loading: '活动签到',
+        pending: '活动签到',
+        success: '签到成功',
+        signed: '已完成签到',
+        expired: '签到已结束',
+        loggedout: '请登录'
+      };
+      document.getElementById('headerTitle').textContent = titles[newState] || '活动签到';
+
+      updateDemoPanelState();
+    }
+
+    // 初始化页面
+    function init() {
+      // 检查URL参数
+      const urlParams = new URLSearchParams(window.location.search);
+      const status = urlParams.get('status');
+
+      // 如果已经签过，显示已签到状态
+      const savedSignState = localStorage.getItem('h5_checkin_signed');
+      const savedSignTime = localStorage.getItem('h5_checkin_time');
+
+      if (savedSignState === 'true' && savedSignTime) {
+        document.getElementById('signedTime').textContent = savedSignTime;
+        hasSigned = true;
+      }
+
+      // 根据URL参数或默认状态显示
+      if (status === 'success' && !hasSigned) {
+        // 模拟签到成功
+        setTimeout(() => {
+          const now = new Date();
+          const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+          document.getElementById('signTime').textContent = timeStr;
+          switchState('success');
+        }, 100);
+        return;
+      }
+
+      // 显示加载中，然后切换到对应状态
+      switchState('loading');
+
+      setTimeout(() => {
+        if (status === 'expired') {
+          switchState('expired');
+        } else if (status === 'loggedout') {
+          switchState('loggedout');
+        } else if (status === 'signed' || hasSigned) {
+          switchState('signed');
+        } else if (status === 'success' || hasSigned) {
+          switchState('success');
+        } else {
+          switchState('pending');
+        }
+      }, 1500);
+    }
+
+    // 确认签到
+    document.getElementById('confirmSignBtn').addEventListener('click', function() {
+      // 保存签到状态
+      const now = new Date();
+      const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+
+      localStorage.setItem('h5_checkin_signed', 'true');
+      localStorage.setItem('h5_checkin_time', timeStr);
+
+      document.getElementById('signTime').textContent = timeStr;
+      hasSigned = true;
+
+      switchState('success');
+    });
+
+    // 返回我的活动（成功）
+    document.getElementById('backActivityBtn').addEventListener('click', function() {
+      alert('正在返回我的活动...\n\n(Mock: 跳转到活动列表页)');
+    });
+
+    // 返回我的活动（已签到）
+    document.getElementById('backActivityBtn2').addEventListener('click', function() {
+      alert('正在返回我的活动...\n\n(Mock: 跳转到活动列表页)');
+    });
+
+    // 查看活动详情
+    document.getElementById('viewDetailBtn').addEventListener('click', function() {
+      alert('正在查看活动详情...\n\n(Mock: 跳转到活动详情页)');
+    });
+
+    // 登录
+    document.getElementById('loginBtn').addEventListener('click', function() {
+      alert('正在进行统一身份认证...\n\n(Mock: 模拟登录成功后切换到待签到状态)');
+
+      // 模拟登录成功后
+      setTimeout(() => {
+        switchState('pending');
+      }, 1000);
+    });
+
+    // 返回按钮
+    document.getElementById('backBtn').addEventListener('click', function() {
+      if (currentState === 'success' || currentState === 'signed') {
+        alert('正在返回我的活动...\n\n(Mock: 跳转到活动列表页)');
+      } else {
+        alert('正在返回...\n\n(Mock: 跳转到上一个页面)');
+      }
+    });
+
+    // 演示面板
+    const demoBtn = document.getElementById('demoBtn');
+    const demoPanel = document.getElementById('demoPanel');
+    const demoOverlay = document.getElementById('demoOverlay');
+    let panelOpen = false;
+
+    function togglePanel() {
+      panelOpen = !panelOpen;
+      demoPanel.classList.toggle('active', panelOpen);
+      demoOverlay.classList.toggle('active', panelOpen);
+    }
+
+    function closePanel() {
+      panelOpen = false;
+      demoPanel.classList.remove('active');
+      demoOverlay.classList.remove('active');
+    }
+
+    demoBtn.addEventListener('click', togglePanel);
+    demoOverlay.addEventListener('click', closePanel);
+
+    // 更新演示面板选中状态
+    function updateDemoPanelState() {
+      document.querySelectorAll('.demo-panel-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.state === currentState);
+      });
+    }
+
+    // 演示面板状态切换
+    document.querySelectorAll('.demo-panel-item').forEach(item => {
+      item.addEventListener('click', function() {
+        const newState = this.dataset.state;
+        closePanel();
+
+        if (newState === 'loading') {
+          switchState('loading');
+          setTimeout(() => switchState('pending'), 1500);
+        } else if (newState === 'success') {
+          // 签到成功需要先模拟签到
+          const now = new Date();
+          const timeStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
+          document.getElementById('signTime').textContent = timeStr;
+          localStorage.setItem('h5_checkin_signed', 'true');
+          localStorage.setItem('h5_checkin_time', timeStr);
+          hasSigned = true;
+          switchState('success');
+        } else {
+          if (newState === 'pending') {
+            // 清除签到状态
+            localStorage.removeItem('h5_checkin_signed');
+            localStorage.removeItem('h5_checkin_time');
+            hasSigned = false;
+          }
+          switchState(newState);
+        }
+
+        updateDemoPanelState();
+      });
+    });
+
+    // 页面加载完成后初始化
+    document.addEventListener('DOMContentLoaded', init);
+
+    // 如果页面已经加载完
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      init();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>专区配置 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'secondary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .tab-active { border-bottom: 2px solid #0A61FF; color: #0A61FF; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-secondary-bg min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium text-white">张明远</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="pt-14 p-6 ml-[220px]">
+        <!-- 页面标题 -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">专区配置</h1>
+                <p class="text-gray-500 mt-1">配置活动专区首页展示内容</p>
+            </div>
+        </div>
+
+        <!-- Tab切换 -->
+        <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden mb-6">
+            <div class="flex border-b border-[#E2E8F0]">
+                <button onclick="switchTab('banner')" id="tab-banner" class="tab-active px-6 py-4 text-sm font-medium">首页Banner</button>
+                <button onclick="switchTab('hot')" id="tab-hot" class="px-6 py-4 text-sm font-medium text-gray-600 hover:text-gray-900">热门活动</button>
+            </div>
+
+            <!-- Banner配置 -->
+            <div id="panel-banner" class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium">Banner列表</h3>
+                    <button onclick="openBannerModal()" class="px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-blue-600 text-sm">
+                        <i class="fas fa-plus mr-2"></i>添加Banner
+                    </button>
+                </div>
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-gray-50">
+                            <th class="px-4 py-3 font-medium">Banner图片</th>
+                            <th class="px-4 py-3 font-medium w-40">标题</th>
+                            <th class="px-4 py-3 font-medium w-32">状态</th>
+                            <th class="px-4 py-3 font-medium w-40">排序</th>
+                            <th class="px-4 py-3 font-medium w-32 text-right">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bannerTableBody"></tbody>
+                </table>
+            </div>
+
+            <!-- 热门活动配置 -->
+            <div id="panel-hot" class="p-6 hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium">热门活动列表</h3>
+                    <button onclick="openHotModal()" class="px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-blue-600 text-sm">
+                        <i class="fas fa-plus mr-2"></i>添加热门
+                    </button>
+                </div>
+                <table class="w-full">
+                    <thead>
+                        <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-gray-50">
+                            <th class="px-4 py-3 font-medium">活动名称</th>
+                            <th class="px-4 py-3 font-medium w-32">推荐位置</th>
+                            <th class="px-4 py-3 font-medium w-24">权重</th>
+                            <th class="px-4 py-3 font-medium w-40">展示时间</th>
+                            <th class="px-4 py-3 font-medium w-24">状态</th>
+                            <th class="px-4 py-3 font-medium w-32 text-right">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="hotTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- Banner弹窗 -->
+    <div id="bannerModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[500px] overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">添加Banner</h3>
+                <button onclick="closeModal('bannerModal')" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">Banner标题</label>
+                    <input type="text" id="bannerTitle" placeholder="请输入Banner标题" class="w-full border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">Banner图片URL</label>
+                    <input type="text" id="bannerUrl" placeholder="请输入图片URL" class="w-full border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">排序</label>
+                    <input type="number" id="bannerSort" value="50" class="w-full border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('bannerModal')" class="px-4 py-2 border border-[#E2E8F0] rounded-lg text-gray-600">取消</button>
+                <button onclick="saveBanner()" class="px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-blue-600">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 热门弹窗 -->
+    <div id="hotModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[500px] overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">添加热门活动</h3>
+                <button onclick="closeModal('hotModal')" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">选择活动</label>
+                    <select id="hotActivity" class="w-full border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="">请选择活动</option>
+                        <option value="101">2024上海数据开放创新应用大赛</option>
+                        <option value="102">可信数据空间建设研讨会</option>
+                        <option value="103">数据资产入表与评估培训</option>
+                        <option value="104">公共数据开放应用案例分享会</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">推荐位置</label>
+                    <select id="hotPosition" class="w-full border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="">请选择位置</option>
+                        <option value="home_featured">首页精选</option>
+                        <option value="home_banner">首页Banner</option>
+                        <option value="list_sticky">列表置顶</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">权重</label>
+                    <input type="number" id="hotWeight" value="50" class="w-full border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">开始时间</label>
+                        <input type="date" id="hotStart" class="w-full border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">结束时间</label>
+                        <input type="date" id="hotEnd" class="w-full border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('hotModal')" class="px-4 py-2 border border-[#E2E8F0] rounded-lg text-gray-600">取消</button>
+                <button onclick="saveHot()" class="px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-blue-600">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let banners = JSON.parse(localStorage.getItem('zoneBanners')) || [
+            { id: 1, title: '2024上海数据开放创新应用大赛', url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=300&fit=crop', sort: 100, status: 'active' },
+            { id: 2, title: '可信数据空间建设研讨会', url: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=800&h=300&fit=crop', sort: 90, status: 'active' },
+            { id: 3, title: '数据安全与隐私保护培训', url: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=300&fit=crop', sort: 80, status: 'pending' },
+        ];
+
+        let hotActivities = JSON.parse(localStorage.getItem('zoneHotActivities')) || [
+            { id: 1, activityId: 101, title: '2024上海数据开放创新应用大赛', position: 'home_featured', weight: 100, startTime: '2024-10-15', endTime: '2024-12-20', status: 'active' },
+            { id: 2, activityId: 102, title: '可信数据空间建设研讨会', position: 'home_banner', weight: 90, startTime: '2024-11-01', endTime: '2024-11-30', status: 'pending' },
+        ];
+
+        function switchTab(tab) {
+            document.getElementById('tab-banner').className = tab === 'banner' ? 'tab-active px-6 py-4 text-sm font-medium' : 'px-6 py-4 text-sm font-medium text-gray-600 hover:text-gray-900';
+            document.getElementById('tab-hot').className = tab === 'hot' ? 'tab-active px-6 py-4 text-sm font-medium' : 'px-6 py-4 text-sm font-medium text-gray-600 hover:text-gray-900';
+            document.getElementById('panel-banner').classList.toggle('hidden', tab !== 'banner');
+            document.getElementById('panel-hot').classList.toggle('hidden', tab !== 'hot');
+        }
+
+        function renderBanners() {
+            const tbody = document.getElementById('bannerTableBody');
+            tbody.innerHTML = banners.map(b => `
+                <tr class="border-b border-[#E2E8F0]">
+                    <td class="px-4 py-3"><img src="${b.url}" class="w-32 h-16 rounded object-cover"></td>
+                    <td class="px-4 py-3 text-sm">${b.title}</td>
+                    <td class="px-4 py-3">${b.status === 'active' ? '<span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded">展示中</span>' : '<span class="px-2 py-1 text-xs bg-amber-100 text-amber-700 rounded">待发布</span>'}</td>
+                    <td class="px-4 py-3 text-sm">${b.sort}</td>
+                    <td class="px-4 py-3 text-right"><button onclick="deleteBanner(${b.id})" class="text-accent-red text-sm">删除</button></td>
+                </tr>
+            `).join('');
+        }
+
+        function renderHot() {
+            const tbody = document.getElementById('hotTableBody');
+            const now = new Date().toISOString().substring(0, 10);
+            tbody.innerHTML = hotActivities.map(h => {
+                let status = 'active';
+                if (h.endTime < now) status = 'expired';
+                else if (h.startTime > now) status = 'pending';
+                return `
+                <tr class="border-b border-[#E2E8F0]">
+                    <td class="px-4 py-3 text-sm">${h.title}</td>
+                    <td class="px-4 py-3">${h.position === 'home_featured' ? '<span class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">首页精选</span>' : h.position === 'home_banner' ? '<span class="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded">Banner</span>' : '<span class="px-2 py-1 text-xs bg-cyan-100 text-cyan-700 rounded">置顶</span>'}</td>
+                    <td class="px-4 py-3 text-sm">${h.weight}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500">${h.startTime} 至 ${h.endTime}</td>
+                    <td class="px-4 py-3">${status === 'active' ? '<span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded">展示中</span>' : status === 'pending' ? '<span class="px-2 py-1 text-xs bg-amber-100 text-amber-700 rounded">即将开始</span>' : '<span class="px-2 py-1 text-xs bg-gray-100 text-gray-500 rounded">已过期</span>'}</td>
+                    <td class="px-4 py-3 text-right"><button onclick="deleteHot(${h.id})" class="text-accent-red text-sm">移除</button></td>
+                </tr>
+            `}).join('');
+        }
+
+        function openBannerModal() { document.getElementById('bannerModal').classList.remove('hidden'); document.getElementById('bannerModal').classList.add('flex'); }
+        function openHotModal() { document.getElementById('hotModal').classList.remove('hidden'); document.getElementById('hotModal').classList.add('flex'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.remove('flex'); }
+
+        function saveBanner() {
+            const title = document.getElementById('bannerTitle').value;
+            const url = document.getElementById('bannerUrl').value;
+            const sort = parseInt(document.getElementById('bannerSort').value) || 50;
+            if (!title || !url) { showToast('请填写完整信息', 'warning'); return; }
+            banners.push({ id: Date.now(), title, url, sort, status: 'active' });
+            localStorage.setItem('zoneBanners', JSON.stringify(banners));
+            closeModal('bannerModal');
+            renderBanners();
+            showToast('Banner已添加', 'success');
+        }
+
+        function saveHot() {
+            const activityId = parseInt(document.getElementById('hotActivity').value);
+            const title = document.getElementById('hotActivity').options[document.getElementById('hotActivity').selectedIndex].text;
+            const position = document.getElementById('hotPosition').value;
+            const weight = parseInt(document.getElementById('hotWeight').value) || 50;
+            const startTime = document.getElementById('hotStart').value;
+            const endTime = document.getElementById('hotEnd').value;
+            if (!activityId || !position || !startTime || !endTime) { showToast('请填写完整信息', 'warning'); return; }
+            hotActivities.push({ id: Date.now(), activityId, title, position, weight, startTime, endTime, status: 'pending' });
+            localStorage.setItem('zoneHotActivities', JSON.stringify(hotActivities));
+            closeModal('hotModal');
+            renderHot();
+            showToast('热门活动已添加', 'success');
+        }
+
+        function deleteBanner(id) { banners = banners.filter(b => b.id !== id); localStorage.setItem('zoneBanners', JSON.stringify(banners)); renderBanners(); showToast('已删除', 'success'); }
+        function deleteHot(id) { hotActivities = hotActivities.filter(h => h.id !== id); localStorage.setItem('zoneHotActivities', JSON.stringify(hotActivities)); renderHot(); showToast('已移除', 'success'); }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type === 'success' ? 'bg-accent-green' : 'bg-accent-amber'} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i><span class="text-sm">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.remove(), 300); }, 3000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() { renderBanners(); renderHot(); });
+    </script>
+</body>
+</html>

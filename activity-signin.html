@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动签到 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .table-row:hover { background: #F8FAFC; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .drawer { transition: transform 0.3s ease; }
+        .drawer.hidden { transform: translateX(100%); }
+        .drawer-overlay { transition: opacity 0.3s ease; }
+        .drawer-overlay.hidden { opacity: 0; pointer-events: none; }
+        .qr-code { background: white; padding: 16px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium text-white">张明远</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- 左侧菜单 -->
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-th-large w-5 text-gray-500"></i>
+                <span>工作台</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-file-alt w-5 text-gray-500"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-tree w-5 text-gray-500"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-gray-600"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
+                <span>审核中心</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">12</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-calendar-alt w-5 text-gray-500"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-open w-5 text-gray-500"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-users w-5 text-gray-500"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-clipboard-check w-5 text-gray-500"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-chart-line w-5 text-gray-500"></i>
+                <span>活动统计</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">专区配置</div>
+            <a href="zone-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-cog w-5 text-gray-500"></i>
+                <span>专区配置</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-gray-600"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-gray-600"></i>
+                <span>视频管理</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>内容分析</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-gray-500"></i>
+                <span>日志管理</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-gray-600"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="ml-[220px] mt-14 p-6">
+        <!-- 页面标题 -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold text-gray-900">活动签到</h1>
+                <p class="text-gray-500 mt-1">管理活动签到与现场核销</p>
+            </div>
+        </div>
+
+        <!-- 搜索筛选区 -->
+        <div class="bg-white rounded-xl p-6 mb-6 shadow-sm border border-gray-100">
+            <div class="flex flex-wrap gap-4">
+                <div class="flex-1 min-w-[200px]">
+                    <label class="block text-sm text-gray-500 mb-2">活动名称</label>
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="searchName" placeholder="请输入活动名称"
+                            class="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-accent-blue focus:ring-1 focus:ring-accent-blue/20">
+                    </div>
+                </div>
+                <div class="w-[160px]">
+                    <label class="block text-sm text-gray-500 mb-2">活动状态</label>
+                    <select id="activityStatus" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-accent-blue">
+                        <option value="">全部</option>
+                        <option value="registration">报名中</option>
+                        <option value="upcoming">即将开始</option>
+                        <option value="ongoing">进行中</option>
+                        <option value="ended">已结束</option>
+                    </select>
+                </div>
+                <div class="w-[160px]">
+                    <label class="block text-sm text-gray-500 mb-2">签到状态</label>
+                    <select id="signinStatus" class="w-full px-4 py-2.5 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-accent-blue">
+                        <option value="">全部</option>
+                        <option value="not_started">未开始签到</option>
+                        <option value="in_progress">签到中</option>
+                        <option value="ended">已结束签到</option>
+                    </select>
+                </div>
+                <div class="flex items-end gap-3">
+                    <button onclick="filterActivities()" class="px-5 py-2.5 bg-accent-blue text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors">
+                        <i class="fas fa-search mr-2"></i>查询
+                    </button>
+                    <button onclick="resetFilters()" class="px-5 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                        <i class="fas fa-undo mr-2"></i>重置
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 签到活动列表 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+            <table class="w-full">
+                <thead class="bg-gray-50 border-b border-gray-100">
+                    <tr>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">活动名称</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">时间</th>
+                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">地点</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">报名人数</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">已签到</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">未签到</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">签到状态</th>
+                        <th class="px-6 py-4 text-center text-xs font-semibold text-gray-500 uppercase tracking-wider">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="activityTableBody" class="divide-y divide-gray-100">
+                    <!-- Dynamic content -->
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+    <!-- 签到码抽屉 -->
+    <div id="qrDrawer" class="fixed inset-0 z-50 hidden">
+        <div class="drawer-overlay hidden absolute inset-0 bg-black/50" onclick="closeQrDrawer()"></div>
+        <div class="drawer absolute right-0 top-0 bottom-0 w-[480px] bg-white shadow-2xl flex flex-col">
+            <!-- 抽屉头部 -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900">查看签到码</h3>
+                <button onclick="closeQrDrawer()" class="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-100 transition-colors">
+                    <i class="fas fa-times text-gray-400"></i>
+                </button>
+            </div>
+            <!-- 抽屉内容 -->
+            <div class="flex-1 overflow-y-auto p-6">
+                <!-- 活动信息 -->
+                <div class="bg-gray-50 rounded-xl p-4 mb-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="w-10 h-10 bg-accent-blue/10 rounded-lg flex items-center justify-center">
+                            <i class="fas fa-calendar-check text-accent-blue"></i>
+                        </div>
+                        <div>
+                            <h4 id="drawerActivityName" class="font-semibold text-gray-900">AI公共数据开放培训会</h4>
+                            <p id="drawerActivityTime" class="text-sm text-gray-500">2026-06-25 09:00</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm text-gray-500">签到状态：</span>
+                        <span id="drawerSigninStatus" class="px-2 py-1 bg-accent-blue/10 text-accent-blue text-xs font-medium rounded-full">签到中</span>
+                    </div>
+                </div>
+
+                <!-- 二维码区域 -->
+                <div class="flex flex-col items-center justify-center py-8">
+                    <div class="qr-code mb-4">
+                        <div class="w-48 h-48 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg flex items-center justify-center relative overflow-hidden">
+                            <!-- Mock QR Code -->
+                            <div class="absolute inset-2 grid grid-cols-8 gap-0.5">
+                                <div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div>
+                                <div class="bg-gray-900"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div>
+                                <div class="bg-gray-900"></div><div class="bg-white"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-white"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div>
+                                <div class="bg-gray-900"></div><div class="bg-white"></div><div class="bg-gray-900"></div><div class="bg-white"></div><div class="bg-gray-900"></div><div class="bg-white"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div>
+                                <div class="bg-gray-900"></div><div class="bg-white"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-white"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div>
+                                <div class="bg-gray-900"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-white"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div>
+                                <div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div>
+                                <div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div><div class="bg-gray-900"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <h4 class="text-lg font-semibold text-gray-900 mb-2">活动签到二维码</h4>
+                    <p class="text-sm text-gray-500">活动现场扫码签到</p>
+                </div>
+
+                <!-- 操作按钮 -->
+                <div class="flex flex-col gap-3 mt-6">
+                    <button onclick="refreshQrCode()" class="w-full px-4 py-3 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-sync-alt text-accent-blue"></i>
+                        刷新签到码
+                    </button>
+                    <button onclick="downloadQrCode()" class="w-full px-4 py-3 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-download text-accent-blue"></i>
+                        下载二维码
+                    </button>
+                    <button onclick="openFullscreen()" class="w-full px-4 py-3 bg-accent-blue text-white rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors flex items-center justify-center gap-2">
+                        <i class="fas fa-expand text-white"></i>
+                        大屏展示
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 手动签到确认弹窗 -->
+    <div id="signinModal" class="fixed inset-0 z-50 hidden flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/50" onclick="closeSigninModal()"></div>
+        <div class="relative bg-white rounded-2xl shadow-2xl w-[400px] overflow-hidden">
+            <div class="px-6 py-5 border-b border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900">确认手动签到</h3>
+            </div>
+            <div class="p-6">
+                <div class="flex items-center gap-4 mb-6">
+                    <div class="w-12 h-12 bg-accent-green/10 rounded-full flex items-center justify-center">
+                        <i class="fas fa-user-check text-accent-green text-xl"></i>
+                    </div>
+                    <div>
+                        <p id="signinUserName" class="font-medium text-gray-900">李明</p>
+                        <p id="signinUserCompany" class="text-sm text-gray-500">深圳市腾讯科技有限公司</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 text-center mb-6">确认将此用户标记为已签到？</p>
+                <div class="flex gap-3">
+                    <button onclick="closeSigninModal()" class="flex-1 px-4 py-2.5 bg-white border border-gray-200 text-gray-700 rounded-lg text-sm font-medium hover:bg-gray-50 transition-colors">
+                        取消
+                    </button>
+                    <button onclick="confirmSignin()" class="flex-1 px-4 py-2.5 bg-accent-green text-white rounded-lg text-sm font-medium hover:bg-green-600 transition-colors">
+                        确认签到
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="fixed top-20 right-6 z-50 hidden">
+        <div class="toast bg-gray-900 text-white px-5 py-3 rounded-lg shadow-lg flex items-center gap-3">
+            <i class="fas fa-check-circle text-accent-green"></i>
+            <span id="toastMessage">操作成功</span>
+        </div>
+    </div>
+
+    <script>
+        // Mock数据 - 10个活动
+        const activities = [
+            { id: 1, name: 'AI公共数据开放培训会', date: '2026-06-25 09:00', location: '深圳南山区科技园报告厅', total: 120, signed: 82, status: 'in_progress', activityStatus: 'ongoing' },
+            { id: 2, name: '数字政务创新发展论坛', date: '2026-06-28 14:00', location: '广州天河区会议中心', total: 200, signed: 0, status: 'not_started', activityStatus: 'upcoming' },
+            { id: 3, name: '智慧城市数据应用研讨会', date: '2026-06-20 09:00', location: '北京海淀区中关村创新大厦', total: 80, signed: 80, status: 'ended', activityStatus: 'ended' },
+            { id: 4, name: '数据安全与合规培训会', date: '2026-07-05 10:00', location: '上海浦东新区陆家嘴金融中心', total: 150, signed: 45, status: 'in_progress', activityStatus: 'ongoing' },
+            { id: 5, name: '公共数据开放工作推进会', date: '2026-07-10 09:00', location: '杭州西湖区云栖小镇', total: 100, signed: 0, status: 'not_started', activityStatus: 'upcoming' },
+            { id: 6, name: '大数据分析与可视化培训', date: '2026-06-15 14:00', location: '成都高新区天府软件园', total: 60, signed: 60, status: 'ended', activityStatus: 'ended' },
+            { id: 7, name: '政务数据共享交换技术培训', date: '2026-07-15 09:00', location: '武汉洪山区光谷科技会展中心', total: 180, signed: 120, status: 'in_progress', activityStatus: 'ongoing' },
+            { id: 8, name: '数据要素市场建设专题讲座', date: '2026-07-20 14:00', location: '南京建邺区河西新城', total: 90, signed: 0, status: 'not_started', activityStatus: 'registration' },
+            { id: 9, name: '云计算与大数据技术交流会', date: '2026-06-18 09:00', location: '西安雁塔区高新区创业园', total: 75, signed: 72, status: 'ended', activityStatus: 'ended' },
+            { id: 10, name: '数据治理能力提升培训班', date: '2026-07-25 10:00', location: '重庆渝北区仙桃数据谷', total: 130, signed: 88, status: 'in_progress', activityStatus: 'ongoing' }
+        ];
+
+        let currentActivity = null;
+        let currentSigninUser = null;
+
+        // 渲染活动列表
+        function renderActivities(data) {
+            const tbody = document.getElementById('activityTableBody');
+            tbody.innerHTML = data.map(activity => {
+                const statusClass = activity.status === 'not_started' ? 'bg-gray-100 text-gray-600' :
+                                   activity.status === 'in_progress' ? 'bg-accent-blue/10 text-accent-blue' :
+                                   'bg-accent-green/10 text-accent-green';
+                const statusText = activity.status === 'not_started' ? '未开始签到' :
+                                  activity.status === 'in_progress' ? '签到中' : '已结束签到';
+
+                return `
+                    <tr class="table-row cursor-pointer">
+                        <td class="px-6 py-4">
+                            <div class="font-medium text-gray-900">${activity.name}</div>
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${activity.date}</td>
+                        <td class="px-6 py-4 text-sm text-gray-600">${activity.location}</td>
+                        <td class="px-6 py-4 text-center text-sm font-medium text-gray-900">${activity.total}</td>
+                        <td class="px-6 py-4 text-center text-sm font-medium text-accent-green">${activity.signed}</td>
+                        <td class="px-6 py-4 text-center text-sm font-medium text-gray-500">${activity.total - activity.signed}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="px-3 py-1 ${statusClass} text-xs font-medium rounded-full">${statusText}</span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <button onclick="openQrDrawer(${activity.id})" class="px-3 py-1.5 text-xs font-medium text-accent-blue hover:bg-accent-blue/5 rounded-lg transition-colors">
+                                    <i class="fas fa-qrcode mr-1"></i>查看签到码
+                                </button>
+                                <button onclick="goToSigninList(${activity.id})" class="px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                                    <i class="fas fa-list mr-1"></i>签到名单
+                                </button>
+                                <button onclick="goToSigninStats(${activity.id})" class="px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-100 rounded-lg transition-colors">
+                                    <i class="fas fa-chart-bar mr-1"></i>签到统计
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        // 筛选活动
+        function filterActivities() {
+            const searchName = document.getElementById('searchName').value.toLowerCase();
+            const activityStatus = document.getElementById('activityStatus').value;
+            const signinStatus = document.getElementById('signinStatus').value;
+
+            let filtered = activities.filter(a => {
+                const matchName = !searchName || a.name.toLowerCase().includes(searchName);
+                const matchActivityStatus = !activityStatus || a.activityStatus === activityStatus;
+                const matchSigninStatus = !signinStatus || a.status === signinStatus;
+                return matchName && matchActivityStatus && matchSigninStatus;
+            });
+
+            renderActivities(filtered);
+        }
+
+        // 重置筛选
+        function resetFilters() {
+            document.getElementById('searchName').value = '';
+            document.getElementById('activityStatus').value = '';
+            document.getElementById('signinStatus').value = '';
+            renderActivities(activities);
+        }
+
+        // 打开签到码抽屉
+        function openQrDrawer(activityId) {
+            currentActivity = activities.find(a => a.id === activityId);
+            if (!currentActivity) return;
+
+            document.getElementById('drawerActivityName').textContent = currentActivity.name;
+            document.getElementById('drawerActivityTime').textContent = currentActivity.date;
+
+            const statusClass = currentActivity.status === 'not_started' ? 'bg-gray-100 text-gray-600' :
+                               currentActivity.status === 'in_progress' ? 'bg-accent-blue/10 text-accent-blue' :
+                               'bg-accent-green/10 text-accent-green';
+            const statusText = currentActivity.status === 'not_started' ? '未开始签到' :
+                              currentActivity.status === 'in_progress' ? '签到中' : '已结束签到';
+            document.getElementById('drawerSigninStatus').className = `px-2 py-1 ${statusClass} text-xs font-medium rounded-full`;
+            document.getElementById('drawerSigninStatus').textContent = statusText;
+
+            const drawer = document.getElementById('qrDrawer');
+            drawer.classList.remove('hidden');
+            setTimeout(() => {
+                drawer.querySelector('.drawer').style.transform = 'translateX(0)';
+                drawer.querySelector('.drawer-overlay').classList.remove('hidden');
+            }, 10);
+        }
+
+        // 关闭签到码抽屉
+        function closeQrDrawer() {
+            const drawer = document.getElementById('qrDrawer');
+            drawer.querySelector('.drawer').style.transform = 'translateX(100%)';
+            drawer.querySelector('.drawer-overlay').classList.add('hidden');
+            setTimeout(() => {
+                drawer.classList.add('hidden');
+            }, 300);
+        }
+
+        // 刷新签到码
+        function refreshQrCode() {
+            showToast('签到码已刷新');
+        }
+
+        // 下载二维码
+        function downloadQrCode() {
+            showToast('二维码下载中...');
+        }
+
+        // 大屏展示
+        function openFullscreen() {
+            if (currentActivity) {
+                window.open(`activity-signin-fullscreen.html?id=${currentActivity.id}`, '_blank', 'width=1920,height=1080');
+            }
+        }
+
+        // 前往签到名单
+        function goToSigninList(activityId) {
+            window.location.href = `activity-signin-list.html?id=${activityId}`;
+        }
+
+        // 前往签到统计
+        function goToSigninStats(activityId) {
+            window.location.href = `activity-signin-stats.html?id=${activityId}`;
+        }
+
+        // 显示Toast
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMessage').textContent = message;
+            toast.classList.remove('hidden');
+            setTimeout(() => {
+                toast.classList.add('hidden');
+            }, 2000);
+        }
+
+        // 关闭手动签到弹窗
+        function closeSigninModal() {
+            document.getElementById('signinModal').classList.add('hidden');
+        }
+
+        // 确认签到
+        function confirmSignin() {
+            showToast('签到成功');
+            closeSigninModal();
+        }
+
+        // 初始化
+        renderActivities(activities);
+    </script>
+</body>
+</html>

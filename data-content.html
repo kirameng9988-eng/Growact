@@ -11,17 +11,17 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-bg': '#030714',
-                        'card-bg': '#0a1628',
-                        'border-dark': '#1a2744',
-                        'accent-blue': '#3b82f6',
-                        'accent-cyan': '#06b6d4',
-                        'accent-green': '#10b981',
-                        'accent-amber': '#f59e0b',
-                        'accent-red': '#ef4444',
-                        'text-primary': '#f1f5f9',
-                        'text-secondary': '#94a3b8',
-                        'text-muted': '#475569'
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
                     }
                 }
             }
@@ -29,79 +29,103 @@
     </script>
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
-        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
-        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
     </style>
 </head>
-<body class="bg-primary-bg text-text-primary min-h-screen">
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
     <!-- 顶部导航 -->
-    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
         <div class="flex items-center gap-3">
             <img src="images/logo.png" alt="logo" class="h-9">
-            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
         </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
-            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
-                    <span class="text-xs text-text-muted">超级管理员</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
                 </div>
-                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
             </div>
         </div>
     </header>
 
-    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
         <nav class="py-4">
-            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
             <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <i class="fas fa-th-large w-5 text-gray-600"></i>
                 <span>工作台</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
             <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-file-alt w-5 text-gray-600"></i>
                 <span>内容管理</span>
             </a>
             <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-tree w-5 text-gray-600"></i>
                 <span>分类管理</span>
             </a>
             <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <i class="fas fa-tags w-5 text-gray-600"></i>
                 <span>标签管理</span>
             </a>
             <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
                 <span>审核中心</span>
             </a>
             <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <i class="fas fa-paper-plane w-5 text-gray-600"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-calendar-alt w-5 text-gray-600"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users w-5 text-gray-600"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-clipboard-check w-5 text-gray-600"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>活动统计</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <i class="fas fa-images w-5 text-gray-600"></i>
                 <span>图片管理</span>
             </a>
             <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
                 <span>文件管理</span>
             </a>
             <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <i class="fas fa-video w-5 text-gray-600"></i>
                 <span>视频管理</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
             <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
                 <span>数据概览</span>
             </a>
             <a href="data-content.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
@@ -109,22 +133,22 @@
                 <span>内容分析</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
                 <span>用户管理</span>
             </a>
             <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
                 <span>角色权限</span>
             </a>
             <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <i class="fas fa-history w-5 text-gray-600"></i>
                 <span>日志管理</span>
             </a>
 
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-cog w-5 text-gray-600"></i>
                 <span>系统设置</span>
             </a>
         </nav>
@@ -134,34 +158,34 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-2xl font-semibold">内容分析</h1>
-                <p class="text-text-muted mt-1">分析内容阅读、互动数据</p>
+                <p class="text-gray-500 mt-1">分析内容阅读、互动数据</p>
             </div>
             <div class="flex items-center gap-2">
-                <select id="timeRangeSelect" class="bg-card-bg border border-border-dark rounded-xl px-4 py-2 text-sm">
+                <select id="timeRangeSelect" class="bg-card-bg border border-[#E2E8F0] rounded-xl px-4 py-2 text-sm">
                     <option value="7">近7天</option>
                     <option value="30">近30天</option>
                     <option value="90">近90天</option>
                 </select>
-                <button id="exportBtn" class="px-4 py-2 bg-primary-bg border border-border-dark rounded-xl hover:border-accent-blue transition-colors">
+                <button id="exportBtn" class="px-4 py-2 bg-primary-bg border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors">
                     <i class="fas fa-download mr-2"></i>导出
                 </button>
             </div>
         </div>
 
         <!-- 阅读量趋势 -->
-        <div class="bg-card-bg rounded-xl p-5 border border-border-dark mb-6">
+        <div class="bg-white rounded-xl p-5 border border-[#E2E8F0] mb-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-medium">阅读量趋势</h3>
                 <div id="metricBtns" class="flex gap-2">
                     <button class="metric-btn px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-lg text-sm" data-metric="views">阅读量</button>
-                    <button class="metric-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-metric="likes">点赞量</button>
-                    <button class="metric-btn px-4 py-2 text-text-muted hover:text-text-primary text-sm" data-metric="shares">分享量</button>
+                    <button class="metric-btn px-4 py-2 text-gray-500 hover:text-white text-sm" data-metric="likes">点赞量</button>
+                    <button class="metric-btn px-4 py-2 text-gray-500 hover:text-white text-sm" data-metric="shares">分享量</button>
                 </div>
             </div>
             <div id="trendChart" class="h-48 flex items-end gap-4">
                 <!-- 动态渲染 -->
             </div>
-            <div class="flex items-center justify-center mt-4 text-sm text-text-muted">
+            <div class="flex items-center justify-center mt-4 text-sm text-gray-500">
                 <span id="trendTip">显示近7天数据，点击柱子查看详情</span>
             </div>
         </div>
@@ -169,7 +193,7 @@
         <!-- 分析指标 -->
         <div class="grid grid-cols-2 gap-6">
             <!-- 互动数据 -->
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0]">
                 <h3 class="text-lg font-medium mb-4">互动数据</h3>
                 <div class="space-y-4">
                     <div class="flex items-center justify-between p-3 bg-primary-bg rounded-lg">
@@ -212,7 +236,7 @@
             </div>
 
             <!-- 转化漏斗 -->
-            <div class="bg-card-bg rounded-xl p-5 border border-border-dark">
+            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0]">
                 <h3 class="text-lg font-medium mb-4">内容转化漏斗</h3>
                 <div id="funnelContainer" class="space-y-4">
                     <!-- 动态渲染 -->
@@ -221,12 +245,12 @@
         </div>
 
         <!-- 内容详情列表 -->
-        <div class="bg-card-bg rounded-xl border border-border-dark p-5 mt-6">
+        <div class="bg-white rounded-xl border border-[#E2E8F0] p-5 mt-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-medium">内容详情 TOP 10</h3>
                 <div class="flex items-center gap-2 text-sm">
-                    <span class="text-text-muted">排序：</span>
-                    <select id="sortSelect" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-1 text-sm">
+                    <span class="text-gray-500">排序：</span>
+                    <select id="sortSelect" class="bg-primary-bg border border-[#E2E8F0] rounded-lg px-3 py-1 text-sm">
                         <option value="views">按阅读量</option>
                         <option value="likes">按点赞量</option>
                         <option value="shares">按分享量</option>
@@ -236,14 +260,14 @@
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
-                        <tr class="border-b border-border-dark">
-                            <th class="text-left py-3 px-4 text-sm font-medium text-text-muted">内容标题</th>
-                            <th class="text-left py-3 px-4 text-sm font-medium text-text-muted">分类</th>
-                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">阅读量</th>
-                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">点赞量</th>
-                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">分享量</th>
-                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">阅读时长</th>
-                            <th class="text-right py-3 px-4 text-sm font-medium text-text-muted">完成率</th>
+                        <tr class="border-b border-[#E2E8F0]">
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">内容标题</th>
+                            <th class="text-left py-3 px-4 text-sm font-medium text-gray-500">分类</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-gray-500">阅读量</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-gray-500">点赞量</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-gray-500">分享量</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-gray-500">阅读时长</th>
+                            <th class="text-right py-3 px-4 text-sm font-medium text-gray-500">完成率</th>
                         </tr>
                     </thead>
                     <tbody id="contentTableBody">
@@ -423,7 +447,7 @@
                     <div class="w-full flex items-end justify-center h-44">
                         <div class="w-8 ${metricColor} rounded-t-lg transition-all hover:opacity-80" style="height: ${height}%"></div>
                     </div>
-                    <span class="text-text-muted text-xs">${d.date}</span>
+                    <span class="text-gray-500 text-xs">${d.date}</span>
                 </div>
                 `;
             }).join('');
@@ -465,7 +489,7 @@
                 el.className = 'text-sm text-accent-red ml-2';
                 el.textContent = '↓' + Math.abs(value) + '%';
             } else {
-                el.className = 'text-sm text-text-muted ml-2';
+                el.className = 'text-sm text-gray-500 ml-2';
                 el.textContent = '持平';
             }
         }
@@ -491,7 +515,7 @@
                 </div>
                 <div>
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm">点击 <span class="text-text-muted text-xs">(${clickRate}%)</span></span>
+                        <span class="text-sm">点击 <span class="text-gray-500 text-xs">(${clickRate}%)</span></span>
                         <span class="text-sm font-bold">${formatNumber(data.click)}</span>
                     </div>
                     <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
@@ -500,7 +524,7 @@
                 </div>
                 <div>
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm">阅读 <span class="text-text-muted text-xs">(${readRate}%)</span></span>
+                        <span class="text-sm">阅读 <span class="text-gray-500 text-xs">(${readRate}%)</span></span>
                         <span class="text-sm font-bold">${formatNumber(data.read)}</span>
                     </div>
                     <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
@@ -509,7 +533,7 @@
                 </div>
                 <div>
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-sm">互动 <span class="text-text-muted text-xs">(${interactRate}%)</span></span>
+                        <span class="text-sm">互动 <span class="text-gray-500 text-xs">(${interactRate}%)</span></span>
                         <span class="text-sm font-bold">${formatNumber(data.interact)}</span>
                     </div>
                     <div class="h-3 bg-primary-bg rounded-full overflow-hidden">
@@ -525,17 +549,17 @@
             const sorted = [...contentDetail].sort((a, b) => b[currentSort] - a[currentSort]);
 
             tbody.innerHTML = sorted.map(item => `
-                <tr class="border-b border-border-dark/50 hover:bg-primary-bg/50 cursor-pointer" data-id="${item.id}">
+                <tr class="border-b border-[#E2E8F0]/50 hover:bg-primary-bg/50 cursor-pointer" data-id="${item.id}">
                     <td class="py-3 px-4">
                         <div class="flex items-center gap-3">
                             <span class="text-sm font-medium truncate max-w-[200px]">${item.title}</span>
                         </div>
                     </td>
-                    <td class="py-3 px-4 text-sm text-text-secondary">${item.category}</td>
+                    <td class="py-3 px-4 text-sm text-gray-600">${item.category}</td>
                     <td class="py-3 px-4 text-sm text-right">${formatNumber(item.views)}</td>
                     <td class="py-3 px-4 text-sm text-right">${formatNumber(item.likes)}</td>
                     <td class="py-3 px-4 text-sm text-right">${formatNumber(item.shares)}</td>
-                    <td class="py-3 px-4 text-sm text-right text-text-muted">${item.duration}</td>
+                    <td class="py-3 px-4 text-sm text-right text-gray-500">${item.duration}</td>
                     <td class="py-3 px-4 text-sm text-right">
                         <span class="${item.completionRate >= 80 ? 'text-accent-green' : (item.completionRate >= 60 ? 'text-accent-amber' : 'text-accent-red')}">${item.completionRate}%</span>
                     </td>
@@ -563,10 +587,10 @@
                 currentMetric = btn.dataset.metric;
                 document.querySelectorAll('.metric-btn').forEach(b => {
                     b.classList.remove('bg-accent-blue/20', 'text-accent-blue');
-                    b.classList.add('text-text-muted', 'hover:text-text-primary');
+                    b.classList.add('text-gray-500', 'hover:text-white');
                 });
                 btn.classList.add('bg-accent-blue/20', 'text-accent-blue');
-                btn.classList.remove('text-text-muted', 'hover:text-text-primary');
+                btn.classList.remove('text-gray-500', 'hover:text-white');
                 renderTrendChart();
             });
         });

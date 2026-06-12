@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>资源选择器 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        .resource-card:hover { border-color: #0A61FF; }
+        .resource-card.selected { border-color: #0891B2; background: rgba(8, 145, 178, 0.1); }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-10">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-2xl font-semibold mb-6">资源选择器组件</h1>
+
+        <!-- 测试按钮 -->
+        <div class="bg-white rounded-xl p-6 mb-6 shadow">
+            <h2 class="text-lg font-medium mb-4">测试入口</h2>
+            <button onclick="openResourcePicker()" class="px-6 py-3 bg-[#0A61FF] text-white rounded-xl hover:bg-blue-600 transition-colors">
+                <i class="fas fa-images mr-2"></i>打开资源选择器
+            </button>
+        </div>
+
+        <!-- 已选资源展示 -->
+        <div id="selectedPreview" class="bg-white rounded-xl p-6 shadow hidden">
+            <h3 class="text-sm font-medium text-gray-600 mb-3">已选资源</h3>
+            <div id="selectedList" class="flex flex-wrap gap-3"></div>
+        </div>
+    </div>
+
+    <!-- 资源选择弹窗 -->
+    <div id="resourcePickerModal" class="fixed inset-0 bg-black/70 z-[9999] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[900px] max-h-[85vh] overflow-hidden shadow-2xl">
+            <!-- 标题栏 -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium text-gray-900">📌 选择资源</h3>
+                <div class="flex items-center gap-3">
+                    <span id="resourcePickerStatus" class="text-sm text-gray-500"></span>
+                    <button onclick="closeResourcePicker()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 标签页 -->
+            <div class="flex border-b border-[#E2E8F0]">
+                <button onclick="switchResourceTab('image')" id="resourceTab-image" class="px-6 py-3 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]">
+                    <i class="fas fa-images mr-2"></i>图片
+                </button>
+                <button onclick="switchResourceTab('file')" id="resourceTab-file" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    <i class="fas fa-file-alt mr-2"></i>文件
+                </button>
+                <button onclick="switchResourceTab('video')" id="resourceTab-video" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    <i class="fas fa-video mr-2"></i>视频
+                </button>
+            </div>
+
+            <!-- 搜索 -->
+            <div class="px-6 py-3 border-b border-[#E2E8F0] bg-gray-50">
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="resourceSearchInput" placeholder="搜索资源名称..."
+                           class="w-full bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-[#0A61FF] focus:outline-none"
+                           oninput="filterResources()">
+                </div>
+            </div>
+
+            <!-- 资源列表 -->
+            <div class="p-6 overflow-y-auto max-h-[400px]">
+                <div id="resourceList" class="grid grid-cols-5 gap-4">
+                    <!-- 动态渲染 -->
+                </div>
+            </div>
+
+            <!-- 分页 -->
+            <div class="flex items-center justify-between px-6 py-3 border-t border-[#E2E8F0] bg-gray-50">
+                <span id="resourcePaginationInfo" class="text-sm text-gray-500">显示 0 条</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="prevResourcePage()" id="resourcePrevBtn" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-gray-700 hover:border-[#0A61FF] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <span id="resourcePageInfo" class="px-3 text-sm text-gray-500">1 / 1</span>
+                    <button onclick="nextResourcePage()" id="resourceNextBtn" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-gray-700 hover:border-[#0A61FF] transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 底部操作 -->
+            <div class="flex items-center justify-between px-6 py-4 border-t border-[#E2E8F0] bg-gray-50">
+                <div id="selectedResourceInfo" class="text-sm text-gray-500">
+                    请选择资源
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="closeResourcePicker()" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-colors">取消</button>
+                    <button onclick="confirmResourceSelection()" id="confirmResourceBtn" class="px-5 py-2.5 bg-[#0A61FF] text-white rounded-xl hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>确认选择</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock资源数据
+        const mockResources = {
+            image: [
+                { id: 1, name: '会议现场.jpg', url: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop', size: '2.3MB', width: 1920, height: 1080 },
+                { id: 2, name: '工作汇报.png', url: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=300&fit=crop', size: '1.8MB', width: 1920, height: 1080 },
+                { id: 3, name: '活动现场.jpg', url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop', size: '3.1MB', width: 1920, height: 1080 },
+                { id: 4, name: '数据展示.png', url: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=300&fit=crop', size: '2.5MB', width: 1920, height: 1080 },
+                { id: 5, name: '城市夜景.jpg', url: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=300&fit=crop', size: '4.2MB', width: 1920, height: 1080 },
+                { id: 6, name: '科技创新.jpg', url: 'https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=300&fit=crop', size: '2.8MB', width: 1920, height: 1080 },
+                { id: 7, name: '团队建设.jpg', url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop', size: '3.5MB', width: 1920, height: 1080 },
+                { id: 8, name: '企业文化.png', url: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=400&h=300&fit=crop', size: '1.9MB', width: 1920, height: 1080 },
+                { id: 9, name: '安全生产.jpg', url: 'https://images.unsplash.com/photo-1581092921461-eab62e97a780?w=400&h=300&fit=crop', size: '2.7MB', width: 1920, height: 1080 },
+                { id: 10, name: '智慧城市.png', url: 'https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=400&h=300&fit=crop', size: '3.3MB', width: 1920, height: 1080 },
+            ],
+            file: [
+                { id: 101, name: '年度工作报告.pdf', url: '#', size: '2.3MB', type: 'pdf', icon: 'fa-file-pdf' },
+                { id: 102, name: '数字化转型方案.docx', url: '#', size: '1.8MB', type: 'docx', icon: 'fa-file-word' },
+                { id: 103, name: '数据统计表.xlsx', url: '#', size: '890KB', type: 'xlsx', icon: 'fa-file-excel' },
+                { id: 104, name: '项目计划书.pdf', url: '#', size: '3.1MB', type: 'pdf', icon: 'fa-file-pdf' },
+                { id: 105, name: '产品介绍.pptx', url: '#', size: '15.6MB', type: 'pptx', icon: 'fa-file-powerpoint' },
+                { id: 106, name: '用户手册.pdf', url: '#', size: '4.2MB', type: 'pdf', icon: 'fa-file-pdf' },
+                { id: 107, name: '技术架构图.vsdx', url: '#', size: '2.8MB', type: 'vsdx', icon: 'fa-file-alt' },
+                { id: 108, name: '会议纪要.docx', url: '#', size: '520KB', type: 'docx', icon: 'fa-file-word' },
+            ],
+            video: [
+                { id: 201, name: '产品演示视频.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', size: '25.3MB', duration: '5:30', poster: 'https://images.unsplash.com/photo-1574717024653-61fd2cf7d944?w=400&h=300&fit=crop' },
+                { id: 202, name: '培训教程.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', size: '128.5MB', duration: '45:20', poster: 'https://images.unsplash.com/photo-1516321318423-f06f85b5f7c1?w=400&h=300&fit=crop' },
+                { id: 203, name: '活动回顾.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', size: '89.2MB', duration: '12:45', poster: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop' },
+                { id: 204, name: '功能介绍.mp4', url: 'https://www.w3schools.com/html/mov_bbb.mp4', size: '45.8MB', duration: '8:15', poster: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=300&fit=crop' },
+            ]
+        };
+
+        // 资源选择器配置
+        let resourcePickerConfig = {
+            mode: 'single',  // single, multiple
+            currentTab: 'image',
+            currentPage: 1,
+            pageSize: 10,
+            selected: [],
+            searchKeyword: ''
+        };
+
+        // 打开资源选择器
+        function openResourcePicker(mode = 'single') {
+            resourcePickerConfig.mode = mode;
+            resourcePickerConfig.currentTab = 'image';
+            resourcePickerConfig.currentPage = 1;
+            resourcePickerConfig.selected = [];
+            resourcePickerConfig.searchKeyword = '';
+
+            document.getElementById('resourceSearchInput').value = '';
+            updateResourcePickerStatus();
+            renderResourceList();
+
+            const modal = document.getElementById('resourcePickerModal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        // 关闭资源选择器
+        function closeResourcePicker() {
+            document.getElementById('resourcePickerModal').classList.add('hidden');
+            document.getElementById('resourcePickerModal').classList.remove('flex');
+        }
+
+        // 切换资源标签页
+        function switchResourceTab(tab) {
+            resourcePickerConfig.currentTab = tab;
+            resourcePickerConfig.currentPage = 1;
+            resourcePickerConfig.selected = [];
+            document.getElementById('resourceSearchInput').value = '';
+            resourcePickerConfig.searchKeyword = '';
+
+            ['image', 'file', 'video'].forEach(t => {
+                const btn = document.getElementById('resourceTab-' + t);
+                if (t === tab) {
+                    btn.className = 'px-6 py-3 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]';
+                } else {
+                    btn.className = 'px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900';
+                }
+            });
+
+            updateResourcePickerStatus();
+            renderResourceList();
+        }
+
+        // 筛选资源
+        function filterResources() {
+            resourcePickerConfig.searchKeyword = document.getElementById('resourceSearchInput').value;
+            resourcePickerConfig.currentPage = 1;
+            renderResourceList();
+        }
+
+        // 渲染资源列表
+        function renderResourceList() {
+            const list = document.getElementById('resourceList');
+            const type = resourcePickerConfig.currentTab;
+            let resources = mockResources[type] || [];
+
+            // 搜索过滤
+            if (resourcePickerConfig.searchKeyword) {
+                const keyword = resourcePickerConfig.searchKeyword.toLowerCase();
+                resources = resources.filter(r => r.name.toLowerCase().includes(keyword));
+            }
+
+            // 分页
+            const pageSize = resourcePickerConfig.pageSize;
+            const start = (resourcePickerConfig.currentPage - 1) * pageSize;
+            const end = start + pageSize;
+            const pageResources = resources.slice(start, end);
+            const total = resources.length;
+            const totalPages = Math.ceil(total / pageSize);
+
+            if (pageResources.length === 0) {
+                list.innerHTML = `
+                    <div class="col-span-5 text-center py-12 text-gray-500">
+                        <i class="fas fa-folder-open text-4xl mb-3 opacity-50"></i>
+                        <p>暂无资源</p>
+                    </div>
+                `;
+            } else {
+                list.innerHTML = pageResources.map(r => {
+                    const isSelected = resourcePickerConfig.selected.some(s => s.id === r.id);
+                    const selectedClass = isSelected ? 'border-[#0891B2] bg-[#0891B2]/10' : 'border-gray-200 hover:border-[#0A61FF]/50';
+
+                    if (type === 'image') {
+                        return `
+                            <div class="resource-card cursor-pointer rounded-xl border-2 ${selectedClass} overflow-hidden transition-all ${isSelected ? 'ring-2 ring-[#0891B2]' : ''}"
+                                 onclick="toggleResourceSelection(${r.id}, '${r.name}', '${r.url}', '${r.size}', '${type}')">
+                                <div class="relative aspect-[4/3] bg-gray-100">
+                                    <img src="${r.url}" class="w-full h-full object-cover">
+                                    ${isSelected ? '<div class="absolute top-2 right-2 w-6 h-6 bg-[#0891B2] rounded-full flex items-center justify-center"><i class="fas fa-check text-white text-xs"></i></div>' : ''}
+                                </div>
+                                <div class="p-2">
+                                    <p class="text-xs text-gray-700 truncate">${r.name}</p>
+                                    <p class="text-xs text-gray-400">${r.size}</p>
+                                </div>
+                            </div>
+                        `;
+                    } else if (type === 'file') {
+                        return `
+                            <div class="resource-card cursor-pointer rounded-xl border-2 ${selectedClass} p-4 transition-all ${isSelected ? 'ring-2 ring-[#0891B2]' : ''}"
+                                 onclick="toggleResourceSelection(${r.id}, '${r.name}', '${r.url}', '${r.size}', '${type}')">
+                                <div class="flex flex-col items-center text-center">
+                                    <i class="fas ${r.icon || 'fa-file'} text-3xl text-gray-400 mb-2"></i>
+                                    <p class="text-xs text-gray-700 truncate w-full">${r.name}</p>
+                                    <p class="text-xs text-gray-400">${r.size}</p>
+                                    ${isSelected ? '<div class="w-5 h-5 bg-[#0891B2] rounded-full flex items-center justify-center mt-2"><i class="fas fa-check text-white text-xs"></i></div>' : ''}
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        return `
+                            <div class="resource-card cursor-pointer rounded-xl border-2 ${selectedClass} overflow-hidden transition-all ${isSelected ? 'ring-2 ring-[#0891B2]' : ''}"
+                                 onclick="toggleResourceSelection(${r.id}, '${r.name}', '${r.url}', '${r.size}', '${type}')">
+                                <div class="relative aspect-[4/3] bg-gray-900">
+                                    <img src="${r.poster}" class="w-full h-full object-cover opacity-60">
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <i class="fas fa-play text-white text-xl"></i>
+                                    </div>
+                                    ${r.duration ? `<span class="absolute bottom-2 right-2 text-xs text-white bg-black/50 px-2 py-0.5 rounded">${r.duration}</span>` : ''}
+                                    ${isSelected ? '<div class="absolute top-2 right-2 w-6 h-6 bg-[#0891B2] rounded-full flex items-center justify-center"><i class="fas fa-check text-white text-xs"></i></div>' : ''}
+                                </div>
+                                <div class="p-2">
+                                    <p class="text-xs text-gray-700 truncate">${r.name}</p>
+                                    <p class="text-xs text-gray-400">${r.size}</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                }).join('');
+            }
+
+            // 更新分页信息
+            document.getElementById('resourcePaginationInfo').textContent = `显示 ${pageResources.length} 条，共 ${total} 条`;
+            document.getElementById('resourcePageInfo').textContent = `${resourcePickerConfig.currentPage} / ${totalPages || 1}`;
+            document.getElementById('resourcePrevBtn').disabled = resourcePickerConfig.currentPage <= 1;
+            document.getElementById('resourceNextBtn').disabled = resourcePickerConfig.currentPage >= totalPages;
+        }
+
+        // 切换资源选中状态
+        function toggleResourceSelection(id, name, url, size, type) {
+            const isSelected = resourcePickerConfig.selected.some(s => s.id === id);
+
+            if (resourcePickerConfig.mode === 'single') {
+                // 单选模式
+                resourcePickerConfig.selected = isSelected ? [] : [{ id, name, url, size, type }];
+            } else {
+                // 多选模式
+                if (isSelected) {
+                    resourcePickerConfig.selected = resourcePickerConfig.selected.filter(s => s.id !== id);
+                } else {
+                    resourcePickerConfig.selected.push({ id, name, url, size, type });
+                }
+            }
+
+            updateResourcePickerStatus();
+            renderResourceList();
+        }
+
+        // 更新选择器状态显示
+        function updateResourcePickerStatus() {
+            const count = resourcePickerConfig.selected.length;
+            const statusEl = document.getElementById('resourcePickerStatus');
+            const infoEl = document.getElementById('selectedResourceInfo');
+            const confirmBtn = document.getElementById('confirmResourceBtn');
+
+            if (count === 0) {
+                statusEl.textContent = '';
+                infoEl.textContent = '请选择资源';
+                confirmBtn.disabled = true;
+            } else {
+                const name = resourcePickerConfig.selected[0].name;
+                statusEl.textContent = `已选择: ${name}${count > 1 ? ' 等' + count + '个' : ''}`;
+                infoEl.textContent = `已选择: ${name}${count > 1 ? ' 等' + count + '个' : ''}`;
+                confirmBtn.disabled = false;
+            }
+        }
+
+        // 上一页
+        function prevResourcePage() {
+            if (resourcePickerConfig.currentPage > 1) {
+                resourcePickerConfig.currentPage--;
+                renderResourceList();
+            }
+        }
+
+        // 下一页
+        function nextResourcePage() {
+            resourcePickerConfig.currentPage++;
+            renderResourceList();
+        }
+
+        // 确认选择
+        function confirmResourceSelection() {
+            const selected = resourcePickerConfig.selected;
+            if (selected.length === 0) return;
+
+            // 显示已选资源
+            const preview = document.getElementById('selectedPreview');
+            const list = document.getElementById('selectedList');
+            preview.classList.remove('hidden');
+
+            list.innerHTML = selected.map(r => `
+                <div class="flex items-center gap-2 bg-gray-100 rounded-lg px-3 py-2">
+                    ${r.type === 'image' ? `<img src="${r.url}" class="w-10 h-10 rounded object-cover">` : `<i class="fas fa-file text-gray-500"></i>`}
+                    <span class="text-sm text-gray-700">${r.name}</span>
+                    <button onclick="removeSelected(${r.id})" class="text-gray-400 hover:text-red-500">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `).join('');
+
+            closeResourcePicker();
+        }
+
+        // 移除已选资源
+        function removeSelected(id) {
+            resourcePickerConfig.selected = resourcePickerConfig.selected.filter(s => s.id !== id);
+            confirmResourceSelection();
+        }
+    </script>
+</body>
+</html>

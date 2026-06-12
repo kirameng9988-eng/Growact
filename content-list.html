@@ -11,17 +11,17 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-bg': '#030714',
-                        'card-bg': '#0a1628',
-                        'border-dark': '#1a2744',
-                        'accent-blue': '#3b82f6',
-                        'accent-cyan': '#06b6d4',
-                        'accent-green': '#10b981',
-                        'accent-amber': '#f59e0b',
-                        'accent-red': '#ef4444',
-                        'text-primary': '#f1f5f9',
-                        'text-secondary': '#94a3b8',
-                        'text-muted': '#475569'
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
                     }
                 }
             }
@@ -30,110 +30,133 @@
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #030714; }
-        ::-webkit-scrollbar-thumb { background: #1a2744; border-radius: 3px; }
-        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
-        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
-        .table-row:hover { background: #1a2744; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #F8FAFC; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .table-row:hover { background: #F8FAFC; }
         .toast { animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .sort-icon.active { color: #3b82f6; }
     </style>
 </head>
-<body class="bg-primary-bg text-text-primary min-h-screen">
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
     <!-- 顶部导航 -->
-    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
                 <div class="flex items-center gap-3">
             <img src="images/logo.png" alt="logo" class="h-9">
-            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
         </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
-            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
-                    <span class="text-xs text-text-muted">超级管理员</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
                 </div>
-                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
             </div>
         </div>
     </header>
 
     <!-- 左侧菜单 -->
-    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
         <nav class="py-4">
-            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
             <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <i class="fas fa-th-large w-5 text-gray-600"></i>
                 <span>工作台</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
             <a href="content-list.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
                 <i class="fas fa-file-alt w-5 text-accent-blue"></i>
                 <span>内容管理</span>
             </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-calendar-alt w-5 text-gray-500"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-open w-5 text-gray-500"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-users w-5 text-gray-500"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-clipboard-check w-5 text-gray-500"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-chart-line w-5 text-gray-500"></i>
+                <span>活动统计</span>
+            </a>
             <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-tree w-5 text-gray-600"></i>
                 <span>分类管理</span>
             </a>
             <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <i class="fas fa-tags w-5 text-gray-600"></i>
                 <span>标签管理</span>
             </a>
             <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
                 <span>审核中心</span>
                 <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">12</span>
             </a>
             <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <i class="fas fa-paper-plane w-5 text-gray-600"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <i class="fas fa-images w-5 text-gray-600"></i>
                 <span>图片管理</span>
             </a>
             <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
                 <span>文件管理</span>
             </a>
             <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <i class="fas fa-video w-5 text-gray-600"></i>
                 <span>视频管理</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
             <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
                 <span>数据概览</span>
             </a>
             <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
                 <span>内容分析</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
                 <span>用户管理</span>
             </a>
             <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
                 <span>角色权限</span>
             </a>
             <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-history w-5 text-text-secondary"></i>
+                <i class="fas fa-history w-5 text-gray-600"></i>
                 <span>日志管理</span>
             </a>
 
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-cog w-5 text-gray-600"></i>
                 <span>系统设置</span>
             </a>
         </nav>
@@ -145,10 +168,10 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-2xl font-semibold">内容管理</h1>
-                <p class="text-text-muted mt-1">管理所有内容文章，支持创建、编辑、删除和批量操作</p>
+                <p class="text-gray-500 mt-1">管理所有内容文章，支持创建、编辑、删除和批量操作</p>
             </div>
             <div class="flex items-center gap-3">
-                <button onclick="refreshList()" class="px-4 py-2.5 border border-border-dark rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
+                <button onclick="refreshList()" class="px-4 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
                     <i class="fas fa-sync-alt"></i>
                     刷新
                 </button>
@@ -160,13 +183,13 @@
         </div>
 
         <!-- 筛选栏 -->
-        <div class="bg-card-bg rounded-xl p-4 mb-6 border border-border-dark">
+        <div class="bg-white rounded-xl p-4 mb-6 border border-[#E2E8F0]">
             <div class="flex items-center gap-4 flex-wrap">
                 <div class="flex items-center gap-2">
-                    <select id="filterCategory" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                    <select id="filterCategory" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
                         <option value="">全部分类</option>
                     </select>
-                    <select id="filterStatus" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                    <select id="filterStatus" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
                         <option value="">全部状态</option>
                         <option value="published">已发布</option>
                         <option value="pending">待审核</option>
@@ -175,7 +198,7 @@
                         <option value="archived">已归档</option>
                         <option value="offline">已下架</option>
                     </select>
-                    <select id="filterAuthor" class="bg-primary-bg border border-border-dark rounded-lg px-3 py-2 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                    <select id="filterAuthor" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
                         <option value="">全部作者</option>
                         <option>张明远</option>
                         <option>李晓华</option>
@@ -186,8 +209,8 @@
                 </div>
                 <div class="flex-1"></div>
                 <div class="relative">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                    <input type="text" id="searchInput" placeholder="搜索标题、关键词..." class="bg-primary-bg border border-border-dark rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none w-64">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="searchInput" placeholder="搜索标题、关键词..." class="bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none w-64">
                 </div>
             </div>
         </div>
@@ -195,23 +218,24 @@
         <!-- 批量操作栏 -->
         <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-2">
-                <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue">
-                <label for="selectAll" class="text-sm text-text-secondary">全选</label>
-                <span id="selectedCount" class="text-sm text-text-muted ml-4">已选择 0 项</span>
+                <input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-[#E2E8F0] bg-primary-bg accent-accent-blue">
+                <label for="selectAll" class="text-sm text-gray-600">全选</label>
+                <span id="selectedCount" class="text-sm text-gray-500 ml-4">已选择 0 项</span>
             </div>
             <div class="flex items-center gap-3">
                 <button onclick="batchPublish()" class="px-4 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors">批量发布</button>
                 <button onclick="batchArchive()" class="px-4 py-2 text-sm text-accent-amber hover:bg-accent-amber/10 rounded-lg transition-colors">批量归档</button>
-                <button onclick="batchOffline()" class="px-4 py-2 text-sm text-purple-400 hover:bg-purple-400/10 rounded-lg transition-colors">批量下架</button>
+                <button onclick="batchRestore()" class="px-4 py-2 text-sm text-accent-green hover:bg-accent-green/10 rounded-lg transition-colors">批量恢复</button>
+                <button onclick="batchOffline()" class="px-4 py-2 text-sm text-accent-blue hover:bg-purple-400/10 rounded-lg transition-colors">批量下架</button>
                 <button onclick="batchDelete()" class="px-4 py-2 text-sm text-accent-red hover:bg-accent-red/10 rounded-lg transition-colors">批量删除</button>
             </div>
         </div>
 
         <!-- 内容列表 -->
-        <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden">
+        <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
             <table class="w-full">
                 <thead>
-                    <tr class="text-left text-text-muted text-sm border-b border-border-dark bg-primary-bg/50">
+                    <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-primary-bg/50">
                         <th class="px-4 py-3 font-medium w-10"></th>
                         <th class="px-4 py-3 font-medium cursor-pointer hover:text-accent-blue" onclick="sortBy('title')">
                             <span class="flex items-center gap-1">
@@ -242,16 +266,16 @@
                 </tbody>
             </table>
             <!-- 分页 -->
-            <div class="flex items-center justify-between px-4 py-3 border-t border-border-dark">
-                <span id="paginationInfo" class="text-sm text-text-muted">显示 1-6 条，共 86 条</span>
+            <div class="flex items-center justify-between px-4 py-3 border-t border-[#E2E8F0]">
+                <span id="paginationInfo" class="text-sm text-gray-500">显示 1-6 条，共 86 条</span>
                 <div class="flex items-center gap-2">
-                    <button id="prevPage" onclick="goToPage(currentPage - 1)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">上一页</button>
+                    <button id="prevPage" onclick="goToPage(currentPage - 1)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">上一页</button>
                     <button id="page1" onclick="goToPage(1)" class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
-                    <button id="page2" onclick="goToPage(2)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">2</button>
-                    <button id="page3" onclick="goToPage(3)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">3</button>
-                    <span class="px-2 text-text-muted">...</span>
-                    <button id="page15" onclick="goToPage(15)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">15</button>
-                    <button id="nextPage" onclick="goToPage(currentPage + 1)" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm">下一页</button>
+                    <button id="page2" onclick="goToPage(2)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">2</button>
+                    <button id="page3" onclick="goToPage(3)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">3</button>
+                    <span class="px-2 text-gray-500">...</span>
+                    <button id="page15" onclick="goToPage(15)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">15</button>
+                    <button id="nextPage" onclick="goToPage(currentPage + 1)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">下一页</button>
                 </div>
             </div>
         </div>
@@ -261,53 +285,53 @@
     <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
 
     <!-- 创建内容弹窗 -->
-    <div id="createModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[90vh] overflow-hidden border border-border-dark shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+    <div id="createModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[90vh] overflow-hidden border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">创建内容</h3>
-                <button onclick="closeModal('createModal')" class="text-text-muted hover:text-text-primary">
+                <button onclick="closeModal('createModal')" class="text-gray-500 hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
                 <div class="grid grid-cols-2 gap-6">
                     <div class="col-span-2">
-                        <label class="block text-sm text-text-secondary mb-2">标题 <span class="text-accent-red">*</span></label>
-                        <input type="text" id="createTitle" placeholder="请输入内容标题" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
+                        <label class="block text-sm text-gray-600 mb-2">标题 <span class="text-accent-red">*</span></label>
+                        <input type="text" id="createTitle" placeholder="请输入内容标题" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm text-text-secondary mb-2">分类 <span class="text-accent-red">*</span></label>
-                        <select id="createCategory" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                        <label class="block text-sm text-gray-600 mb-2">分类 <span class="text-accent-red">*</span></label>
+                        <select id="createCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
                             <option value="">请选择分类</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm text-text-secondary mb-2">标签</label>
-                        <input type="text" id="createTags" placeholder="多个标签用逗号分隔" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
+                        <label class="block text-sm text-gray-600 mb-2">标签</label>
+                        <input type="text" id="createTags" placeholder="多个标签用逗号分隔" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm text-text-secondary mb-2">封面图片</label>
-                        <div id="createCoverArea" class="border-2 border-dashed border-border-dark rounded-xl p-6">
+                        <label class="block text-sm text-gray-600 mb-2">封面图片</label>
+                        <div id="createCoverArea" class="border-2 border-dashed border-[#E2E8F0] rounded-xl p-6">
                             <div id="createCoverEmpty" class="text-center">
                                 <div class="flex items-center justify-center gap-4 mb-4">
-                                    <div onclick="openResourcePicker('cover', 'single')" class="flex-1 bg-primary-bg rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
+                                    <div onclick="openResourcePicker('cover', 'single')" class="flex-1 bg-white rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
                                         <i class="fas fa-images text-2xl text-accent-blue mb-2"></i>
                                         <p class="text-sm font-medium">📌 从资源中心选择</p>
-                                        <p class="text-xs text-text-muted mt-1">已有封面图库</p>
+                                        <p class="text-xs text-gray-500 mt-1">已有封面图库</p>
                                     </div>
-                                    <div class="text-text-muted text-xl">/</div>
-                                    <div onclick="triggerCoverUpload()" class="flex-1 bg-primary-bg rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
-                                        <i class="fas fa-cloud-upload-alt text-2xl text-text-secondary mb-2"></i>
+                                    <div class="text-gray-500 text-xl">/</div>
+                                    <div onclick="triggerCoverUpload()" class="flex-1 bg-white rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
+                                        <i class="fas fa-cloud-upload-alt text-2xl text-gray-600 mb-2"></i>
                                         <p class="text-sm font-medium">⬆️ 上传新资源</p>
-                                        <p class="text-xs text-text-muted mt-1">直接本地上传</p>
+                                        <p class="text-xs text-gray-500 mt-1">直接本地上传</p>
                                     </div>
                                 </div>
                             </div>
-                            <div id="createCoverPreview" class="hidden mt-3 flex items-center gap-3 p-3 bg-primary-bg rounded-xl">
+                            <div id="createCoverPreview" class="hidden mt-3 flex items-center gap-3 p-3 bg-white rounded-xl">
                                 <img id="createCoverImg" src="" class="w-32 h-20 rounded object-cover">
                                 <div class="flex-1">
                                     <p id="createCoverName" class="text-sm font-medium"></p>
-                                    <p id="createCoverSize" class="text-xs text-text-muted"></p>
+                                    <p id="createCoverSize" class="text-xs text-gray-500"></p>
                                 </div>
                                 <button onclick="removeCreateCover()" class="text-accent-red hover:text-red-400 text-sm px-3 py-1 border border-accent-red/30 rounded-lg">移除</button>
                                 <button onclick="openResourcePicker('cover', 'single')" class="text-accent-blue hover:text-blue-400 text-sm px-3 py-1 border border-accent-blue/30 rounded-lg">更换</button>
@@ -316,33 +340,33 @@
                         </div>
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm text-text-secondary mb-2">内容摘要</label>
-                        <textarea id="createSummary" rows="2" placeholder="请输入内容摘要，简短描述内容要点" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                        <label class="block text-sm text-gray-600 mb-2">内容摘要</label>
+                        <textarea id="createSummary" rows="2" placeholder="请输入内容摘要，简短描述内容要点" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none resize-none"></textarea>
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm text-text-secondary mb-2">正文内容 <span class="text-accent-red">*</span></label>
-                        <div class="bg-primary-bg border border-border-dark rounded-xl overflow-hidden">
-                            <div class="flex items-center gap-1 px-4 py-2 border-b border-border-dark bg-card-bg">
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="加粗"><i class="fas fa-bold"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="斜体"><i class="fas fa-italic"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="下划线"><i class="fas fa-underline"></i></button>
+                        <label class="block text-sm text-gray-600 mb-2">正文内容 <span class="text-accent-red">*</span></label>
+                        <div class="bg-primary-bg border border-[#E2E8F0] rounded-xl overflow-hidden">
+                            <div class="flex items-center gap-1 px-4 py-2 border-b border-[#E2E8F0] bg-card-bg">
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="加粗"><i class="fas fa-bold"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="斜体"><i class="fas fa-italic"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="下划线"><i class="fas fa-underline"></i></button>
                                 <span class="w-px h-6 bg-border-dark mx-2"></span>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="无序列表"><i class="fas fa-list-ul"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="有序列表"><i class="fas fa-list-ol"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="链接"><i class="fas fa-link"></i></button>
-                                <button onclick="openResourcePicker('content', 'multiple')" class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="插入图片"><i class="fas fa-image"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="无序列表"><i class="fas fa-list-ul"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="有序列表"><i class="fas fa-list-ol"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="链接"><i class="fas fa-link"></i></button>
+                                <button onclick="openResourcePicker('content', 'multiple')" class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="插入图片"><i class="fas fa-image"></i></button>
                                 <button onclick="openResourcePicker('content', 'multiple')" class="w-8 h-8 rounded hover:bg-accent-cyan flex items-center justify-center text-accent-cyan" title="插入资源">
                                     <i class="fas fa-folder-open"></i>
                                 </button>
                             </div>
-                            <div id="createEditorArea" class="min-h-[200px] px-4 py-3 text-sm text-text-primary focus:outline-none overflow-auto">
+                            <div id="createEditorArea" class="min-h-[200px] px-4 py-3 text-sm text-white focus:outline-none overflow-auto">
                                 <div id="createContentDisplay" class="whitespace-pre-wrap leading-relaxed"></div>
-                                <textarea id="createContent" rows="8" placeholder="请输入正文内容...\n\n提示：点击工具栏📁资源按钮可插入图片/文件/视频" class="w-full h-[200px] text-sm text-text-primary placeholder-text-muted focus:outline-none resize-none bg-transparent"></textarea>
+                                <textarea id="createContent" rows="8" placeholder="请输入正文内容...\n\n提示：点击工具栏📁资源按钮可插入图片/文件/视频" class="w-full h-[200px] text-sm text-white placeholder-text-muted focus:outline-none resize-none bg-transparent"></textarea>
                             </div>
                         </div>
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm text-text-secondary mb-2">发布形式</label>
+                        <label class="block text-sm text-gray-600 mb-2">发布形式</label>
                         <div class="flex gap-6">
                             <label class="flex items-center gap-2 cursor-pointer">
                                 <input type="radio" name="createPublishType" value="now" checked class="accent-accent-blue">
@@ -359,24 +383,24 @@
                         </div>
                     </div>
                     <div id="scheduleTimeGroup" class="col-span-2 hidden">
-                        <label class="block text-sm text-text-secondary mb-2">定时发布时间</label>
-                        <input type="datetime-local" id="createScheduleTime" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                        <label class="block text-sm text-gray-600 mb-2">定时发布时间</label>
+                        <input type="datetime-local" id="createScheduleTime" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
                     </div>
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark bg-primary-bg/50">
-                <button onclick="closeModal('createModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary hover:border-text-muted transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-primary-bg/50">
+                <button onclick="closeModal('createModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white hover:border-text-muted transition-colors">取消</button>
                 <button onclick="saveContent('create')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存</button>
             </div>
         </div>
     </div>
 
     <!-- 编辑内容弹窗 -->
-    <div id="editModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[90vh] overflow-hidden border border-border-dark shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+    <div id="editModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[90vh] overflow-hidden border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">编辑内容</h3>
-                <button onclick="closeModal('editModal')" class="text-text-muted hover:text-text-primary">
+                <button onclick="closeModal('editModal')" class="text-gray-500 hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -384,42 +408,42 @@
                 <input type="hidden" id="editId">
                 <div class="grid grid-cols-2 gap-6">
                     <div class="col-span-2">
-                        <label class="block text-sm text-text-secondary mb-2">标题 <span class="text-accent-red">*</span></label>
-                        <input type="text" id="editTitle" placeholder="请输入内容标题" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
+                        <label class="block text-sm text-gray-600 mb-2">标题 <span class="text-accent-red">*</span></label>
+                        <input type="text" id="editTitle" placeholder="请输入内容标题" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-sm text-text-secondary mb-2">分类 <span class="text-accent-red">*</span></label>
-                        <select id="editCategory" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                        <label class="block text-sm text-gray-600 mb-2">分类 <span class="text-accent-red">*</span></label>
+                        <select id="editCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
                             <option value="">请选择分类</option>
                         </select>
                     </div>
                     <div>
-                        <label class="block text-sm text-text-secondary mb-2">标签</label>
-                        <input type="text" id="editTags" placeholder="多个标签用逗号分隔" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none">
+                        <label class="block text-sm text-gray-600 mb-2">标签</label>
+                        <input type="text" id="editTags" placeholder="多个标签用逗号分隔" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm text-text-secondary mb-2">封面图片</label>
-                        <div id="editCoverArea" class="border-2 border-dashed border-border-dark rounded-xl p-6">
+                        <label class="block text-sm text-gray-600 mb-2">封面图片</label>
+                        <div id="editCoverArea" class="border-2 border-dashed border-[#E2E8F0] rounded-xl p-6">
                             <div id="editCoverEmpty" class="text-center">
                                 <div class="flex items-center justify-center gap-4 mb-4">
-                                    <div onclick="openResourcePicker('editCover', 'single')" class="flex-1 bg-primary-bg rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
+                                    <div onclick="openResourcePicker('editCover', 'single')" class="flex-1 bg-white rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
                                         <i class="fas fa-images text-2xl text-accent-blue mb-2"></i>
                                         <p class="text-sm font-medium">📌 从资源中心选择</p>
-                                        <p class="text-xs text-text-muted mt-1">已有封面图库</p>
+                                        <p class="text-xs text-gray-500 mt-1">已有封面图库</p>
                                     </div>
-                                    <div class="text-text-muted text-xl">/</div>
-                                    <div onclick="triggerEditCoverUpload()" class="flex-1 bg-primary-bg rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
-                                        <i class="fas fa-cloud-upload-alt text-2xl text-text-secondary mb-2"></i>
+                                    <div class="text-gray-500 text-xl">/</div>
+                                    <div onclick="triggerEditCoverUpload()" class="flex-1 bg-white rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
+                                        <i class="fas fa-cloud-upload-alt text-2xl text-gray-600 mb-2"></i>
                                         <p class="text-sm font-medium">⬆️ 上传新资源</p>
-                                        <p class="text-xs text-text-muted mt-1">直接本地上传</p>
+                                        <p class="text-xs text-gray-500 mt-1">直接本地上传</p>
                                     </div>
                                 </div>
                             </div>
-                            <div id="editCoverPreview" class="hidden mt-3 flex items-center gap-3 p-3 bg-primary-bg rounded-xl">
+                            <div id="editCoverPreview" class="hidden mt-3 flex items-center gap-3 p-3 bg-white rounded-xl">
                                 <img id="editCoverImgDisplay" src="" class="w-32 h-20 rounded object-cover">
                                 <div class="flex-1">
                                     <p id="editCoverName" class="text-sm font-medium"></p>
-                                    <p id="editCoverSize" class="text-xs text-text-muted"></p>
+                                    <p id="editCoverSize" class="text-xs text-gray-500"></p>
                                 </div>
                                 <button onclick="removeEditCover()" class="text-accent-red hover:text-red-400 text-sm px-3 py-1 border border-accent-red/30 rounded-lg">移除</button>
                                 <button onclick="openResourcePicker('editCover', 'single')" class="text-accent-blue hover:text-blue-400 text-sm px-3 py-1 border border-accent-blue/30 rounded-lg">更换</button>
@@ -428,46 +452,46 @@
                         </div>
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm text-text-secondary mb-2">内容摘要</label>
-                        <textarea id="editSummary" rows="2" placeholder="请输入内容摘要" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                        <label class="block text-sm text-gray-600 mb-2">内容摘要</label>
+                        <textarea id="editSummary" rows="2" placeholder="请输入内容摘要" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none resize-none"></textarea>
                     </div>
                     <div class="col-span-2">
-                        <label class="block text-sm text-text-secondary mb-2">正文内容 <span class="text-accent-red">*</span></label>
-                        <div class="bg-primary-bg border border-border-dark rounded-xl overflow-hidden">
-                            <div class="flex items-center gap-1 px-4 py-2 border-b border-border-dark bg-card-bg">
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="加粗"><i class="fas fa-bold"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="斜体"><i class="fas fa-italic"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="下划线"><i class="fas fa-underline"></i></button>
+                        <label class="block text-sm text-gray-600 mb-2">正文内容 <span class="text-accent-red">*</span></label>
+                        <div class="bg-primary-bg border border-[#E2E8F0] rounded-xl overflow-hidden">
+                            <div class="flex items-center gap-1 px-4 py-2 border-b border-[#E2E8F0] bg-card-bg">
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="加粗"><i class="fas fa-bold"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="斜体"><i class="fas fa-italic"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="下划线"><i class="fas fa-underline"></i></button>
                                 <span class="w-px h-6 bg-border-dark mx-2"></span>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="无序列表"><i class="fas fa-list-ul"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="有序列表"><i class="fas fa-list-ol"></i></button>
-                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="链接"><i class="fas fa-link"></i></button>
-                                <button onclick="openResourcePicker('editContent', 'multiple')" class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-text-secondary" title="插入图片"><i class="fas fa-image"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="无序列表"><i class="fas fa-list-ul"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="有序列表"><i class="fas fa-list-ol"></i></button>
+                                <button class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="链接"><i class="fas fa-link"></i></button>
+                                <button onclick="openResourcePicker('editContent', 'multiple')" class="w-8 h-8 rounded hover:bg-border-dark flex items-center justify-center text-gray-600" title="插入图片"><i class="fas fa-image"></i></button>
                                 <button onclick="openResourcePicker('editContent', 'multiple')" class="w-8 h-8 rounded hover:bg-accent-cyan flex items-center justify-center text-accent-cyan" title="插入资源">
                                     <i class="fas fa-folder-open"></i>
                                 </button>
                             </div>
-                            <div id="editEditorArea" class="min-h-[200px] px-4 py-3 text-sm text-text-primary focus:outline-none overflow-auto">
+                            <div id="editEditorArea" class="min-h-[200px] px-4 py-3 text-sm text-white focus:outline-none overflow-auto">
                                 <div id="editContentDisplay" class="whitespace-pre-wrap leading-relaxed"></div>
-                                <textarea id="editContent" rows="8" placeholder="请输入正文内容...\n\n提示：点击工具栏📁资源按钮可插入图片/文件/视频" class="w-full h-[200px] text-sm text-text-primary placeholder-text-muted focus:outline-none resize-none bg-transparent"></textarea>
+                                <textarea id="editContent" rows="8" placeholder="请输入正文内容...\n\n提示：点击工具栏📁资源按钮可插入图片/文件/视频" class="w-full h-[200px] text-sm text-white placeholder-text-muted focus:outline-none resize-none bg-transparent"></textarea>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark bg-primary-bg/50">
-                <button onclick="closeModal('editModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-primary-bg/50">
+                <button onclick="closeModal('editModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button onclick="saveContent('edit')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存</button>
             </div>
         </div>
     </div>
 
     <!-- 查看详情弹窗 -->
-    <div id="viewModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[800px] max-h-[90vh] overflow-hidden border border-border-dark shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+    <div id="viewModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[800px] max-h-[90vh] overflow-hidden border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">内容详情</h3>
-                <button onclick="closeModal('viewModal')" class="text-text-muted hover:text-text-primary">
+                <button onclick="closeModal('viewModal')" class="text-gray-500 hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
@@ -476,7 +500,7 @@
                     <img id="viewCoverImg" src="" class="w-full h-48 rounded-xl object-cover">
                 </div>
                 <h2 id="viewTitle" class="text-xl font-semibold mb-4"></h2>
-                <div class="flex items-center gap-4 mb-6 text-sm text-text-muted">
+                <div class="flex items-center gap-4 mb-6 text-sm text-gray-500">
                     <span><i class="fas fa-folder mr-1"></i><span id="viewCategory"></span></span>
                     <span><i class="fas fa-user mr-1"></i><span id="viewAuthor"></span></span>
                     <span><i class="fas fa-clock mr-1"></i><span id="viewTime"></span></span>
@@ -484,105 +508,128 @@
                 </div>
                 <div class="mb-4">
                     <span id="viewStatus" class="px-3 py-1 text-xs rounded-full"></span>
-                    <span id="viewTags" class="ml-2 text-xs text-text-muted"></span>
+                    <span id="viewTags" class="ml-2 text-xs text-gray-500"></span>
                 </div>
-                <div class="border-t border-border-dark pt-4">
-                    <h4 class="text-sm font-medium text-text-muted mb-2">内容摘要</h4>
-                    <p id="viewSummary" class="text-sm text-text-secondary mb-4"></p>
-                    <h4 class="text-sm font-medium text-text-muted mb-2">正文内容</h4>
-                    <div id="viewContent" class="text-sm text-text-primary leading-relaxed whitespace-pre-wrap"></div>
+                <div class="border-t border-[#E2E8F0] pt-4">
+                    <h4 class="text-sm font-medium text-gray-500 mb-2">内容摘要</h4>
+                    <p id="viewSummary" class="text-sm text-gray-600 mb-4"></p>
+                    <h4 class="text-sm font-medium text-gray-500 mb-2">正文内容</h4>
+                    <div id="viewContent" class="text-sm text-white leading-relaxed whitespace-pre-wrap"></div>
                 </div>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark bg-primary-bg/50">
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-primary-bg/50">
                 <button onclick="closeModal('viewModal'); openEditModal(currentContentId)" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
                     <i class="fas fa-edit mr-2"></i>编辑
                 </button>
-                <button onclick="closeModal('viewModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">关闭</button>
+                <button onclick="closeModal('viewModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">关闭</button>
             </div>
         </div>
     </div>
 
     <!-- 确认删除弹窗 -->
-    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
-            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
                 <div class="w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center">
                     <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
                 </div>
                 <div>
                     <h3 class="text-lg font-medium">确认删除</h3>
-                    <p id="deleteTip" class="text-sm text-text-muted mt-1">删除后无法恢复，请谨慎操作</p>
+                    <p id="deleteTip" class="text-sm text-gray-500 mt-1">删除后无法恢复，请谨慎操作</p>
                 </div>
             </div>
             <div class="p-6">
-                <p class="text-sm text-text-secondary">确定要删除以下内容吗？</p>
-                <p id="deleteTitle" class="text-sm font-medium mt-2 text-text-primary"></p>
+                <p class="text-sm text-gray-600">确定要删除以下内容吗？</p>
+                <p id="deleteTitle" class="text-sm font-medium mt-2 text-white"></p>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('deleteModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('deleteModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button id="confirmDeleteBtn" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
             </div>
         </div>
     </div>
 
     <!-- 确认归档弹窗 -->
-    <div id="archiveModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
-            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+    <div id="archiveModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
                 <div class="w-12 h-12 rounded-full bg-accent-amber/20 flex items-center justify-center">
                     <i class="fas fa-inbox text-accent-amber text-xl"></i>
                 </div>
                 <div>
                     <h3 class="text-lg font-medium">确认归档</h3>
-                    <p class="text-sm text-text-muted mt-1">归档后可在归档管理中恢复</p>
+                    <p class="text-sm text-gray-500 mt-1">归档后可在归档管理中恢复</p>
                 </div>
             </div>
             <div class="p-6">
-                <p class="text-sm text-text-secondary">确定要归档以下内容吗？</p>
-                <p id="archiveTitle" class="text-sm font-medium mt-2 text-text-primary"></p>
+                <p class="text-sm text-gray-600">确定要归档以下内容吗？</p>
+                <p id="archiveTitle" class="text-sm font-medium mt-2 text-white"></p>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('archiveModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('archiveModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button id="confirmArchiveBtn" class="px-5 py-2.5 bg-accent-amber text-white rounded-xl hover:bg-amber-600 transition-colors">确认归档</button>
             </div>
         </div>
     </div>
 
-    <!-- 下架确认弹窗 -->
-    <div id="offlineModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
-            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
-                <div class="w-12 h-12 rounded-full bg-purple-500/20 flex items-center justify-center">
-                    <i class="fas fa-arrow-down text-purple-400 text-xl"></i>
+    <!-- 恢复确认弹窗 -->
+    <div id="restoreModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
+                <div class="w-12 h-12 rounded-full bg-accent-green/20 flex items-center justify-center">
+                    <i class="fas fa-undo text-accent-green text-xl"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-medium">确认下架</h3>
-                    <p class="text-sm text-text-muted mt-1">下架后内容将从门户移除</p>
+                    <h3 class="text-lg font-medium text-gray-900">确认恢复</h3>
+                    <p class="text-sm text-gray-500 mt-1">恢复后内容将回到草稿状态</p>
                 </div>
             </div>
             <div class="p-6">
-                <p class="text-sm text-text-secondary">确定要下架以下内容吗？</p>
-                <p id="offlineTitle" class="text-sm font-medium mt-2 text-text-primary"></p>
+                <p class="text-sm text-gray-600">确定要恢复以下内容吗？</p>
+                <p id="restoreTitle" class="text-sm font-medium mt-2 text-gray-900"></p>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('offlineModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('restoreModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button id="confirmRestoreBtn" class="px-5 py-2.5 bg-accent-green text-white rounded-xl hover:bg-green-600 transition-colors">确认恢复</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 下架确认弹窗 -->
+    <div id="offlineModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
+                <div class="w-12 h-12 rounded-full bg-accent-blue/10 flex items-center justify-center">
+                    <i class="fas fa-arrow-down text-accent-blue text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认下架</h3>
+                    <p class="text-sm text-gray-500 mt-1">下架后内容将从门户移除</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600">确定要下架以下内容吗？</p>
+                <p id="offlineTitle" class="text-sm font-medium mt-2 text-white"></p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('offlineModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button id="confirmOfflineBtn" class="px-5 py-2.5 bg-purple-500 text-white rounded-xl hover:bg-purple-600 transition-colors">确认下架</button>
             </div>
         </div>
     </div>
 
     <!-- 移动分类弹窗 -->
-    <div id="moveModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
+    <div id="moveModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">移动分类</h3>
-                <button onclick="closeModal('moveModal')" class="text-text-muted hover:text-text-primary">
+                <button onclick="closeModal('moveModal')" class="text-gray-500 hover:text-white">
                     <i class="fas fa-times text-xl"></i>
                 </button>
             </div>
             <div class="p-6">
-                <p class="text-sm text-text-secondary mb-4">选择要移动到的分类：</p>
-                <select id="moveCategory" class="w-full bg-primary-bg border border-border-dark rounded-xl px-4 py-3 text-sm text-text-primary focus:border-accent-blue focus:outline-none">
+                <p class="text-sm text-gray-600 mb-4">选择要移动到的分类：</p>
+                <select id="moveCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
                     <option value="">请选择分类</option>
                     <option>新闻资讯</option>
                     <option>政策文件</option>
@@ -590,66 +637,66 @@
                     <option>专题活动</option>
                 </select>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('moveModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('moveModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button id="confirmMoveBtn" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认移动</button>
             </div>
         </div>
     </div>
 
     <!-- 批量操作确认弹窗 -->
-    <div id="batchModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[450px] border border-border-dark shadow-2xl">
-            <div class="flex items-center gap-4 p-6 border-b border-border-dark">
+    <div id="batchModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
                 <div id="batchModalIcon" class="w-12 h-12 rounded-full bg-accent-blue/20 flex items-center justify-center">
                     <i class="fas fa-check text-accent-blue text-xl"></i>
                 </div>
                 <div>
                     <h3 id="batchModalTitle" class="text-lg font-medium">批量操作</h3>
-                    <p id="batchModalTip" class="text-sm text-text-muted mt-1"></p>
+                    <p id="batchModalTip" class="text-sm text-gray-500 mt-1"></p>
                 </div>
             </div>
             <div class="p-6">
-                <p id="batchModalDesc" class="text-sm text-text-secondary"></p>
+                <p id="batchModalDesc" class="text-sm text-gray-600"></p>
             </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-border-dark">
-                <button onclick="closeModal('batchModal')" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary transition-colors">取消</button>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('batchModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
                 <button id="confirmBatchBtn" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认</button>
             </div>
         </div>
     </div>
 
     <!-- 资源选择弹窗 -->
-    <div id="resourcePickerModal" class="fixed inset-0 bg-black/70 z-[60] hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[900px] max-h-[85vh] overflow-hidden border border-border-dark shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-border-dark">
-                <h3 class="text-lg font-medium">📌 选择资源</h3>
+    <div id="resourcePickerModal" class="fixed inset-0 bg-black/70 z-[9999] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[900px] max-h-[85vh] overflow-hidden border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium text-gray-900">📌 选择资源</h3>
                 <div class="flex items-center gap-3">
-                    <div class="flex items-center gap-2 text-sm text-text-muted">
+                    <div class="flex items-center gap-2 text-sm text-gray-500">
                         <span id="resourcePickerStatus"></span>
                     </div>
-                    <button onclick="closeResourcePicker()" class="text-text-muted hover:text-text-primary">
+                    <button onclick="closeResourcePicker()" class="text-gray-500 hover:text-gray-700">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
             </div>
             <!-- 标签页 -->
-            <div class="flex border-b border-border-dark">
+            <div class="flex border-b border-[#E2E8F0]">
                 <button onclick="switchResourceTab('image')" id="resourceTab-image" class="px-6 py-3 text-sm font-medium border-b-2 border-accent-blue text-accent-blue">
                     <i class="fas fa-images mr-2"></i>图片
                 </button>
-                <button onclick="switchResourceTab('file')" id="resourceTab-file" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-text-secondary hover:text-text-primary">
+                <button onclick="switchResourceTab('file')" id="resourceTab-file" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
                     <i class="fas fa-file-alt mr-2"></i>文件
                 </button>
-                <button onclick="switchResourceTab('video')" id="resourceTab-video" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-text-secondary hover:text-text-primary">
+                <button onclick="switchResourceTab('video')" id="resourceTab-video" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
                     <i class="fas fa-video mr-2"></i>视频
                 </button>
             </div>
             <!-- 搜索 -->
-            <div class="px-6 py-3 border-b border-border-dark bg-primary-bg/30">
+            <div class="px-6 py-3 border-b border-[#E2E8F0] bg-gray-50">
                 <div class="relative">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-text-muted"></i>
-                    <input type="text" id="resourceSearchInput" placeholder="搜索资源名称..." class="w-full bg-primary-bg border border-border-dark rounded-lg pl-10 pr-4 py-2 text-sm text-text-primary placeholder-text-muted focus:border-accent-blue focus:outline-none" oninput="filterResources()">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="resourceSearchInput" placeholder="搜索资源名称..." class="w-full bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none" oninput="filterResources()">
                 </div>
             </div>
             <!-- 资源列表 -->
@@ -659,25 +706,25 @@
                 </div>
             </div>
             <!-- 分页 -->
-            <div class="flex items-center justify-between px-6 py-3 border-t border-border-dark bg-primary-bg/30">
-                <span id="resourcePaginationInfo" class="text-sm text-text-muted">显示 0 条</span>
+            <div class="flex items-center justify-between px-6 py-3 border-t border-[#E2E8F0] bg-gray-50">
+                <span id="resourcePaginationInfo" class="text-sm text-gray-500">显示 0 条</span>
                 <div class="flex items-center gap-2">
-                    <button onclick="prevResourcePage()" id="resourcePrevBtn" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                    <button onclick="prevResourcePage()" id="resourcePrevBtn" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-gray-700 hover:border-accent-blue transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <span id="resourcePageInfo" class="px-3 text-sm text-text-muted">1 / 1</span>
-                    <button onclick="nextResourcePage()" id="resourceNextBtn" class="px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
+                    <span id="resourcePageInfo" class="px-3 text-sm text-gray-500">1 / 1</span>
+                    <button onclick="nextResourcePage()" id="resourceNextBtn" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-gray-700 hover:border-accent-blue transition-colors text-sm disabled:opacity-50 disabled:cursor-not-allowed">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
             </div>
             <!-- 底部操作 -->
-            <div class="flex items-center justify-between px-6 py-4 border-t border-border-dark bg-primary-bg/50">
-                <div id="selectedResourceInfo" class="text-sm text-text-muted">
+            <div class="flex items-center justify-between px-6 py-4 border-t border-[#E2E8F0] bg-gray-50">
+                <div id="selectedResourceInfo" class="text-sm text-gray-500">
                     请选择资源
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="closeResourcePicker()" class="px-5 py-2.5 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary hover:border-text-muted transition-colors">取消</button>
+                    <button onclick="closeResourcePicker()" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-colors">取消</button>
                     <button onclick="confirmResourceSelection()" id="confirmResourceBtn" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" disabled>确认选择</button>
                 </div>
             </div>
@@ -699,6 +746,17 @@
         let currentContentId = null;
         let selectedIds = [];
 
+        // 资源选择器配置（提前声明，避免引用错误）
+        let resourcePickerConfig = {
+            target: '',
+            mode: 'single',
+            currentTab: 'image',
+            currentPage: 1,
+            pageSize: 10,
+            selected: [],
+            searchKeyword: ''
+        };
+
         // 渲染内容列表
         function renderContentList() {
             const tbody = document.getElementById('contentTableBody');
@@ -706,36 +764,37 @@
                 const statusMap = {
                     'published': { text: '已发布', class: 'bg-accent-green/20 text-accent-green' },
                     'pending': { text: '待审核', class: 'bg-accent-blue/20 text-accent-blue' },
-                    'draft': { text: '草稿', class: 'bg-text-muted/20 text-text-muted' },
+                    'draft': { text: '草稿', class: 'bg-text-muted/20 text-gray-500' },
                     'scheduled': { text: '待发布', class: 'bg-accent-amber/20 text-accent-amber' },
-                    'archived': { text: '已归档', class: 'bg-purple-500/20 text-purple-400' },
+                    'archived': { text: '已归档', class: 'bg-accent-blue/10 text-accent-blue' },
                     'offline': { text: '已下架', class: 'bg-red-500/20 text-red-400' }
                 };
                 const status = statusMap[content.status] || statusMap['draft'];
                 const isChecked = selectedIds.includes(content.id);
 
                 return `
-                    <tr class="table-row border-b border-border-dark/50 transition-colors">
-                        <td class="px-4 py-3"><input type="checkbox" class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue item-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSelect(${content.id})"></td>
+                    <tr class="table-row border-b border-[#E2E8F0]/50 transition-colors">
+                        <td class="px-4 py-3"><input type="checkbox" class="w-4 h-4 rounded border-[#E2E8F0] bg-primary-bg accent-accent-blue item-checkbox" ${isChecked ? 'checked' : ''} onchange="toggleSelect(${content.id})"></td>
                         <td class="px-4 py-3">
                             <div class="flex items-center gap-3">
                                 <img src="${content.cover}" class="w-12 h-8 rounded object-cover cursor-pointer" onclick="viewDetail(${content.id})">
                                 <span class="text-sm font-medium hover:text-accent-blue cursor-pointer" onclick="viewDetail(${content.id})">${content.title}</span>
                             </div>
                         </td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">${content.category}</td>
-                        <td class="px-4 py-3 text-sm text-text-secondary">${content.author}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">${content.category}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">${content.author}</td>
                         <td class="px-4 py-3"><span class="px-2 py-1 ${status.class} text-xs rounded">${status.text}</span></td>
-                        <td class="px-4 py-3 text-sm text-text-muted">${content.publishTime}</td>
-                        <td class="px-4 py-3 text-sm text-text-muted">${content.views > 0 ? content.views.toLocaleString() : '-'}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">${content.publishTime}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">${content.views > 0 ? content.views.toLocaleString() : '-'}</td>
                         <td class="px-4 py-3 text-right">
-                            <button onclick="viewDetail(${content.id})" class="text-text-secondary hover:text-accent-blue text-sm mr-2">查看</button>
-                            <button onclick="openEditModal(${content.id})" class="text-text-secondary hover:text-accent-blue text-sm mr-2">编辑</button>
-                            <button onclick="openMoveModal(${content.id})" class="text-text-secondary hover:text-cyan-400 text-sm mr-2">移动</button>
-                            ${content.status === 'published' ? `<button onclick="openOfflineModal(${content.id})" class="text-purple-400 hover:text-purple-300 text-sm mr-2">下架</button>` : ''}
+                            <button onclick="viewDetail(${content.id})" class="text-gray-600 hover:text-accent-blue text-sm mr-2">查看</button>
+                            <button onclick="openEditModal(${content.id})" class="text-gray-600 hover:text-accent-blue text-sm mr-2">编辑</button>
+                            <button onclick="openMoveModal(${content.id})" class="text-gray-600 hover:text-cyan-400 text-sm mr-2">移动</button>
+                            ${content.status === 'published' ? `<button onclick="openOfflineModal(${content.id})" class="text-accent-blue hover:text-purple-300 text-sm mr-2">下架</button>` : ''}
                             ${content.status !== 'archived' ? `<button onclick="openArchiveModal(${content.id})" class="text-accent-amber hover:text-amber-400 text-sm mr-2">归档</button>` : ''}
-                            <button onclick="copyContent(${content.id})" class="text-text-secondary hover:text-accent-green text-sm mr-2">复制</button>
-                            <button onclick="openDeleteModal(${content.id})" class="text-text-secondary hover:text-accent-red text-sm">删除</button>
+                            ${content.status === 'archived' ? `<button onclick="openRestoreModal(${content.id})" class="text-accent-green hover:text-green-400 text-sm mr-2">恢复</button>` : ''}
+                            <button onclick="copyContent(${content.id})" class="text-gray-600 hover:text-accent-green text-sm mr-2">复制</button>
+                            <button onclick="openDeleteModal(${content.id})" class="text-gray-600 hover:text-accent-red text-sm">删除</button>
                         </td>
                     </tr>
                 `;
@@ -805,9 +864,9 @@
             const statusMap = {
                 'published': { text: '已发布', class: 'bg-accent-green/20 text-accent-green' },
                 'pending': { text: '待审核', class: 'bg-accent-blue/20 text-accent-blue' },
-                'draft': { text: '草稿', class: 'bg-text-muted/20 text-text-muted' },
+                'draft': { text: '草稿', class: 'bg-text-muted/20 text-gray-500' },
                 'scheduled': { text: '待发布', class: 'bg-accent-amber/20 text-accent-amber' },
-                'archived': { text: '已归档', class: 'bg-purple-500/20 text-purple-400' },
+                'archived': { text: '已归档', class: 'bg-accent-blue/10 text-accent-blue' },
                 'offline': { text: '已下架', class: 'bg-red-500/20 text-red-400' }
             };
 
@@ -871,6 +930,27 @@
             document.getElementById('archiveTitle').textContent = content.title;
             document.getElementById('confirmArchiveBtn').onclick = () => doArchive(id);
             openModal('archiveModal');
+        }
+
+        // 打开恢复弹窗
+        function openRestoreModal(id) {
+            const content = contents.find(c => c.id === id);
+            if (!content) return;
+
+            document.getElementById('restoreTitle').textContent = content.title;
+            document.getElementById('confirmRestoreBtn').onclick = () => doRestore(id);
+            openModal('restoreModal');
+        }
+
+        // 执行恢复
+        function doRestore(id) {
+            const content = contents.find(c => c.id === id);
+            if (content) {
+                content.status = 'draft';
+                closeModal('restoreModal');
+                renderContentList();
+                showToast('内容已恢复', 'success');
+            }
         }
 
         function doArchive(id) {
@@ -953,7 +1033,7 @@
             if (type === 'create') {
                 title = document.getElementById('createTitle').value;
                 category = document.getElementById('createCategory').value;
-                tags = document.getElementById('createTags').value;
+                tags = getSelectedTagsString(); // 使用标签组件获取已选标签
                 summary = document.getElementById('createSummary').value;
                 content = document.getElementById('createContent').value;
             } else {
@@ -998,9 +1078,11 @@
                 closeModal('createModal');
                 document.getElementById('createTitle').value = '';
                 document.getElementById('createCategory').value = '';
-                document.getElementById('createTags').value = '';
                 document.getElementById('createSummary').value = '';
                 document.getElementById('createContent').value = '';
+                // 重置标签选择
+                selectedTags = [];
+                updateSelectedTagsDisplay();
             } else {
                 closeModal('editModal');
             }
@@ -1051,6 +1133,31 @@
                 closeModal('batchModal');
                 renderContentList();
                 showToast('已批量归档', 'success');
+            };
+            openModal('batchModal');
+        }
+
+        function batchRestore() {
+            const archivedSelected = selectedIds.filter(id => {
+                const content = contents.find(c => c.id === id);
+                return content && content.status === 'archived';
+            });
+            if (archivedSelected.length === 0) {
+                showToast('请选择已归档的内容', 'error');
+                return;
+            }
+            document.getElementById('batchModalTitle').textContent = '批量恢复';
+            document.getElementById('batchModalTip').textContent = '将选中的已归档内容恢复到草稿状态';
+            document.getElementById('batchModalDesc').textContent = `确定要恢复选中的 ${archivedSelected.length} 条已归档内容吗？`;
+            document.getElementById('confirmBatchBtn').onclick = () => {
+                archivedSelected.forEach(id => {
+                    const content = contents.find(c => c.id === id);
+                    if (content) content.status = 'draft';
+                });
+                selectedIds = [];
+                closeModal('batchModal');
+                renderContentList();
+                showToast('已批量恢复', 'success');
             };
             openModal('batchModal');
         }
@@ -1119,17 +1226,18 @@
             currentPage = page;
             // 简化分页逻辑
             document.querySelectorAll('[id^="page"]').forEach(btn => {
-                btn.className = btn.textContent == page ? 'px-3 py-1 rounded bg-accent-blue text-white text-sm' : 'px-3 py-1 rounded border border-border-dark text-text-muted hover:text-text-primary hover:border-accent-blue transition-colors text-sm';
+                btn.className = btn.textContent == page ? 'px-3 py-1 rounded bg-accent-blue text-white text-sm' : 'px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm';
             });
         }
 
         // 初始渲染
         renderContentList();
         initCategoryFilter();
+        initTagsInput();
 
         // ==================== 分类联动 ====================
-        // 分类数据（与分类管理同步）
-        const categoryOptions = [
+        // 默认分类数据
+        const defaultCategories = [
             { id: 1, name: '新闻资讯', children: [
                 { id: 11, name: '时政要闻' },
                 { id: 12, name: '社会民生' },
@@ -1145,13 +1253,28 @@
             ]}
         ];
 
+        // 加载分类数据（优先从localStorage）
+        function loadCategories() {
+            const stored = localStorage.getItem('content_categories');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    return defaultCategories;
+                }
+            }
+            return defaultCategories;
+        }
+
         // 初始化分类筛选下拉
         function initCategoryFilter() {
+            const categories = loadCategories();
+
             // 筛选栏分类
             const filterSelect = document.getElementById('filterCategory');
             if (filterSelect) {
                 filterSelect.innerHTML = '<option value="">全部分类</option>';
-                categoryOptions.forEach(cat => {
+                categories.forEach(cat => {
                     const group = document.createElement('optgroup');
                     group.label = cat.name;
                     group.innerHTML = `<option value="${cat.name}">全部${cat.name}</option>`;
@@ -1171,7 +1294,7 @@
             const createSelect = document.getElementById('createCategory');
             if (createSelect) {
                 createSelect.innerHTML = '<option value="">请选择分类</option>';
-                categoryOptions.forEach(cat => {
+                categories.forEach(cat => {
                     const group = document.createElement('optgroup');
                     group.label = cat.name;
                     if (cat.children) {
@@ -1185,6 +1308,187 @@
                     createSelect.appendChild(group);
                 });
             }
+
+            // 监听分类更新事件
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'content_categories') {
+                    initCategoryFilter();
+                }
+            });
+        }
+
+        // ==================== 标签输入组件 ====================
+        let tagsList = []; // 当前可用标签列表
+        let selectedTags = []; // 已选中的标签
+
+        // 加载标签数据
+        function loadTags() {
+            const stored = localStorage.getItem('content_tags');
+            if (stored) {
+                try {
+                    return JSON.parse(stored);
+                } catch (e) {
+                    return [];
+                }
+            }
+            return [];
+        }
+
+        // 初始化标签输入组件
+        function initTagsInput() {
+            tagsList = loadTags();
+            selectedTags = [];
+            renderTagsInput();
+
+            // 监听标签更新事件
+            window.addEventListener('storage', function(e) {
+                if (e.key === 'content_tags') {
+                    tagsList = loadTags();
+                    renderTagsInput();
+                }
+            });
+        }
+
+        // 渲染标签输入组件
+        function renderTagsInput() {
+            const container = document.getElementById('createTags');
+            if (!container) return;
+
+            // 替换为自定义标签输入容器
+            container.outerHTML = `
+                <div id="tagsInputContainer" class="relative">
+                    <div id="tagsInputBox" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 min-h-[46px] cursor-text flex flex-wrap gap-2" onclick="focusTagInput()">
+                        <div id="selectedTagsDisplay" class="flex flex-wrap gap-2"></div>
+                        <input type="text" id="tagSearchInput" placeholder="输入标签名称搜索或创建..." class="flex-1 min-w-[150px] bg-transparent text-sm text-white placeholder-text-muted focus:outline-none" oninput="filterTagsSuggestions()" onfocus="showTagsSuggestions()" onblur="setTimeout(hideTagsSuggestions, 200)">
+                    </div>
+                    <div id="tagsSuggestions" class="absolute z-50 w-full mt-1 bg-card-bg border border-[#E2E8F0] rounded-xl shadow-xl max-h-[200px] overflow-y-auto hidden">
+                        <div id="tagsSuggestionsList"></div>
+                        <div id="createNewTag" class="hidden p-3 border-t border-[#E2E8F0]">
+                            <button onclick="createAndSelectTag()" class="w-full text-left px-3 py-2 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg">
+                                <i class="fas fa-plus mr-2"></i>创建新标签: <span id="newTagName"></span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            updateSelectedTagsDisplay();
+        }
+
+        // 聚焦标签输入框
+        function focusTagInput() {
+            const input = document.getElementById('tagSearchInput');
+            if (input) input.focus();
+        }
+
+        // 显示标签建议
+        function showTagsSuggestions() {
+            const suggestions = document.getElementById('tagsSuggestions');
+            if (suggestions) suggestions.classList.remove('hidden');
+        }
+
+        // 隐藏标签建议
+        function hideTagsSuggestions() {
+            const suggestions = document.getElementById('tagsSuggestions');
+            if (suggestions) suggestions.classList.add('hidden');
+        }
+
+        // 过滤标签建议
+        function filterTagsSuggestions() {
+            const keyword = document.getElementById('tagSearchInput').value.toLowerCase().trim();
+            const suggestionsList = document.getElementById('tagsSuggestionsList');
+            const createNewTag = document.getElementById('createNewTag');
+            const newTagNameSpan = document.getElementById('newTagName');
+
+            if (!keyword) {
+                suggestionsList.innerHTML = '<div class="p-3 text-sm text-gray-500">输入关键词搜索标签</div>';
+                createNewTag.classList.add('hidden');
+                return;
+            }
+
+            // 过滤匹配的标签
+            const matched = tagsList.filter(t =>
+                t.name.toLowerCase().includes(keyword) && !selectedTags.some(s => s.id === t.id)
+            );
+
+            if (matched.length === 0 && keyword.length > 0) {
+                // 没有匹配，显示创建新标签选项
+                suggestionsList.innerHTML = '<div class="p-3 text-sm text-gray-500">没有找到匹配的标签</div>';
+                newTagNameSpan.textContent = keyword;
+                createNewTag.classList.remove('hidden');
+            } else {
+                suggestionsList.innerHTML = matched.map(t => `
+                    <div class="flex items-center justify-between px-4 py-3 hover:bg-primary-bg cursor-pointer border-b border-[#E2E8F0] last:border-b-0" onclick="selectTag(${t.id}, '${t.name}', '${t.color}')">
+                        <span class="w-3 h-3 rounded-full bg-${t.color}"></span>
+                        <span class="flex-1 ml-3 text-sm">${t.name}</span>
+                        <span class="text-xs text-gray-500">${t.contentCount}篇</span>
+                    </div>
+                `).join('');
+                createNewTag.classList.remove('hidden');
+                newTagNameSpan.textContent = keyword;
+            }
+        }
+
+        // 选择标签
+        function selectTag(id, name, color) {
+            const tag = tagsList.find(t => t.id === id);
+            if (tag && !selectedTags.some(s => s.id === id)) {
+                selectedTags.push(tag);
+                updateSelectedTagsDisplay();
+                document.getElementById('tagSearchInput').value = '';
+                hideTagsSuggestions();
+            }
+        }
+
+        // 创建并选中标签
+        function createAndSelectTag() {
+            const keyword = document.getElementById('tagSearchInput').value.trim();
+            if (!keyword) return;
+
+            const newTag = {
+                id: Date.now(),
+                name: keyword,
+                type: '其他',
+                color: 'accent-blue',
+                contentCount: 0,
+                createdAt: new Date().toISOString().slice(0, 10),
+                remark: ''
+            };
+
+            // 添加到标签列表
+            tagsList.push(newTag);
+            selectedTags.push(newTag);
+
+            // 同步到localStorage
+            localStorage.setItem('content_tags', JSON.stringify(tagsList));
+
+            updateSelectedTagsDisplay();
+            document.getElementById('tagSearchInput').value = '';
+            hideTagsSuggestions();
+        }
+
+        // 更新已选标签显示
+        function updateSelectedTagsDisplay() {
+            const display = document.getElementById('selectedTagsDisplay');
+            if (!display) return;
+
+            display.innerHTML = selectedTags.map(t => `
+                <span class="inline-flex items-center gap-1 px-2 py-1 bg-${t.color}/20 text-${t.color} text-xs rounded-lg">
+                    ${t.name}
+                    <i onclick="removeTag(${t.id})" class="fas fa-times cursor-pointer hover:opacity-70"></i>
+                </span>
+            `).join('');
+        }
+
+        // 移除已选标签
+        function removeTag(id) {
+            selectedTags = selectedTags.filter(t => t.id !== id);
+            updateSelectedTagsDisplay();
+        }
+
+        // 获取已选标签名称（用于保存内容时）
+        function getSelectedTagsString() {
+            return selectedTags.map(t => t.name).join(',');
         }
 
         // ==================== 资源选择器相关 ====================
@@ -1221,30 +1525,41 @@
             ]
         };
 
-        let resourcePickerConfig = {
-            target: '',      // cover, editCover, content, editContent
-            mode: 'single',  // single, multiple
-            currentTab: 'image',
-            currentPage: 1,
-            pageSize: 10,
-            selected: [],    // 当前选中的资源
-            searchKeyword: ''
-        };
-
         // 打开资源选择器
         function openResourcePicker(target, mode) {
-            resourcePickerConfig.target = target;
-            resourcePickerConfig.mode = mode;
-            resourcePickerConfig.currentTab = 'image';
-            resourcePickerConfig.currentPage = 1;
-            resourcePickerConfig.selected = [];
-            resourcePickerConfig.searchKeyword = '';
+            console.log('openResourcePicker called:', target, mode);
+            try {
+                // 确保resourcePickerConfig已初始化
+                if (typeof resourcePickerConfig === 'undefined') {
+                    console.error('resourcePickerConfig not defined yet');
+                    resourcePickerConfig = {
+                        target: '',
+                        mode: 'single',
+                        currentTab: 'image',
+                        currentPage: 1,
+                        pageSize: 10,
+                        selected: [],
+                        searchKeyword: ''
+                    };
+                }
+                resourcePickerConfig.target = target;
+                resourcePickerConfig.mode = mode;
+                resourcePickerConfig.currentTab = 'image';
+                resourcePickerConfig.currentPage = 1;
+                resourcePickerConfig.selected = [];
+                resourcePickerConfig.searchKeyword = '';
 
-            document.getElementById('resourceSearchInput').value = '';
-            updateResourcePickerStatus();
-            renderResourceList();
-            document.getElementById('resourcePickerModal').classList.remove('hidden');
-            document.getElementById('resourcePickerModal').classList.add('flex');
+                document.getElementById('resourceSearchInput').value = '';
+                updateResourcePickerStatus();
+                renderResourceList();
+
+                const modal = document.getElementById('resourcePickerModal');
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+                console.log('Resource picker opened successfully');
+            } catch (e) {
+                console.error('Error opening resource picker:', e);
+            }
         }
 
         // 关闭资源选择器
@@ -1266,7 +1581,7 @@
                 if (t === tab) {
                     btn.className = 'px-6 py-3 text-sm font-medium border-b-2 border-accent-blue text-accent-blue';
                 } else {
-                    btn.className = 'px-6 py-3 text-sm font-medium border-b-2 border-transparent text-text-secondary hover:text-text-primary';
+                    btn.className = 'px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-white';
                 }
             });
 
@@ -1303,7 +1618,7 @@
 
             if (pageResources.length === 0) {
                 list.innerHTML = `
-                    <div class="col-span-5 text-center py-12 text-text-muted">
+                    <div class="col-span-5 text-center py-12 text-gray-500">
                         <i class="fas fa-folder-open text-4xl mb-3 opacity-50"></i>
                         <p>暂无资源</p>
                     </div>
@@ -1311,30 +1626,30 @@
             } else {
                 list.innerHTML = pageResources.map(r => {
                     const isSelected = resourcePickerConfig.selected.some(s => s.id === r.id);
-                    const selectedClass = isSelected ? 'border-accent-cyan bg-accent-cyan/10' : 'border-border-dark hover:border-accent-blue/50';
+                    const selectedClass = isSelected ? 'border-accent-cyan bg-accent-cyan/10' : 'border-gray-200 hover:border-accent-blue/50';
 
                     if (type === 'image') {
                         return `
                             <div class="cursor-pointer rounded-xl border-2 ${selectedClass} overflow-hidden transition-all ${isSelected ? 'ring-2 ring-accent-cyan' : ''}"
                                  onclick="toggleResourceSelection(${r.id}, '${r.name}', '${r.url}', '${r.size}', '${type}')">
-                                <div class="relative aspect-[4/3] bg-primary-bg">
+                                <div class="relative aspect-[4/3] bg-gray-100">
                                     <img src="${r.url}" class="w-full h-full object-cover">
                                     ${isSelected ? '<div class="absolute top-2 right-2 w-5 h-5 bg-accent-cyan rounded-full flex items-center justify-center"><i class="fas fa-check text-white text-xs"></i></div>' : ''}
                                 </div>
-                                <div class="p-2 text-xs">
-                                    <p class="text-text-primary truncate">${r.name}</p>
-                                    <p class="text-text-muted">${r.size}</p>
+                                <div class="p-2 text-xs bg-white">
+                                    <p class="text-gray-700 truncate">${r.name}</p>
+                                    <p class="text-gray-400">${r.size}</p>
                                 </div>
                             </div>
                         `;
                     } else if (type === 'file') {
                         return `
-                            <div class="cursor-pointer rounded-xl border-2 ${selectedClass} p-4 transition-all ${isSelected ? 'ring-2 ring-accent-cyan' : ''}"
+                            <div class="cursor-pointer rounded-xl border-2 ${selectedClass} p-4 transition-all bg-white ${isSelected ? 'ring-2 ring-accent-cyan' : ''}"
                                  onclick="toggleResourceSelection(${r.id}, '${r.name}', '${r.url}', '${r.size}', '${type}')">
                                 <div class="flex flex-col items-center text-center">
                                     <i class="fas ${r.icon} text-3xl text-accent-amber mb-2"></i>
-                                    <p class="text-xs text-text-primary truncate w-full">${r.name}</p>
-                                    <p class="text-xs text-text-muted">${r.size}</p>
+                                    <p class="text-xs text-gray-700 truncate w-full">${r.name}</p>
+                                    <p class="text-xs text-gray-400">${r.size}</p>
                                 </div>
                                 ${isSelected ? '<div class="absolute top-2 right-2 w-5 h-5 bg-accent-cyan rounded-full flex items-center justify-center"><i class="fas fa-check text-white text-xs"></i></div>' : ''}
                             </div>
@@ -1343,7 +1658,7 @@
                         return `
                             <div class="cursor-pointer rounded-xl border-2 ${selectedClass} overflow-hidden transition-all ${isSelected ? 'ring-2 ring-accent-cyan' : ''}"
                                  onclick="toggleResourceSelection(${r.id}, '${r.name}', '${r.url}', '${r.size}', '${type}')">
-                                <div class="relative aspect-[4/3] bg-primary-bg">
+                                <div class="relative aspect-[4/3] bg-gray-100">
                                     <img src="${r.poster}" class="w-full h-full object-cover">
                                     <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
                                         <i class="fas fa-play-circle text-3xl text-white"></i>
@@ -1351,9 +1666,9 @@
                                     <div class="absolute bottom-2 right-2 px-2 py-0.5 bg-black/60 text-white text-xs rounded">${r.duration}</div>
                                     ${isSelected ? '<div class="absolute top-2 right-2 w-5 h-5 bg-accent-cyan rounded-full flex items-center justify-center"><i class="fas fa-check text-white text-xs"></i></div>' : ''}
                                 </div>
-                                <div class="p-2 text-xs">
-                                    <p class="text-text-primary truncate">${r.name}</p>
-                                    <p class="text-text-muted">${r.size}</p>
+                                <div class="p-2 text-xs bg-white">
+                                    <p class="text-gray-700 truncate">${r.name}</p>
+                                    <p class="text-gray-400">${r.size}</p>
                                 </div>
                             </div>
                         `;

@@ -1,0 +1,1822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动专区 - 可信数据空间门户</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'border-light': '#E2E8F0',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#06B6D4',
+                        'accent-indigo': '#6366F1',
+                        'accent-green': '#10B981',
+                        'accent-amber': '#F59E0B',
+                        'accent-red': '#EF4444',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#64748B',
+                        'text-muted': '#94A3B8',
+                        'tech-gradient-start': '#F0F9FF',
+                        'tech-gradient-end': '#E0F2FE',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        /* Page Transitions */
+        .page-transition { animation: fadeSlideIn 0.4s ease-out; }
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Banner Carousel -修复高度塌陷问题 */
+        .carousel-item { position: absolute; inset: 0; transition: opacity 0.6s ease-in-out; }
+        .carousel-item:not(.active) { opacity: 0; z-index: 1; pointer-events: none; }
+        .carousel-item.active { opacity: 1; z-index: 2; }
+
+        /* Card Hover Effects */
+        .activity-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .activity-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(10, 97, 255, 0.12); }
+
+        /* Gradient Border */
+        .gradient-border { position: relative; }
+        .gradient-border::before { content: ''; position: absolute; inset: 0; padding: 1px; background: linear-gradient(135deg, #0A61FF, #06B6D4); -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0); -webkit-mask-composite: xor; mask-composite: exclude; border-radius: inherit; pointer-events: none; }
+
+        /* Floating Badge */
+        .floating-badge { animation: floatBadge 3s ease-in-out infinite; }
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        /* Drawer Animation */
+        .drawer-overlay { transition: opacity 0.3s ease; }
+        .drawer-panel { transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
+        .drawer-panel.hidden { transform: translateX(100%); }
+        .drawer-panel.show { transform: translateX(0); }
+
+        /* Toast Animation */
+        .toast { animation: toastSlide 0.4s ease-out; }
+        @keyframes toastSlide {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Calendar Day Hover */
+        .calendar-day:hover:not(.empty):not(.current-month) { background: rgba(10, 97, 255, 0.1); border-radius: 50%; }
+
+        /* Stagger Animation for Cards */
+        .stagger-item { opacity: 0; animation: staggerFadeIn 0.5s ease-out forwards; }
+        @keyframes staggerFadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Glow Effect */
+        .glow-effect { box-shadow: 0 0 30px rgba(10, 97, 255, 0.15); }
+
+        /* Status Badge Pulse */
+        .status-pulse { animation: statusPulse 2s ease-in-out infinite; }
+        @keyframes statusPulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.6; }
+        }
+
+        /* City Background Pattern */
+        .city-pattern {
+            background-image:
+                radial-gradient(ellipse at 20% 80%, rgba(10, 97, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+        }
+    </style>
+</head>
+<body class="bg-tech-gradient-start min-h-screen city-pattern">
+    <!-- 顶部导航栏 (保持不变风格) -->
+    <header class="fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] z-50 shadow-sm">
+        <div class="h-full flex items-center px-6">
+            <!-- Logo -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center shadow-lg">
+                    <i class="fas fa-city text-white text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-semibold text-gray-900">公共数据授权运营</span>
+            
+                </div>
+            </div>
+
+            <!-- 顶部导航 -->
+            <nav class="flex-1 flex items-center justify-center gap-8 ml-16">
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">首页</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">数据资源</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">数据产品</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">服务专区</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">政策资讯</a>
+                <a href="#" class="nav-link active text-sm font-semibold text-accent-blue border-b-2 border-accent-blue pb-1">活动专区</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">个人中心</a>
+            </nav>
+
+            <!-- 右侧 -->
+            <div class="flex items-center gap-4">
+                <button class="relative text-gray-600 hover:text-accent-blue transition-colors">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center text-white">3</span>
+                </button>
+                <div class="flex items-center gap-3 pl-4 border-l border-[#E2E8F0]">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/20">
+                    <div class="flex flex-col">
+                        <span class="text-sm font-medium text-gray-900">张明远</span>
+                        <span class="text-xs text-gray-500">上海数据集团</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="pt-16 min-h-screen">
+        <!-- 活动专区内容区域 (SPA切换) -->
+        <div id="zoneContent" class="relative">
+            <!-- 内容由JS动态切换 -->
+        </div>
+    </main>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+    <!-- 签到码弹窗 -->
+    <div id="signInModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" onclick="closeSignInModal()"></div>
+        <div class="absolute inset-0 flex items-center justify-center p-6 pointer-events-none">
+            <div class="bg-white rounded-2xl shadow-2xl w-full max-w-md pointer-events-auto overflow-hidden">
+                <!-- 弹窗头部 -->
+                <div class="px-6 py-4 bg-gradient-to-r from-accent-blue to-accent-cyan flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-qrcode text-white text-lg"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-white">活动签到码</h3>
+                            <p class="text-xs text-white/80">请在活动现场出示此码</p>
+                        </div>
+                    </div>
+                    <button onclick="closeSignInModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
+                        <i class="fas fa-times text-white"></i>
+                    </button>
+                </div>
+                <!-- 弹窗内容 -->
+                <div class="p-6">
+                    <!-- 二维码区域 -->
+                    <div id="signInQRCode" class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-6 mb-5 flex items-center justify-center">
+                        <div class="relative">
+                            <div class="w-48 h-48 bg-white rounded-xl shadow-lg flex items-center justify-center border-2 border-gray-100">
+                                <!-- Mock二维码占位 -->
+                                <div class="grid grid-cols-8 gap-0.5 w-40 h-40">
+                                    ${Array(64).fill().map(() => `<div class="${Math.random() > 0.5 ? 'bg-gray-900' : 'bg-white'}"></div>`).join('')}
+                                </div>
+                            </div>
+                            <div class="absolute -bottom-2 -right-2 w-12 h-12 bg-accent-blue rounded-xl flex items-center justify-center shadow-lg">
+                                <i class="fas fa-shield-check text-white text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 活动信息 -->
+                    <div class="space-y-3 mb-5">
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-calendar-day text-gray-400"></i>
+                                <span class="text-sm text-gray-600">活动名称</span>
+                            </div>
+                            <span id="modalActivityName" class="text-sm font-medium text-gray-900">AI公共数据开放培训会</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-clock text-gray-400"></i>
+                                <span class="text-sm text-gray-600">签到时间</span>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900">09:00-10:00</span>
+                        </div>
+                        <div class="flex items-center justify-between p-3 bg-amber-50 rounded-xl border border-amber-200">
+                            <div class="flex items-center gap-2">
+                                <i class="fas fa-exclamation-circle text-amber-500"></i>
+                                <span class="text-sm text-amber-700">签到状态</span>
+                            </div>
+                            <span id="modalSignInStatus" class="px-3 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full">待签到</span>
+                        </div>
+                    </div>
+
+                    <!-- 提示文案 -->
+                    <div class="p-4 bg-blue-50 border border-blue-200 rounded-xl mb-5">
+                        <div class="flex items-start gap-3">
+                            <i class="fas fa-info-circle text-blue-500 mt-0.5"></i>
+                            <div>
+                                <p class="text-sm text-blue-800 font-medium">签到提示</p>
+                                <p class="text-xs text-blue-600 mt-1">请在活动现场打开「我的活动」，点击「查看签到码」完成签到。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 底部按钮 -->
+                    <button onclick="closeSignInModal()" class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-xl font-medium transition-colors">
+                        关闭
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 报名抽屉 -->
+    <div id="registrationDrawer" class="fixed inset-0 z-50 hidden">
+        <div class="drawer-overlay absolute inset-0 bg-black/40 backdrop-blur-sm" onclick="closeDrawer()"></div>
+        <div class="drawer-panel hidden absolute right-0 top-0 bottom-0 w-[480px] bg-white shadow-2xl overflow-y-auto">
+            <!-- 抽屉头部 -->
+            <div class="sticky top-0 bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] px-6 py-4 flex items-center justify-between z-10">
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900">活动报名</h3>
+                    <p id="drawerActivityName" class="text-sm text-gray-500 mt-1">2024上海数据开放创新应用大赛</p>
+                </div>
+                <button onclick="closeDrawer()" class="w-10 h-10 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-gray-500"></i>
+                </button>
+            </div>
+
+            <!-- 抽屉内容 -->
+            <div class="p-6">
+                <!-- 认证提示 -->
+                <div id="authNotice" class="hidden mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                    <div class="flex items-start gap-3">
+                        <i class="fas fa-exclamation-circle text-amber-500 mt-0.5"></i>
+                        <div>
+                            <p class="text-sm text-amber-800 font-medium">请先完成个人实名及企业认证后报名</p>
+                            <button class="mt-2 text-sm text-amber-600 hover:text-amber-700 font-medium">立即认证 <i class="fas fa-arrow-right ml-1 text-xs"></i></button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 报名表单 -->
+                <form id="registrationForm" class="space-y-5">
+                    <div class="p-4 bg-blue-50 border border-blue-100 rounded-xl">
+                        <div class="flex items-center gap-2 mb-2">
+                            <i class="fas fa-shield-check text-blue-500"></i>
+                            <span class="text-sm font-medium text-blue-800">统一身份认证</span>
+                        </div>
+                        <p class="text-xs text-blue-600">以下信息已通过实名认证，可直接提交报名</p>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-user text-gray-400 mr-1"></i>姓名 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="regName" value="张明远" class="w-full px-4 py-3 bg-gray-50 border border-[#E2E8F0] rounded-xl text-sm focus:border-accent-blue focus:outline-none focus:ring-2 focus:ring-accent-blue/20 transition-all" readonly>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-building text-gray-400 mr-1"></i>企业名称 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="text" id="regCompany" value="上海数据集团有限公司" class="w-full px-4 py-3 bg-gray-50 border border-[#E2E8F0] rounded-xl text-sm focus:border-accent-blue focus:outline-none focus:ring-2 focus:ring-accent-blue/20 transition-all" readonly>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-phone text-gray-400 mr-1"></i>手机号 <span class="text-red-500">*</span>
+                        </label>
+                        <input type="tel" id="regPhone" value="138****8888" class="w-full px-4 py-3 bg-gray-50 border border-[#E2E8F0] rounded-xl text-sm focus:border-accent-blue focus:outline-none focus:ring-2 focus:ring-accent-blue/20 transition-all" readonly>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-envelope text-gray-400 mr-1"></i>邮箱
+                        </label>
+                        <input type="email" id="regEmail" placeholder="请输入邮箱地址" class="w-full px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-accent-blue focus:outline-none focus:ring-2 focus:ring-accent-blue/20 transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-briefcase text-gray-400 mr-1"></i>职位
+                        </label>
+                        <input type="text" id="regPosition" placeholder="请输入您的职位" class="w-full px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-accent-blue focus:outline-none focus:ring-2 focus:ring-accent-blue/20 transition-all">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-comment text-gray-400 mr-1"></i>备注
+                        </label>
+                        <textarea id="regNote" rows="3" placeholder="如有其他需求请备注说明" class="w-full px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-accent-blue focus:outline-none focus:ring-2 focus:ring-accent-blue/20 transition-all resize-none"></textarea>
+                    </div>
+
+                    <div class="pt-4">
+                        <button type="submit" class="w-full py-4 bg-gradient-to-r from-accent-blue to-accent-cyan text-white rounded-xl font-medium hover:shadow-lg hover:shadow-accent-blue/30 transition-all flex items-center justify-center gap-2">
+                            <i class="fas fa-paper-plane"></i>
+                            提交报名
+                        </button>
+                    </div>
+
+                    <p class="text-xs text-gray-500 text-center">提交报名即表示同意<a href="#" class="text-accent-blue hover:underline">《活动协议》</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+        <script>
+        // ==================== Mock数据 ====================
+        //统一状态定义:
+        // 活动状态: registration(报名中) | registration_closed(报名截止) | upcoming(即将开始) | ongoing(进行中) | ended(已结束) | review(精彩回顾)
+        // 用户状态: not_registered(未报名) | pending(审核中) | approved(审核通过) | pending_signin(待签到) | signed(已签到) | rejected(审核驳回) | absent(缺席)
+        const mockData = {
+            // Banner轮播数据
+            banners: [
+                {
+                    id: 1,
+                    title: '2024上海数据开放创新应用大赛',
+                    subtitle: '汇聚创新力量，共建数据生态',
+                    time: '2024年10月15日-12月20日',
+                    location: '上海世博中心',
+                    cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=500&fit=crop',
+                    activityStatus: 'registration',
+                    userStatus: 'not_registered'
+                },
+                {
+                    id: 2,
+                    title: '可信数据空间建设研讨会',
+                    subtitle: '推进数据要素市场化配置改革',
+                    time: '2024年11月8日',
+                    location: '上海国际会议中心',
+                    cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=1200&h=500&fit=crop',
+                    activityStatus: 'upcoming',
+                    userStatus: 'approved'
+                },
+                {
+                    id: 3,
+                    title: '数据安全与隐私保护培训',
+                    subtitle: '企业数据安全能力建设专题课程',
+                    time: '2024年11月20日-21日',
+                    location: '线上直播',
+                    cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=1200&h=500&fit=crop',
+                    activityStatus: 'ongoing',
+                    userStatus: 'pending_signin'
+                }
+            ],
+            // 所有活动列表 - 20+活动覆盖所有状态组合
+            allActivities: [
+                // ========== 报名中 ==========
+                { id: 101, title: '2024上海数据开放创新应用大赛', time: '2024-10-15 至 12-20', location: '上海世博中心', activityStatus: 'registration', userStatus: 'not_registered', registrations: 1256, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
+                { id: 102, title: '数据资产入表与评估培训', time: '2024-11-12', location: '线上直播', activityStatus: 'registration', userStatus: 'pending', registrations: 892, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop' },
+                { id: 103, title: '数据交易合规与风险管理', time: '2024-11-18', location: '线上直播', activityStatus: 'registration', userStatus: 'approved', registrations: 634, cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+                // ========== 报名截止 ==========
+                { id: 104, title: '公共数据开放应用案例分享会', time: '2024-11-15', location: '上海数据中心', activityStatus: 'registration_closed', userStatus: 'not_registered', registrations: 356, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop' },
+                { id: 105, title: 'AI大模型应用创新大赛', time: '2024-12-01', location: '张江高科技园区', activityStatus: 'registration_closed', userStatus: 'rejected', registrations: 456, cover: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&h=250&fit=crop' },
+                // ========== 即将开始 ==========
+                { id: 106, title: '可信数据空间建设研讨会', time: '2024-11-08', location: '上海国际会议中心', activityStatus: 'upcoming', userStatus: 'approved', registrations: 486, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+                { id: 107, title: '数据要素市场化配置改革培训班', time: '2024-11-10', location: '上海国际会议中心', activityStatus: 'upcoming', userStatus: 'pending_signin', registrations: 156, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
+                { id: 108, title: '企业数字化转型Workshop', time: '2024-11-22', location: '张江高科技园区', activityStatus: 'upcoming', userStatus: 'not_registered', registrations: 128, cover: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&h=250&fit=crop' },
+                // ========== 进行中 ==========
+                { id: 109, title: 'AI公共数据开放培训会', time: '2024-11-0509:00', location: '上海数据交易所', activityStatus: 'ongoing', userStatus: 'pending_signin', registrations: 234, cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=250&fit=crop' },
+                { id: 110, title: '数据安全工程师认证培训', time: '2024-11-06 14:00', location: '线上直播', activityStatus: 'ongoing', userStatus: 'signed', signInTime: '09:23', registrations: 189, cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop' },
+                // ========== 已结束 ==========
+                { id: 111, title: '2024数据要素市场建设峰会', time: '2024-09-28 09:00', location: '上海国际会议中心', activityStatus: 'ended', userStatus: 'signed', signInTime: '09:15', registrations: 356, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop', hasMaterials: true },
+                { id: 112, title: '数据安全法实施三周年研讨会', time: '2024-09-15 14:00', location: '线上直播', activityStatus: 'ended', userStatus: 'absent', registrations: 245, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop', hasMaterials: true },
+                { id: 113, title: '公共数据开放应用大赛颁奖典礼', time: '2024-08-20 10:00', location: '上海世博中心', activityStatus: 'ended', userStatus: 'signed', signInTime: '10:05', registrations: 567, cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop', hasMaterials: false },
+                { id: 114, title: '数据资产入表实务操作班', time: '2024-11-12 14:00', location: '上海数据交易所', activityStatus: 'ended', userStatus: 'signed', signInTime: '14:10', registrations: 89, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop', hasMaterials: true },
+                // ========== 精彩回顾 ==========
+                { id: 115, title: '2023数据要素市场建设峰会', time: '2023-09-28', location: '上海国际会议中心', activityStatus: 'review', userStatus: 'signed', signInTime: '09:00', registrations: 456, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop', hasMaterials: true, hasVideo: true },
+                { id: 116, title: '公共数据开放应用大赛总决赛', time: '2023-12-15', location: '上海世博中心', activityStatus: 'review', userStatus: 'signed', signInTime: '13:30', registrations: 1200, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop', hasMaterials: true, hasVideo: true },
+                { id: 117, title: '数据安全与隐私保护高峰论坛', time: '2023-11-20', location: '线上直播', activityStatus: 'review', userStatus: 'absent', registrations: 3568, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop', hasMaterials: true, hasVideo: false },
+                // ========== 更多状态组合 ==========
+                { id: 118, title: '可信数据空间标准宣贯会', time: '2024-12-03 09:00', location: '线上+线下', activityStatus: 'upcoming', userStatus: 'not_registered', registrations: 312, cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+                { id: 119, title: '数据合规官专题研修班', time: '2024-11-25', location: '上海数据交易所', activityStatus: 'registration', userStatus: 'not_registered', registrations: 78, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop' },
+                { id: 120, title: '数据分析与可视化实战', time: '2024-12-02', location: '线上直播', activityStatus: 'registration', userStatus: 'approved', registrations: 156, cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop' },
+            ],
+            // 热门活动
+            hotActivities: [
+                { id: 101, title: '2024上海数据开放创新应用大赛', time: '2024-10-15 至 12-20', location: '上海世博中心', activityStatus: 'registration', userStatus: 'not_registered', registrations: 1256, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
+                { id: 106, title: '可信数据空间建设研讨会', time: '2024-11-08', location: '上海国际会议中心', activityStatus: 'upcoming', userStatus: 'approved', registrations: 486, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+                { id: 103, title: '数据资产入表与评估培训', time: '2024-11-12', location: '线上直播', activityStatus: 'registration', userStatus: 'approved', registrations: 892, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop' },
+                { id: 109, title: 'AI公共数据开放培训会', time: '2024-11-05 09:00', location: '上海数据交易所', activityStatus: 'ongoing', userStatus: 'pending_signin', registrations: 234, cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=250&fit=crop' },
+                { id: 115, title: '2023数据要素市场建设峰会', time: '2023-09-28', location: '上海国际会议中心', activityStatus: 'review', userStatus: 'signed', signInTime: '09:00', registrations: 456, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop', hasMaterials: true, hasVideo: true },
+                { id: 119, title: '数据合规官专题研修班', time: '2024-11-25', location: '上海数据交易所', activityStatus: 'registration', userStatus: 'not_registered', registrations: 78, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop' },
+            ],
+            // 近期活动
+            recentActivities: [
+                { id: 109, title: 'AI公共数据开放培训会', time: '2024-11-05 09:00', location: '上海数据交易所', activityStatus: 'ongoing', userStatus: 'pending_signin', registrations: 234, cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=250&fit=crop' },
+                { id: 106, title: '可信数据空间建设研讨会', time: '2024-11-08', location: '上海国际会议中心', activityStatus: 'upcoming', userStatus: 'approved', registrations: 486, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+                { id: 107, title: '数据要素市场化配置改革培训班', time: '2024-11-10', location: '上海国际会议中心', activityStatus: 'upcoming', userStatus: 'pending_signin', registrations: 156, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
+                { id: 103, title: '数据资产入表与评估培训', time: '2024-11-12', location: '线上直播', activityStatus: 'registration', userStatus: 'approved', registrations: 892, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop' },
+                { id: 118, title: '可信数据空间标准宣贯会', time: '2024-12-03 09:00', location: '线上+线下', activityStatus: 'upcoming', userStatus: 'not_registered', registrations: 312, cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+            ],
+            // 培训专区
+            trainingActivities: [
+                { id: 102, title: '数据资产入表与评估培训', time: '11月12日', location: '线上直播', activityStatus: 'registration', userStatus: 'pending', speaker: '李明博士', registrations: 892, cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=300&h=180&fit=crop' },
+                { id: 107, title: '数据要素市场化配置改革培训班', time: '11月10日', location: '上海国际会议中心', activityStatus: 'upcoming', userStatus: 'pending_signin', speaker: '王芳教授', registrations: 156, cover: 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?w=300&h=180&fit=crop' },
+                { id: 119, title: '数据合规官专题研修班', time: '11月25日', location: '上海数据交易所', activityStatus: 'registration', userStatus: 'not_registered', speaker: '张伟律师', registrations: 78, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=300&h=180&fit=crop' },
+                { id: 120, title: '数据分析与可视化实战', time: '12月02日', location: '线上直播', activityStatus: 'registration', userStatus: 'approved', speaker: '陈雪高级工程师', registrations: 156, cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=300&h=180&fit=crop' },
+            ],
+            // 日历数据
+            calendarData: {
+                5: [{ title: 'AI公共数据开放培训会', id: 109 }],
+                8: [{ title: '可信数据空间建设研讨会', id: 106 }],
+                10: [{ title: '数据要素市场化配置改革培训班', id: 107 }],
+                12: [{ title: '数据资产入表与评估培训', id: 102 }],
+                15: [{ title: '数据安全工程师认证培训', id: 110 }],
+                20: [{ title: '公共数据开放应用大赛颁奖典礼', id: 113 }],
+                25: [{ title: '数据合规官专题研修班', id: 119 }],
+            },
+            // 我的活动 - 12条活动，覆盖所有状态
+            myActivities: [
+                // 待审核 2条
+                { id: 102, title: '数据资产入表与评估培训', time: '2024-11-12 09:00', location: '线上直播', applyStatus: 'pending', applyStatusText: '待审核', signInStatus: null, signInTime: null, activityStatus: 'registration', activityStatusText: '报名中', cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop' },
+                { id: 118, title: '可信数据空间标准宣贯会', time: '2024-12-03 09:00', location: '线上+线下', applyStatus: 'pending', applyStatusText: '待审核', signInStatus: null, signInTime: null, activityStatus: 'upcoming', activityStatusText: '即将开始', cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+                // 已通过+待签到 3条
+                { id: 109, title: 'AI公共数据开放培训会', time: '2024-11-05 09:00', location: '上海数据交易所', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'pending', signInTime: null, activityStatus: 'ongoing', activityStatusText: '进行中', cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=250&fit=crop' },
+                { id: 107, title: '数据要素市场化配置改革培训班', time: '2024-11-10 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'pending', signInTime: null, activityStatus: 'upcoming', activityStatusText: '即将开始', cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
+                { id: 103, title: '数据交易合规与风险管理', time: '2024-11-18 14:00', location: '线上直播', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'pending', signInTime: null, activityStatus: 'registration', activityStatusText: '报名中', cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+                // 已签到 3条
+                { id: 110, title: '数据安全工程师认证培训', time: '2024-11-06 14:00', location: '线上直播', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '09:23', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop' },
+                { id: 106, title: '可信数据空间建设研讨会', time: '2024-11-08 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '13:55', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+                { id: 111, title: '2024数据要素市场建设峰会', time: '2024-09-28 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '08:58', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+                // 已结束 4条
+                { id: 112, title: '数据安全法实施三周年研讨会', time: '2024-09-15 14:00', location: '线上直播', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'absent', signInTime: null, activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop', hasMaterials: true },
+                { id: 113, title: '公共数据开放应用大赛颁奖典礼', time: '2024-08-20 10:00', location: '上海世博中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '10:05', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop', hasMaterials: false },
+                { id: 114, title: '数据资产入表实务操作班', time: '2024-11-12 14:00', location: '上海数据交易所', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '14:10', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop', hasMaterials: true },
+                { id: 115, title: '2023数据要素市场建设峰会', time: '2023-09-28 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '09:00', activityStatus: 'review', activityStatusText: '精彩回顾', cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop', hasMaterials: true, hasVideo: true },
+            ],
+            // 活动详情数据
+            activityDetail: {
+                id: 1,
+                title: '2024上海数据开放创新应用大赛',
+                status: 'registration',
+                statusText: '报名中',
+                time: '2024年10月15日-12月20日',
+                location: '上海世博中心',
+                organizer: '上海市数据局',
+                coOrganizer: '上海数据集团有限公司',
+                cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop',
+                description: '上海数据开放创新应用大赛是上海市数据局主办的重要赛事活动，旨在激发全社会对数据要素创新应用的热情，推动数据要素市场化配置改革。大赛设置多个赛道，覆盖智慧城市、数字政务、金融科技、医疗健康等领域，获奖团队将获得丰厚奖金及产业孵化支持。',
+                quota: { total: 2000, registered: 1256 },
+                deadline: '2024-11-30',
+                guests: [
+                    { name: '王部长', title: '上海市数据局 局长', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face' },
+                    { name: '李院士', title: '中国科学院 院士', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face' },
+                    { name: '张总裁', title: '上海数据集团 总裁', avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face' }
+                ],
+                agenda: [
+                    { time: '10月15日 09:00', title: '开幕式', location: '主会场' },
+                    { time: '10月15日 10:00', title: '主旨演讲', location: '主会场' },
+                    { time: '10月15日 14:00', title: '赛道说明会', location: '分会场A' },
+                    { time: '10月16日-12月15日', title: '作品提交期', location: '线上' },
+                    { time: '12月20日', title: '决赛及颁奖', location: '主会场' }
+                ],
+                attachments: [
+                    { name: '大赛参赛指南.pdf', size: '2.5MB' },
+                    { name: '数据开放清单.xlsx', size: '1.8MB' },
+                    { name: '赛道说明材料.zip', size: '15.2MB' }
+                ],
+                notice: '1. 参赛作品须围绕数据开放创新应用展开，突出数据价值释放<br>2. 同一参赛者/团队最多提交3件作品<br>3. 初赛采用线上评审，决赛采取现场答辩形式'
+            }
+        };
+
+        // 当前状态
+        let currentPage = 'home';
+        let currentActivityId = null;
+        let carouselIndex = 0;
+        let myActivitiesFilter = 'all';
+
+        // ==================== 统一动态按钮组件 ====================
+        /**
+         * 统一活动状态按钮组件
+         * @param {Object} params - 参数对象
+         * @param {string} params.activityStatus - 活动状态: registration|registration_closed|upcoming|ongoing|ended|review
+         * @param {string} params.userStatus - 用户状态: not_registered|pending|approved|pending_signin|signed|rejected|absent
+         * @param {number} params.activityId - 活动ID
+         * @param {string} params.signInTime - 签到时间(可选)
+         * @param {boolean} params.hasMaterials - 是否有资料下载(可选)
+         * @param {boolean} params.hasVideo - 是否有视频回放(可选)
+         * @returns {string} HTML字符串
+         */
+        function ActivityStatusButton({ activityStatus, userStatus, activityId, signInTime, hasMaterials, hasVideo }) {
+            const buttonBaseClass = 'flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all';
+
+            // ========== 场景1: 报名中 + 未报名 ==========
+            if (activityStatus === 'registration' && userStatus === 'not_registered') {
+                return `
+                    <button onclick="openRegistration(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm hover:shadow-md">
+                        <i class="fas fa-edit"></i>立即报名
+                    </button>
+                   <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                        <i class="fas fa-eye"></i>查看详情
+                    </button>
+                `;
+            }
+
+            // ========== 场景2: 报名中 + 审核中 ==========
+            if (activityStatus === 'registration' && userStatus === 'pending') {
+                return `
+                    <div class="${buttonBaseClass} bg-amber-50 text-amber-600 cursor-default border border-amber-200">
+                        <i class="fas fa-clock"></i>审核中
+                    </div>
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                        <i class="fas fa-eye"></i>查看详情
+                    </button>
+                `;
+            }
+
+            // ========== 场景3: 报名中 +审核通过 ==========
+            if (activityStatus === 'registration' && userStatus === 'approved') {
+                return `
+                    <div class="${buttonBaseClass} bg-green-50 text-green-600 cursor-default border border-green-200">
+                        <i class="fas fa-check-circle"></i>已报名
+                    </div>
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                        <i class="fas fa-eye"></i>查看详情
+                    </button>
+                `;
+            }
+
+            // ========== 场景4: 报名截止 + 未报名 ==========
+            if (activityStatus === 'registration_closed' && userStatus === 'not_registered') {
+                return `
+                    <div class="${buttonBaseClass} bg-gray-100 text-gray-500 cursor-not-allowed border border-gray-200">
+                        <i class="fas fa-ban"></i>报名截止
+                    </div>
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                        <i class="fas fa-eye"></i>查看详情
+                    </button>
+                `;
+            }
+
+            // ========== 场景5: 即将开始 + 审核通过 ==========
+            if (activityStatus === 'upcoming' && userStatus === 'approved') {
+                return `
+                    <button onclick="openSignInModal(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm hover:shadow-md">
+                        <i class="fas fa-qrcode"></i>查看签到码
+                    </button>
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                        <i class="fas fa-eye"></i>查看详情
+                    </button>
+                `;
+            }
+
+            // ========== 场景6: 进行中 + 待签到(重点) ==========
+            if (activityStatus === 'ongoing' && (userStatus === 'approved' || userStatus === 'pending_signin')) {
+                return `
+                    <button onclick="openSignInModal(${activityId})" class="${buttonBaseClass} bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-sm hover:shadow-md animate-pulse">
+                        <i class="fas fa-sign-in-alt"></i>立即签到
+                    </button>
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                        <i class="fas fa-eye"></i>查看详情
+                    </button>
+                `;
+            }
+
+            // ========== 场景7: 进行中 + 已签到 ==========
+            if (activityStatus === 'ongoing' && userStatus === 'signed') {
+                return `
+                    <div class="${buttonBaseClass} bg-green-50 text-green-600 cursor-default border border-green-200">
+                        <i class="fas fa-check-circle"></i>已签到 ${signInTime ? signInTime : ''}
+                    </div>
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                        <i class="fas fa-eye"></i>查看详情
+                    </button>
+                `;
+            }
+
+            // ========== 场景8: 已结束 ==========
+            if (activityStatus === 'ended') {
+                return `
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-calendar-times"></i>活动结束
+                    </button>
+                `;
+            }
+
+            // ========== 场景9: 精彩回顾(重点) ==========
+            if (activityStatus === 'review') {
+                return `
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white shadow-sm hover:shadow-md">
+                        <i class="fas fa-play-circle"></i>查看回顾
+                    </button>
+                    ${hasVideo ? `
+                        <button onclick="showToast('正在打开回放视频...', 'info')" class="${buttonBaseClass} bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white shadow-sm hover:shadow-md">
+                            <i class="fas fa-video"></i>观看回放
+                        </button>
+                    ` : ''}
+                    ${hasMaterials ? `
+                        <button onclick="showToast('资料下载中...', 'success')" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                            <i class="fas fa-download"></i>下载资料
+                        </button>
+                    ` : ''}
+                `;
+            }
+
+            // ========== 场景10: 报名中 + 审核驳回 ==========
+            if (activityStatus === 'registration' && userStatus === 'rejected') {
+                return `
+                    <button onclick="openRegistration(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm hover:shadow-md">
+                        <i class="fas fa-redo"></i>重新报名
+                    </button>
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                        <i class="fas fa-eye"></i>查看详情
+                    </button>
+                `;
+            }
+
+            // ========== 场景11: 已结束 + 缺席 ==========
+            if (activityStatus === 'ended' && userStatus === 'absent') {
+                return `
+                    <div class="${buttonBaseClass} bg-red-50 text-red-600 cursor-default border border-red-200">
+                        <i class="fas fa-user-slash"></i>未签到
+                    </div>
+                    <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                        <i class="fas fa-eye"></i>查看详情
+                    </button>
+                `;
+            }
+
+            // ========== 默认: 未报名 ==========
+            return `
+                <button onclick="openRegistration(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm hover:shadow-md">
+                    <i class="fas fa-edit"></i>立即报名
+                </button>
+                <button onclick="navigateTo('detail', ${activityId})" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10">
+                    <i class="fas fa-eye"></i>查看详情
+                </button>
+            `;
+        }
+
+        // 获取活动状态Tag HTML
+        function getActivityStatusTag(activityStatus) {
+            const statusMap = {
+                'registration': { text: '报名中', class: 'bg-blue-100 text-blue-700 border-blue-200' },
+                'registration_closed': { text: '报名截止', class: 'bg-gray-100 text-gray-600 border-gray-200' },
+                'upcoming': { text: '即将开始', class: 'bg-amber-100 text-amber-700 border-amber-200' },
+                'ongoing': { text: '进行中', class: 'bg-green-100 text-green-700 border-green-200' },
+                'ended': { text: '已结束', class: 'bg-gray-100 text-gray-500 border-gray-200' },
+                'review': { text: '精彩回顾', class: 'bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 border-purple-200' }
+            };
+            const status = statusMap[activityStatus] || statusMap['ended'];
+            return `<span class="px-2.5 py-1 ${status.class} text-xs font-medium rounded-full border">${status.text}</span>`;
+        }
+
+        // 获取用户状态Tag HTML
+        function getUserStatusTag(userStatus, signInTime) {
+            const statusMap = {
+                'not_registered': { text: '未报名', class: 'bg-gray-100 text-gray-500' },
+                'pending': { text: '待审核', class: 'bg-amber-100 text-amber-700' },
+                'approved': { text: '已通过', class: 'bg-green-100 text-green-700' },
+                'pending_signin': { text: '待签到', class: 'bg-amber-100 text-amber-700' },
+                'signed': { text: signInTime ? `已签到 ${signInTime}` : '已签到', class: 'bg-green-100 text-green-700' },
+                'rejected': { text: '审核驳回', class: 'bg-red-100 text-red-700' },
+                'absent': { text: '缺席', class: 'bg-red-100 text-red-700' }
+            };
+            const status = statusMap[userStatus] || statusMap['not_registered'];
+            return `<span class="px-2.5 py-1 ${status.class} text-xs font-medium rounded-full">${status.text}</span>`;
+        }
+
+        // ==================== 获取配置的热门活动 ====================
+        function getConfiguredHotActivities() {
+            // 从LocalStorage读取热门活动配置
+            const savedConfig = localStorage.getItem('hotActivitiesConfig');
+            let hotConfig = savedConfig ? JSON.parse(savedConfig) : [];
+
+            // 更新自动过期状态
+            const now = new Date().toISOString().substring(0, 10);
+            hotConfig.forEach(config => {
+                if (config.endTime && config.endTime < now) {
+                    config.status = 'expired';
+                } else if (config.startTime && config.startTime > now) {
+                    config.status = 'pending';
+                } else {
+                    config.status = 'active';
+                }
+            });
+
+            // 按权重排序并返回
+            return hotConfig.sort((a, b) => b.weight - a.weight);
+        }
+
+        // ==================== 页面渲染函数 ====================
+
+        // 渲染活动专区首页
+        function renderHomePage() {
+            return `
+                <div class="page-transition">
+                    <!-- 右上角胶囊按钮 -->
+                    <div class="fixed top-24 right-6 z-40">
+                        <button onclick="navigateTo('myActivities')" class="floating-badge group flex items-center gap-2 px-4 py-2.5 bg-white/95 backdrop-blur-md rounded-full shadow-lg hover:shadow-xl transition-all border border-[#E2E8F0] hover:border-accent-blue">
+                            <i class="fas fa-star text-amber-500"></i>
+                            <span class="text-sm font-medium text-gray-700">我的活动</span>
+                            <span class="px-2 py-0.5 bg-accent-blue/10 text-accent-blue text-xs font-semibold rounded-full">${mockData.myActivities.filter(a => a.activityStatus === 'upcoming' || a.activityStatus === 'ongoing').length}</span>
+                       </button>
+                    </div>
+
+                    <!-- Banner轮播区 -->
+                    ${renderBanner()}
+
+                    <!-- 主内容区 -->
+                    <div class="max-w-7xl mx-auto px-6 py-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                            <!-- 左侧主内容 -->
+                            <div class="lg:col-span-3 space-y-8">
+                                <!-- 热门活动 -->
+                                ${renderSection('热门活动', [
+                                    { icon: 'fas fa-fire text-orange-500', action: '查看全部', actionClass: 'text-orange-500 hover:text-orange-600', href: 'activity-all.html' },
+                                    { icon: 'fas fa-trophy text-amber-500', label: 'TOP 6 热门活动' }
+                                ], renderHotActivities())}
+
+                                <!-- 近期活动 -->
+                                ${renderSection('近期活动', [
+                                    { icon: 'fas fa-clock text-blue-500', label: '即将开始的活动' }
+                                ], renderRecentActivities())}
+
+                                <!-- 培训专区 -->
+                                ${renderSection('培训专区', [
+                                    { icon: 'fas fa-graduation-cap text-purple-500', label: '专业培训课程' }
+                                ], renderTrainingActivities())}
+
+                                <!-- 已结束活动 -->
+                                ${renderSection('已结束活动', [
+                                    { icon: 'fas fa-history text-gray-500', label: '精彩回顾' }
+                                ], renderEndedActivities())}
+                            </div>
+
+                            <!-- 右侧边栏 -->
+                            <div class="lg:col-span-1">
+                                <!-- 活动日历 -->
+                                ${renderCalendar()}
+
+                                <!-- 快捷统计 -->
+                                <div class="mt-6 p-5 bg-white rounded-2xl shadow-sm border border-[#E2E8F0]">
+                                    <h4 class="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                                        <i class="fas fa-chart-bar text-accent-blue"></i>
+                                        活动统计
+                                    </h4>
+                                    <div class="space-y-4">
+                                        <div class="flex items-center justify-between p-3 bg-blue-50 rounded-xl">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-calendar-check text-blue-500"></i>
+                                                <span class="text-sm text-gray-600">进行中</span>
+                                            </div>
+                                            <span class="text-lg font-bold text-blue-600">1</span>
+                                        </div>
+                                        <div class="flex items-center justify-between p-3 bg-green-50 rounded-xl">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-user-check text-green-500"></i>
+                                                <span class="text-sm text-gray-600">报名中</span>
+                                            </div>
+                                            <span class="text-lg font-bold text-green-600">4</span>
+                                        </div>
+                                        <div class="flex items-center justify-between p-3 bg-purple-50 rounded-xl">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-graduation-cap text-purple-500"></i>
+                                                <span class="text-sm text-gray-600">培训活动</span>
+                                            </div>
+                                            <span class="text-lg font-bold text-purple-600">4</span>
+                                        </div>
+                                       <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-history text-gray-500"></i>
+                                                <span class="text-sm text-gray-600">已结束</span>
+                                            </div>
+                                            <span class="text-lg font-bold text-gray-600">3</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 底部装饰 -->
+                    <div class="h-32 bg-gradient-to-t from-white/50 to-transparent"></div>
+                </div>
+            `;
+        }
+
+        // 渲染Banner轮播
+        function renderBanner() {
+            return `
+                <div class="relative h-[420px] overflow-hidden">
+                    <div id="bannerCarousel" class="relative h-full">
+                        ${mockData.banners.map((banner, index) => `
+                            <div class="carousel-item ${index === 0 ? 'active' : ''}" data-index="${index}">
+                                <div class="absolute inset-0">
+                                    <img src="${banner.cover}" class="w-full h-full object-cover" alt="${banner.title}">
+                                    <div class="absolute inset-0 bg-gradient-to-r from-gray-900/80 via-gray-900/40 to-transparent"></div>
+                                </div>
+                                <div class="relative h-full max-w-7xl mx-auto px-6 flex items-center">
+                                    <div class="max-w-xl">
+                                        <div class="flex items-center gap-3 mb-4">
+                                            ${getActivityStatusTag(banner.activityStatus)}
+                                            <span class="text-white/80 text-sm"><i class="fas fa-map-marker-alt mr-1"></i>${banner.location}</span>
+                                        </div>
+                                        <h2 class="text-4xl font-bold text-white mb-3 leading-tight">${banner.title}</h2>
+                                        <p class="text-lg text-white/90 mb-6">${banner.subtitle}</p>
+                                        <div class="flex items-center gap-4 text-white/80 text-sm mb-6">
+                                            <span><i class="far fa-calendar mr-2"></i>${banner.time}</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            ${ActivityStatusButton({
+                                                activityStatus: banner.activityStatus,
+                                                userStatus: banner.userStatus,
+                                                activityId: banner.id,
+                                                signInTime: banner.signInTime,
+                                                hasMaterials: banner.hasMaterials,
+                                                hasVideo: banner.hasVideo
+                                            }).split('</button>').slice(0, 1).join('</button>') + '</button>' || ''}
+                                           <button onclick="navigateTo('detail', ${banner.id})" class="px-6 py-3 bg-white/20 hover:bg-white/30 text-white rounded-xl font-medium transition-all flex items-center gap-2 backdrop-blur-sm">
+                                                <i class="fas fa-eye"></i>
+                                                查看详情
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <!-- 轮播指示器 -->
+                    <div class="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-3">
+                        ${mockData.banners.map((_, index) => `
+                            <button onclick="goToSlide(${index})" class="carousel-dot w-3 h-3 rounded-full transition-all ${index === 0 ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/70'}"></button>
+                        `).join('')}
+                    </div>
+
+                    <!-- 轮播箭头 -->
+                    <button onclick="prevSlide()" class="absolute left-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button onclick="nextSlide()" class="absolute right-6 top-1/2 -translate-y-1/2 w-12 h-12 bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            `;
+        }
+
+        // 渲染热门活动
+        function renderHotActivities() {
+            return `
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                    ${mockData.hotActivities.map((activity, index) => `
+                        <div class="activity-card stagger-item bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E2E8F0] cursor-pointer" style="animation-delay: ${index * 0.1}s" onclick="navigateTo('detail', ${activity.id})">
+                            <div class="relative h-40 overflow-hidden">
+                                <img src="${activity.cover}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" alt="${activity.title}">
+                                <div class="absolute top-3 right-3 flex flex-col gap-2">
+                                    ${getActivityStatusTag(activity.activityStatus)}
+                               </div>
+                                <div class="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/60 to-transparent"></div>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">${activity.title}</h4>
+                                <div class="space-y-1.5 text-xs text-gray-500">
+                                    <div class="flex items-center gap-1.5">
+                                        <i class="far fa-calendar text-gray-400"></i>
+                                        <span>${activity.time}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                        <span>${activity.location}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <i class="fas fa-users text-gray-400"></i>
+                                        <span>${activity.registrations}人已报名</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex items-center justify-between">
+                                    <div class="flex items-center gap-1">
+                                        <i class="fas fa-fire text-orange-400 text-xs"></i>
+                                        <span class="text-xs text-orange-500 font-medium">热门</span>
+                                    </div>
+                                </div>
+                                <div class="mt-3 flex items-center gap-2 pt-3 border-t border-[#E2E8F0]">
+                                    ${ActivityStatusButton({
+                                        activityStatus: activity.activityStatus,
+                                        userStatus: activity.userStatus,
+                                        activityId: activity.id,
+                                        signInTime: activity.signInTime,
+                                        hasMaterials: activity.hasMaterials,
+                                        hasVideo: activity.hasVideo
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        function getStatusText(status) {
+            const map = { 'active': '展示中', 'pending': '即将开始', 'expired': '已过期' };
+            return map[status] || status;
+        }
+
+        // 渲染近期活动
+        function renderRecentActivities() {
+            return `
+                <div class="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] overflow-hidden">
+                    ${mockData.recentActivities.map((activity, index) => `
+                        <div class="flex items-center gap-4 p-4 ${index !== mockData.recentActivities.length - 1 ? 'border-b border-[#E2E8F0]' : ''} hover:bg-gray-50/50 transition-colors stagger-item" style="animation-delay: ${index * 0.08}s">
+                            <img src="${activity.cover || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=100&h=100&fit=crop'}" class="w-20 h-20 rounded-xl object-cover flex-shrink-0" alt="${activity.title}">
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-medium text-gray-900 mb-1 truncate">${activity.title}</h4>
+                                <div class="flex flex-wrap items-center gap-3 text-xs text-gray-500">
+                                    <span><i class="far fa-calendar mr-1"></i>${activity.time}</span>
+                                    <span><i class="fas fa-map-marker-alt mr-1"></i>${activity.location}</span>
+                                    <span><i class="fas fa-users mr-1"></i>${activity.registrations}人</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 flex-shrink-0">
+                                ${getActivityStatusTag(activity.activityStatus)}
+                                ${ActivityStatusButton({
+                                    activityStatus: activity.activityStatus,
+                                    userStatus: activity.userStatus,
+                                    activityId: activity.id,
+                                    signInTime: activity.signInTime,
+                                    hasMaterials: activity.hasMaterials,
+                                    hasVideo: activity.hasVideo
+                                })}
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // 渲染培训专区
+        function renderTrainingActivities() {
+            return `
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                    ${mockData.trainingActivities.map((activity, index) => `
+                        <div class="activity-card stagger-item bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E2E8F0] cursor-pointer" style="animation-delay: ${index * 0.1}s" onclick="navigateTo('detail', ${activity.id})">
+                            <div class="relative h-28 overflow-hidden">
+                                <img src="${activity.cover}" class="w-full h-full object-cover" alt="${activity.title}">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                                <div class="absolute top-2 right-2">
+                                    ${getActivityStatusTag(activity.activityStatus)}
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="text-sm font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">${activity.title}</h4>
+                                <div class="space-y-1 text-xs text-gray-500 mb-3">
+                                    <div class="flex items-center gap-1.5">
+                                        <i class="far fa-calendar text-gray-400"></i>
+                                        <span>${activity.time}</span>
+                                    </div>
+                                    <div class="flex items-center gap-1.5">
+                                        <i class="fas fa-user-graduate text-gray-400"></i>
+                                        <span>${activity.speaker}</span>
+                                    </div>
+                                </div>
+                                <div class="flex items-center gap-2 pt-3 border-t border-[#E2E8F0]">
+                                    ${ActivityStatusButton({
+                                        activityStatus: activity.activityStatus,
+                                        userStatus: activity.userStatus,
+                                        activityId: activity.id,
+                                        signInTime: activity.signInTime,
+                                        hasMaterials: activity.hasMaterials,
+                                        hasVideo: activity.hasVideo
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // 渲染精彩回顾活动(已结束活动)
+        function renderEndedActivities() {
+            // 从allActivities筛选已结束和精彩回顾状态的活动
+            const endedAndReviewActivities = mockData.allActivities.filter(a =>
+                a.activityStatus === 'ended' || a.activityStatus === 'review'
+            );
+            return `
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    ${endedAndReviewActivities.map((activity, index) => `
+                        <div class="stagger-item bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E2E8F0] ${activity.activityStatus === 'review' ? 'border-purple-200' : ''}" style="animation-delay: ${index * 0.1}s">
+                            <div class="relative h-32 overflow-hidden">
+                                <img src="${activity.cover}" class="w-full h-full object-cover ${activity.activityStatus === 'review' ? '' : 'grayscale opacity-80'}" alt="${activity.title}">
+                                <div class="absolute inset-0 ${activity.activityStatus === 'review' ? 'bg-gradient-to-t from-purple-900/40 via-transparent to-transparent' : 'bg-gray-900/30'}"></div>
+                                <div class="absolute top-3 left-3">
+                                    ${getActivityStatusTag(activity.activityStatus)}
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <h4 class="text-sm font-semibold text-gray-700 mb-2 line-clamp-2 leading-snug">${activity.title}</h4>
+                                <div class="text-xs text-gray-500 mb-3">
+                                    <i class="far fa-calendar mr-1"></i>${activity.time}
+                                </div>
+                                <div class="flex items-center gap-2">
+                                    ${ActivityStatusButton({
+                                        activityStatus: activity.activityStatus,
+                                        userStatus: activity.userStatus,
+                                        activityId: activity.id,
+                                        signInTime: activity.signInTime,
+                                        hasMaterials: activity.hasMaterials,
+                                        hasVideo: activity.hasVideo
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        }
+
+        // 渲染活动日历
+        function renderCalendar() {
+            const today = new Date();
+            const currentMonth = today.getMonth() + 1;
+            const currentYear = today.getFullYear();
+            const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+            const firstDayOfMonth = new Date(currentYear, currentMonth - 1, 1).getDay();
+
+            let calendarDays = '';
+            for (let i = 0; i < firstDayOfMonth; i++) {
+                calendarDays += '<div class="w-9 h-9"></div>';
+            }
+            for (let day = 1; day <= daysInMonth; day++) {
+                const hasActivity = mockData.calendarData[day];
+                const isToday = day === today.getDate();
+                calendarDays += `
+                    <div class="calendar-day w-9 h-9 flex items-center justify-center text-sm rounded-full cursor-pointer ${isToday ? 'bg-accent-blue text-white font-semibold' : 'text-gray-700 hover:bg-accent-blue/10'} transition-colors relative ${hasActivity ? 'has-activity' : ''}" onclick="showDayActivities(${day})">
+                        ${day}
+                        ${hasActivity ? '<span class="absolute -bottom-0.5 left-1/2 -translate-x-1/2 w-1 h-1 bg-accent-red rounded-full"></span>' : ''}
+                    </div>
+                `;
+            }
+
+            return `
+                <div class="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] overflow-hidden">
+                    <div class="px-5 py-4 border-b border-[#E2E8F0] bg-gradient-to-r from-blue-50 to-cyan-50">
+                        <h4 class="text-sm font-semibold text-gray-900 flex items-center gap-2">
+                            <i class="fas fa-calendar-alt text-accent-blue"></i>
+                            ${currentYear}年${currentMonth}月
+                        </h4>
+                    </div>
+                    <div class="p-4">
+                        <!-- 星期标题 -->
+                        <div class="grid grid-cols-7 gap-1 mb-2">
+                            ${['日', '一', '二', '三', '四', '五', '六'].map(d => `
+                                <div class="w-9 h-6 flex items-center justify-center text-xs text-gray-500">${d}</div>
+                            `).join('')}
+                        </div>
+                        <!-- 日期 -->
+                        <div class="grid grid-cols-7 gap-1">
+                            ${calendarDays}
+                        </div>
+                    </div>
+                    <!-- 当日活动 -->
+                    <div id="dayActivities" class="hidden px-5 py-4 border-t border-[#E2E8F0] bg-gray-50/50">
+                        <p class="text-xs text-gray-500 mb-2">该日活动：</p>
+                        <div id="dayActivitiesList" class="space-y-2"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 渲染通用区块
+        function renderSection(title, badges, content) {
+            return `
+                <div class="relative">
+                    <!-- 标题区 -->
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex items-center gap-3">
+                            ${badges.filter(b => b.label).map(badge => `
+                                <div class="flex items-center gap-1.5 text-xs ${badge.icon ? '' : 'text-gray-500'}">
+                                    ${badge.icon ? `<i class="${badge.icon}"></i>` : ''}
+                                    <span>${badge.label}</span>
+                                </div>
+                            `).join('')}
+                       </div>
+                        ${badges.find(b => b.action) ? (() => {
+                            const actionBadge = badges.find(b => b.action);
+                            return actionBadge.href
+                                ? `<a href="${actionBadge.href}" class="${actionBadge.actionClass} text-sm font-medium flex items-center gap-1 transition-colors">
+                                    ${actionBadge.action}
+                                    <i class="fas fa-angle-right text-xs"></i>
+                                </a>`
+                                : `<button onclick="${actionBadge.onclick || ''}" class="${actionBadge.actionClass} text-sm font-medium flex items-center gap-1 transition-colors">
+                                    ${actionBadge.action}
+                                    <i class="fas fa-angle-right text-xs"></i>
+                                </button>`;
+                        })() : ''}
+                    </div>
+                    ${content}
+                </div>
+            `;
+        }
+
+        // ==================== 活动详情页 ====================
+        function renderDetailPage(activityId) {
+            // 优先从myActivities查找该活动，获取用户状态
+            const myActivity = mockData.myActivities.find(a => a.id === activityId);
+            const activity = mockData.activityDetail;
+
+            // 确定活动状态和用户状态
+            let activityStatus = activity.status;
+            let userStatus = 'not_registered';
+            let signInTime = null;
+            let hasMaterials = false;
+            let hasVideo = false;
+
+            if (myActivity) {
+                // 从我的活动获取状态
+                if (myActivity.applyStatus === 'pending') userStatus = 'pending';
+                else if (myActivity.applyStatus === 'approved') {
+                    userStatus = myActivity.signInStatus === 'signed' ? 'signed' : (myActivity.signInStatus === 'pending' ? 'pending_signin' : 'approved');
+                    signInTime = myActivity.signInTime;
+                }
+                hasMaterials = myActivity.hasMaterials || false;
+                hasVideo = myActivity.hasVideo || false;
+                activityStatus = myActivity.activityStatus === 'review' ? 'review' : (myActivity.activityStatus === 'ended' ? 'ended' : activityStatus);
+            }
+
+            return `
+                <div class="page-transition">
+                    <!-- 顶部工具栏 -->
+                    <div class="sticky top-16 z-30 bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] px-6 py-3">
+                        <div class="max-w-7xl mx-auto flex items-center justify-between">
+                            <button onclick="navigateTo('home')" class="flex items-center gap-2 text-gray-600 hover:text-accent-blue transition-colors">
+                                <i class="fas fa-arrow-left"></i>
+                                <span class="text-sm">返回活动专区</span>
+                            </button>
+                            <button onclick="navigateTo('myActivities')" class="flex items-center gap-2 px-4 py-2 bg-accent-blue/10 hover:bg-accent-blue/20 text-accent-blue rounded-full transition-colors">
+                                <i class="fas fa-star text-amber-500"></i>
+                                <span class="text-sm font-medium">我的活动</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 主内容 -->
+                    <div class="max-w-7xl mx-auto px-6 py-8">
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                            <!-- 左侧内容 -->
+                            <div class="lg:col-span-2 space-y-6">
+                                <!-- 封面 -->
+                                <div class="relative rounded-2xl overflow-hidden h-72">
+                                    <img src="${activity.cover}" class="w-full h-full object-cover" alt="${activity.title}">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                                    <div class="absolute bottom-6 left-6 right-6 flex items-center gap-3">
+                                        ${getActivityStatusTag(activityStatus)}
+                                        ${userStatus !== 'not_registered' ? getUserStatusTag(userStatus, signInTime) : ''}
+                                    </div>
+                                </div>
+
+                                <!-- 活动信息 -->
+                                <div class="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-6">
+                                    <h1 class="text-2xl font-bold text-gray-900 mb-4">${activity.title}</h1>
+
+                                    <div class="grid grid-cols-2 gap-4 mb-6">
+                                        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                            <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                                                <i class="fas fa-calendar-day text-blue-500"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-xs text-gray-500">活动时间</p>
+                                                <p class="text-sm font-medium text-gray-900">${activity.time}</p>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                            <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
+                                                <i class="fas fa-map-marker-alt text-green-500"></i>
+                                            </div>
+                                            <div>
+                                                <p class="text-xs text-gray-500">活动地点</p>
+                                                <p class="text-sm font-medium text-gray-900">${activity.location}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- 活动介绍 -->
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                            <i class="fas fa-info-circle text-accent-blue"></i>
+                                            活动介绍
+                                        </h3>
+                                        <p class="text-gray-600 leading-relaxed">${activity.description}</p>
+                                    </div>
+
+                                    <!-- 主办单位 -->
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                            <i class="fas fa-building text-accent-blue"></i>
+                                            主办单位
+                                        </h3>
+                                        <div class="flex flex-wrap gap-3">
+                                            <span class="px-4 py-2 bg-blue-50 text-blue-700 rounded-full text-sm">${activity.organizer}</span>
+                                            <span class="px-4 py-2 bg-green-50 text-green-700 rounded-full text-sm">${activity.coOrganizer}</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- 嘉宾介绍 -->
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                            <i class="fas fa-users text-accent-blue"></i>
+                                            嘉宾介绍
+                                        </h3>
+                                        <div class="flex flex-wrap gap-4">
+                                            ${activity.guests.map(guest => `
+                                                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                                    <img src="${guest.avatar}" class="w-12 h-12 rounded-full object-cover ring-2 ring-white shadow" alt="${guest.name}">
+                                                    <div>
+                                                        <p class="font-medium text-gray-900">${guest.name}</p>
+                                                        <p class="text-xs text-gray-500">${guest.title}</p>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+
+                                    <!-- 活动议程 -->
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                            <i class="fas fa-list-ul text-accent-blue"></i>
+                                            活动议程
+                                        </h3>
+                                        <div class="space-y-3">
+                                            ${activity.agenda.map((item, index) => `
+                                                <div class="flex items-start gap-4 p-4 bg-gray-50 rounded-xl ${index === 0 ? 'border-l-4 border-accent-blue' : ''}">
+                                                    <div class="w-32 flex-shrink-0">
+                                                        <span class="text-sm font-medium text-accent-blue">${item.time}</span>
+                                                    </div>
+                                                    <div class="flex-1">
+                                                        <p class="font-medium text-gray-900">${item.title}</p>
+                                                        <p class="text-xs text-gray-500 mt-1"><i class="fas fa-map-marker-alt mr-1"></i>${item.location}</p>
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+
+                                    <!-- 附件下载 -->
+                                    <div class="mb-6">
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                            <i class="fas fa-paperclip text-accent-blue"></i>
+                                            附件下载
+                                        </h3>
+                                        <div class="space-y-2">
+                                            ${activity.attachments.map(attachment => `
+                                                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors cursor-pointer">
+                                                    <div class="flex items-center gap-3">
+                                                        <div class="w-10 h-10 rounded-lg bg-blue-100 flex items-center justify-center">
+                                                            <i class="fas fa-file-pdf text-red-500"></i>
+                                                        </div>
+                                                        <div>
+                                                            <p class="text-sm font-medium text-gray-900">${attachment.name}</p>
+                                                            <p class="text-xs text-gray-500">${attachment.size}</p>
+                                                        </div>
+                                                    </div>
+                                                    <button onclick="showToast('资料下载中...', 'success')" class="px-3 py-1.5 text-xs text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors">
+                                                        <i class="fas fa-download mr-1"></i>下载
+                                                    </button>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+
+                                    <!-- 注意事项 -->
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                            <i class="fas fa-exclamation-circle text-accent-blue"></i>
+                                            注意事项
+                                        </h3>
+                                        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                                            <p class="text-sm text-amber-800 leading-relaxed">${activity.notice}</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 右侧报名卡片 -->
+                            <div class="lg:col-span-1 space-y-4">
+                                <div class="sticky top-32 bg-white rounded-2xl shadow-lg border border-[#E2E8F0] overflow-hidden">
+                                    <div class="p-5 bg-gradient-to-r from-accent-blue to-accent-cyan">
+                                        <h3 class="text-lg font-semibold text-white">活动报名</h3>
+                                    </div>
+                                    <div class="p-5 space-y-4">
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-signal text-green-500"></i>
+                                                <span class="text-sm text-gray-600">活动状态</span>
+                                            </div>
+                                            ${getActivityStatusTag(activityStatus)}
+                                        </div>
+
+                                        ${userStatus !== 'not_registered' ? `
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-user-check text-blue-500"></i>
+                                                <span class="text-sm text-gray-600">报名状态</span>
+                                            </div>
+                                            ${getUserStatusTag(userStatus, signInTime)}
+                                        </div>
+                                        ` : ''}
+
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-users text-blue-500"></i>
+                                                <span class="text-sm text-gray-600">剩余名额</span>
+                                            </div>
+                                            <span class="text-sm font-bold text-accent-blue">${activity.quota.total - activity.quota.registered} / ${activity.quota.total}</span>
+                                        </div>
+                                        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                                            <div class="flex items-center gap-2">
+                                                <i class="fas fa-clock text-orange-500"></i>
+                                                <span class="text-sm text-gray-600">报名截止</span>
+                                            </div>
+                                            <span class="text-sm font-medium text-gray-900">${activity.deadline}</span>
+                                        </div>
+
+                                        <!-- 报名进度条 -->
+                                        <div class="p-3 bg-blue-50 rounded-xl">
+                                            <div class="flex items-center justify-between mb-2">
+                                                <span class="text-xs text-gray-500">报名进度</span>
+                                                <span class="text-xs font-medium text-accent-blue">${Math.round(activity.quota.registered / activity.quota.total * 100)}%</span>
+                                            </div>
+                                            <div class="h-2 bg-blue-200 rounded-full overflow-hidden">
+                                                <div class="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full transition-all" style="width: ${activity.quota.registered / activity.quota.total * 100}%"></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- 统一动态按钮 -->
+                                        <div class="space-y-2">
+                                            ${ActivityStatusButton({
+                                                activityStatus: activityStatus,
+                                                userStatus: userStatus,
+                                                activityId: activityId,
+                                                signInTime: signInTime,
+                                                hasMaterials: hasMaterials,
+                                                hasVideo: hasVideo
+                                            })}
+                                        </div>
+
+                                        <p class="text-xs text-gray-500 text-center">报名即表示同意活动协议</p>
+                                    </div>
+                                </div>
+
+                                <!-- 签到说明 -->
+                                <div class="bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-5">
+                                    <h4 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                        <i class="fas fa-qrcode text-accent-blue"></i>
+                                        签到说明
+                                    </h4>
+                                    <div class="space-y-3 text-sm text-gray-600">
+                                        <p>活动开始后支持扫码签到。</p>
+                                        <p>请于活动现场打开：</p>
+                                        <div class="pl-4 border-l-2 border-accent-blue/30 space-y-2">
+                                            <p class="flex items-center gap-2">
+                                                <span class="w-6 h-6 bg-accent-blue/10 text-accent-blue rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                                                <span>「我的活动」</span>
+                                            </p>
+                                            <p class="flex items-center gap-2">
+                                                <span class="w-6 h-6 bg-accent-blue/10 text-accent-blue rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                                                <span>点击「查看签到码」</span>
+                                            </p>
+                                            <p class="flex items-center gap-2">
+                                                <span class="w-6 h-6 bg-accent-blue/10 text-accent-blue rounded-full flex items-center justify-center text-xs font-bold">3</span>
+                                                <span>出示二维码完成签到</span>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==================== 我的活动页 ====================
+        function renderMyActivitiesPage() {
+            const filteredActivities = myActivitiesFilter === 'all'
+                ? mockData.myActivities
+                : mockData.myActivities.filter(a => {
+                    if (myActivitiesFilter === 'pending') return a.applyStatus === 'pending';
+                    if (myActivitiesFilter === 'approved') {
+                        return a.applyStatus === 'approved' && (a.signInStatus === 'signed' || a.signInStatus === 'pending');
+                    }
+                    if (myActivitiesFilter === 'signPending') return a.signInStatus === 'pending';
+                    if (myActivitiesFilter === 'signed') return a.signInStatus === 'signed';
+                    if (myActivitiesFilter === 'ended') return a.activityStatus === 'ended' || a.activityStatus === 'review';
+                    return true;
+                });
+
+            return `
+                <div class="page-transition">
+                    <!-- 顶部工具栏 -->
+                    <div class="sticky top-16 z-30 bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] px-6 py-3">
+                        <div class="max-w-7xl mx-auto">
+                            <button onclick="navigateTo('home')" class="flex items-center gap-2 text-gray-600 hover:text-accent-blue transition-colors">
+                                <i class="fas fa-arrow-left"></i>
+                                <span class="text-sm">返回活动专区</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- 页面内容 -->
+                    <div class="max-w-7xl mx-auto px-6 py-8">
+                        <!-- 页面标题 -->
+                        <div class="mb-8">
+                            <h1 class="text-2xl font-bold text-gray-900 flex items-center gap-3">
+                                <i class="fas fa-star text-amber-500"></i>
+                                我的活动
+                            </h1>
+                            <p class="text-gray-500 mt-2">查看已报名活动及签到状态</p>
+                        </div>
+
+                        <!-- 状态Tab -->
+                        <div class="flex items-center gap-2 mb-8 p-1 bg-gray-100 rounded-xl w-fit">
+                            ${['all', 'pending', 'approved', 'signPending', 'signed', 'ended'].map(filter => `
+                                <button onclick="filterMyActivities('${filter}')" class="px-4 py-2.5 text-sm font-medium rounded-lg transition-all ${myActivitiesFilter === filter ? 'bg-white text-accent-blue shadow-sm' : 'text-gray-600 hover:text-gray-900'}">
+                                    ${getFilterLabel(filter)}
+                                    ${getFilterCount(filter) > 0 ? `<span class="ml-1.5 px-1.5 py-0.5 ${myActivitiesFilter === filter ? 'bg-accent-blue/10 text-accent-blue' : 'bg-gray-200 text-gray-600'} text-xs font-semibold rounded-full">${getFilterCount(filter)}</span>` : ''}
+                                </button>
+                            `).join('')}
+                        </div>
+
+                        <!-- 活动卡片列表 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            ${filteredActivities.length === 0 ? `
+                                <div class="col-span-1 md:col-span-2 lg:col-span-3 py-16 text-center">
+                                    <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                                        <i class="fas fa-calendar-times text-4xl text-gray-300"></i>
+                                    </div>
+                                    <p class="text-gray-500">暂无活动</p>
+                                </div>
+                            ` : filteredActivities.map((activity, index) => `
+                                <div class="stagger-item bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E2E8F0] hover:shadow-lg hover:border-accent-blue/30 transition-all cursor-pointer" style="animation-delay: ${index * 0.08}s" onclick="navigateTo('detail', ${activity.id})">
+                                    <!-- 16:9封面 -->
+                                    <div class="relative aspect-video overflow-hidden">
+                                        <img src="${activity.cover}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" alt="${activity.title}">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                                        <!-- 活动状态标签 -->
+                                        <div class="absolute top-3 right-3 flex flex-col gap-2">
+                                            <span class="px-2.5 py-1 ${getApplyStatusClass(activity.applyStatus)} text-xs font-medium rounded-full">${activity.applyStatusText}</span>
+                                            <span class="px-2.5 py-1 ${getSignInStatusClass(activity.signInStatus)} text-xs font-medium rounded-full">${getSignInStatusText(activity.signInStatus)}</span>
+                                        </div>
+                                        <!-- 活动名称 -->
+                                        <div class="absolute bottom-3 left-3 right-3">
+                                            <h4 class="text-base font-semibold text-white line-clamp-2 leading-tight drop-shadow-lg">${activity.title}</h4>
+                                        </div>
+                                    </div>
+
+                                    <!-- 卡片内容 -->
+                                    <div class="p-4">
+                                        <!-- 时间地点 -->
+                                        <div class="space-y-2 mb-4">
+                                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                                <i class="far fa-calendar text-gray-400 w-4"></i>
+                                                <span>${activity.time}</span>
+                                            </div>
+                                            <div class="flex items-center gap-2 text-sm text-gray-600">
+                                                <i class="fas fa-map-marker-alt text-gray-400 w-4"></i>
+                                                <span>${activity.location}</span>
+                                            </div>
+                                            ${activity.signInStatus === 'signed' && activity.signInTime ? `
+                                                <div class="flex items-center gap-2 text-sm text-green-600">
+                                                    <i class="fas fa-check-circle text-green-500 w-4"></i>
+                                                    <span>签到时间：${activity.signInTime}</span>
+                                                </div>
+                                            ` : ''}
+                                        </div>
+
+                                        <!-- 按钮区域 -->
+                                        <div class="flex items-center gap-2 pt-3 border-t border-[#E2E8F0]">
+                                            ${getActivityButtons(activity)}
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // 根据活动状态获取按钮
+        function getActivityButtons(activity) {
+            // 待审核状态
+            if (activity.applyStatus === 'pending') {
+                return `<button onclick="event.stopPropagation(); navigateTo('detail', ${activity.id})" class="flex-1 py-2.5 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors font-medium">
+                    <i class="fas fa-eye mr-1.5"></i>查看详情
+                </button>`;
+            }
+
+            // 已通过 + 待签到
+            if (activity.applyStatus === 'approved' && activity.signInStatus === 'pending') {
+                return `
+                    <button onclick="event.stopPropagation(); navigateTo('detail', ${activity.id})" class="flex-1 py-2.5 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors font-medium">
+                        <i class="fas fa-eye mr-1.5"></i>查看详情
+                    </button>
+                    <button onclick="event.stopPropagation(); openSignInModal(${activity.id})" class="flex-1 py-2.5 text-sm bg-accent-blue hover:bg-blue-600 text-white rounded-lg transition-colors font-medium">
+                        <i class="fas fa-qrcode mr-1.5"></i>查看签到码
+                    </button>
+                `;
+            }
+
+            // 已签到状态
+            if (activity.signInStatus === 'signed') {
+                return `
+                    <button onclick="event.stopPropagation(); navigateTo('detail', ${activity.id})" class="flex-1 py-2.5 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors font-medium">
+                        <i class="fas fa-eye mr-1.5"></i>查看详情
+                    </button>
+                    <button class="flex-1 py-2.5 text-sm bg-green-500 text-white rounded-lg font-medium cursor-default opacity-80">
+                        <i class="fas fa-check-circle mr-1.5"></i>签到成功
+                    </button>
+                `;
+            }
+
+            // 已结束状态
+            if (activity.activityStatus === 'ended') {
+                return `
+                    <button onclick="event.stopPropagation(); navigateTo('detail', ${activity.id})" class="flex-1 py-2.5 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors font-medium">
+                        <i class="fas fa-play-circle mr-1.5"></i>查看回顾
+                    </button>
+                    ${activity.hasMaterials ? `
+                        <button onclick="event.stopPropagation(); showToast('资料下载中...', 'success')" class="flex-1 py-2.5 text-sm text-gray-600 hover:bg-gray-100 rounded-lg transition-colors font-medium">
+                            <i class="fas fa-download mr-1.5"></i>下载资料
+                        </button>
+                    ` : ''}
+                `;
+            }
+
+            // 默认
+            return `<button onclick="event.stopPropagation(); navigateTo('detail', ${activity.id})" class="flex-1 py-2.5 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors font-medium">
+                <i class="fas fa-eye mr-1.5"></i>查看详情
+            </button>`;
+        }
+
+        // 获取签到状态样式
+        function getSignInStatusClass(status) {
+            if (status === 'pending') return 'bg-amber-100 text-amber-700';
+            if (status === 'signed') return 'bg-green-100 text-green-700';
+            return 'bg-gray-100 text-gray-500';
+        }
+
+        // 获取签到状态文本
+        function getSignInStatusText(status) {
+            if (status === 'pending') return '待签到';
+            if (status === 'signed') return '已签到';
+            return '未报名';
+        }
+
+        // 获取各状态数量
+        function getFilterCount(filter) {
+            const activities = mockData.myActivities;
+            switch(filter) {
+                case 'all': return activities.length;
+                case 'pending': return activities.filter(a => a.applyStatus === 'pending').length;
+                case 'approved': return activities.filter(a => a.applyStatus === 'approved').length;
+                case 'signPending': return activities.filter(a => a.signInStatus === 'pending').length;
+                case 'signed': return activities.filter(a => a.signInStatus === 'signed').length;
+                case 'ended': return activities.filter(a => a.activityStatus === 'ended').length;
+                default: return 0;
+            }
+        }
+
+        // ==================== 辅助函数 ====================
+
+        function getStatusClass(status) {
+            const classes = {
+                'registration': 'bg-green-100 text-green-700',
+                'upcoming': 'bg-blue-100 text-blue-700',
+                'ongoing': 'bg-green-100 text-green-700',
+                'ended': 'bg-gray-100 text-gray-600',
+                'training': 'bg-purple-100 text-purple-700'
+            };
+            return classes[status] || 'bg-gray-100 text-gray-600';
+        }
+
+        function getStatusText(status) {
+            const texts = {
+                'registration': '报名中',
+                'upcoming': '即将开始',
+                'ongoing': '进行中',
+                'ended': '已结束',
+                'training': '培训中'
+            };
+            return texts[status] || status;
+        }
+
+        function getApplyStatusClass(status) {
+            const classes = {
+                'pending': 'bg-amber-100 text-amber-700',
+                'approved': 'bg-green-100 text-green-700',
+                'rejected': 'bg-red-100 text-red-700'
+            };
+            return classes[status] || 'bg-gray-100 text-gray-600';
+        }
+
+        function getActivityStatusClass(status) {
+            const classes = {
+                'upcoming': 'bg-blue-100 text-blue-700',
+                'ongoing': 'bg-green-100 text-green-700',
+                'ended': 'bg-gray-100 text-gray-600'
+            };
+            return classes[status] || 'bg-gray-100 text-gray-600';
+        }
+
+        function getFilterLabel(filter) {
+            const labels = {
+                'all': '全部',
+                'pending': '待审核',
+                'approved': '已通过',
+                'signPending': '待签到',
+                'signed': '已签到',
+                'ended': '已结束'
+            };
+            return labels[filter] || filter;
+        }
+
+        // ==================== 导航函数 ====================
+
+        function navigateTo(page, activityId = null) {
+            currentPage = page;
+            currentActivityId = activityId;
+            renderContent();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function renderContent() {
+            const container = document.getElementById('zoneContent');
+            switch(currentPage) {
+                case 'home':
+                    container.innerHTML = renderHomePage();
+                    startCarousel();
+                    break;
+                case 'detail':
+                    container.innerHTML = renderDetailPage(currentActivityId);
+                    break;
+                case 'myActivities':
+                    container.innerHTML = renderMyActivitiesPage();
+                    break;
+            }
+        }
+
+        // ==================== 轮播函数 ====================
+
+        function startCarousel() {
+            setInterval(() => {
+                nextSlide();
+            }, 5000);
+        }
+
+        function nextSlide() {
+            carouselIndex = (carouselIndex + 1) % mockData.banners.length;
+            updateCarousel();
+        }
+
+        function prevSlide() {
+            carouselIndex = (carouselIndex - 1 + mockData.banners.length) % mockData.banners.length;
+            updateCarousel();
+        }
+
+        function goToSlide(index) {
+            carouselIndex = index;
+            updateCarousel();
+        }
+
+        function updateCarousel() {
+            const items = document.querySelectorAll('.carousel-item');
+            const dots = document.querySelectorAll('.carousel-dot');
+            items.forEach((item, i) => {
+                item.classList.toggle('active', i === carouselIndex);
+            });
+            dots.forEach((dot, i) => {
+                if (i === carouselIndex) {
+                    dot.classList.add('bg-white', 'w-8');
+                    dot.classList.remove('bg-white/50');
+                } else {
+                    dot.classList.remove('bg-white', 'w-8');
+                    dot.classList.add('bg-white/50');
+                }
+            });
+        }
+
+        // ==================== 日历函数 ====================
+
+        function showDayActivities(day) {
+            const activities = mockData.calendarData[day];
+            const container = document.getElementById('dayActivities');
+            const list = document.getElementById('dayActivitiesList');
+
+            if (activities && activities.length > 0) {
+                list.innerHTML = activities.map(a => `
+                    <div class="p-2 bg-white rounded-lg border border-[#E2E8F0] cursor-pointer hover:border-accent-blue transition-colors" onclick="navigateTo('detail', ${a.id})">
+                        <p class="text-xs font-medium text-gray-900">${a.title}</p>
+                    </div>
+                `).join('');
+                container.classList.remove('hidden');
+            } else {
+                container.classList.add('hidden');
+            }
+        }
+
+        // ==================== 报名相关函数 ====================
+
+        function openRegistration(activityId) {
+            const drawer = document.getElementById('registrationDrawer');
+            const panel = drawer.querySelector('.drawer-panel');
+            drawer.classList.remove('hidden');
+            setTimeout(() => {
+                panel.classList.remove('hidden');
+                panel.classList.add('show');
+            }, 10);
+        }
+
+        function closeDrawer() {
+            const drawer = document.getElementById('registrationDrawer');
+            const panel = drawer.querySelector('.drawer-panel');
+            panel.classList.remove('show');
+            setTimeout(() => {
+                drawer.classList.add('hidden');
+                panel.classList.add('hidden');
+            }, 300);
+        }
+
+        // ==================== 签到码弹窗函数 ====================
+        function openSignInModal(activityId) {
+            const activity = mockData.myActivities.find(a => a.id === activityId);
+            if (activity) {
+                document.getElementById('modalActivityName').textContent = activity.title;
+                const statusEl = document.getElementById('modalSignInStatus');
+                if (activity.signInStatus === 'signed') {
+                    statusEl.textContent = '已签到';
+                    statusEl.className = 'px-3 py-1 bg-green-100 text-green-700 text-xs font-semibold rounded-full';
+                } else {
+                    statusEl.textContent = '待签到';
+                    statusEl.className = 'px-3 py-1 bg-amber-100 text-amber-700 text-xs font-semibold rounded-full';
+                }
+            }
+            const modal = document.getElementById('signInModal');
+            modal.classList.remove('hidden');
+        }
+
+        function closeSignInModal() {
+            const modal = document.getElementById('signInModal');
+            modal.classList.add('hidden');
+        }
+
+        function cancelRegistration(activityId) {
+            if (confirm('确定要取消报名吗？')) {
+                showToast('取消报名成功', 'success');
+            }
+        }
+
+        // ==================== Tab切换 ====================
+
+        function filterMyActivities(filter) {
+            myActivitiesFilter = filter;
+            document.getElementById('zoneContent').innerHTML = renderMyActivitiesPage();
+        }
+
+        // ==================== Toast提示 ====================
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-accent-blue';
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle';
+            toast.className = `toast ${bgColor} text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `<i class="fas fa-${icon}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ==================== 表单提交 ====================
+
+        document.getElementById('registrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            closeDrawer();
+            showToast('报名成功！您可以在"我的活动"中查看报名状态', 'success');
+            setTimeout(() => {
+                navigateTo('myActivities');
+            }, 1500);
+        });
+
+        // ==================== 初始化 ====================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderContent();
+        });
+    </script>
+</body>
+</html>

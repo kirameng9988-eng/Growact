@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动签到 - 大屏展示</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#030714',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(10, 97, 255, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(10, 97, 255, 0.6); }
+        }
+        @keyframes countdown {
+            from { stroke-dashoffset: 0; }
+            to { stroke-dashoffset: 283; }
+        }
+        .qr-container { animation: pulse-glow 2s ease-in-out infinite; }
+        .countdown-circle { animation: countdown 1s linear infinite; }
+    </style>
+</head>
+<body class="bg-primary-bg min-h-screen flex flex-col items-center justify-center">
+    <!-- 关闭按钮 -->
+    <button onclick="window.close()" class="absolute top-6 right-6 w-12 h-12 flex items-center justify-center rounded-full bg-white/10 hover:bg-white/20 transition-colors">
+        <i class="fas fa-times text-white/80 text-xl"></i>
+    </button>
+
+    <!-- 活动信息 -->
+    <div class="text-center mb-8">
+        <h1 id="activityName" class="text-4xl font-bold text-white mb-3">AI公共数据开放培训会</h1>
+        <p id="activityTime" class="text-xl text-white/60">2026-06-25 09:00</p>
+    </div>
+
+    <!-- 二维码区域 -->
+    <div class="qr-container bg-gradient-to-br from-[#0A61FF]/20 to-[#0891B2]/20 rounded-3xl p-12 mb-8">
+        <div class="w-72 h-72 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-white rounded-2xl flex items-center justify-center relative overflow-hidden">
+            <!-- Mock QR Code with animated elements -->
+            <div class="absolute inset-4 grid grid-cols-8 gap-1">
+                <div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div>
+                <div class="bg-gray-900 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div>
+                <div class="bg-gray-900 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div>
+                <div class="bg-gray-900 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div>
+                <div class="bg-gray-900 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div>
+                <div class="bg-gray-900 rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-white rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div>
+                <div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div>
+                <div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div><div class="bg-gray-900 rounded-sm"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 标题 -->
+    <h2 class="text-2xl font-semibold text-white mb-3">活动签到二维码</h2>
+    <p class="text-lg text-white/60 mb-6">请使用微信扫码签到</p>
+
+    <!-- 倒计时区域 -->
+    <div class="flex items-center gap-6">
+        <div class="flex items-center gap-3">
+            <div class="relative w-16 h-16">
+                <svg class="w-16 h-16 transform -rotate-90">
+                    <circle cx="32" cy="32" r="28" stroke="#1a2744" stroke-width="4" fill="none"/>
+                    <circle id="countdownCircle" class="countdown-circle" cx="32" cy="32" r="28" stroke="#0A61FF" stroke-width="4" fill="none" stroke-dasharray="283 283"/>
+                </svg>
+                <span id="countdownNumber" class="absolute inset-0 flex items-center justify-center text-xl font-bold text-white">59</span>
+            </div>
+            <div class="text-left">
+                <p class="text-sm text-white/60">二维码有效期</p>
+                <p class="text-lg font-medium text-white">秒</p>
+            </div>
+        </div>
+        <div class="w-px h-12 bg-white/20"></div>
+        <div class="flex items-center gap-3">
+            <i class="fas fa-sync-alt text-accent-blue text-2xl"></i>
+            <div class="text-left">
+                <p class="text-sm text-white/60">自动刷新</p>
+                <p class="text-lg font-medium text-white">扫码签到</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部提示 -->
+    <div class="absolute bottom-8 flex items-center gap-2 text-white/40">
+        <i class="fas fa-shield-alt"></i>
+        <span class="text-sm">仅限活动现场使用 · 扫码即签到</span>
+    </div>
+
+    <script>
+        const activityData = {
+            1: { name: 'AI公共数据开放培训会', time: '2026-06-25 09:00' },
+            2: { name: '数字政务创新发展论坛', time: '2026-06-28 14:00' },
+            3: { name: '智慧城市数据应用研讨会', time: '2026-06-20 09:00' },
+            4: { name: '数据安全与合规培训会', time: '2026-07-05 10:00' },
+            5: { name: '公共数据开放工作推进会', time: '2026-07-10 09:00' },
+            6: { name: '大数据分析与可视化培训', time: '2026-06-15 14:00' },
+            7: { name: '政务数据共享交换技术培训', time: '2026-07-15 09:00' },
+            8: { name: '数据要素市场建设专题讲座', time: '2026-07-20 14:00' },
+            9: { name: '云计算与大数据技术交流会', time: '2026-06-18 09:00' },
+            10: { name: '数据治理能力提升培训班', time: '2026-07-25 10:00' }
+        };
+
+        let countdown = 59;
+
+        function init() {
+            const params = new URLSearchParams(window.location.search);
+            const id = parseInt(params.get('id')) || 1;
+            const activity = activityData[id] || activityData[1];
+
+            document.getElementById('activityName').textContent = activity.name;
+            document.getElementById('activityTime').textContent = activity.time;
+
+            startCountdown();
+        }
+
+        function startCountdown() {
+            const circle = document.getElementById('countdownCircle');
+            const number = document.getElementById('countdownNumber');
+
+            setInterval(() => {
+                countdown--;
+                if (countdown < 0) countdown = 59;
+                number.textContent = countdown;
+
+                // Reset animation
+                circle.style.animation = 'none';
+                circle.offsetHeight; // Trigger reflow
+                circle.style.animation = 'countdown 1s linear infinite';
+            }, 1000);
+        }
+
+        init();
+    </script>
+</body>
+</html>

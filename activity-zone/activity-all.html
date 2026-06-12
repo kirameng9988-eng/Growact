@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>全部活动 - 活动专区 - 可信数据空间门户</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'border-light': '#E2E8F0',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#06B6D4',
+                        'accent-indigo': '#6366F1',
+                        'accent-green': '#10B981',
+                        'accent-amber': '#F59E0B',
+                        'accent-red': '#EF4444',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#64748B',
+                        'text-muted': '#94A3B8',
+                        'tech-gradient-start': '#F0F9FF',
+                        'tech-gradient-end': '#E0F2FE',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+
+        .page-transition { animation: fadeSlideIn 0.4s ease-out; }
+        @keyframes fadeSlideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .activity-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .activity-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(10, 97, 255, 0.12); }
+        .activity-card:hover .card-cover { transform: scale(1.05); }
+
+        .stagger-item { opacity: 0; animation: staggerFadeIn 0.5s ease-out forwards; }
+        @keyframes staggerFadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .toast { animation: toastSlide 0.4s ease-out; }
+        @keyframes toastSlide {
+            from { transform: translateX(120%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .city-pattern {
+            background-image:
+                radial-gradient(ellipse at 20% 80%, rgba(10, 97, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 20%, rgba(6, 182, 212, 0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(99, 102, 241, 0.04) 0%, transparent 70%);
+        }
+
+        .filter-btn.active { background: linear-gradient(135deg, #0A61FF, #06B6D4); color: white; border-color: transparent; }
+        .filter-item.active { background: #F0F9FF; color: #0A61FF; border-color: #0A61FF; }
+
+        .sidebar-sticky { position: sticky; top: 80px; }
+    </style>
+</head>
+<body class="bg-tech-gradient-start min-h-screen city-pattern">
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-3"></div>
+
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 left-0 right-0 h-16 bg-white/95 backdrop-blur-md border-b border-[#E2E8F0] z-50 shadow-sm">
+        <div class="h-full flex items-center px-6">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center shadow-lg">
+                    <i class="fas fa-city text-white text-lg"></i>
+                </div>
+                <div>
+                    <span class="text-lg font-semibold text-gray-900">公共数据授权运营</span>
+                </div>
+            </div>
+
+            <nav class="flex-1 flex items-center justify-center gap-8 ml-16">
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">首页</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">数据资源</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">数据产品</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">服务专区</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">政策资讯</a>
+                <a href="index.html" class="nav-link active text-sm font-semibold text-accent-blue border-b-2 border-accent-blue pb-1">活动专区</a>
+                <a href="#" class="nav-link text-sm text-gray-600 hover:text-accent-blue transition-colors font-medium">个人中心</a>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <button class="relative text-gray-600 hover:text-accent-blue transition-colors">
+                    <i class="fas fa-bell text-xl"></i>
+                    <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center text-white">3</span>
+                </button>
+                <div class="flex items-center gap-3 pl-4 border-l border-[#E2E8F0]">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/20">
+                    <div class="flex flex-col">
+                        <span class="text-sm font-medium text-gray-900">张明远</span>
+                        <span class="text-xs text-gray-500">上海数据集团</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="pt-16 min-h-screen">
+    <!-- 页面内容 -->
+    <div class="page-transition">
+        <!-- 页面标题区 -->
+        <div class="bg-white/80 backdrop-blur-md border-b border-[#E2E8F0] px-6 py-4">
+            <div class="max-w-7xl mx-auto flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <a href="index.html" class="flex items-center gap-2 text-gray-600 hover:text-accent-blue transition-colors">
+                        <i class="fas fa-arrow-left"></i>
+                        <span class="text-sm">返回活动专区</span>
+                    </a>
+                    <div class="w-px h-6 bg-gray-200"></div>
+                    <div>
+                        <h1 class="text-xl font-bold text-gray-900 flex items-center gap-2">
+                            <i class="fas fa-th-large text-accent-blue"></i>
+                            全部活动
+                        </h1>
+                    </div>
+                </div>
+                <!-- 搜索框和我的活动 -->
+                <div class="flex items-center gap-4">
+                    <a href="index.html?myActivities=1" class="flex items-center gap-2 px-4 py-2 bg-accent-blue/10 hover:bg-accent-blue/20 text-accent-blue rounded-full transition-colors">
+                        <i class="fas fa-star text-amber-500"></i>
+                        <span class="text-sm font-medium">我的活动</span>
+                    </a>
+                    <div class="relative">
+                        <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                        <input type="text" id="searchInput" placeholder="请输入活动名称" oninput="handleSearch()" class="w-64 pl-12 pr-4 py-2.5 border border-[#E2E8F0] rounded-xl focus:border-accent-blue focus:outline-none focus:ring-2 focus:ring-accent-blue/20">
+                    </div>
+                    <button onclick="handleSearch()" class="px-4 py-2.5 bg-accent-blue hover:bg-blue-600 text-white rounded-xl font-medium transition-colors">
+                        <i class="fas fa-search mr-2"></i>搜索
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 主内容区 -->
+        <div class="max-w-7xl mx-auto px-6 py-6">
+            <div class="flex gap-6">
+                <!-- 左侧筛选栏 -->
+                <div class="w-56 flex-shrink-0">
+                    <div class="sidebar-sticky bg-white rounded-2xl shadow-sm border border-[#E2E8F0] overflow-hidden">
+                        <!-- 活动分类 -->
+                        <div class="p-4 border-b border-[#E2E8F0]">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                <i class="fas fa-tag text-accent-blue"></i>
+                                活动分类
+                            </h3>
+                            <div class="space-y-1">
+                                <button onclick="filterByCategory('all')" class="filter-item active w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    全部
+                                </button>
+                                <button onclick="filterByCategory('专题活动')" class="filter-item w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    专题活动
+                                </button>
+                                <button onclick="filterByCategory('培训专区')" class="filter-item w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    培训专区
+                                </button>
+                                <button onclick="filterByCategory('行业沙龙')" class="filter-item w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    行业沙龙
+                                </button>
+                                <button onclick="filterByCategory('政策解读')" class="filter-item w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    政策解读
+                                </button>
+                                <button onclick="filterByCategory('技术交流')" class="filter-item w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    技术交流
+                                </button>
+                                <button onclick="filterByCategory('生态合作')" class="filter-item w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    生态合作
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 活动状态 -->
+                        <div class="p-4 border-b border-[#E2E8F0]">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                <i class="fas fa-signal text-accent-blue"></i>
+                                活动状态
+                            </h3>
+                            <div class="space-y-1">
+                                <button onclick="filterByStatus('all')" class="filter-btn active w-full text-left px-3 py-2 text-sm rounded-xl border border-[#E2E8F0] transition-all">
+                                    全部
+                                </button>
+                                <button onclick="filterByStatus('registration')" class="filter-btn w-full text-left px-3 py-2 text-sm rounded-xl border border-[#E2E8F0] transition-all hover:border-accent-blue">
+                                    报名中
+                                </button>
+                                <button onclick="filterByStatus('registration_closed')" class="filter-btn w-full text-left px-3 py-2 text-sm rounded-xl border border-[#E2E8F0] transition-all hover:border-accent-blue">
+                                    报名截止
+                                </button>
+                                <button onclick="filterByStatus('upcoming')" class="filter-btn w-full text-left px-3 py-2 text-sm rounded-xl border border-[#E2E8F0] transition-all hover:border-accent-blue">
+                                    即将开始
+                                </button>
+                                <button onclick="filterByStatus('ongoing')" class="filter-btn w-full text-left px-3 py-2 text-sm rounded-xl border border-[#E2E8F0] transition-all hover:border-accent-blue">
+                                    进行中
+                                </button>
+                                <button onclick="filterByStatus('ended')" class="filter-btn w-full text-left px-3 py-2 text-sm rounded-xl border border-[#E2E8F0] transition-all hover:border-accent-blue">
+                                    已结束
+                                </button>
+                                <button onclick="filterByStatus('review')" class="filter-btn w-full text-left px-3 py-2 text-sm rounded-xl border border-[#E2E8F0] transition-all hover:border-accent-blue">
+                                    精彩回顾
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 活动时间 -->
+                        <div class="p-4">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2">
+                                <i class="fas fa-calendar-alt text-accent-blue"></i>
+                                活动时间
+                            </h3>
+                            <div class="space-y-1">
+                                <button onclick="filterByTime('all')" class="filter-item active w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    全部
+                                </button>
+                                <button onclick="filterByTime('week')" class="filter-item w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    本周
+                                </button>
+                                <button onclick="filterByTime('month')" class="filter-item w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    本月
+                                </button>
+                                <button onclick="filterByTime('quarter')" class="filter-item w-full text-left px-3 py-2 text-sm rounded-lg border border-transparent transition-all hover:bg-gray-50">
+                                    近三个月
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧活动列表 -->
+                <div class="flex-1">
+                    <!-- 结果统计 -->
+                    <div class="flex items-center justify-between mb-4">
+                        <p class="text-sm text-gray-500">共 <span id="activityCount" class="font-semibold text-accent-blue">0</span> 个活动</p>
+                        <div class="flex items-center gap-3">
+                            <span class="text-sm text-gray-500">排序：</span>
+                            <select id="sortSelect" onchange="handleSort()" class="px-3 py-1.5 text-sm border border-[#E2E8F0] rounded-lg focus:border-accent-blue focus:outline-none">
+                                <option value="default">默认排序</option>
+                                <option value="time">按时间</option>
+                                <option value="popular">按热度</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 活动卡片网格 -->
+                    <div id="activityList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                        <!-- 动态渲染 -->
+                    </div>
+
+                    <!-- 分页 -->
+                    <div id="pagination" class="flex items-center justify-center gap-2 mt-8">
+                        <!-- 动态渲染 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </main>
+
+    <script>
+        // ==================== Mock数据 - 20+活动 ====================
+        const allActivities = [
+            // 报名中
+            { id: 101, title: '2024上海数据开放创新应用大赛', summary: '汇聚创新力量，共建数据生态，推动数据要素市场化配置改革', time: '2024-10-15 至 12-20', location: '上海世博中心', activityStatus: 'registration', userStatus: 'not_registered', category: '专题活动', registrations: 1256, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
+            { id: 103, title: '数据资产入表与评估培训', summary: '系统学习数据资产入表操作实务，掌握数据估值方法', time: '2024-11-12', location: '线上直播', activityStatus: 'registration', userStatus: 'pending', category: '培训专区', registrations: 892, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop' },
+            { id: 105, title: '数据交易合规与风险管理', summary: '深度解读数据交易法规，防范合规风险', time: '2024-11-18', location: '线上直播', activityStatus: 'registration', userStatus: 'approved', category: '行业沙龙', registrations: 634, cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+            { id: 119, title: '数据合规官专题研修班', summary: '培养企业数据合规管理人才，提升合规能力', time: '2024-11-25', location: '上海数据交易所', activityStatus: 'registration', userStatus: 'not_registered', category: '培训专区', registrations: 178, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop' },
+            { id: 120, title: '数据分析与可视化实战', summary: '实战导向，掌握数据分析与可视化技能', time: '2024-12-02', location: '线上直播', activityStatus: 'registration', userStatus: 'approved', category: '技术交流', registrations: 256, cover: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=250&fit=crop' },
+            // 报名截止
+            { id: 104, title: '公共数据开放应用案例分享会', summary: '分享公共数据开放应用优秀案例，促进数据价值释放', time: '2024-11-15', location: '上海数据中心', activityStatus: 'registration_closed', userStatus: 'not_registered', category: '行业沙龙', registrations: 356, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop' },
+            { id: 121, title: 'AI大模型应用创新大赛', summary: '探索AI大模型在各行业的创新应用场景', time: '2024-12-01', location: '张江高科技园区', activityStatus: 'registration_closed', userStatus: 'rejected', category: '专题活动', registrations: 456, cover: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&h=250&fit=crop' },
+            // 即将开始
+            { id: 102, title: '可信数据空间建设研讨会', summary: '推进数据要素市场化配置改革，构建可信数据空间', time: '2024-11-08', location: '上海国际会议中心', activityStatus: 'upcoming', userStatus: 'approved', category: '行业沙龙', registrations: 486, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+            { id: 106, title: '企业数字化转型Workshop', summary: '企业数字化转型实操工作坊，案例驱动', time: '2024-11-22', location: '张江高科技园区', activityStatus: 'upcoming', userStatus: 'pending_signin', category: '技术交流', registrations: 128, cover: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=400&h=250&fit=crop' },
+            { id: 107, title: '数据要素市场化配置改革培训班', summary: '深入学习数据要素市场化配置改革政策与实践', time: '2024-11-10', location: '上海国际会议中心', activityStatus: 'upcoming', userStatus: 'pending_signin', category: '培训专区', registrations: 156, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
+            { id: 109, title: '可信数据空间标准宣贯会', summary: '可信数据空间标准体系解读与推广', time: '2024-12-03', location: '线上+线下', activityStatus: 'upcoming', userStatus: 'not_registered', category: '政策解读', registrations: 312, cover: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=250&fit=crop' },
+            // 进行中
+            { id: 108, title: 'AI公共数据开放培训会', summary: 'AI技术在公共数据领域的应用培训', time: '2024-11-05 09:00', location: '上海数据交易所', activityStatus: 'ongoing', userStatus: 'pending_signin', category: '培训专区', registrations: 234, cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=250&fit=crop' },
+            { id: 110, title: '数据安全工程师认证培训', summary: '数据安全工程师认证课程，提升安全技能', time: '2024-11-06 14:00', location: '线上直播', activityStatus: 'ongoing', userStatus: 'signed', signInTime: '09:23', category: '培训专区', registrations: 189, cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop' },
+            // 已结束
+            { id: 111, title: '2024数据要素市场建设峰会', summary: '数据要素市场建设年度盛会，汇聚行业精英', time: '2024-09-28 09:00', location: '上海国际会议中心', activityStatus: 'ended', userStatus: 'signed', signInTime: '09:15', category: '行业沙龙', registrations: 356, hasMaterials: true, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+            { id: 112, title: '数据安全法实施三周年研讨会', summary: '数据安全法实施三周年回顾与展望', time: '2024-09-15 14:00', location: '线上直播', activityStatus: 'ended', userStatus: 'absent', category: '政策解读', registrations: 423, hasMaterials: true, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop' },
+            { id: 113, title: '公共数据开放应用大赛颁奖典礼', summary: '大赛获奖作品颁奖及优秀案例展示', time: '2024-08-20 10:00', location: '上海世博中心', activityStatus: 'ended', userStatus: 'signed', signInTime: '10:05', category: '专题活动', registrations: 856, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop' },
+            { id: 114, title: '数据资产入表实务操作班', summary: '数据资产入表实操培训，案例演练', time: '2024-11-12 14:00', location: '上海数据交易所', activityStatus: 'ended', userStatus: 'signed', signInTime: '14:10', category: '培训专区', registrations: 89, hasMaterials: true, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop' },
+            // 精彩回顾
+            { id: 115, title: '2023数据要素市场建设峰会', summary: '2023年度数据要素市场建设成果展示与经验分享', time: '2023-09-28', location: '上海国际会议中心', activityStatus: 'review', userStatus: 'signed', signInTime: '09:00', category: '行业沙龙', registrations: 456, hasMaterials: true, hasVideo: true, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
+            { id: 116, title: '公共数据开放应用大赛总决赛', summary: '大赛总决赛精彩回顾，获奖团队路演', time: '2023-12-15', location: '上海世博中心', activityStatus: 'review', userStatus: 'signed', signInTime: '13:30', category: '专题活动', registrations: 1200, hasMaterials: true, hasVideo: true, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+            { id: 117, title: '数据安全与隐私保护高峰论坛', summary: '数据安全与隐私保护前沿技术论坛', time: '2023-11-20', location: '线上直播', activityStatus: 'review', userStatus: 'absent', category: '技术交流', registrations: 3568, hasMaterials: true, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop' },
+            { id: 118, title: '可信数据空间生态大会', summary: '可信数据空间生态系统构建大会', time: '2023-10-25', location: '深圳国际会展中心', activityStatus: 'review', userStatus: 'signed', signInTime: '10:00', category: '生态合作', registrations: 892, hasMaterials: true, hasVideo: true, cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+        ];
+
+        let currentCategory = 'all';
+        let currentStatus = 'all';
+        let currentTime = 'all';
+        let currentSearch = '';
+        let currentSort = 'default';
+        let currentPage = 1;
+        const pageSize = 9;
+
+        // ==================== 统一动态按钮组件 ====================
+        function ActivityStatusButton({ activityStatus, userStatus, activityId, signInTime, hasMaterials, hasVideo }) {
+            const buttonBaseClass = 'flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium rounded-lg transition-all';
+
+            if (activityStatus === 'registration' && userStatus === 'not_registered') {
+                return `<button onclick="openRegistration(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm"><i class="fas fa-edit"></i>立即报名</button>`;
+            }
+            if (activityStatus === 'registration' && userStatus === 'pending') {
+                return `<div class="${buttonBaseClass} bg-amber-50 text-amber-600 cursor-default border border-amber-200"><i class="fas fa-clock"></i>审核中</div>`;
+            }
+            if (activityStatus === 'registration' && userStatus === 'approved') {
+                return `<div class="${buttonBaseClass} bg-green-50 text-green-600 cursor-default border border-green-200"><i class="fas fa-check-circle"></i>已报名</div>`;
+            }
+            if (activityStatus === 'registration_closed' && userStatus === 'not_registered') {
+                return `<div class="${buttonBaseClass} bg-gray-100 text-gray-500 cursor-not-allowed border border-gray-200"><i class="fas fa-ban"></i>报名截止</div>`;
+            }
+            if (activityStatus === 'upcoming' && userStatus === 'approved') {
+                return `<button onclick="openSignInModal(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm"><i class="fas fa-qrcode"></i>查看签到码</button>`;
+            }
+            if (activityStatus === 'ongoing' && (userStatus === 'approved' || userStatus === 'pending_signin')) {
+                return `<button onclick="openSignInModal(${activityId})" class="${buttonBaseClass} bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-sm animate-pulse"><i class="fas fa-sign-in-alt"></i>立即签到</button>`;
+            }
+            if (activityStatus === 'ongoing' && userStatus === 'signed') {
+                return `<div class="${buttonBaseClass} bg-green-50 text-green-600 cursor-default border border-green-200"><i class="fas fa-check-circle"></i>已签到 ${signInTime || ''}</div>`;
+            }
+            if (activityStatus === 'ended') {
+                return `<div class="${buttonBaseClass} bg-gray-100 text-gray-500 cursor-default border border-gray-200"><i class="fas fa-calendar-times"></i>活动结束</div>`;
+            }
+            if (activityStatus === 'review') {
+                let html = `<button onclick="goToDetail(${activityId})" class="${buttonBaseClass} bg-gradient-to-r from-purple-500 to-indigo-500 hover:from-purple-600 hover:to-indigo-600 text-white shadow-sm"><i class="fas fa-play-circle"></i>查看回顾</button>`;
+                if (hasVideo) html += `<button onclick="showToast('正在打开回放视频...', 'info')" class="${buttonBaseClass} bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 text-white shadow-sm"><i class="fas fa-video"></i>观看回放</button>`;
+                if (hasMaterials) html += `<button onclick="showToast('资料下载中...', 'success')" class="${buttonBaseClass} text-accent-blue hover:bg-accent-blue/10"><i class="fas fa-download"></i>下载资料</button>`;
+                return html;
+            }
+            if (activityStatus === 'registration' && userStatus === 'rejected') {
+                return `<button onclick="openRegistration(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm"><i class="fas fa-redo"></i>重新报名</button>`;
+            }
+            if (activityStatus === 'ended' && userStatus === 'absent') {
+                return `<div class="${buttonBaseClass} bg-red-50 text-red-600 cursor-default border border-red-200"><i class="fas fa-user-slash"></i>未签到</div>`;
+            }
+            return `<button onclick="goToDetail(${activityId})" class="${buttonBaseClass} bg-accent-blue hover:bg-blue-600 text-white shadow-sm"><i class="fas fa-edit"></i>立即报名</button>`;
+        }
+
+        function getActivityStatusTag(activityStatus) {
+            const statusMap = {
+                'registration': { text: '报名中', class: 'bg-blue-100 text-blue-700 border-blue-200' },
+                'registration_closed': { text: '报名截止', class: 'bg-gray-100 text-gray-600 border-gray-200' },
+                'upcoming': { text: '即将开始', class: 'bg-amber-100 text-amber-700 border-amber-200' },
+                'ongoing': { text: '进行中', class: 'bg-green-100 text-green-700 border-green-200' },
+                'ended': { text: '已结束', class: 'bg-gray-100 text-gray-500 border-gray-200' },
+                'review': { text: '精彩回顾', class: 'bg-gradient-to-r from-purple-100 to-indigo-100 text-purple-700 border-purple-200' }
+            };
+            const status = statusMap[activityStatus] || statusMap['ended'];
+            return `<span class="px-2 py-0.5 ${status.class} text-xs font-medium rounded-full border">${status.text}</span>`;
+        }
+
+        function getCategoryTag(category) {
+            const categoryColors = {
+                '专题活动': 'bg-pink-50 text-pink-700 border-pink-200',
+                '培训专区': 'bg-purple-50 text-purple-700 border-purple-200',
+                '行业沙龙': 'bg-blue-50 text-blue-700 border-blue-200',
+                '政策解读': 'bg-amber-50 text-amber-700 border-amber-200',
+                '技术交流': 'bg-cyan-50 text-cyan-700 border-cyan-200',
+                '生态合作': 'bg-green-50 text-green-700 border-green-200'
+            };
+            const colorClass = categoryColors[category] || 'bg-gray-50 text-gray-700 border-gray-200';
+            return `<span class="px-2 py-0.5 ${colorClass} text-xs font-medium rounded-full border">${category}</span>`;
+        }
+
+        function filterActivities() {
+            let filtered = [...allActivities];
+
+            if (currentCategory !== 'all') {
+                filtered = filtered.filter(a => a.category === currentCategory);
+            }
+            if (currentStatus !== 'all') {
+                filtered = filtered.filter(a => a.activityStatus === currentStatus);
+            }
+            if (currentSearch) {
+                filtered = filtered.filter(a => a.title.toLowerCase().includes(currentSearch.toLowerCase()));
+            }
+            if (currentSort === 'popular') {
+                filtered.sort((a, b) => b.registrations - a.registrations);
+            }
+
+            return filtered;
+        }
+
+        function renderActivityList() {
+            const filtered = filterActivities();
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            const start = (currentPage - 1) * pageSize;
+            const pageActivities = filtered.slice(start, start + pageSize);
+
+            document.getElementById('activityCount').textContent = filtered.length;
+
+            const container = document.getElementById('activityList');
+            if (pageActivities.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-1 md:col-span-2 lg:col-span-3 py-16 text-center">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                            <i class="fas fa-search text-4xl text-gray-300"></i>
+                        </div>
+                        <p class="text-gray-500">未找到符合条件的活动</p>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = pageActivities.map((activity, index) => `
+                    <div class="activity-card stagger-item bg-white rounded-2xl overflow-hidden shadow-sm border border-[#E2E8F0] cursor-pointer" style="animation-delay: ${index * 0.05}s" onclick="goToDetail(${activity.id})">
+                        <div class="relative aspect-video overflow-hidden">
+                            <img src="${activity.cover}" class="card-cover w-full h-full object-cover transition-transform duration-500" alt="${activity.title}">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+                            <div class="absolute top-3 right-3 flex flex-col gap-2">
+                                ${getActivityStatusTag(activity.activityStatus)}
+                            </div>
+                            <div class="absolute top-3 left-3">
+                                ${getCategoryTag(activity.category)}
+                            </div>
+                        </div>
+                        <div class="p-4">
+                            <h4 class="text-sm font-semibold text-gray-900 mb-2 line-clamp-2 leading-snug">${activity.title}</h4>
+                            <p class="text-xs text-gray-500 mb-3 line-clamp-2">${activity.summary}</p>
+                            <div class="space-y-1.5 text-xs text-gray-500 mb-3">
+                                <div class="flex items-center gap-1.5">
+                                    <i class="far fa-calendar text-gray-400"></i>
+                                    <span>${activity.time}</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-map-marker-alt text-gray-400"></i>
+                                    <span>${activity.location}</span>
+                                </div>
+                                <div class="flex items-center gap-1.5">
+                                    <i class="fas fa-users text-gray-400"></i>
+                                    <span>已报名 ${activity.registrations} 人</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-2 pt-3 border-t border-[#E2E8F0]">
+                                ${ActivityStatusButton({
+                                    activityStatus: activity.activityStatus,
+                                    userStatus: activity.userStatus,
+                                    activityId: activity.id,
+                                    signInTime: activity.signInTime,
+                                    hasMaterials: activity.hasMaterials,
+                                    hasVideo: activity.hasVideo
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderPagination(totalPages);
+        }
+
+        function renderPagination(totalPages) {
+            const container = document.getElementById('pagination');
+            if (totalPages <= 1) {
+                container.innerHTML = '';
+                return;
+            }
+
+            let html = '';
+            html += `<button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''} class="w-10 h-10 rounded-xl border border-[#E2E8F0] flex items-center justify-center hover:border-accent-blue transition-colors ${currentPage === 1 ? 'opacity-50 cursor-not-allowed' : ''}">
+                <i class="fas fa-chevron-left text-gray-500"></i>
+            </button>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<button onclick="goToPage(${i})" class="w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${i === currentPage ? 'bg-accent-blue text-white' : 'border border-[#E2E8F0] hover:border-accent-blue text-gray-600'}">${i}</button>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<span class="text-gray-400">...</span>`;
+                }
+            }
+
+            html += `<button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''} class="w-10 h-10 rounded-xl border border-[#E2E8F0] flex items-center justify-center hover:border-accent-blue transition-colors ${currentPage === totalPages ? 'opacity-50 cursor-not-allowed' : ''}">
+                <i class="fas fa-chevron-right text-gray-500"></i>
+            </button>`;
+
+            container.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            const filtered = filterActivities();
+            const totalPages = Math.ceil(filtered.length / pageSize);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderActivityList();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function filterByCategory(category) {
+            currentCategory = category;
+            currentPage = 1;
+            document.querySelectorAll('.filter-item').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderActivityList();
+        }
+
+        function filterByStatus(status) {
+            currentStatus = status;
+            currentPage = 1;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderActivityList();
+        }
+
+        function filterByTime(time) {
+            currentTime = time;
+            currentPage = 1;
+            renderActivityList();
+        }
+
+        function handleSearch() {
+            currentSearch = document.getElementById('searchInput').value;
+            currentPage = 1;
+            renderActivityList();
+        }
+
+        function handleSort() {
+            currentSort = document.getElementById('sortSelect').value;
+            renderActivityList();
+        }
+
+        function goToDetail(id) {
+            // 跳转到index.html并打开详情页
+            window.location.href = `index.html?detail=${id}`;
+        }
+
+        function openRegistration(id) {
+            showToast('请在活动详情页进行报名', 'info');
+        }
+
+        function openSignInModal(id) {
+            showToast('签到码已生成，请在活动现场出示', 'info');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-accent-blue';
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : 'info-circle';
+            toast.className = `toast ${bgColor} text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `<i class="fas fa-${icon}"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderActivityList();
+        });
+    </script>
+</body>
+</html>

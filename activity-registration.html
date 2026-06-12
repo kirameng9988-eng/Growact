@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>报名管理 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'secondary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #F8FAFC; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .sidebar-menu-item.active i { color: #0A61FF; }
+        .table-row:hover { background: #F8FAFC; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium text-white">张明远</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- 左侧菜单 -->
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
+        <nav class="py-4">
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
+            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-th-large w-5 text-gray-500"></i>
+                <span>工作台</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
+            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-file-alt w-5 text-gray-500"></i>
+                <span>内容管理</span>
+            </a>
+            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-tree w-5 text-gray-500"></i>
+                <span>分类管理</span>
+            </a>
+            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-tags w-5 text-gray-600"></i>
+                <span>标签管理</span>
+            </a>
+            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
+                <span>审核中心</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">12</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">活动运营</div>
+            <a href="activity-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-calendar-alt w-5 text-gray-500"></i>
+                <span>活动管理</span>
+            </a>
+            <a href="activity-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-folder-open w-5 text-gray-500"></i>
+                <span>活动分类</span>
+            </a>
+            <a href="activity-registration.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-900">
+                <i class="fas fa-users w-5 text-accent-blue"></i>
+                <span>报名管理</span>
+            </a>
+            <a href="activity-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-clipboard-check w-5 text-gray-500"></i>
+                <span>活动审核</span>
+                <span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">5</span>
+            </a>
+            <a href="activity-stats.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-chart-line w-5 text-gray-500"></i>
+                <span>活动统计</span>
+            </a>
+            <a href="activity-signin.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-qrcode w-5 text-gray-500"></i>
+                <span>活动签到</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">专区配置</div>
+            <a href="zone-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer text-gray-600">
+                <i class="fas fa-cog w-5 text-gray-500"></i>
+                <span>专区配置</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
+            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-images w-5 text-gray-600"></i>
+                <span>图片管理</span>
+            </a>
+            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
+                <span>文件管理</span>
+            </a>
+            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-video w-5 text-gray-600"></i>
+                <span>视频管理</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
+            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
+                <span>数据概览</span>
+            </a>
+            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
+                <span>内容分析</span>
+            </a>
+
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
+            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
+                <span>用户管理</span>
+            </a>
+            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
+                <span>角色权限</span>
+            </a>
+            <a href="system-log.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-history w-5 text-gray-600"></i>
+                <span>日志管理</span>
+            </a>
+            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
+                <i class="fas fa-cog w-5 text-gray-600"></i>
+                <span>系统设置</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="ml-[220px] mt-16 p-6">
+        <!-- 页面标题 -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">报名管理</h1>
+                <p class="text-gray-500 mt-1">管理活动报名信息，审核报名资格</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="exportData()" class="px-4 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
+                    <i class="fas fa-download"></i>
+                    导出数据
+                </button>
+                <button onclick="refreshList()" class="px-4 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
+                    <i class="fas fa-sync-alt"></i>
+                    刷新
+                </button>
+            </div>
+        </div>
+
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-xl p-4 mb-6 border border-[#E2E8F0]">
+            <div class="flex items-center gap-4 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <select id="filterActivity" onchange="filterList()" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                        <option value="">全部活动</option>
+                        <option value="1">2024数字化转型高峰论坛</option>
+                        <option value="2">企业文化创意大赛</option>
+                        <option value="4">新员工入职培训</option>
+                        <option value="6">读书分享会</option>
+                        <option value="8">数据分析技能培训</option>
+                    </select>
+                    <select id="filterStatus" onchange="filterList()" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                        <option value="">全部状态</option>
+                        <option value="pending">待审核</option>
+                        <option value="approved">已通过</option>
+                        <option value="rejected">已拒绝</option>
+                    </select>
+                </div>
+                <div class="flex-1"></div>
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="searchInput" oninput="filterList()" placeholder="搜索报名人、手机号..." class="bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none w-64">
+                </div>
+            </div>
+        </div>
+
+        <!-- 报名列表 -->
+        <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-primary-bg/50">
+                        <th class="px-4 py-3 font-medium">活动名称</th>
+                        <th class="px-4 py-3 font-medium w-24">报名人</th>
+                        <th class="px-4 py-3 font-medium w-36">企业名称</th>
+                        <th class="px-4 py-3 font-medium w-28">手机号</th>
+                        <th class="px-4 py-3 font-medium w-24">职位</th>
+                        <th class="px-4 py-3 font-medium w-28">报名时间</th>
+                        <th class="px-4 py-3 font-medium w-24">审核状态</th>
+                        <th class="px-4 py-3 font-medium w-40 text-right">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="registrationTableBody">
+                </tbody>
+            </table>
+            <!-- 分页 -->
+            <div class="flex items-center justify-between px-4 py-3 border-t border-[#E2E8F0]">
+                <span id="paginationInfo" class="text-sm text-gray-500">显示 1-10 条，共 25 条</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="goToPage(currentPage - 1)" id="prevPage" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm disabled:opacity-50">上一页</button>
+                    <button onclick="goToPage(1)" class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
+                    <button onclick="goToPage(2)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">2</button>
+                    <button onclick="goToPage(3)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">3</button>
+                    <button onclick="goToPage(currentPage + 1)" id="nextPage" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">下一页</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- 详情弹窗 -->
+    <div id="viewModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[500px] max-h-[90vh] overflow-hidden border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">报名详情</h3>
+                <button onclick="closeModal('viewModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
+                <div class="space-y-4">
+                    <div class="flex items-center justify-center mb-6">
+                        <div class="w-20 h-20 rounded-full bg-accent-blue/10 flex items-center justify-center">
+                            <i class="fas fa-user text-3xl text-accent-blue"></i>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">活动名称</label>
+                            <p id="viewActivity" class="text-sm font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">报名人</label>
+                            <p id="viewName" class="text-sm font-medium text-gray-900"></p>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">企业名称</label>
+                            <p id="viewCompany" class="text-sm text-gray-700"></p>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">手机号</label>
+                            <p id="viewPhone" class="text-sm text-gray-700"></p>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">职位</label>
+                            <p id="viewPosition" class="text-sm text-gray-700"></p>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">邮箱</label>
+                            <p id="viewEmail" class="text-sm text-gray-700"></p>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">报名时间</label>
+                            <p id="viewTime" class="text-sm text-gray-700"></p>
+                        </div>
+                        <div>
+                            <label class="block text-xs text-gray-500 mb-1">审核状态</label>
+                            <p id="viewStatus" class="text-sm"></p>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-500 mb-1">备注</label>
+                        <p id="viewNote" class="text-sm text-gray-700 bg-gray-50 p-3 rounded-lg"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-gray-50">
+                <button onclick="closeModal('viewModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 审核弹窗 -->
+    <div id="reviewModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[450px] overflow-hidden border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
+                <div id="reviewIcon" class="w-12 h-12 rounded-full bg-accent-green/20 flex items-center justify-center">
+                    <i class="fas fa-check text-accent-green text-xl"></i>
+                </div>
+                <div>
+                    <h3 id="reviewTitle" class="text-lg font-medium">审核报名</h3>
+                    <p id="reviewSubtitle" class="text-sm text-gray-500 mt-1">请确认报名信息无误</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p id="reviewMessage" class="text-sm text-gray-600"></p>
+                <p id="reviewName" class="text-sm font-medium mt-2 text-gray-900"></p>
+                <div id="rejectReasonGroup" class="mt-4 hidden">
+                    <label class="block text-sm text-gray-600 mb-2">驳回原因</label>
+                    <textarea id="rejectReason" rows="3" placeholder="请输入驳回原因" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('reviewModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button id="confirmReviewBtn" class="px-5 py-2.5 bg-accent-green text-white rounded-xl hover:bg-green-600 transition-colors">确认通过</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mock报名数据
+        let registrations = [
+            { id: 1, activityId: 1, activityName: '2024数字化转型高峰论坛', name: '王磊', company: '北京科技有限公司', phone: '13812345601', position: '技术总监', email: 'wanglei@bjtech.com', time: '2024-03-02 14:30', status: 'approved', note: '已缴费' },
+            { id: 2, activityId: 1, activityName: '2024数字化转型高峰论坛', name: '李娜', company: '上海数字集团', phone: '13912345602', position: '项目经理', email: 'lina@shdigital.com', time: '2024-03-03 09:15', status: 'approved', note: '团队报名' },
+            { id: 3, activityId: 1, activityName: '2024数字化转型高峰论坛', name: '张伟', company: '深圳创新科技', phone: '13712345603', position: '研发工程师', email: 'zhangwei@szinno.com', time: '2024-03-04 16:45', status: 'pending', note: '' },
+            { id: 4, activityId: 2, activityName: '企业文化创意大赛', name: '刘芳', company: '杭州文化传媒', phone: '13612345604', position: '创意总监', email: 'liufang@hzccm.com', time: '2024-03-05 11:20', status: 'approved', note: '提交作品已通过初选' },
+            { id: 5, activityId: 2, activityName: '企业文化创意大赛', name: '陈晨', company: '广州创意设计', phone: '13512345605', position: '设计师', email: 'chenchen@gzdesign.com', time: '2024-03-06 14:00', status: 'pending', note: '' },
+            { id: 6, activityId: 4, activityName: '新员工入职培训', name: '赵敏', company: '集团总部', phone: '13412345606', position: '市场专员', email: 'zhaomin@group.com', time: '2024-03-01 10:00', status: 'approved', note: '新员工第一批' },
+            { id: 7, activityId: 4, activityName: '新员工入职培训', name: '周杰', company: '集团总部', phone: '13312345607', position: '财务专员', email: 'zhoujie@group.com', time: '2024-03-01 10:30', status: 'approved', note: '新员工第一批' },
+            { id: 8, activityId: 4, activityName: '新员工入职培训', name: '吴婷', company: '集团总部', phone: '13212345608', position: 'HR专员', email: 'wuting@group.com', time: '2024-03-02 09:45', status: 'pending', note: '' },
+            { id: 9, activityId: 6, activityName: '读书分享会', name: '孙浩', company: '北京大学出版社', phone: '13112345609', position: '编辑', email: 'sunhao@bdup.com', time: '2024-03-10 15:30', status: 'approved', note: '已借阅书籍' },
+            { id: 10, activityId: 6, activityName: '读书分享会', name: '许晴', company: '上海图书馆', phone: '13012345610', position: '馆员', email: 'xuqing@shtsg.com', time: '2024-03-11 10:15', status: 'rejected', note: '名额已满' },
+            { id: 11, activityId: 8, activityName: '数据分析技能培训', name: '马超', company: '数据科技有限公司', phone: '12912345611', position: '数据分析师', email: 'machao@datatech.com', time: '2024-03-15 09:00', status: 'approved', note: '需自带电脑' },
+            { id: 12, activityId: 8, activityName: '数据分析技能培训', name: '林青', company: '智能科技公司', phone: '12812345612', position: '运营专员', email: 'linqing@intech.com', time: '2024-03-15 14:20', status: 'pending', note: '' },
+            { id: 13, activityId: 1, activityName: '2024数字化转型高峰论坛', name: '黄磊', company: '成都科技集团', phone: '12712345613', position: 'CEO', email: 'huanglei@cdtech.com', time: '2024-03-06 11:30', status: 'approved', note: 'VIP嘉宾' },
+            { id: 14, activityId: 2, activityName: '企业文化创意大赛', name: '杨幂', company: '影视制作公司', phone: '12612345614', position: '制片人', email: 'yangmian@filmco.com', time: '2024-03-07 16:00', status: 'approved', note: '提交视频作品' },
+            { id: 15, activityId: 4, activityName: '新员工入职培训', name: '韩梅梅', company: '集团总部', phone: '12512345615', position: '行政专员', email: 'hanmm@group.com', time: '2024-03-03 08:30', status: 'approved', note: '新员工第二批' },
+        ];
+
+        let currentPage = 1;
+        let currentReviewId = null;
+        let reviewAction = null;
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderTable();
+        });
+
+        function renderTable() {
+            const tbody = document.getElementById('registrationTableBody');
+            const filtered = getFilteredRegistrations();
+            const start = (currentPage - 1) * 10;
+            const end = Math.min(start + 10, filtered.length);
+            const pageData = filtered.slice(start, end);
+
+            tbody.innerHTML = pageData.map(reg => `
+                <tr class="table-row border-b border-[#E2E8F0]">
+                    <td class="px-4 py-3">
+                        <div class="text-sm font-medium text-gray-900">${reg.activityName}</div>
+                    </td>
+                    <td class="px-4 py-3 text-sm text-gray-700">${reg.name}</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">${reg.company}</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">${reg.phone}</td>
+                    <td class="px-4 py-3 text-sm text-gray-600">${reg.position}</td>
+                    <td class="px-4 py-3 text-sm text-gray-500">${reg.time}</td>
+                    <td class="px-4 py-3">${getStatusBadge(reg.status)}</td>
+                    <td class="px-4 py-3 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <button onclick="viewRegistration(${reg.id})" class="text-accent-blue hover:text-blue-700 text-sm">查看</button>
+                            ${reg.status === 'pending' ? `
+                                <button onclick="approveRegistration(${reg.id})" class="text-accent-green hover:text-green-700 text-sm">通过</button>
+                                <button onclick="rejectRegistration(${reg.id})" class="text-accent-red hover:text-red-700 text-sm">拒绝</button>
+                            ` : ''}
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+
+            document.getElementById('paginationInfo').textContent = `显示 ${start + 1}-${end} 条，共 ${filtered.length} 条`;
+        }
+
+        function getFilteredRegistrations() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const activityId = document.getElementById('filterActivity').value;
+            const status = document.getElementById('filterStatus').value;
+
+            return registrations.filter(r => {
+                if (search && !r.name.toLowerCase().includes(search) && !r.phone.includes(search)) return false;
+                if (activityId && r.activityId !== parseInt(activityId)) return false;
+                if (status && r.status !== status) return false;
+                return true;
+            });
+        }
+
+        function filterList() {
+            currentPage = 1;
+            renderTable();
+        }
+
+        function getStatusBadge(status) {
+            const statusMap = {
+                pending: '<span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">待审核</span>',
+                approved: '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">已通过</span>',
+                rejected: '<span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">已拒绝</span>'
+            };
+            return statusMap[status] || status;
+        }
+
+        function goToPage(page) {
+            const filtered = getFilteredRegistrations();
+            const totalPages = Math.ceil(filtered.length / 10);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderTable();
+        }
+
+        function refreshList() {
+            showToast('列表已刷新', 'success');
+            renderTable();
+        }
+
+        function viewRegistration(id) {
+            const reg = registrations.find(r => r.id === id);
+            if (!reg) return;
+
+            document.getElementById('viewActivity').textContent = reg.activityName;
+            document.getElementById('viewName').textContent = reg.name;
+            document.getElementById('viewCompany').textContent = reg.company;
+            document.getElementById('viewPhone').textContent = reg.phone;
+            document.getElementById('viewPosition').textContent = reg.position;
+            document.getElementById('viewEmail').textContent = reg.email;
+            document.getElementById('viewTime').textContent = reg.time;
+            document.getElementById('viewStatus').outerHTML = getStatusBadge(reg.status);
+            document.getElementById('viewNote').textContent = reg.note || '无备注';
+
+            openModal('viewModal');
+        }
+
+        function approveRegistration(id) {
+            currentReviewId = id;
+            reviewAction = 'approve';
+            const reg = registrations.find(r => r.id === id);
+            if (!reg) return;
+
+            document.getElementById('reviewIcon').className = 'w-12 h-12 rounded-full bg-accent-green/20 flex items-center justify-center';
+            document.getElementById('reviewIcon').innerHTML = '<i class="fas fa-check text-accent-green text-xl"></i>';
+            document.getElementById('reviewTitle').textContent = '审核通过';
+            document.getElementById('reviewSubtitle').textContent = '确认报名信息无误';
+            document.getElementById('reviewMessage').textContent = '确定要通过以下报名申请？';
+            document.getElementById('reviewName').textContent = `${reg.name} - ${reg.company}`;
+            document.getElementById('rejectReasonGroup').classList.add('hidden');
+            document.getElementById('confirmReviewBtn').className = 'px-5 py-2.5 bg-accent-green text-white rounded-xl hover:bg-green-600 transition-colors';
+            document.getElementById('confirmReviewBtn').textContent = '确认通过';
+
+            openModal('reviewModal');
+        }
+
+        function rejectRegistration(id) {
+            currentReviewId = id;
+            reviewAction = 'reject';
+            const reg = registrations.find(r => r.id === id);
+            if (!reg) return;
+
+            document.getElementById('reviewIcon').className = 'w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center';
+            document.getElementById('reviewIcon').innerHTML = '<i class="fas fa-times text-accent-red text-xl"></i>';
+            document.getElementById('reviewTitle').textContent = '驳回申请';
+            document.getElementById('reviewSubtitle').textContent = '请填写驳回原因';
+            document.getElementById('reviewMessage').textContent = '确定要驳回以下报名申请？';
+            document.getElementById('reviewName').textContent = `${reg.name} - ${reg.company}`;
+            document.getElementById('rejectReasonGroup').classList.remove('hidden');
+            document.getElementById('confirmReviewBtn').className = 'px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors';
+            document.getElementById('confirmReviewBtn').textContent = '确认驳回';
+
+            openModal('reviewModal');
+        }
+
+        function exportData() {
+            showToast('数据导出中，请稍候...', 'success');
+            setTimeout(() => {
+                showToast('数据已导出到 Downloads/报名数据.xlsx', 'success');
+            }, 1500);
+        }
+
+        // 弹窗操作
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+            document.getElementById(modalId).classList.add('flex');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+            document.getElementById(modalId).classList.remove('flex');
+            if (modalId === 'reviewModal') {
+                document.getElementById('rejectReason').value = '';
+            }
+        }
+
+        // 审核确认
+        document.getElementById('confirmReviewBtn').onclick = function() {
+            if (!currentReviewId) return;
+
+            const reg = registrations.find(r => r.id === currentReviewId);
+            if (!reg) return;
+
+            if (reviewAction === 'approve') {
+                reg.status = 'approved';
+                showToast('报名已审核通过', 'success');
+            } else {
+                const reason = document.getElementById('rejectReason').value.trim();
+                if (!reason) {
+                    showToast('请填写驳回原因', 'warning');
+                    return;
+                }
+                reg.status = 'rejected';
+                reg.note = `驳回原因：${reason}`;
+                showToast('报名已驳回', 'success');
+            }
+
+            closeModal('reviewModal');
+            renderTable();
+        };
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColors = {
+                success: 'bg-accent-green',
+                error: 'bg-accent-red',
+                warning: 'bg-accent-amber'
+            };
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle'
+            };
+
+            toast.className = `toast ${bgColors[type]} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `
+                <i class="fas ${icons[type]}"></i>
+                <span class="text-sm">${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

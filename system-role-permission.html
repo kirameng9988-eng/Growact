@@ -11,17 +11,17 @@
             theme: {
                 extend: {
                     colors: {
-                        'primary-bg': '#030714',
-                        'card-bg': '#0a1628',
-                        'border-dark': '#1a2744',
-                        'accent-blue': '#3b82f6',
-                        'accent-cyan': '#06b6d4',
-                        'accent-green': '#10b981',
-                        'accent-amber': '#f59e0b',
-                        'accent-red': '#ef4444',
-                        'text-primary': '#f1f5f9',
-                        'text-secondary': '#94a3b8',
-                        'text-muted': '#475569'
+                        'primary-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
                     }
                 }
             }
@@ -30,10 +30,10 @@
     <style>
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #030714; }
-        ::-webkit-scrollbar-thumb { background: #1a2744; border-radius: 3px; }
-        .sidebar-menu-item:hover { background: rgba(59, 130, 246, 0.1); }
-        .sidebar-menu-item.active { background: rgba(59, 130, 246, 0.15); border-left: 3px solid #3b82f6; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #F8FAFC; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
         .toast { animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
         .permission-tag {
@@ -42,7 +42,7 @@
             user-select: none;
         }
         .permission-tag:hover {
-            background: rgba(59, 130, 246, 0.15);
+            background: rgba(10, 97, 255, 0.1);
         }
         .permission-tag.selected {
             background: rgba(59, 130, 246, 0.25);
@@ -50,100 +50,100 @@
             color: #3b82f6;
         }
         .category-row {
-            background: linear-gradient(90deg, rgba(59, 130, 246, 0.1) 0%, transparent 100%);
+            background: linear-gradient(90deg, rgba(10, 97, 255, 0.08) 0%, transparent 100%);
         }
         .category-row.collapsed {
             background: linear-gradient(90deg, rgba(59, 130, 246, 0.05) 0%, transparent 100%);
         }
     </style>
 </head>
-<body class="bg-primary-bg text-text-primary min-h-screen">
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
         <!-- 顶部导航 -->
-    <header class="fixed top-0 left-0 right-0 h-16 bg-primary-bg border-b border-border-dark z-50 flex items-center px-6">
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
                 <div class="flex items-center gap-3">
             <img src="images/logo.png" alt="logo" class="h-9">
-            <span class="text-lg font-semibold text-text-primary">内容服务平台</span>
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
         </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
-            <button class="relative text-text-secondary hover:text-text-primary transition-colors">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
                 <i class="fas fa-bell text-xl"></i>
                 <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
             </button>
-            <div class="flex items-center gap-3 pl-4 border-l border-border-dark">
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
                 <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
                 <div class="flex flex-col">
                     <span class="text-sm font-medium">张明远</span>
-                    <span class="text-xs text-text-muted">超级管理员</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
                 </div>
-                <i class="fas fa-chevron-down text-text-muted text-xs ml-2"></i>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
             </div>
         </div>
     </header>
 
-    <aside class="fixed top-16 left-0 bottom-0 w-[220px] bg-card-bg border-r border-border-dark overflow-y-auto z-40">
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
         <nav class="py-4">
-            <div class="px-4 mb-2 text-xs text-text-muted uppercase tracking-wider">工作台</div>
+            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
             <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-th-large w-5 text-text-secondary"></i>
+                <i class="fas fa-th-large w-5 text-gray-600"></i>
                 <span>工作台</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">内容中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
             <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-file-alt w-5 text-gray-600"></i>
                 <span>内容管理</span>
             </a>
             <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-tree w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-tree w-5 text-gray-600"></i>
                 <span>分类管理</span>
             </a>
             <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-tags w-5 text-text-secondary"></i>
+                <i class="fas fa-tags w-5 text-gray-600"></i>
                 <span>标签管理</span>
             </a>
             <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-check-circle w-5 text-text-secondary"></i>
+                <i class="fas fa-check-circle w-5 text-gray-600"></i>
                 <span>审核中心</span>
             </a>
             <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-paper-plane w-5 text-text-secondary"></i>
+                <i class="fas fa-paper-plane w-5 text-gray-600"></i>
                 <span>发布管理</span>
             </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">资源中心</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
             <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-images w-5 text-text-secondary"></i>
+                <i class="fas fa-images w-5 text-gray-600"></i>
                 <span>图片管理</span>
             </a>
             <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-open w-5 text-text-secondary"></i>
+                <i class="fas fa-folder-open w-5 text-gray-600"></i>
                 <span>文件管理</span>
             </a>
             <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-video w-5 text-text-secondary"></i>
+                <i class="fas fa-video w-5 text-gray-600"></i>
                 <span>视频管理</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">数据分析</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
             <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
                 <span>数据概览</span>
             </a>
             <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-text-secondary"></i>
+                <i class="fas fa-chart-line w-5 text-gray-600"></i>
                 <span>内容分析</span>
             </a>
 
-            <div class="px-4 mt-6 mb-2 text-xs text-text-muted uppercase tracking-wider">系统管理</div>
+            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
             <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-users-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-users-cog w-5 text-gray-600"></i>
                 <span>用户管理</span>
             </a>
             <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-shield-alt w-5 text-text-secondary"></i>
+                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
                 <span>角色权限</span>
             </a>
             <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-cog w-5 text-text-secondary"></i>
+                <i class="fas fa-cog w-5 text-gray-600"></i>
                 <span>系统设置</span>
             </a>
         </nav>
@@ -151,21 +151,21 @@
 
     <main class="ml-[220px] mt-16">
         <!-- 顶部操作栏 -->
-        <div class="bg-card-bg border-b border-border-dark px-6 py-4">
+        <div class="bg-card-bg border-b border-[#E2E8F0] px-6 py-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                    <a href="system-role.html" class="flex items-center gap-2 text-text-secondary hover:text-text-primary transition-colors">
+                    <a href="system-role.html" class="flex items-center gap-2 text-gray-600 hover:text-white transition-colors">
                         <i class="fas fa-arrow-left"></i>
                         <span>返回角色列表</span>
                     </a>
                     <div class="w-px h-6 bg-border-dark"></div>
                     <div>
                         <h1 class="text-xl font-semibold">权限配置</h1>
-                        <p class="text-sm text-text-muted mt-0.5">为角色分配功能权限</p>
+                        <p class="text-sm text-gray-500 mt-0.5">为角色分配功能权限</p>
                     </div>
                 </div>
                 <div class="flex items-center gap-3">
-                    <button onclick="resetPermissions()" class="px-4 py-2 border border-border-dark rounded-xl text-text-secondary hover:text-text-primary hover:border-accent-blue transition-colors">
+                    <button onclick="resetPermissions()" class="px-4 py-2 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white hover:border-accent-blue transition-colors">
                         <i class="fas fa-undo mr-2"></i>重置
                     </button>
                     <button onclick="savePermissions()" class="px-5 py-2 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
@@ -176,7 +176,7 @@
         </div>
 
         <!-- 角色信息卡片 -->
-        <div class="px-6 py-4 bg-card-bg/50 border-b border-border-dark">
+        <div class="px-6 py-4 bg-card-bg/50 border-b border-[#E2E8F0]">
             <div class="flex items-center gap-6">
                 <div class="flex items-center gap-3">
                     <div id="roleIcon" class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
@@ -184,21 +184,21 @@
                     </div>
                     <div>
                         <div id="roleName" class="text-lg font-medium">角色名称</div>
-                        <div id="roleCode" class="text-sm text-text-muted">role_code</div>
+                        <div id="roleCode" class="text-sm text-gray-500">role_code</div>
                     </div>
                 </div>
                 <div class="w-px h-10 bg-border-dark"></div>
                 <div>
-                    <div class="text-sm text-text-muted">角色描述</div>
+                    <div class="text-sm text-gray-500">角色描述</div>
                     <div id="roleDesc" class="text-sm mt-0.5">角色描述信息</div>
                 </div>
                 <div class="w-px h-10 bg-border-dark"></div>
                 <div>
-                    <div class="text-sm text-text-muted">用户数</div>
+                    <div class="text-sm text-gray-500">用户数</div>
                     <div id="userCount" class="text-sm font-medium mt-0.5">0</div>
                 </div>
                 <div class="flex-1"></div>
-                <div class="text-sm text-text-muted">
+                <div class="text-sm text-gray-500">
                     已选 <span id="selectedCount" class="text-accent-blue font-medium">0</span> 项权限
                 </div>
             </div>
@@ -206,9 +206,9 @@
 
         <!-- 权限配置表格 -->
         <div class="p-6">
-            <div class="bg-card-bg rounded-xl border border-border-dark overflow-hidden">
+            <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
                 <!-- 表头 -->
-                <div class="flex items-center bg-primary-bg/50 px-6 py-3 text-sm text-text-muted font-medium border-b border-border-dark">
+                <div class="flex items-center bg-primary-bg/50 px-6 py-3 text-sm text-gray-500 font-medium border-b border-[#E2E8F0]">
                     <div class="w-[120px]">分类</div>
                     <div class="w-[180px]">功能菜单</div>
                     <div class="flex-1">按钮权限</div>
@@ -228,12 +228,12 @@
 
     <!-- 保存成功弹窗 -->
     <div id="successModal" class="fixed inset-0 bg-black/50 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl p-8 border border-border-dark shadow-2xl text-center">
+        <div class="bg-card-bg rounded-2xl p-8 border border-[#E2E8F0] shadow-2xl text-center">
             <div class="w-16 h-16 rounded-full bg-accent-green/20 flex items-center justify-center mx-auto mb-4">
                 <i class="fas fa-check text-accent-green text-2xl"></i>
             </div>
             <h3 class="text-lg font-medium mb-2">保存成功</h3>
-            <p class="text-sm text-text-muted mb-6">权限配置已更新</p>
+            <p class="text-sm text-gray-500 mb-6">权限配置已更新</p>
             <button onclick="closeSuccessModal()" class="px-6 py-2 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
                 确定
             </button>
@@ -625,8 +625,8 @@
                 const categoryRowspan = category.menus.reduce((sum, m) => sum + m.buttons.length, 0) + category.menus.length - 1;
 
                 html += `
-                <div class="flex category-row border-b border-border-dark">
-                    <div class="w-[120px] py-3 px-4 flex items-center border-r border-border-dark">
+                <div class="flex category-row border-b border-[#E2E8F0]">
+                    <div class="w-[120px] py-3 px-4 flex items-center border-r border-[#E2E8F0]">
                         <div class="w-8 h-8 rounded-lg bg-${category.color}/20 flex items-center justify-center mr-3">
                             <i class="fas fa-${category.icon} text-${category.color}"></i>
                         </div>
@@ -638,11 +638,11 @@
                             const isMenuSelected = isMenuAllSelected(catKey, menu.key);
 
                             return `
-                            <div class="flex items-start border-b border-border-dark/50 ${menuIdx === category.menus.length - 1 ? 'border-b-0' : ''}">
-                                <div class="w-[180px] py-2 px-4 flex items-center gap-2 border-r border-border-dark/50">
+                            <div class="flex items-start border-b border-[#E2E8F0]/50 ${menuIdx === category.menus.length - 1 ? 'border-b-0' : ''}">
+                                <div class="w-[180px] py-2 px-4 flex items-center gap-2 border-r border-[#E2E8F0]/50">
                                     <label class="flex items-center gap-2 cursor-pointer flex-shrink-0">
                                         <input type="checkbox"
-                                            class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue menu-checkbox"
+                                            class="w-4 h-4 rounded border-[#E2E8F0] bg-primary-bg accent-accent-blue menu-checkbox"
                                             data-category="${catKey}"
                                             data-menu="${menu.key}"
                                             ${isMenuSelected ? 'checked' : ''}
@@ -655,7 +655,7 @@
                                         const btnKey = `${catKey}.${menu.key}.${btn.key}`;
                                         const isSelected = selectedPermissions.includes(btnKey);
                                         return `
-                                        <span class="permission-tag px-3 py-1.5 rounded-lg border border-border-dark text-sm ${isSelected ? 'selected' : 'text-text-secondary'}"
+                                        <span class="permission-tag px-3 py-1.5 rounded-lg border border-[#E2E8F0] text-sm ${isSelected ? 'selected' : 'text-gray-600'}"
                                             data-key="${btnKey}"
                                             onclick="togglePermission('${btnKey}', this)">
                                             <i class="fas fa-${isSelected ? '-check-square' : 'square'} mr-1"></i>
@@ -664,10 +664,10 @@
                                         `;
                                     }).join('')}
                                 </div>
-                                <div class="w-[80px] py-2 flex items-center justify-center border-l border-border-dark/50">
+                                <div class="w-[80px] py-2 flex items-center justify-center border-l border-[#1a2744]/50">
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="checkbox"
-                                            class="w-4 h-4 rounded border-border-dark bg-primary-bg accent-accent-blue select-all-checkbox"
+                                            class="w-4 h-4 rounded border-[#E2E8F0] bg-primary-bg accent-accent-blue select-all-checkbox"
                                             data-category="${catKey}"
                                             data-menu="${menu.key}"
                                             ${isMenuSelected ? 'checked' : ''}
