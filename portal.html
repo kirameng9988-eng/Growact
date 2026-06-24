@@ -103,23 +103,26 @@
      *  - section: 所属一级菜单
      * ========================================================================= */
     const pageMap = {
-        // 工作台
-        dashboard:           { url: 'dashboard.html',                title: '工作台',         section: '工作台' },
+        // 首页（原工作台）
+        dashboard:           { url: 'dashboard.html',                title: '首页',           section: '首页' },
 
-        // 活动运营
+        // 活动运营（5 项核心菜单）
         activityManage:      { url: 'activity-list.html',            title: '活动管理',       section: '活动运营' },
-        activityCategory:    { url: 'activity-category.html',        title: '活动分类',       section: '活动运营' },
-        activityTag:         { url: 'content-tag.html',              title: '活动标签',       section: '活动运营' },
         activityReview:      { url: 'content-review.html',           title: '活动审核',       section: '活动运营' },
         activityPublish:     { url: 'content-publish.html',          title: '活动发布',       section: '活动运营' },
         activityRegister:    { url: 'activity-registration.html',    title: '报名管理',       section: '活动运营' },
         activitySign:        { url: 'activity-signin.html',          title: '活动签到',       section: '活动运营' },
+        // 活动运营下保留的辅助入口（菜单不展示，但 hash 可直达）
         activitySignList:    { url: 'activity-signin-list.html',     title: '签到列表',       section: '活动运营' },
         activitySignStats:   { url: 'activity-signin-stats.html',    title: '签到统计',       section: '活动运营' },
         activitySignFullscreen: { url: 'activity-signin-fullscreen.html', title: '签到大屏',  section: '活动运营' },
-        activityPortalConfig:{ url: 'zone-config.html',              title: '活动专区配置',   section: '活动运营' },
-        activityHotConfig:   { url: 'hot-activity-config.html',      title: '热门活动配置',   section: '活动运营' },
         activityStats:       { url: 'activity-stats.html',           title: '活动统计',       section: '活动运营' },
+
+        // 运营配置
+        activityCategory:    { url: 'activity-category.html',        title: '活动分类',       section: '运营配置' },
+        activityTag:         { url: 'content-tag.html',              title: '活动标签',       section: '运营配置' },
+        activityPortalConfig:{ url: 'zone-config.html',              title: '专区配置',       section: '运营配置' },
+        activityHotConfig:   { url: 'hot-activity-config.html',      title: '热门活动配置',   section: '运营配置' },
 
         // 资源中心
         imageManage:         { url: 'resource-image.html',           title: '图片管理',       section: '资源中心' },
@@ -127,7 +130,7 @@
         videoManage:         { url: 'resource-video.html',           title: '视频管理',       section: '资源中心' },
         resourcePicker:      { url: 'resource-picker.html',          title: '资源选择器',     section: '资源中心' },
 
-        // 数据分析
+        // 数据分析（已下线，hash 仍可直达，菜单不再展示）
         dataOverview:        { url: 'data-overview.html',            title: '数据概览',       section: '数据分析' },
         activityAnalysis:    { url: 'data-content.html',             title: '活动分析',       section: '数据分析' },
 
@@ -166,18 +169,18 @@
     };
 
     /* =========================================================================
-     * 菜单配置（重组后的最终结构）
-     *  - 内容中心已合并到活动运营
-     *  - 标签管理 → 活动标签
-     *  - 审核中心 → 活动审核
-     *  - 发布管理 → 活动发布
+     * 菜单配置（v0.5 优化版）
+     *  - 工作台 → 首页（仅菜单名变更）
+     *  - 活动运营：精简为 5 项核心菜单（管理/审核/发布/报名/签到）
+     *  - 新增 运营配置 一级菜单（活动分类/活动标签/专区配置）
+     *  - 删除整个 数据分析 模块
      * ========================================================================= */
     const menuConfig = [
         {
             key: 'dashboard',
-            section: '工作台',
+            section: '首页',
             icon: 'fas fa-th-large',
-            label: '工作台',
+            label: '首页',
             children: null
         },
         {
@@ -186,15 +189,22 @@
             icon: 'fas fa-calendar-alt',
             label: '活动运营',
             children: [
-                { key: 'activityManage',       icon: 'fas fa-list',            label: '活动管理' },
-                { key: 'activityCategory',     icon: 'fas fa-folder-open',     label: '活动分类' },
-                { key: 'activityTag',          icon: 'fas fa-tags',            label: '活动标签' },
-                { key: 'activityReview',       icon: 'fas fa-clipboard-check', label: '活动审核', badge: 5 },
-                { key: 'activityPublish',      icon: 'fas fa-paper-plane',     label: '活动发布' },
-                { key: 'activityRegister',     icon: 'fas fa-users',           label: '报名管理' },
-                { key: 'activitySign',         icon: 'fas fa-qrcode',          label: '活动签到' },
-                { key: 'activityPortalConfig', icon: 'fas fa-cog',             label: '活动专区配置' },
-                { key: 'activityStats',        icon: 'fas fa-chart-line',      label: '活动统计' }
+                { key: 'activityManage',   icon: 'fas fa-list',            label: '活动管理' },
+                { key: 'activityReview',   icon: 'fas fa-clipboard-check', label: '活动审核', badge: 5 },
+                { key: 'activityPublish',  icon: 'fas fa-paper-plane',     label: '活动发布' },
+                { key: 'activityRegister', icon: 'fas fa-users',           label: '报名管理' },
+                { key: 'activitySign',     icon: 'fas fa-qrcode',          label: '活动签到' }
+            ]
+        },
+        {
+            key: 'operation',
+            section: '运营配置',
+            icon: 'fas fa-sliders-h',
+            label: '运营配置',
+            children: [
+                { key: 'activityCategory',     icon: 'fas fa-folder-open', label: '活动分类' },
+                { key: 'activityTag',          icon: 'fas fa-tags',        label: '活动标签' },
+                { key: 'activityPortalConfig', icon: 'fas fa-cog',         label: '专区配置' }
             ]
         },
         {
@@ -206,16 +216,6 @@
                 { key: 'imageManage', icon: 'fas fa-image',       label: '图片管理' },
                 { key: 'fileManage',  icon: 'fas fa-folder-open', label: '文件管理' },
                 { key: 'videoManage', icon: 'fas fa-video',       label: '视频管理' }
-            ]
-        },
-        {
-            key: 'data',
-            section: '数据分析',
-            icon: 'fas fa-chart-pie',
-            label: '数据分析',
-            children: [
-                { key: 'dataOverview',     icon: 'fas fa-chart-pie',  label: '数据概览' },
-                { key: 'activityAnalysis', icon: 'fas fa-chart-line', label: '活动分析' }
             ]
         },
         {
@@ -238,7 +238,7 @@
     const STORAGE_KEY = 'portal_state_v1';
     const defaultState = {
         currentPage: 'dashboard',
-        expandedGroups: ['activity', 'resource', 'data', 'system']  // 默认展开所有分组
+        expandedGroups: ['activity', 'operation', 'resource', 'system']  // 默认展开所有分组
     };
 
     function loadState() {
@@ -398,10 +398,20 @@
 
     /* =========================================================================
      * 面包屑
+     *  - 特殊处理：当页面就是"首页"（dashboard）时，只显示一个当前指示项
      * ========================================================================= */
     function renderBreadcrumb(page) {
         const bc = document.getElementById('breadcrumb');
         bc.innerHTML = '';
+
+        // 当访问的就是首页（dashboard），避免显示『首页 / 首页 / 首页』
+        if (page.key === 'dashboard' || page.section === '首页') {
+            const current = document.createElement('span');
+            current.className = 'breadcrumb-item text-gray-700 font-medium';
+            current.textContent = '首页';
+            bc.appendChild(current);
+            return;
+        }
 
         const home = document.createElement('a');
         home.href = '#/dashboard';

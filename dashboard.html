@@ -3,9 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>内容中台系统 - 工作台</title>
+    <title>活动运营驾驶舱 - 内容服务平台</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -35,17 +36,11 @@
         * { font-family: 'PingFang SC', 'Microsoft YaHei', 'Inter', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #F1F5F9; }
-        ::-webkit-scrollbar-thumb { background: #F8FAFC; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-        .nav-item:hover .nav-indicator { width: 100%; }
-        .nav-indicator { transition: width 0.3s; }
-        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(10, 97, 255, 0.12); }
         .card-hover { transition: all 0.3s; }
-        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
-        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
-        .sidebar-menu-item.active i { color: #0A61FF; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(10, 97, 255, 0.12); }
         .table-row:hover { background: #F8FAFC; }
-        .glow-box { box-shadow: 0 0 40px rgba(10, 97, 255, 0.08); }
         .stat-card::before {
             content: '';
             position: absolute;
@@ -55,6 +50,17 @@
             height: 100px;
             background: radial-gradient(circle, rgba(10, 97, 255, 0.08) 0%, transparent 70%);
             pointer-events: none;
+        }
+        .glow { box-shadow: 0 0 30px rgba(10, 97, 255, 0.2); }
+        .glow-green { box-shadow: 0 0 30px rgba(5, 150, 105, 0.2); }
+        .glow-amber { box-shadow: 0 0 30px rgba(217, 119, 6, 0.2); }
+        .glow-cyan { box-shadow: 0 0 30px rgba(8, 145, 178, 0.2); }
+        .chart-container { position: relative; height: 280px; }
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(10, 97, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(10, 97, 255, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
         }
     </style>
 </head>
@@ -66,326 +72,434 @@
         <div class="bg-gradient-to-r from-accent-blue/10 via-accent-cyan/5 to-transparent rounded-2xl p-6 mb-6 border border-accent-blue/20 relative overflow-hidden">
             <div class="absolute top-0 right-0 w-64 h-64 bg-accent-blue/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2"></div>
             <div class="relative z-10">
-                <h1 class="text-2xl font-semibold mb-2">早上好，张明远 👋</h1>
-                <p class="text-gray-600">今日内容发布量较昨日增长 <span class="text-accent-green font-medium">12.5%</span>，继续保持！</p>
+                <h1 class="text-2xl font-semibold mb-2">活动运营驾驶舱 👋</h1>
+                <p class="text-gray-600">今日报名人数较昨日增长 <span class="text-accent-green font-medium">28.5%</span>，活动热度持续攀升！</p>
             </div>
         </div>
 
-        <!-- 统计卡片 -->
+        <!-- 核心指标卡（4 个）-->
         <div class="grid grid-cols-4 gap-5 mb-6">
-            <div class="stat-card card-hover bg-white rounded-xl p-5 border border-[#E2E8F0] relative overflow-hidden cursor-pointer">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
-                        <i class="fas fa-file-alt text-accent-blue text-xl"></i>
+            <!-- 活动总数 -->
+            <div class="stat-card card-hover bg-gradient-to-br from-[#0A61FF] to-[#0055FF] rounded-2xl p-5 text-white relative overflow-hidden glow">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-calendar-alt text-2xl"></i>
+                        </div>
+                        <span class="text-xs bg-white/20 px-2 py-1 rounded-full">全部</span>
                     </div>
-                    <span class="text-accent-green text-sm font-medium flex items-center gap-1">
-                        <i class="fas fa-arrow-up text-xs"></i> 12.5%
-                    </span>
+                    <p class="text-3xl font-bold mb-1">48</p>
+                    <p class="text-white/80 text-sm">活动总数</p>
+                    <div class="flex items-center gap-1 mt-2 text-xs text-green-300">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>较上月 +12%</span>
+                    </div>
                 </div>
-                <div class="text-3xl font-bold mb-1">2,847</div>
-                <div class="text-gray-500 text-sm">内容总量</div>
             </div>
-            <div class="stat-card card-hover bg-white rounded-xl p-5 border border-[#E2E8F0] relative overflow-hidden cursor-pointer">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-accent-cyan/20 flex items-center justify-center">
-                        <i class="fas fa-eye text-accent-cyan text-xl"></i>
+
+            <!-- 报名人数 -->
+            <div class="stat-card card-hover bg-gradient-to-br from-[#059669] to-[#047857] rounded-2xl p-5 text-white relative overflow-hidden glow-green">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-users text-2xl"></i>
+                        </div>
+                        <span class="text-xs bg-white/20 px-2 py-1 rounded-full">累计</span>
                     </div>
-                    <span class="text-accent-green text-sm font-medium flex items-center gap-1">
-                        <i class="fas fa-arrow-up text-xs"></i> 8.3%
-                    </span>
+                    <p class="text-3xl font-bold mb-1">2,847</p>
+                    <p class="text-white/80 text-sm">报名人数</p>
+                    <div class="flex items-center gap-1 mt-2 text-xs text-green-300">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>较上月 +28%</span>
+                    </div>
                 </div>
-                <div class="text-3xl font-bold mb-1">158.6万</div>
-                <div class="text-gray-500 text-sm">总阅读量</div>
             </div>
-            <div class="stat-card card-hover bg-white rounded-xl p-5 border border-[#E2E8F0] relative overflow-hidden cursor-pointer">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-accent-amber/20 flex items-center justify-center">
-                        <i class="fas fa-clock text-accent-amber text-xl"></i>
+
+            <!-- 签到人数 -->
+            <div class="stat-card card-hover bg-gradient-to-br from-[#0891B2] to-[#0E7490] rounded-2xl p-5 text-white relative overflow-hidden glow-cyan">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-qrcode text-2xl"></i>
+                        </div>
+                        <span class="text-xs bg-white/20 px-2 py-1 rounded-full">已签到</span>
                     </div>
-                    <span class="text-accent-red text-sm font-medium flex items-center gap-1">
-                        <i class="fas fa-arrow-down text-xs"></i> 3.2%
-                    </span>
+                    <p class="text-3xl font-bold mb-1">1,892</p>
+                    <p class="text-white/80 text-sm">签到人数</p>
+                    <div class="flex items-center gap-1 mt-2 text-xs text-cyan-300">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>较上月 +22%</span>
+                    </div>
                 </div>
-                <div class="text-3xl font-bold mb-1">12</div>
-                <div class="text-gray-500 text-sm">待审核</div>
             </div>
-            <div class="stat-card card-hover bg-white rounded-xl p-5 border border-[#E2E8F0] relative overflow-hidden cursor-pointer">
-                <div class="flex items-center justify-between mb-4">
-                    <div class="w-12 h-12 rounded-xl bg-accent-green/20 flex items-center justify-center">
-                        <i class="fas fa-paper-plane text-accent-green text-xl"></i>
+
+            <!-- 活动参与率 -->
+            <div class="stat-card card-hover bg-gradient-to-br from-[#D97706] to-[#B45309] rounded-2xl p-5 text-white relative overflow-hidden glow-amber">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                            <i class="fas fa-percentage text-2xl"></i>
+                        </div>
+                        <span class="text-xs bg-white/20 px-2 py-1 rounded-full">转化</span>
                     </div>
-                    <span class="text-accent-green text-sm font-medium flex items-center gap-1">
-                        <i class="fas fa-arrow-up text-xs"></i> 15.8%
-                    </span>
+                    <p class="text-3xl font-bold mb-1">66.5%</p>
+                    <p class="text-white/80 text-sm">活动参与率</p>
+                    <div class="flex items-center gap-1 mt-2 text-xs text-yellow-300">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>较上月 +5.2%</span>
+                    </div>
                 </div>
-                <div class="text-3xl font-bold mb-1">486</div>
-                <div class="text-gray-500 text-sm">本月发布</div>
             </div>
         </div>
 
-        <!-- 图表与列表 -->
+        <!-- 活动趋势 + 报名趋势（迁移自 activity-stats.html）-->
+        <div class="grid grid-cols-2 gap-5 mb-6">
+            <!-- 活动趋势图 -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 relative overflow-hidden">
+                <div class="absolute inset-0 grid-bg opacity-50"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">活动趋势</h3>
+                            <p class="text-sm text-gray-500 mt-1">每月新增活动数量</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="flex items-center gap-1 text-xs text-accent-blue"><span class="w-3 h-3 rounded bg-accent-blue"></span>活动数</span>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="activityTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 报名趋势图 -->
+            <div class="bg-white rounded-2xl border border-[#E2E8F0] p-5 relative overflow-hidden">
+                <div class="absolute inset-0 grid-bg opacity-50"></div>
+                <div class="relative">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900">报名趋势</h3>
+                            <p class="text-sm text-gray-500 mt-1">每月新增报名人数</p>
+                        </div>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="registrationTrendChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 待审核报名 + 待发布活动 + 热门活动排行 -->
         <div class="grid grid-cols-3 gap-5 mb-6">
-            <!-- 内容趋势图 -->
-            <div class="col-span-2 bg-white rounded-xl p-5 border border-[#E2E8F0]">
-                <div class="flex items-center justify-between mb-6">
-                    <div>
-                        <h3 class="text-lg font-medium">内容发布趋势</h3>
-                        <p class="text-gray-500 text-sm mt-1">近30天内容发布数据</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button class="px-4 py-2 bg-accent-blue/20 text-accent-blue rounded-lg text-sm">本周</button>
-                        <button class="px-4 py-2 text-gray-500 hover:text-white text-sm transition-colors">本月</button>
-                        <button class="px-4 py-2 text-gray-500 hover:text-white text-sm transition-colors">本年</button>
-                    </div>
+            <!-- 待审核报名 -->
+            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0]">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium">待审核报名</h3>
+                    <a href="#" onclick="goActivityRegister(); return false;" class="text-accent-blue text-sm hover:underline">查看全部 <i class="fas fa-arrow-right ml-1"></i></a>
                 </div>
-                <div class="h-64 flex items-end gap-2">
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 45%"></div>
-                        <span class="text-gray-500 text-xs">1日</span>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-accent-blue to-cyan-500 flex items-center justify-center text-white text-sm font-medium">张</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">张明远 报名「数据开放创新应用大赛」</p>
+                            <p class="text-xs text-gray-500 mt-0.5">10:23 · 待审核</p>
+                        </div>
+                        <button class="text-accent-blue text-xs hover:text-accent-cyan mr-2">通过</button>
+                        <button class="text-accent-red text-xs hover:text-red-400">拒绝</button>
                     </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 60%"></div>
-                        <span class="text-gray-500 text-xs">2日</span>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-accent-green to-emerald-500 flex items-center justify-center text-white text-sm font-medium">李</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">李晓华 报名「可信数据空间建设研讨会」</p>
+                            <p class="text-xs text-gray-500 mt-0.5">09:45 · 待审核</p>
+                        </div>
+                        <button class="text-accent-blue text-xs hover:text-accent-cyan mr-2">通过</button>
+                        <button class="text-accent-red text-xs hover:text-red-400">拒绝</button>
                     </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 35%"></div>
-                        <span class="text-gray-500 text-xs">3日</span>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-accent-amber to-orange-500 flex items-center justify-center text-white text-sm font-medium">王</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">王建国 报名「数据资产入表与评估培训」</p>
+                            <p class="text-xs text-gray-500 mt-0.5">09:12 · 待审核</p>
+                        </div>
+                        <button class="text-accent-blue text-xs hover:text-accent-cyan mr-2">通过</button>
+                        <button class="text-accent-red text-xs hover:text-red-400">拒绝</button>
                     </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 55%"></div>
-                        <span class="text-gray-500 text-xs">4日</span>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-accent-cyan to-teal-500 flex items-center justify-center text-white text-sm font-medium">陈</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">陈思远 报名「公共数据开放案例分享会」</p>
+                            <p class="text-xs text-gray-500 mt-0.5">08:56 · 待审核</p>
+                        </div>
+                        <button class="text-accent-blue text-xs hover:text-accent-cyan mr-2">通过</button>
+                        <button class="text-accent-red text-xs hover:text-red-400">拒绝</button>
                     </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 70%"></div>
-                        <span class="text-gray-500 text-xs">5日</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 85%"></div>
-                        <span class="text-gray-500 text-xs">6日</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 50%"></div>
-                        <span class="text-gray-500 text-xs">7日</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 65%"></div>
-                        <span class="text-gray-500 text-xs">8日</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 40%"></div>
-                        <span class="text-gray-500 text-xs">9日</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 75%"></div>
-                        <span class="text-gray-500 text-xs">10日</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 55%"></div>
-                        <span class="text-gray-500 text-xs">11日</span>
-                    </div>
-                    <div class="flex-1 flex flex-col items-center gap-2">
-                        <div class="w-full bg-gradient-to-t from-accent-blue to-accent-cyan rounded-t-lg transition-all hover:opacity-80" style="height: 80%"></div>
-                        <span class="text-gray-500 text-xs">12日</span>
+                    <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                        <div class="w-9 h-9 rounded-full bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center text-white text-sm font-medium">周</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">周明杰 报名「2024 数字化转型高峰论坛」</p>
+                            <p class="text-xs text-gray-500 mt-0.5">08:30 · 待审核</p>
+                        </div>
+                        <button class="text-accent-blue text-xs hover:text-accent-cyan mr-2">通过</button>
+                        <button class="text-accent-red text-xs hover:text-red-400">拒绝</button>
                     </div>
                 </div>
             </div>
 
-            <!-- 快捷操作 -->
+            <!-- 待发布活动 -->
             <div class="bg-white rounded-xl p-5 border border-[#E2E8F0]">
-                <h3 class="text-lg font-medium mb-4">快捷操作</h3>
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium">待发布活动</h3>
+                    <a href="#" onclick="goActivityPublish(); return false;" class="text-accent-blue text-sm hover:underline">查看全部 <i class="fas fa-arrow-right ml-1"></i></a>
+                </div>
                 <div class="space-y-3">
-                    <button onclick="location.href='content-list.html'" class="w-full flex items-center gap-4 p-4 bg-white rounded-xl hover:bg-gray-100 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-accent-blue/20 flex items-center justify-center">
-                            <i class="fas fa-plus text-accent-blue"></i>
+                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 bg-amber-200 text-amber-800 text-xs rounded">待发布</span>
+                            <span class="text-xs text-gray-500">12-25 截止报名</span>
                         </div>
-                        <div class="flex-1 text-left">
-                            <div class="text-sm font-medium">创建内容</div>
-                            <div class="text-xs text-gray-500">新建文章或资讯</div>
+                        <p class="text-sm font-medium text-gray-900">2024 数据要素流通大会</p>
+                        <p class="text-xs text-gray-500 mt-1">科技创新 · 预计 200 人</p>
+                    </div>
+                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 bg-amber-200 text-amber-800 text-xs rounded">待发布</span>
+                            <span class="text-xs text-gray-500">12-28 截止报名</span>
                         </div>
-                        <i class="fas fa-arrow-right text-gray-500 group-hover:text-accent-blue transition-colors"></i>
-                    </button>
-                    <button onclick="location.href='content-review.html'" class="w-full flex items-center gap-4 p-4 bg-white rounded-xl hover:bg-gray-100 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-accent-amber/20 flex items-center justify-center">
-                            <i class="fas fa-clipboard-check text-accent-amber"></i>
+                        <p class="text-sm font-medium text-gray-900">AI 大模型行业应用研讨会</p>
+                        <p class="text-xs text-gray-500 mt-1">教育培训 · 预计 150 人</p>
+                    </div>
+                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 bg-amber-200 text-amber-800 text-xs rounded">待发布</span>
+                            <span class="text-xs text-gray-500">01-05 截止报名</span>
                         </div>
-                        <div class="flex-1 text-left">
-                            <div class="text-sm font-medium">审核内容</div>
-                            <div class="text-xs text-gray-500">待处理 12 条</div>
+                        <p class="text-sm font-medium text-gray-900">企业数字化转型案例沙龙</p>
+                        <p class="text-xs text-gray-500 mt-1">文化活动 · 预计 80 人</p>
+                    </div>
+                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 bg-amber-200 text-amber-800 text-xs rounded">待发布</span>
+                            <span class="text-xs text-gray-500">01-10 截止报名</span>
                         </div>
-                        <i class="fas fa-arrow-right text-gray-500 group-hover:text-accent-blue transition-colors"></i>
-                    </button>
-                    <button onclick="location.href='portal-home.html'" class="w-full flex items-center gap-4 p-4 bg-white rounded-xl hover:bg-gray-100 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-accent-green/20 flex items-center justify-center">
-                            <i class="fas fa-magic text-accent-green"></i>
+                        <p class="text-sm font-medium text-gray-900">2025 元宇宙产业发展论坛</p>
+                        <p class="text-xs text-gray-500 mt-1">科技创新 · 预计 300 人</p>
+                    </div>
+                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="px-2 py-0.5 bg-amber-200 text-amber-800 text-xs rounded">待发布</span>
+                            <span class="text-xs text-gray-500">01-15 截止报名</span>
                         </div>
-                        <div class="flex-1 text-left">
-                            <div class="text-sm font-medium">页面装修</div>
-                            <div class="text-xs text-gray-500">可视化编辑首页</div>
+                        <p class="text-sm font-medium text-gray-900">数据安全与隐私保护培训</p>
+                        <p class="text-xs text-gray-500 mt-1">教育培训 · 预计 100 人</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 热门活动排行（迁移自 activity-stats.html）-->
+            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0]">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-lg font-medium">热门活动排行</h3>
+                        <p class="text-xs text-gray-500 mt-1">报名人数最多的活动</p>
+                    </div>
+                </div>
+                <div class="space-y-3">
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-blue to-cyan-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">1</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">2024 数字化转型高峰论坛</p>
+                            <p class="text-xs text-gray-500">科技创新 · 328 人报名</p>
                         </div>
-                        <i class="fas fa-arrow-right text-gray-500 group-hover:text-accent-blue transition-colors"></i>
-                    </button>
-                    <button onclick="location.href='data-overview.html'" class="w-full flex items-center gap-4 p-4 bg-white rounded-xl hover:bg-gray-100 transition-colors group">
-                        <div class="w-10 h-10 rounded-lg bg-accent-cyan/20 flex items-center justify-center">
-                            <i class="fas fa-chart-bar text-accent-cyan"></i>
+                        <div class="flex items-center gap-1 text-accent-red flex-shrink-0">
+                            <i class="fas fa-fire text-xs"></i>
+                            <span class="text-xs font-medium">98%</span>
                         </div>
-                        <div class="flex-1 text-left">
-                            <div class="text-sm font-medium">数据分析</div>
-                            <div class="text-xs text-gray-500">查看内容报表</div>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-green to-emerald-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">2</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">数据开放创新应用大赛</p>
+                            <p class="text-xs text-gray-500">科技创新 · 256 人报名</p>
                         </div>
-                        <i class="fas fa-arrow-right text-gray-500 group-hover:text-accent-blue transition-colors"></i>
-                    </button>
+                        <div class="flex items-center gap-1 text-accent-amber flex-shrink-0">
+                            <i class="fas fa-fire text-xs"></i>
+                            <span class="text-xs font-medium">92%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-amber to-orange-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">3</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">企业文化创意大赛</p>
+                            <p class="text-xs text-gray-500">文化活动 · 156 人报名</p>
+                        </div>
+                        <div class="flex items-center gap-1 text-accent-amber flex-shrink-0">
+                            <i class="fas fa-fire text-xs"></i>
+                            <span class="text-xs font-medium">78%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-accent-cyan to-teal-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">4</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">数据分析技能培训</p>
+                            <p class="text-xs text-gray-500">教育培训 · 65 人报名</p>
+                        </div>
+                        <div class="flex items-center gap-1 text-gray-400 flex-shrink-0">
+                            <i class="fas fa-fire text-xs"></i>
+                            <span class="text-xs font-medium">81%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-500 to-violet-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">5</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">端午龙舟赛</p>
+                            <p class="text-xs text-gray-500">体育运动 · 120 人报名</p>
+                        </div>
+                        <div class="flex items-center gap-1 text-gray-400 flex-shrink-0">
+                            <i class="fas fa-fire text-xs"></i>
+                            <span class="text-xs font-medium">80%</span>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">6</div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-900 truncate">新员工入职培训</p>
+                            <p class="text-xs text-gray-500">教育培训 · 45 人报名</p>
+                        </div>
+                        <div class="flex items-center gap-1 text-gray-400 flex-shrink-0">
+                            <i class="fas fa-fire text-xs"></i>
+                            <span class="text-xs font-medium">76%</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- 待审核与活动时间线 -->
-        <div class="grid grid-cols-3 gap-5">
-            <!-- 待审核列表 -->
-            <div class="col-span-2 bg-white rounded-xl p-5 border border-[#E2E8F0]">
-                <div class="flex items-center justify-between mb-4">
-                    <h3 class="text-lg font-medium">待审核内容</h3>
-                    <a href="content-review.html" class="text-accent-blue text-sm hover:underline">查看全部 <i class="fas fa-arrow-right ml-1"></i></a>
-                </div>
-                <div class="overflow-x-auto">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0]">
-                                <th class="pb-3 font-medium">标题</th>
-                                <th class="pb-3 font-medium">类型</th>
-                                <th class="pb-3 font-medium">作者</th>
-                                <th class="pb-3 font-medium">提交时间</th>
-                                <th class="pb-3 font-medium">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="table-row border-b border-[#E2E8F0]/50 transition-colors">
-                                <td class="py-3 text-sm">关于开展2024年度工作总结的通知</td>
-                                <td class="py-3"><span class="px-2 py-1 bg-accent-blue/20 text-accent-blue text-xs rounded">公告</span></td>
-                                <td class="py-3 text-sm text-gray-600">李晓华</td>
-                                <td class="py-3 text-sm text-gray-500">10:23</td>
-                                <td class="py-3">
-                                    <button class="text-accent-blue hover:text-accent-cyan text-sm mr-3">通过</button>
-                                    <button class="text-accent-red hover:text-red-400 text-sm">拒绝</button>
-                                </td>
-                            </tr>
-                            <tr class="table-row border-b border-[#E2E8F0]/50 transition-colors">
-                                <td class="py-3 text-sm">数字化转型工作进展报告</td>
-                                <td class="py-3"><span class="px-2 py-1 bg-accent-cyan/20 text-accent-cyan text-xs rounded">资讯</span></td>
-                                <td class="py-3 text-sm text-gray-600">王建国</td>
-                                <td class="py-3 text-sm text-gray-500">09:45</td>
-                                <td class="py-3">
-                                    <button class="text-accent-blue hover:text-accent-cyan text-sm mr-3">通过</button>
-                                    <button class="text-accent-red hover:text-red-400 text-sm">拒绝</button>
-                                </td>
-                            </tr>
-                            <tr class="table-row border-b border-[#E2E8F0]/50 transition-colors">
-                                <td class="py-3 text-sm">安全生产知识竞赛活动方案</td>
-                                <td class="py-3"><span class="px-2 py-1 bg-accent-amber/20 text-accent-amber text-xs rounded">专题</span></td>
-                                <td class="py-3 text-sm text-gray-600">陈思远</td>
-                                <td class="py-3 text-sm text-gray-500">09:12</td>
-                                <td class="py-3">
-                                    <button class="text-accent-blue hover:text-accent-cyan text-sm mr-3">通过</button>
-                                    <button class="text-accent-red hover:text-red-400 text-sm">拒绝</button>
-                                </td>
-                            </tr>
-                            <tr class="table-row border-b border-[#E2E8F0]/50 transition-colors">
-                                <td class="py-3 text-sm">第一季度工作规划部署会议纪要</td>
-                                <td class="py-3"><span class="px-2 py-1 bg-accent-green/20 text-accent-green text-xs rounded">文件</span></td>
-                                <td class="py-3 text-sm text-gray-600">周明杰</td>
-                                <td class="py-3 text-sm text-gray-500">08:56</td>
-                                <td class="py-3">
-                                    <button class="text-accent-blue hover:text-accent-cyan text-sm mr-3">通过</button>
-                                    <button class="text-accent-red hover:text-red-400 text-sm">拒绝</button>
-                                </td>
-                            </tr>
-                            <tr class="table-row transition-colors">
-                                <td class="py-3 text-sm">智慧城市建设成果展示</td>
-                                <td class="py-3"><span class="px-2 py-1 bg-accent-blue/10 text-accent-blue text-xs rounded">专题</span></td>
-                                <td class="py-3 text-sm text-gray-600">吴晓燕</td>
-                                <td class="py-3 text-sm text-gray-500">08:30</td>
-                                <td class="py-3">
-                                    <button class="text-accent-blue hover:text-accent-cyan text-sm mr-3">通过</button>
-                                    <button class="text-accent-red hover:text-red-400 text-sm">拒绝</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <!-- 活动时间线 -->
-            <div class="bg-white rounded-xl p-5 border border-[#E2E8F0]">
-                <h3 class="text-lg font-medium mb-4">近期活动</h3>
-                <div class="space-y-4 relative">
-                    <div class="absolute left-4 top-4 bottom-4 w-px bg-border-dark"></div>
-                    <div class="flex gap-4 relative">
-                        <div class="w-8 h-8 rounded-full bg-accent-blue flex items-center justify-center z-10 flex-shrink-0">
-                            <i class="fas fa-check text-white text-xs"></i>
-                        </div>
-                        <div>
-                            <div class="text-sm font-medium">内容发布审核通过</div>
-                            <div class="text-xs text-gray-500 mt-1">「数字化转型工作进展报告」已发布</div>
-                            <div class="text-xs text-gray-500 mt-1">10:32</div>
-                        </div>
+        <!-- 快捷操作（活动相关入口）-->
+        <div class="bg-white rounded-xl p-5 border border-[#E2E8F0]">
+            <h3 class="text-lg font-medium mb-4">快捷操作</h3>
+            <div class="grid grid-cols-4 gap-4">
+                <button onclick="goActivityManage()" class="flex items-center gap-3 p-4 bg-white border border-[#E2E8F0] rounded-xl hover:border-accent-blue hover:shadow-sm transition-all group">
+                    <div class="w-10 h-10 rounded-lg bg-accent-blue/20 flex items-center justify-center">
+                        <i class="fas fa-plus text-accent-blue"></i>
                     </div>
-                    <div class="flex gap-4 relative">
-                        <div class="w-8 h-8 rounded-full bg-accent-green flex items-center justify-center z-10 flex-shrink-0">
-                            <i class="fas fa-user-plus text-white text-xs"></i>
-                        </div>
-                        <div>
-                            <div class="text-sm font-medium">新用户注册</div>
-                            <div class="text-xs text-gray-500 mt-1">陈思远 加入了内容中台</div>
-                            <div class="text-xs text-gray-500 mt-1">09:15</div>
-                        </div>
+                    <div class="flex-1 text-left">
+                        <div class="text-sm font-medium">创建活动</div>
+                        <div class="text-xs text-gray-500">发起新活动</div>
                     </div>
-                    <div class="flex gap-4 relative">
-                        <div class="w-8 h-8 rounded-full bg-accent-amber flex items-center justify-center z-10 flex-shrink-0">
-                            <i class="fas fa-upload text-white text-xs"></i>
-                        </div>
-                        <div>
-                            <div class="text-sm font-medium">资源上传</div>
-                            <div class="text-xs text-gray-500 mt-1">李晓华 上传了 5 个图片文件</div>
-                            <div class="text-xs text-gray-500 mt-1">08:45</div>
-                        </div>
+                    <i class="fas fa-arrow-right text-gray-400 group-hover:text-accent-blue transition-colors"></i>
+                </button>
+                <button onclick="goActivityReview()" class="flex items-center gap-3 p-4 bg-white border border-[#E2E8F0] rounded-xl hover:border-accent-blue hover:shadow-sm transition-all group">
+                    <div class="w-10 h-10 rounded-lg bg-accent-amber/20 flex items-center justify-center">
+                        <i class="fas fa-clipboard-check text-accent-amber"></i>
                     </div>
-                    <div class="flex gap-4 relative">
-                        <div class="w-8 h-8 rounded-full bg-accent-cyan flex items-center justify-center z-10 flex-shrink-0">
-                            <i class="fas fa-edit text-white text-xs"></i>
-                        </div>
-                        <div>
-                            <div class="text-sm font-medium">内容更新</div>
-                            <div class="text-xs text-gray-500 mt-1">王建国 更新了「年度报告」</div>
-                            <div class="text-xs text-gray-500 mt-1">08:20</div>
-                        </div>
+                    <div class="flex-1 text-left">
+                        <div class="text-sm font-medium">活动审核</div>
+                        <div class="text-xs text-gray-500">待处理 5 条</div>
                     </div>
-                    <div class="flex gap-4 relative">
-                        <div class="w-8 h-8 rounded-full bg-purple-500 flex items-center justify-center z-10 flex-shrink-0">
-                            <i class="fas fa-star text-white text-xs"></i>
-                        </div>
-                        <div>
-                            <div class="text-sm font-medium">专题上线</div>
-                            <div class="text-xs text-gray-500 mt-1">「两会专题」已发布上线</div>
-                            <div class="text-xs text-gray-500 mt-1">昨天 17:30</div>
-                        </div>
+                    <i class="fas fa-arrow-right text-gray-400 group-hover:text-accent-blue transition-colors"></i>
+                </button>
+                <button onclick="goActivityRegister()" class="flex items-center gap-3 p-4 bg-white border border-[#E2E8F0] rounded-xl hover:border-accent-blue hover:shadow-sm transition-all group">
+                    <div class="w-10 h-10 rounded-lg bg-accent-green/20 flex items-center justify-center">
+                        <i class="fas fa-users text-accent-green"></i>
                     </div>
-                </div>
+                    <div class="flex-1 text-left">
+                        <div class="text-sm font-medium">报名管理</div>
+                        <div class="text-xs text-gray-500">查看报名数据</div>
+                    </div>
+                    <i class="fas fa-arrow-right text-gray-400 group-hover:text-accent-blue transition-colors"></i>
+                </button>
+                <button onclick="goActivitySign()" class="flex items-center gap-3 p-4 bg-white border border-[#E2E8F0] rounded-xl hover:border-accent-blue hover:shadow-sm transition-all group">
+                    <div class="w-10 h-10 rounded-lg bg-accent-cyan/20 flex items-center justify-center">
+                        <i class="fas fa-qrcode text-accent-cyan"></i>
+                    </div>
+                    <div class="flex-1 text-left">
+                        <div class="text-sm font-medium">活动签到</div>
+                        <div class="text-xs text-gray-500">扫码签到核销</div>
+                    </div>
+                    <i class="fas fa-arrow-right text-gray-400 group-hover:text-accent-blue transition-colors"></i>
+                </button>
             </div>
         </div>
     </main>
 
     <script>
-        // 模拟按钮点击反馈
-        document.querySelectorAll('button').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                if (this.classList.contains('bg-accent-blue') || this.classList.contains('bg-accent-red')) {
-                    return;
-                }
-                this.style.transform = 'scale(0.98)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 150);
-            });
+        // 跳转活动管理页面（通过 portal hash 路由，由父级拦截）
+        function goActivityManage()    { window.top.location.hash = '#/activityManage'; }
+        function goActivityReview()    { window.top.location.hash = '#/activityReview'; }
+        function goActivityRegister()  { window.top.location.hash = '#/activityRegister'; }
+        function goActivitySign()      { window.top.location.hash = '#/activitySign'; }
+        function goActivityPublish()   { window.top.location.hash = '#/activityPublish'; }
+
+        // 图表初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            initCharts();
         });
+
+        function initCharts() {
+            // 活动趋势图（折线）
+            const activityTrendCtx = document.getElementById('activityTrendChart').getContext('2d');
+            new Chart(activityTrendCtx, {
+                type: 'line',
+                data: {
+                    labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    datasets: [{
+                        label: '活动数',
+                        data: [6, 8, 12, 9, 7, 6, 10, 14, 11, 8, 9, 12],
+                        borderColor: '#0A61FF',
+                        backgroundColor: 'rgba(10, 97, 255, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#0A61FF',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 4,
+                        pointHoverRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+
+            // 报名趋势图（柱状）
+            const registrationTrendCtx = document.getElementById('registrationTrendChart').getContext('2d');
+            new Chart(registrationTrendCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+                    datasets: [{
+                        label: '报名人数',
+                        data: [420, 580, 890, 650, 380, 287, 450, 720, 980, 760, 540, 670],
+                        backgroundColor: 'rgba(5, 150, 105, 0.8)',
+                        borderColor: '#059669',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                        hoverBackgroundColor: '#059669'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(0,0,0,0.05)' } },
+                        x: { grid: { display: false } }
+                    }
+                }
+            });
+        }
     </script>
 </body>
 </html>
