@@ -35,116 +35,12 @@
         .news-card { transition: all 0.3s; }
     </style>
 </head>
-<body class="bg-secondary-bg text-gray-900 min-h-screen">
-    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
-        <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-blue to-accent-cyan flex items-center justify-center">
-                <i class="fas fa-cube text-white text-lg"></i>
-            </div>
-            <span class="text-lg font-semibold">内容中台</span>
-        </div>
-        <div class="flex-1 max-w-xl mx-8">
-            <div class="relative">
-                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                <input type="text" placeholder="搜索内容、功能..." class="w-full bg-card-bg border border-[#E2E8F0] rounded-xl pl-12 pr-4 py-2.5 text-sm focus:border-accent-blue focus:outline-none">
-            </div>
-        </div>
-        <div class="flex items-center gap-6">
-            <button class="relative text-gray-600 hover:text-white">
-                <i class="fas fa-bell text-xl"></i>
-                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
-            </button>
-            <div class="flex items-center gap-3 pl-6 border-l border-[#1a2744]">
-                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" class="w-9 h-9 rounded-full object-cover">
-                <div class="flex flex-col">
-                    <span class="text-sm font-medium">张明远</span>
-                    <span class="text-xs text-gray-500">超级管理员</span>
-                </div>
-            </div>
-        </div>
-    </header>
+<body class="bg-secondary-bg text-gray-900">
+    
 
-    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
-        <nav class="py-4">
-            <div class="px-4 mb-2 text-xs text-gray-500 uppercase tracking-wider">工作台</div>
-            <a href="dashboard.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-th-large w-5 text-gray-600"></i>
-                <span>工作台</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">内容中心</div>
-            <a href="content-list.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-alt w-5 text-gray-600"></i>
-                <span>内容管理</span>
-            </a>
-            <a href="content-category.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-tree w-5 text-gray-600"></i>
-                <span>分类管理</span>
-            </a>
-            <a href="content-tag.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-tags w-5 text-gray-600"></i>
-                <span>标签管理</span>
-            </a>
-            <a href="content-review.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-check-circle w-5 text-gray-600"></i>
-                <span>审核中心</span>
-            </a>
-            <a href="content-publish.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-paper-plane w-5 text-gray-600"></i>
-                <span>发布管理</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">门户运营</div>
-            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资讯公告</div>
-            <a href="news-list.html" class="sidebar-menu-item active flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-newspaper w-5 text-accent-blue"></i>
-                <span>新闻资讯</span>
-            </a>
-            <a href="news-announce.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-bullhorn w-5 text-gray-600"></i>
-                <span>公告通知</span>
-            </a>
-            <a href="news-policy.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-file-contract w-5 text-gray-600"></i>
-                <span>政策文件</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">数据分析</div>
-            <a href="data-overview.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-pie w-5 text-gray-600"></i>
-                <span>数据概览</span>
-            </a>
-            <a href="data-content.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-chart-line w-5 text-gray-600"></i>
-                <span>内容分析</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">资源中心</div>
-            <a href="resource-image.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-images w-5 text-gray-600"></i>
-                <span>图片管理</span>
-            </a>
-            <a href="resource-file.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-folder-open w-5 text-gray-600"></i>
-                <span>文件管理</span>
-            </a>
-            <a href="resource-video.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-video w-5 text-gray-600"></i>
-                <span>视频管理</span>
-            </a>
-            <div class="px-4 mt-6 mb-2 text-xs text-gray-500 uppercase tracking-wider">系统管理</div>
-            <a href="system-user.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-users-cog w-5 text-gray-600"></i>
-                <span>用户管理</span>
-            </a>
-            <a href="system-role.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-shield-alt w-5 text-gray-600"></i>
-                <span>角色权限</span>
-            </a>
-            <a href="system-config.html" class="sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer">
-                <i class="fas fa-cog w-5 text-gray-600"></i>
-                <span>系统设置</span>
-            </a>
-        </nav>
-    </aside>
+    
 
-    <main class="ml-[220px] mt-16 p-6">
+    <main class="ml-[220px] p-6">
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h1 class="text-2xl font-semibold">新闻资讯</h1>

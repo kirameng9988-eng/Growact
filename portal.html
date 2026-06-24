@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>内容服务平台</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'secondary-bg': '#F8FAFC',
+                        'sidebar-bg': '#FFFFFF',
+                        'card-bg': '#FFFFFF',
+                        'border-light': '#E2E8F0',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', 'Inter', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; color: #0A61FF; }
+        .sidebar-menu-item.active i { color: #0A61FF; }
+        .menu-group-header { user-select: none; cursor: pointer; }
+        .menu-group-header:hover { color: #0A61FF; }
+        .menu-children { transition: max-height 0.3s ease-in-out, opacity 0.2s ease; overflow: hidden; }
+        .menu-children.collapsed { max-height: 0; opacity: 0; }
+        .menu-children.expanded { max-height: 1000px; opacity: 1; }
+        .group-arrow { transition: transform 0.3s; }
+        .group-arrow.collapsed { transform: rotate(-90deg); }
+        .content-frame { width: 100%; height: 100%; border: 0; display: block; background: #F8FAFC; }
+        .breadcrumb-item + .breadcrumb-item::before { content: '/'; margin: 0 8px; color: #94A3B8; }
+    </style>
+</head>
+<body class="bg-secondary-bg text-gray-900 min-h-screen">
+    <!-- 顶部导航 -->
+    <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
+        <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-white">内容服务平台</span>
+        </div>
+        <div class="flex-1"></div>
+        <div class="flex items-center gap-4">
+            <button class="relative text-gray-600 hover:text-white transition-colors">
+                <i class="fas fa-bell text-xl"></i>
+                <span class="absolute -top-1 -right-1 w-4 h-4 bg-accent-red rounded-full text-xs flex items-center justify-center">3</span>
+            </button>
+            <div class="flex items-center gap-3 pl-4 border-l border-[#1a2744]">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="用户头像" class="w-9 h-9 rounded-full object-cover ring-2 ring-accent-blue/30">
+                <div class="flex flex-col">
+                    <span class="text-sm font-medium text-white">张明远</span>
+                    <span class="text-xs text-gray-500">超级管理员</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-500 text-xs ml-2"></i>
+            </div>
+        </div>
+    </header>
+
+    <!-- 左侧菜单 -->
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
+        <nav class="py-4" id="sidebar-nav">
+            <!-- 菜单由 JS 动态生成 -->
+        </nav>
+    </aside>
+
+    <!-- 面包屑 -->
+    <div class="fixed top-14 left-[220px] right-0 h-10 bg-white border-b border-[#E2E8F0] z-30 flex items-center px-6 text-sm">
+        <nav class="flex items-center text-gray-500" id="breadcrumb">
+            <span class="breadcrumb-item text-gray-700">首页</span>
+        </nav>
+    </div>
+
+    <!-- 主内容区 -->
+    <main class="ml-[220px] mt-24" style="height: calc(100vh - 96px);">
+        <iframe id="content-frame" class="content-frame" src="about:blank"></iframe>
+    </main>
+
+    <script>
+    /* =========================================================================
+     * 统一页面映射表
+     *  - key: 路由 key
+     *  - url: 实际页面文件（保持原页面不变）
+     *  - title: 页面标题（用于面包屑）
+     *  - section: 所属一级菜单
+     * ========================================================================= */
+    const pageMap = {
+        // 工作台
+        dashboard:           { url: 'dashboard.html',                title: '工作台',         section: '工作台' },
+
+        // 活动运营
+        activityManage:      { url: 'activity-list.html',            title: '活动管理',       section: '活动运营' },
+        activityCategory:    { url: 'activity-category.html',        title: '活动分类',       section: '活动运营' },
+        activityTag:         { url: 'content-tag.html',              title: '活动标签',       section: '活动运营' },
+        activityReview:      { url: 'content-review.html',           title: '活动审核',       section: '活动运营' },
+        activityPublish:     { url: 'content-publish.html',          title: '活动发布',       section: '活动运营' },
+        activityRegister:    { url: 'activity-registration.html',    title: '报名管理',       section: '活动运营' },
+        activitySign:        { url: 'activity-signin.html',          title: '活动签到',       section: '活动运营' },
+        activitySignList:    { url: 'activity-signin-list.html',     title: '签到列表',       section: '活动运营' },
+        activitySignStats:   { url: 'activity-signin-stats.html',    title: '签到统计',       section: '活动运营' },
+        activitySignFullscreen: { url: 'activity-signin-fullscreen.html', title: '签到大屏',  section: '活动运营' },
+        activityPortalConfig:{ url: 'zone-config.html',              title: '活动专区配置',   section: '活动运营' },
+        activityHotConfig:   { url: 'hot-activity-config.html',      title: '热门活动配置',   section: '活动运营' },
+        activityStats:       { url: 'activity-stats.html',           title: '活动统计',       section: '活动运营' },
+
+        // 资源中心
+        imageManage:         { url: 'resource-image.html',           title: '图片管理',       section: '资源中心' },
+        fileManage:          { url: 'resource-file.html',            title: '文件管理',       section: '资源中心' },
+        videoManage:         { url: 'resource-video.html',           title: '视频管理',       section: '资源中心' },
+        resourcePicker:      { url: 'resource-picker.html',          title: '资源选择器',     section: '资源中心' },
+
+        // 数据分析
+        dataOverview:        { url: 'data-overview.html',            title: '数据概览',       section: '数据分析' },
+        activityAnalysis:    { url: 'data-content.html',             title: '活动分析',       section: '数据分析' },
+
+        // 系统管理
+        userManage:          { url: 'system-user.html',              title: '用户管理',       section: '系统管理' },
+        rolePermission:      { url: 'system-role.html',              title: '角色权限',       section: '系统管理' },
+        rolePermissionDetail:{ url: 'system-role-permission.html',   title: '角色权限详情',   section: '系统管理' },
+        systemSetting:       { url: 'system-config.html',            title: '系统设置',       section: '系统管理' },
+        loginLog:            { url: 'system-log.html',               title: '日志管理',       section: '系统管理' },
+        operationLog:        { url: 'system-log.html',               title: '日志管理',       section: '系统管理' },
+        auditLog:            { url: 'system-log.html',               title: '日志管理',       section: '系统管理' },
+        exceptionLog:        { url: 'system-log.html',               title: '日志管理',       section: '系统管理' },
+
+        // 兼容旧内容中心（页面保留，菜单不再显示；兼容直接 URL 访问）
+        contentList:         { url: 'content-list.html',             title: '内容管理',       section: '内容中心' },
+        contentCategory:     { url: 'content-category.html',         title: '分类管理',       section: '内容中心' },
+        contentTag:          { url: 'content-tag.html',              title: '标签管理',       section: '内容中心' },
+        contentReview:       { url: 'content-review.html',           title: '审核中心',       section: '内容中心' },
+        contentPublish:      { url: 'content-publish.html',          title: '发布管理',       section: '内容中心' },
+        contentPublishList:  { url: 'content-publish-list.html',     title: '发布列表',       section: '内容中心' },
+
+        // 资讯相关
+        newsList:            { url: 'news-list.html',                title: '资讯列表',       section: '资讯' },
+        newsAnnounce:        { url: 'news-announce.html',            title: '公告管理',       section: '资讯' },
+        newsPolicy:          { url: 'news-policy.html',              title: '政策管理',       section: '资讯' },
+
+        // 门户相关
+        portalHome:          { url: 'portal-home.html',              title: '门户首页',       section: '门户' },
+        portalBanner:        { url: 'portal-banner.html',            title: '轮播图',         section: '门户' },
+        portalColumn:        { url: 'portal-column.html',            title: '栏目',           section: '门户' },
+        portalTopic:         { url: 'portal-topic.html',             title: '专题',           section: '门户' },
+
+        // 帮助中心
+        helpFaq:             { url: 'help-faq.html',                 title: '常见问题',       section: '帮助' },
+        helpDocs:            { url: 'help-docs.html',                title: '帮助文档',       section: '帮助' }
+    };
+
+    /* =========================================================================
+     * 菜单配置（重组后的最终结构）
+     *  - 内容中心已合并到活动运营
+     *  - 标签管理 → 活动标签
+     *  - 审核中心 → 活动审核
+     *  - 发布管理 → 活动发布
+     * ========================================================================= */
+    const menuConfig = [
+        {
+            key: 'dashboard',
+            section: '工作台',
+            icon: 'fas fa-th-large',
+            label: '工作台',
+            children: null
+        },
+        {
+            key: 'activity',
+            section: '活动运营',
+            icon: 'fas fa-calendar-alt',
+            label: '活动运营',
+            children: [
+                { key: 'activityManage',       icon: 'fas fa-list',            label: '活动管理' },
+                { key: 'activityCategory',     icon: 'fas fa-folder-open',     label: '活动分类' },
+                { key: 'activityTag',          icon: 'fas fa-tags',            label: '活动标签' },
+                { key: 'activityReview',       icon: 'fas fa-clipboard-check', label: '活动审核', badge: 5 },
+                { key: 'activityPublish',      icon: 'fas fa-paper-plane',     label: '活动发布' },
+                { key: 'activityRegister',     icon: 'fas fa-users',           label: '报名管理' },
+                { key: 'activitySign',         icon: 'fas fa-qrcode',          label: '活动签到' },
+                { key: 'activityPortalConfig', icon: 'fas fa-cog',             label: '活动专区配置' },
+                { key: 'activityStats',        icon: 'fas fa-chart-line',      label: '活动统计' }
+            ]
+        },
+        {
+            key: 'resource',
+            section: '资源中心',
+            icon: 'fas fa-images',
+            label: '资源中心',
+            children: [
+                { key: 'imageManage', icon: 'fas fa-image',       label: '图片管理' },
+                { key: 'fileManage',  icon: 'fas fa-folder-open', label: '文件管理' },
+                { key: 'videoManage', icon: 'fas fa-video',       label: '视频管理' }
+            ]
+        },
+        {
+            key: 'data',
+            section: '数据分析',
+            icon: 'fas fa-chart-pie',
+            label: '数据分析',
+            children: [
+                { key: 'dataOverview',     icon: 'fas fa-chart-pie',  label: '数据概览' },
+                { key: 'activityAnalysis', icon: 'fas fa-chart-line', label: '活动分析' }
+            ]
+        },
+        {
+            key: 'system',
+            section: '系统管理',
+            icon: 'fas fa-cog',
+            label: '系统管理',
+            children: [
+                { key: 'userManage',     icon: 'fas fa-users-cog', label: '用户管理' },
+                { key: 'rolePermission', icon: 'fas fa-shield-alt', label: '角色权限' },
+                { key: 'systemSetting',  icon: 'fas fa-sliders-h', label: '系统设置' },
+                { key: 'loginLog',       icon: 'fas fa-history',   label: '日志管理' }
+            ]
+        }
+    ];
+
+    /* =========================================================================
+     * LocalStorage 状态管理
+     * ========================================================================= */
+    const STORAGE_KEY = 'portal_state_v1';
+    const defaultState = {
+        currentPage: 'dashboard',
+        expandedGroups: ['activity', 'resource', 'data', 'system']  // 默认展开所有分组
+    };
+
+    function loadState() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return { ...defaultState };
+            const parsed = JSON.parse(raw);
+            return { ...defaultState, ...parsed };
+        } catch (e) {
+            return { ...defaultState };
+        }
+    }
+
+    function saveState(state) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {}
+    }
+
+    let state = loadState();
+
+    /* =========================================================================
+     * 渲染侧边栏
+     * ========================================================================= */
+    function renderSidebar() {
+        const nav = document.getElementById('sidebar-nav');
+        nav.innerHTML = '';
+
+        menuConfig.forEach(group => {
+            // 一级菜单
+            const groupEl = document.createElement('div');
+            groupEl.className = 'mb-2';
+
+            if (!group.children) {
+                // 单项菜单（如工作台）
+                const isActive = state.currentPage === group.key;
+                const link = document.createElement('a');
+                link.href = '#/' + group.key;
+                link.className = 'sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer ' +
+                    (isActive ? 'active text-accent-blue' : 'text-gray-600');
+                link.innerHTML = `
+                    <i class="${group.icon} w-5 ${isActive ? 'text-accent-blue' : 'text-gray-500'}"></i>
+                    <span>${group.label}</span>
+                `;
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    loadPage(group.key);
+                });
+                groupEl.appendChild(link);
+            } else {
+                // 分组菜单
+                const isExpanded = state.expandedGroups.includes(group.key);
+                const header = document.createElement('div');
+                header.className = 'menu-group-header flex items-center justify-between px-4 py-2 text-xs text-gray-500 uppercase tracking-wider';
+                header.innerHTML = `
+                    <span>${group.section}</span>
+                    <i class="fas fa-chevron-down group-arrow text-[10px] ${isExpanded ? '' : 'collapsed'}"></i>
+                `;
+                header.addEventListener('click', () => toggleGroup(group.key));
+                groupEl.appendChild(header);
+
+                // 子菜单容器
+                const children = document.createElement('div');
+                children.className = 'menu-children ' + (isExpanded ? 'expanded' : 'collapsed');
+                children.dataset.group = group.key;
+
+                group.children.forEach(item => {
+                    const isActive = state.currentPage === item.key;
+                    const link = document.createElement('a');
+                    link.href = '#/' + item.key;
+                    link.className = 'sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer ' +
+                        (isActive ? 'active text-accent-blue' : 'text-gray-600');
+                    link.dataset.key = item.key;
+                    link.innerHTML = `
+                        <i class="${item.icon} w-5 ${isActive ? 'text-accent-blue' : 'text-gray-500'}"></i>
+                        <span>${item.label}</span>
+                        ${item.badge ? `<span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">${item.badge}</span>` : ''}
+                    `;
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        loadPage(item.key);
+                    });
+                    children.appendChild(link);
+                });
+
+                groupEl.appendChild(children);
+            }
+
+            nav.appendChild(groupEl);
+        });
+    }
+
+    /* =========================================================================
+     * 切换分组展开/收起
+     * ========================================================================= */
+    function toggleGroup(groupKey) {
+        const idx = state.expandedGroups.indexOf(groupKey);
+        if (idx >= 0) {
+            state.expandedGroups.splice(idx, 1);
+        } else {
+            state.expandedGroups.push(groupKey);
+        }
+        saveState(state);
+        renderSidebar();
+    }
+
+    /* =========================================================================
+     * 加载页面
+     * ========================================================================= */
+    function loadPage(pageKey) {
+        const page = pageMap[pageKey];
+        if (!page) {
+            console.warn('Unknown page key:', pageKey);
+            return;
+        }
+
+        // 状态更新
+        state.currentPage = pageKey;
+
+        // 如果点击的是分组内的页面，自动展开该分组
+        const parentGroup = findGroupByPageKey(pageKey);
+        if (parentGroup && !state.expandedGroups.includes(parentGroup.key)) {
+            state.expandedGroups.push(parentGroup.key);
+        }
+
+        saveState(state);
+
+        // 更新 hash（不触发刷新）
+        if (window.location.hash !== '#/' + pageKey) {
+            history.replaceState(null, '', '#/' + pageKey);
+        }
+
+        // 重新渲染侧边栏（高亮 + 展开）
+        renderSidebar();
+
+        // 更新面包屑
+        renderBreadcrumb(page);
+
+        // 加载 iframe
+        const frame = document.getElementById('content-frame');
+        if (frame.src.indexOf(page.url) === -1) {
+            frame.src = page.url;
+        } else {
+            // 同 URL 强制刷新
+            frame.src = page.url + '?t=' + Date.now();
+        }
+    }
+
+    function findGroupByPageKey(pageKey) {
+        for (const group of menuConfig) {
+            if (group.children && group.children.some(c => c.key === pageKey)) {
+                return group;
+            }
+        }
+        return null;
+    }
+
+    /* =========================================================================
+     * 面包屑
+     * ========================================================================= */
+    function renderBreadcrumb(page) {
+        const bc = document.getElementById('breadcrumb');
+        bc.innerHTML = '';
+
+        const home = document.createElement('a');
+        home.href = '#/dashboard';
+        home.className = 'breadcrumb-item text-gray-500 hover:text-accent-blue';
+        home.textContent = '首页';
+        home.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadPage('dashboard');
+        });
+        bc.appendChild(home);
+
+        const section = document.createElement('span');
+        section.className = 'breadcrumb-item text-gray-500';
+        section.textContent = page.section;
+        bc.appendChild(section);
+
+        const current = document.createElement('span');
+        current.className = 'breadcrumb-item text-gray-700 font-medium';
+        current.textContent = page.title;
+        bc.appendChild(current);
+    }
+
+    /* =========================================================================
+     * Hash 路由解析
+     * ========================================================================= */
+    function parseHash() {
+        const hash = window.location.hash || '#/dashboard';
+        const key = hash.replace('#/', '').trim() || 'dashboard';
+        return pageMap[key] ? key : 'dashboard';
+    }
+
+    function handleHashChange() {
+        const key = parseHash();
+        if (key !== state.currentPage) {
+            loadPage(key);
+        }
+    }
+
+    /* =========================================================================
+     * iframe 内部跳转监听
+     * 当内部页面修改 location 时，同步到 portal 的 hash
+     * ========================================================================= */
+    function attachFrameInterceptor() {
+        const frame = document.getElementById('content-frame');
+        // 拦截内部页面点击链接（a 标签 target=_self 且为本地页面的情况）
+        frame.addEventListener('load', () => {
+            try {
+                const innerDoc = frame.contentDocument || frame.contentWindow.document;
+                if (!innerDoc) return;
+
+                // 注入 CSS：隐藏原页面的 header 和 sidebar，避免重复显示
+                injectFrameStyles(innerDoc);
+
+                // 拦截内部 a 标签点击
+                innerDoc.addEventListener('click', (e) => {
+                    const a = e.target.closest('a');
+                    if (!a) return;
+                    const href = a.getAttribute('href');
+                    if (!href) return;
+                    // 忽略外部链接、锚点、javascript:、mailto:
+                    if (/^(https?:|mailto:|javascript:|#|tel:)/i.test(href)) return;
+                    // 拦截本地页面跳转，改为更新 hash
+                    if (/\.html?(\?.*)?$/i.test(href)) {
+                        e.preventDefault();
+                        const key = reverseLookup(href.split('?')[0]);
+                        if (key) {
+                            loadPage(key);
+                        } else {
+                            // 找不到对应 key 时直接修改 iframe src
+                            frame.src = href;
+                            // 同时更新 hash 以便刷新恢复
+                            const adHocKey = 'page_' + href.replace(/[^a-z0-9]/gi, '_');
+                            history.replaceState(null, '', '#/' + adHocKey);
+                        }
+                    }
+                }, true);
+            } catch (e) {
+                // 跨域等情况，忽略
+            }
+        });
+    }
+
+    /* =========================================================================
+     * 注入样式到 iframe：隐藏原页面顶栏和侧边栏
+     * 保持业务页面完全不变（不重写），仅通过 CSS 让出顶部和左侧空间
+     * ========================================================================= */
+    function injectFrameStyles(doc) {
+        if (!doc || !doc.head) return;
+        // 防重复注入
+        if (doc.getElementById('__portal_inject__')) return;
+
+        const style = doc.createElement('style');
+        style.id = '__portal_inject__';
+        style.textContent = `
+            /* 隐藏顶部导航 - portal 已有统一 header */
+            body > header {
+                display: none !important;
+            }
+            /* 隐藏左侧菜单 - portal 已有统一 sidebar */
+            body > aside {
+                display: none !important;
+            }
+            /* 调整主内容区：移除 portal 壳层对应的 left/top 偏移 */
+            body > main {
+                margin-left: 0 !important;
+                margin-top: 0 !important;
+                position: relative !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: auto !important;
+                padding: 24px !important;
+            }
+            /* 一些页面使用了 .ml-[220px] 等 Tailwind 任意值类，强制重置 */
+            main[class*="ml-"], main[class*="mt-"] {
+                margin-left: 0 !important;
+                margin-top: 0 !important;
+            }
+            /* 让 body 没有外边距 */
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: #F8FAFC !important;
+            }
+            /* 让滚动条由 portal 主体控制（避免双滚动） */
+            html, body {
+                overflow-x: hidden;
+            }
+        `;
+        doc.head.appendChild(style);
+    }
+
+    function reverseLookup(url) {
+        for (const key in pageMap) {
+            if (pageMap[key].url === url) return key;
+        }
+        return null;
+    }
+
+    /* =========================================================================
+     * 启动
+     * ========================================================================= */
+    window.addEventListener('hashchange', handleHashChange);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderSidebar();
+        attachFrameInterceptor();
+
+        // 初始加载：根据 hash 或 localStorage 决定
+        const initialKey = parseHash();
+        loadPage(initialKey);
+    });
+    </script>
+</body>
+</html>
