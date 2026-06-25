@@ -461,63 +461,35 @@ const ProductSwitcher = ({ children }) => {
 };
 
 // ============================================================================
-// 面包屑式产品切换器（替代简单汉堡按钮）
-//  - 显示当前产品名 + 下拉箭头
-//  - 点击调用 useProductSwitcher().openDrawer
-//  - 在打开状态高亮显示
+// 汉堡按钮 — 调用 useProductSwitcher().openDrawer
+//  - 纯白色图标，深色导航栏上高对比清晰可见
+//  - 默认带轻微背景，hover/打开时加深
 // ============================================================================
-const ProductSwitcherBreadcrumb = () => {
+const HamburgerButton = () => {
   const { openDrawer, isOpen } = useProductSwitcher();
 
   return (
     <button
       onClick={openDrawer}
-      aria-label="切换产品"
-      data-testid="product-switcher-breadcrumb"
-      className={`
-        group flex items-center gap-2 h-9 pl-3 pr-2.5
-        rounded-lg border transition-all duration-200
-        ${isOpen
-          ? 'bg-white/15 border-white/20 text-white'
-          : 'bg-white/5 border-white/10 text-white/90 hover:bg-white/10 hover:border-white/20'
-        }
-      `}
+      aria-label="打开产品切换器"
+      data-testid="hamburger-button"
+      className={`w-10 h-10 flex items-center justify-center rounded-lg text-white bg-white/10 hover:bg-white/20 transition-all duration-200 ${
+        isOpen ? 'bg-white/25 ring-1 ring-white/30' : ''
+      }`}
     >
-      {/* 产品图标（应用 logo 缩略） */}
-      <div className="w-5 h-5 rounded-md bg-gradient-to-br from-blue-500 to-cyan-400 flex items-center justify-center flex-shrink-0">
-        <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
-        </svg>
-      </div>
-
-      {/* 产品名（面包屑文字） */}
-      <span className="text-sm font-medium whitespace-nowrap">天机·智信</span>
-
-      {/* 面包屑分隔符 */}
-      <span className="text-white/30 text-xs">/</span>
-
-      {/* 当前模块指示（动态可改为当前 product.name） */}
-      <span className="text-sm text-white/70 whitespace-nowrap">产品与服务</span>
-
-      {/* 下拉箭头 */}
-      <svg
-        className={`w-3.5 h-3.5 text-white/60 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
       </svg>
     </button>
   );
 };
 
 // ============================================================================
-// 根 App 组件：用 ProductSwitcher 包裹面包屑式切换器
+// 根 App 组件：用 ProductSwitcher 包裹汉堡按钮
 // ============================================================================
 const App = () => (
   <ProductSwitcher>
-    <ProductSwitcherBreadcrumb />
+    <HamburgerButton />
   </ProductSwitcher>
 );
 
