@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>内容服务平台</title>
+    <title>天机∙智信</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- React 18 (UMD) + Babel Standalone - 用于在浏览器中直接运行 JSX -->
+    <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.24.7/babel.min.js"></script>
     <script>
         tailwind.config = {
             theme: {
@@ -54,9 +58,11 @@
 <body class="bg-secondary-bg text-gray-900 min-h-screen">
     <!-- 顶部导航 -->
     <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
+        <!-- 产品切换器汉堡按钮 (React 挂载点) -->
+        <div id="hamburger-root" class="flex items-center mr-3"></div>
         <div class="flex items-center gap-3">
             <img src="images/logo.png" alt="logo" class="h-9">
-            <span class="text-lg font-semibold text-white">内容服务平台</span>
+            <span class="text-lg font-semibold text-white">天机∙智信</span>
         </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
@@ -565,5 +571,8 @@
         loadPage(initialKey);
     });
     </script>
+
+    <!-- 产品切换器组件 (React + JSX, 通过 Babel standalone 在浏览器中编译) -->
+    <script type="text/babel" data-presets="react" src="components/ProductSwitcher.jsx"></script>
 </body>
 </html>
