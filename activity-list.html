@@ -12,6 +12,7 @@
                 extend: {
                     colors: {
                         'primary-bg': '#FFFFFF',
+                        'secondary-bg': '#F8FAFC',
                         'card-bg': '#FFFFFF',
                         'border-dark': '#CBD5E1',
                         'accent-blue': '#0A61FF',
@@ -31,16 +32,12 @@
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #F1F5F9; }
-        ::-webkit-scrollbar-thumb { background: #F8FAFC; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
         .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
         .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
         .table-row:hover { background: #F8FAFC; }
         .toast { animation: slideIn 0.3s ease; }
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
-        .drawer { transition: transform0.3s ease; }
-        .drawer.hidden { transform: translateX(100%); }
-        .drawer-panel { max-height: calc(100vh - 64px); overflow-y: auto; }
-        .tab-btn.active { border-bottom: 2px solid #0A61FF; color: #0A61FF; }
     </style>
 </head>
 <body class="bg-secondary-bg text-gray-900">
@@ -58,10 +55,10 @@
                     <i class="fas fa-sync-alt"></i>
                     刷新
                 </button>
-                <button onclick="openDrawer('create')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                <a href="activity-create.html" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
                     <i class="fas fa-plus"></i>
                     创建活动
-                </button>
+                </a>
             </div>
         </div>
 
@@ -150,233 +147,6 @@
     <!-- Toast容器 -->
     <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
 
-    <!-- 活动抽屉 -->
-    <div id="activityDrawer" class="fixed top-14 right-0 bottom-0 w-[700px] bg-white shadow-2xl drawer hidden z-[100]">
-        <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0] bg-gray-50">
-            <h3 id="drawerTitle" class="text-lg font-medium">创建活动</h3>
-            <button onclick="closeDrawer()" class="text-gray-500 hover:text-gray-700">
-                <i class="fas fa-times text-xl"></i>
-            </button>
-        </div>
-
-        <!-- Tab导航 -->
-        <div class="flex border-b border-[#E2E8F0]">
-            <button onclick="switchTab('basic')" id="tab-basic" class="tab-btn active px-6 py-3 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]">基础信息</button>
-            <button onclick="switchTab('detail')" id="tab-detail" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">活动详情</button>
-            <button onclick="switchTab('resource')" id="tab-resource" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">资源引用</button>
-        </div>
-
-        <div class="drawer-panel p-6 overflow-y-auto" style="max-height: calc(100vh - 140px);">
-            <input type="hidden" id="activityId">
-
-            <!-- Tab1: 基础信息 -->
-            <div id="panel-basic" class="tab-panel">
-                <div class="grid grid-cols-2 gap-6">
-                    <div class="col-span-2">
-                        <label class="block text-sm text-gray-600 mb-2">活动名称 <span class="text-accent-red">*</span></label>
-                        <input type="text" id="activityName" placeholder="请输入活动名称" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm text-gray-600 mb-2">活动分类 <span class="text-accent-red">*</span></label>
-                        <select id="activityCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
-                            <option value="">请选择分类</option>
-                            <option value="tech">科技创新</option>
-                            <option value="culture">文化活动</option>
-                            <option value="sports">体育运动</option>
-                            <option value="education">教育培训</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm text-gray-600 mb-2">标签</label>
-                        <input type="text" id="activityTags" placeholder="多个标签用逗号分隔" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm text-gray-600 mb-2">活动封面</label>
-                        <div id="coverArea" class="border-2 border-dashed border-[#E2E8F0] rounded-xl p-6">
-                            <div id="coverEmpty" class="text-center">
-                                <div class="flex items-center justify-center gap-4 mb-4">
-                                    <div onclick="openResourcePicker('cover', 'single')" class="flex-1 bg-white rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
-                                        <i class="fas fa-images text-2xl text-accent-blue mb-2"></i>
-                                        <p class="text-smfont-medium">📌 从资源中心选择</p>
-                                        <p class="text-xs text-gray-500 mt-1">已有封面图库</p>
-                                    </div>
-                                    <div class="text-gray-500 text-xl">/</div>
-                                    <div onclick="triggerCoverUpload()" class="flex-1 bg-white rounded-xl p-4 cursor-pointer hover:border-accent-blue border-2 border-transparent transition-all">
-                                        <i class="fas fa-cloud-upload-alt text-2xl text-gray-600 mb-2"></i>
-                                        <p class="text-sm font-medium">⬆️ 上传新资源</p>
-                                        <p class="text-xs text-gray-500 mt-1">直接本地上传</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="coverPreview" class="hidden mt-3 flex items-center gap-3 p-3 bg-white rounded-xl">
-                                <img id="coverImg" src="" class="w-32 h-20 rounded object-cover">
-                                <div class="flex-1">
-                                    <p id="coverName" class="text-sm font-medium"></p>
-                                    <p id="coverSize" class="text-xs text-gray-500"></p>
-                                </div>
-                                <button onclick="removeCover()" class="text-accent-red hover:text-red-400 text-sm px-3 py-1 border border-accent-red/30 rounded-lg">移除</button>
-                                <button onclick="openResourcePicker('cover', 'single')" class="text-accent-blue hover:text-blue-400 text-sm px-3 py-1 border border-accent-blue/30 rounded-lg">更换</button>
-                            </div>
-                            <input type="file" id="coverFileInput" accept="image/*" class="hidden" onchange="handleCoverFileUpload(this)">
-                        </div>
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm text-gray-600 mb-2">活动简介</label>
-                        <textarea id="activitySummary" rows="2" placeholder="请输入活动简介，简短描述活动要点" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none resize-none"></textarea>
-                    </div>
-                    <div>
-                        <label class="block text-sm text-gray-600 mb-2">活动地点</label>
-                        <input type="text" id="activityLocation" placeholder="请输入活动地点" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm text-gray-600 mb-2">主办单位</label>
-                        <input type="text" id="activityOrganizer" placeholder="请输入主办单位" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-sm text-gray-600 mb-2">最大报名人数</label>
-                        <input type="number" id="maxParticipants" placeholder="0" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none">
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm text-gray-600 mb-2">活动时间</label>
-                        <div class="flex items-center gap-4">
-                            <input type="datetime-local" id="activityStartTime" class="flex-1 bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
-                            <span class="text-gray-500">至</span>
-                            <input type="datetime-local" id="activityEndTime" class="flex-1 bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
-                        </div>
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm text-gray-600 mb-2">报名时间</label>
-                        <div class="flex items-center gap-4">
-                            <input type="datetime-local" id="registrationStartTime" class="flex-1 bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
-                            <span class="text-gray-500">至</span>
-                            <input type="datetime-local" id="registrationEndTime" class="flex-1 bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
-                        </div>
-                    </div>
-                    <div class="col-span-2">
-                        <label class="block text-sm text-gray-600 mb-2">发布形式</label>
-                        <div class="flex gap-6">
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="publishType" value="draft" checked class="accent-accent-blue">
-                                <span class="text-sm">存为草稿</span>
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="publishType" value="pending" class="accent-accent-blue">
-                                <span class="text-sm">提交审核</span>
-                            </label>
-                            <label class="flex items-center gap-2 cursor-pointer">
-                                <input type="radio" name="publishType" value="published" class="accent-accent-blue">
-                                <span class="text-sm">直接发布</span>
-                            </label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab2: 活动详情 -->
-            <div id="panel-detail" class="tab-panel hidden">
-                <div>
-                    <label class="block text-sm text-gray-600 mb-2">活动详情</label>
-                    <div class="bg-white border border-[#E2E8F0] rounded-xl overflow-hidden">
-                        <div class="flex items-center gap-1 px-4 py-2 border-b border-[#E2E8F0] bg-gray-50">
-                            <button class="w-8 h-8 rounded hover:bg-gray-200 flex items-center justify-center text-gray-600" title="加粗"><i class="fas fa-bold"></i></button>
-                            <button class="w-8 h-8 rounded hover:bg-gray-200 flex items-center justify-center text-gray-600" title="斜体"><i class="fas fa-italic"></i></button>
-                            <button class="w-8 h-8 rounded hover:bg-gray-200 flex items-center justify-center text-gray-600" title="下划线"><i class="fas fa-underline"></i></button>
-                            <span class="w-px h-6 bg-gray-300 mx-2"></span>
-                            <button class="w-8 h-8 rounded hover:bg-gray-200 flex items-center justify-center text-gray-600" title="无序列表"><i class="fas fa-list-ul"></i></button>
-                            <button class="w-8 h-8 rounded hover:bg-gray-200 flex items-center justify-center text-gray-600" title="有序列表"><i class="fas fa-list-ol"></i></button>
-                            <button class="w-8 h-8 rounded hover:bg-gray-200 flex items-center justify-center text-gray-600" title="链接"><i class="fas fa-link"></i></button>
-                            <button onclick="openResourcePicker('content', 'multiple')" class="w-8 h-8 rounded hover:bg-gray-200 flex items-center justify-center text-gray-600" title="插入图片"><i class="fas fa-image"></i></button>
-                            <button onclick="openResourcePicker('content', 'multiple')" class="w-8 h-8 rounded hover:bg-gray-200 flex items-center justify-center text-accent-cyan" title="插入资源">
-                                <i class="fas fa-folder-open"></i>
-                            </button>
-                        </div>
-                        <textarea id="activityContent" rows="12" placeholder="请输入活动详情...\n\n提示：点击工具栏📁资源按钮可插入图片/文件/视频" class="w-full p-4 text-sm text-gray-700 placeholder-gray-400 focus:outline-none resize-none"></textarea>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Tab3: 资源引用 -->
-            <div id="panel-resource" class="tab-panel hidden">
-                <div class="flex border-b border-[#E2E8F0] mb-4">
-                    <button onclick="switchResourceTab('image')" id="resTab-image" class="px-4 py-2 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]">
-                        <i class="fas fa-images mr-1"></i>图片
-                    </button>
-                    <button onclick="switchResourceTab('file')" id="resTab-file" class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-file-alt mr-1"></i>文件
-                    </button>
-                    <button onclick="switchResourceTab('video')" id="resTab-video" class="px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
-                        <i class="fas fa-video mr-1"></i>视频
-                    </button>
-                </div>
-
-                <div class="mb-4">
-                    <div class="relative">
-                        <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                        <input type="text" id="resourceSearchInput" placeholder="搜索资源名称..." class="w-full bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none" oninput="filterActivityResources()">
-                    </div>
-                </div>
-
-                <div id="activityResourceList" class="grid grid-cols-4 gap-3 max-h-[300px] overflow-y-auto mb-4">
-                    <!-- 动态渲染 -->
-                </div>
-
-                <div class="border-t border-[#E2E8F0] pt-4">
-                    <h4 class="text-sm font-medium text-gray-600 mb-3">已选资源</h4>
-                    <div id="selectedActivityResources" class="flex flex-wrap gap-3 min-h-[80px] bg-gray-50 rounded-xl p-4">
-                        <p class="text-sm text-gray-400">暂无选择资源</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-gray-50">
-            <button onclick="closeDrawer()" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-colors">取消</button>
-            <button onclick="saveActivity()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存</button>
-        </div>
-    </div>
-
-    <!-- 查看详情弹窗 -->
-    <div id="viewModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
-        <div class="bg-white rounded-2xl w-[800px] max-h-[90vh] overflow-hidden border border-[#E2E8F0] shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
-                <h3 class="text-lg font-medium">活动详情</h3>
-                <button onclick="closeModal('viewModal')" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div class="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
-                <img id="viewCover" src="" class="w-full h-48 rounded-xl object-cover mb-4">
-                <h2 id="viewTitle" class="text-xl font-semibold mb-4"></h2>
-                <div class="flex items-center gap-4 mb-6 text-sm text-gray-500 flex-wrap">
-                    <span><i class="fas fa-folder mr-1"></i><span id="viewCategory"></span></span>
-                    <span><i class="fas fa-user mr-1"></i><span id="viewOrganizer"></span></span>
-                    <span><i class="fas fa-map-marker-alt mr-1"></i><span id="viewLocation"></span></span>
-                    <span><i class="fas fa-users mr-1"></i><span id="viewParticipants"></span></span>
-                </div>
-                <div class="flex items-center gap-3 mb-6">
-                    <span id="viewStatus" class="px-3 py-1 text-xs rounded-full"></span>
-                    <span id="viewTags" class="text-xs text-gray-500"></span>
-                </div>
-                <div class="border-t border-[#E2E8F0] pt-4">
-                    <h4 class="text-sm font-medium text-gray-500 mb-2">活动时间</h4>
-                    <p id="viewTimeRange" class="text-sm text-gray-600 mb-4"></p>
-                    <h4 class="text-sm font-medium text-gray-500 mb-2">报名时间</h4>
-                    <p id="viewRegTimeRange" class="text-sm text-gray-600 mb-4"></p>
-                    <h4 class="text-sm font-medium text-gray-500 mb-2">活动简介</h4>
-                    <p id="viewSummary" class="text-sm text-gray-600 mb-4"></p>
-                    <h4 class="text-sm font-medium text-gray-500 mb-2">活动详情</h4>
-                    <div id="viewContent" class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap bg-gray-50 p-4 rounded-xl"></div>
-                </div>
-            </div>
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
-                <button onclick="closeModal('viewModal'); openDrawer('edit', currentActivityId)" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">
-                    <i class="fas fa-edit mr-2"></i>编辑
-                </button>
-                <button onclick="closeModal('viewModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">关闭</button>
-            </div>
-        </div>
-    </div>
-
     <!-- 确认删除弹窗 -->
     <div id="deleteModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
         <div class="bg-white rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
@@ -400,51 +170,9 @@
         </div>
     </div>
 
-    <!-- 资源选择弹窗 -->
-    <div id="resourcePickerModal" class="fixed inset-0 bg-black/70 z-[9999] hidden items-center justify-center">
-        <div class="bg-white rounded-2xl w-[900px] max-h-[85vh] overflow-hidden shadow-2xl">
-            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
-                <h3 class="text-lg font-medium text-gray-900">📌 选择资源</h3>
-                <button onclick="closeResourcePicker()" class="text-gray-500 hover:text-gray-700">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
-            </div>
-            <div class="flex border-b border-[#E2E8F0]">
-                <button onclick="switchResourcePickerTab('image')" id="pickerTab-image" class="px-6 py-3 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]">
-                    <i class="fas fa-images mr-2"></i>图片
-                </button>
-                <button onclick="switchResourcePickerTab('file')" id="pickerTab-file" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
-                    <i class="fas fa-file-alt mr-2"></i>文件
-                </button>
-                <button onclick="switchResourcePickerTab('video')" id="pickerTab-video" class="px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
-                    <i class="fas fa-video mr-2"></i>视频
-                </button>
-            </div>
-            <div class="px-6 py-3 border-b border-[#E2E8F0] bg-gray-50">
-                <div class="relative">
-                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                    <input type="text" id="pickerSearchInput" placeholder="搜索资源名称..."
-                           class="w-full bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-[#0A61FF] focus:outline-none"
-                           oninput="filterPickerResources()">
-                </div>
-            </div>
-            <div class="p-6 overflow-y-auto max-h-[400px]">
-                <div id="pickerResourceList" class="grid grid-cols-5 gap-4">
-                </div>
-            </div>
-            <div class="flex items-center justify-between px-6 py-3 border-t border-[#E2E8F0] bg-gray-50">
-                <span id="pickerSelectedInfo" class="text-sm text-gray-500">请选择资源</span>
-                <div class="flex items-center gap-3">
-                    <button onclick="closeResourcePicker()" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-colors">取消</button>
-                    <button onclick="confirmResourceSelection()" id="pickerConfirmBtn" class="px-5 py-2.5 bg-[#0A61FF] text-white rounded-xl hover:bg-blue-600 transition-colors" disabled>确认选择</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        // Mock活动数据
-        let activities = [
+        // 默认 Mock 活动数据（与 activity-create.html / activity-edit.html / activity-detail.html 保持一致）
+        const defaultActivities = [
             { id: 1, name: '2024数字化转型高峰论坛', category: 'tech', categoryName: '科技创新', status: 'published', participants: 328, maxParticipants: 500, startTime: '2024-03-15 09:00', endTime: '2024-03-15 17:00', regStartTime: '2024-02-01 00:00', regEndTime: '2024-03-10 23:59', publishTime: '2024-02-01 10:00', creator: '张明远', organizer: '数字化转型研究院', location: '北京国际会议中心', summary: '汇聚行业专家，共商企业数字化转型之路', tags: '数字化,转型,高峰论坛', content: '本次论坛将邀请国内外知名专家分享数字化转型最新实践案例...' },
             { id: 2, name: '企业文化创意大赛', category: 'culture', categoryName: '文化活动', status: 'pending', participants: 156, maxParticipants: 200, startTime: '2024-04-20 14:00', endTime: '2024-04-20 18:00', regStartTime: '2024-03-01 00:00', regEndTime: '2024-04-15 23:59', publishTime: '', creator: '李晓华', organizer: '企业文化部', location: '集团总部报告厅', summary: '激发创意，展示企业文化魅力', tags: '创意,文化,大赛', content: '大赛分为初赛和决赛两个阶段...' },
             { id: 3, name: '春季篮球友谊赛', category: 'sports', categoryName: '体育运动', status: 'draft', participants: 0, maxParticipants: 100, startTime: '2024-05-10 09:00', endTime: '2024-05-10 16:00', regStartTime: '2024-04-01 00:00', regEndTime: '2024-05-05 23:59', publishTime: '', creator: '王建国', organizer: '工会体育部', location: '集团篮球场', summary: '增进友谊，强身健体', tags: '篮球,友谊赛,春季', content: '比赛采用循环赛制...' },
@@ -459,38 +187,33 @@
             { id: 12, name: '中秋联欢晚会', category: 'culture', categoryName: '文化活动', status: 'draft', participants: 0, maxParticipants: 300, startTime: '2024-09-17 19:00', endTime: '2024-09-17 22:00', regStartTime: '2024-08-20 00:00', regEndTime: '2024-09-10 23:59', publishTime: '', creator: '李晓华', organizer: '工会', location: '集团大礼堂', summary: '共庆中秋佳节', tags: '中秋,晚会,联欢', content: '晚会节目丰富多彩...' }
         ];
 
+        const STORAGE_KEY = 'activities_data';
+
+        // 数据源：优先从 sessionStorage 读取（与新增/编辑页共享），否则使用默认 Mock
+        function loadActivities() {
+            try {
+                const stored = sessionStorage.getItem(STORAGE_KEY);
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+            } catch (e) {}
+            // 首次访问时初始化 sessionStorage
+            try {
+                sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultActivities));
+            } catch (e) {}
+            return [...defaultActivities];
+        }
+
+        function saveActivities(list) {
+            try {
+                sessionStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            } catch (e) {}
+        }
+
+        let activities = loadActivities();
         let currentPage = 1;
         let currentActivityId = null;
         let selectedIds = [];
-        let drawerMode = 'create';
-
-        // 资源数据
-        const mockResources = {
-            image: [
-                { id: 1, name: '会议现场.jpg', url: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop', size: '2.3MB' },
-                { id: 2, name: '活动现场.jpg', url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop', size: '3.1MB' },
-                { id: 3, name: '团队建设.jpg', url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop', size: '3.5MB' },
-                { id: 4, name: '培训现场.jpg', url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop', size: '2.8MB' },
-            ],
-            file: [
-                { id: 101, name: '活动策划书.pdf', url: '#', size: '2.3MB', icon: 'fa-file-pdf' },
-                { id: 102, name: '会议资料.docx', url: '#', size: '1.8MB', icon: 'fa-file-word' },
-                { id: 103, name: '报名表.xlsx', url: '#', size: '890KB', icon: 'fa-file-excel' },
-            ],
-            video: [
-                { id: 201, name: '活动回顾.mp4', url: '#', size: '25.3MB', duration: '5:30', poster: 'https://images.unsplash.com/photo-1574717024653-61fd2cf7d944?w=400&h=300&fit=crop' },
-                { id: 202, name: '培训教程.mp4', url: '#', size: '128.5MB', duration: '45:20', poster: 'https://images.unsplash.com/photo-1516321318423-f06f85b5f7c1?w=400&h=300&fit=crop' },
-            ]
-        };
-
-        let resourcePickerConfig = {
-            mode: 'single',
-            currentTab: 'image',
-            selected: [],
-            onSelect: null
-        };
-
-        let selectedActivityResources = [];
 
         // 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
@@ -499,6 +222,7 @@
 
         // 渲染活动表格
         function renderActivityTable() {
+            activities = loadActivities();
             const tbody = document.getElementById('activityTableBody');
             const filtered = getFilteredActivities();
             const start = (currentPage - 1) * 10;
@@ -520,8 +244,8 @@
                     <td class="px-4 py-3 text-sm text-gray-600">${activity.creator}</td>
                     <td class="px-4 py-3 text-right">
                         <div class="flex items-center justify-end gap-2">
-                            <button onclick="viewActivity(${activity.id})" class="text-accent-blue hover:text-blue-700 text-sm" title="查看">查看</button>
-                            <button onclick="editActivity(${activity.id})" class="text-accent-cyan hover:text-cyan-700 text-sm" title="编辑">编辑</button>
+                            <a href="activity-detail.html?id=${activity.id}" class="text-accent-blue hover:text-blue-700 text-sm" title="查看">查看</a>
+                            <a href="activity-edit.html?id=${activity.id}" class="text-accent-cyan hover:text-cyan-700 text-sm" title="编辑">编辑</a>
                             ${activity.status === 'draft' ? `<button onclick="submitForReview(${activity.id})" class="text-accent-amber hover:text-amber-700 text-sm" title="提交审核">提交</button>` : ''}
                             ${activity.status === 'pending' ? `<button onclick="publishActivity(${activity.id})" class="text-accent-green hover:text-green-700 text-sm" title="发布">发布</button>` : ''}
                             ${activity.status === 'published' ? `<button onclick="offlineActivity(${activity.id})" class="text-accent-amber hover:text-amber-700 text-sm" title="下线">下线</button>` : ''}
@@ -581,187 +305,6 @@
             renderActivityTable();
         }
 
-        // 抽屉操作
-        function openDrawer(mode, id = null) {
-            drawerMode = mode;
-            currentActivityId = id;
-            document.getElementById('drawerTitle').textContent = mode === 'create' ? '创建活动' : '编辑活动';
-            document.getElementById('activityDrawer').classList.remove('hidden');
-            switchTab('basic');
-
-            if (mode === 'edit' && id) {
-                loadActivityData(id);
-            } else {
-                resetDrawerForm();
-            }
-        }
-
-        function closeDrawer() {
-            document.getElementById('activityDrawer').classList.add('hidden');
-            currentActivityId = null;
-        }
-
-        function resetDrawerForm() {
-            document.getElementById('activityId').value = '';
-            document.getElementById('activityName').value = '';
-            document.getElementById('activityCategory').value = '';
-            document.getElementById('activityTags').value = '';
-            document.getElementById('activitySummary').value = '';
-            document.getElementById('activityLocation').value = '';
-            document.getElementById('activityOrganizer').value = '';
-            document.getElementById('maxParticipants').value = '';
-            document.getElementById('activityStartTime').value = '';
-            document.getElementById('activityEndTime').value = '';
-            document.getElementById('registrationStartTime').value = '';
-            document.getElementById('registrationEndTime').value = '';
-            document.getElementById('activityContent').value = '';
-            document.querySelector('input[name="publishType"][value="draft"]').checked = true;
-            document.getElementById('coverEmpty').classList.remove('hidden');
-            document.getElementById('coverPreview').classList.add('hidden');
-            selectedActivityResources = [];
-            renderSelectedResources();
-        }
-
-        function loadActivityData(id) {
-            const activity = activities.find(a => a.id === id);
-            if (!activity) return;
-
-            document.getElementById('activityId').value = activity.id;
-            document.getElementById('activityName').value = activity.name;
-            document.getElementById('activityCategory').value = activity.category;
-            document.getElementById('activityTags').value = activity.tags;
-            document.getElementById('activitySummary').value = activity.summary;
-            document.getElementById('activityLocation').value = activity.location;
-            document.getElementById('activityOrganizer').value = activity.organizer;
-            document.getElementById('maxParticipants').value = activity.maxParticipants;
-            document.getElementById('activityStartTime').value = activity.startTime;
-            document.getElementById('activityEndTime').value = activity.endTime;
-            document.getElementById('registrationStartTime').value = activity.regStartTime;
-            document.getElementById('registrationEndTime').value = activity.regEndTime;
-            document.getElementById('activityContent').value = activity.content;
-
-            if (activity.coverUrl) {
-                document.getElementById('coverEmpty').classList.add('hidden');
-                document.getElementById('coverPreview').classList.remove('hidden');
-                document.getElementById('coverImg').src = activity.coverUrl;
-                document.getElementById('coverName').textContent = activity.coverName || '封面图片';
-            }
-        }
-
-        function switchTab(tab) {
-            ['basic', 'detail', 'resource'].forEach(t => {
-                document.getElementById('tab-' + t).classList.remove('active');
-                document.getElementById('tab-' + t).classList.add('border-transparent', 'text-gray-600');
-                document.getElementById('tab-' + t).classList.remove('border-[#0A61FF]', 'text-[#0A61FF]');
-                document.getElementById('panel-' + t).classList.add('hidden');
-            });
-
-            document.getElementById('tab-' + tab).classList.add('active');
-            document.getElementById('tab-' + tab).classList.remove('border-transparent', 'text-gray-600');
-            document.getElementById('tab-' + tab).classList.add('border-[#0A61FF]', 'text-[#0A61FF]');
-            document.getElementById('panel-' + tab).classList.remove('hidden');
-
-            if (tab === 'resource') {
-                renderActivityResourceList('image');
-            }
-        }
-
-        function saveActivity() {
-            const name = document.getElementById('activityName').value;
-            const category = document.getElementById('activityCategory').value;
-
-            if (!name) {
-                showToast('请输入活动名称', 'error');
-                return;
-            }
-            if (!category) {
-                showToast('请选择活动分类', 'error');
-                return;
-            }
-
-            const publishType = document.querySelector('input[name="publishType"]:checked').value;
-            let status = 'draft';
-            if (publishType === 'pending') status = 'pending';
-            if (publishType === 'published') status = 'published';
-
-            if (currentActivityId) {
-                const index = activities.findIndex(a => a.id === currentActivityId);
-                if (index !== -1) {
-                    activities[index] = {
-                        ...activities[index],
-                        name: name,
-                        category: category,
-                        categoryName: category ? document.querySelector(`#activityCategory option[value="${category}"]`).textContent : '',
-                        tags: document.getElementById('activityTags').value,
-                        summary: document.getElementById('activitySummary').value,
-                        location: document.getElementById('activityLocation').value,
-                        organizer: document.getElementById('activityOrganizer').value,
-                        maxParticipants: parseInt(document.getElementById('maxParticipants').value) || 0,
-                        startTime: document.getElementById('activityStartTime').value,
-                        endTime: document.getElementById('activityEndTime').value,
-                        regStartTime: document.getElementById('registrationStartTime').value,
-                        regEndTime: document.getElementById('registrationEndTime').value,
-                        content: document.getElementById('activityContent').value,
-                        status: status
-                    };
-                }
-                showToast('活动已更新', 'success');
-            } else {
-                const newId = Math.max(...activities.map(a => a.id)) + 1;
-                activities.unshift({
-                    id: newId,
-                    name: name,
-                    category: category,
-                    categoryName: document.querySelector(`#activityCategory option[value="${category}"]`).textContent,
-                    status: status,
-                    participants: 0,
-                    maxParticipants: parseInt(document.getElementById('maxParticipants').value) || 0,
-                    startTime: document.getElementById('activityStartTime').value,
-                    endTime: document.getElementById('activityEndTime').value,
-                    regStartTime: document.getElementById('registrationStartTime').value,
-                    regEndTime: document.getElementById('registrationEndTime').value,
-                    publishTime: status === 'published' ? new Date().toISOString().substring(0, 16) : '',
-                    creator: '张明远',
-                    organizer: document.getElementById('activityOrganizer').value,
-                    location: document.getElementById('activityLocation').value,
-                    summary: document.getElementById('activitySummary').value,
-                    tags: document.getElementById('activityTags').value,
-                    content: document.getElementById('activityContent').value
-                });
-                showToast('活动已创建', 'success');
-            }
-
-            closeDrawer();
-            renderActivityTable();
-        }
-
-        // 查看活动
-        function viewActivity(id) {
-            currentActivityId = id;
-            const activity = activities.find(a => a.id === id);
-            if (!activity) return;
-
-            document.getElementById('viewCover').src = activity.coverUrl || 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop';
-            document.getElementById('viewTitle').textContent = activity.name;
-            document.getElementById('viewCategory').textContent = activity.categoryName;
-            document.getElementById('viewOrganizer').textContent = activity.organizer;
-            document.getElementById('viewLocation').textContent = activity.location;
-            document.getElementById('viewParticipants').textContent = `${activity.participants}/${activity.maxParticipants}`;
-            document.getElementById('viewStatus').outerHTML = getStatusBadge(activity.status);
-            document.getElementById('viewTags').textContent = activity.tags ? `#${activity.tags.replace(/,/g, ' #')}` : '';
-            document.getElementById('viewTimeRange').textContent = `${activity.startTime} 至 ${activity.endTime}`;
-            document.getElementById('viewRegTimeRange').textContent = `${activity.regStartTime} 至 ${activity.regEndTime}`;
-            document.getElementById('viewSummary').textContent = activity.summary || '暂无简介';
-            document.getElementById('viewContent').textContent = activity.content || '暂无详情';
-
-            openModal('viewModal');
-        }
-
-        // 编辑活动
-        function editActivity(id) {
-            openDrawer('edit', id);
-        }
-
         // 删除活动
         function deleteActivity(id) {
             const activity = activities.find(a => a.id === id);
@@ -770,6 +313,7 @@
             document.getElementById('deleteTitle').textContent = activity.name;
             document.getElementById('confirmDeleteBtn').onclick = function() {
                 activities = activities.filter(a => a.id !== id);
+                saveActivities(activities);
                 closeModal('deleteModal');
                 showToast('活动已删除', 'success');
                 renderActivityTable();
@@ -783,6 +327,7 @@
             if (!activity) return;
 
             activity.status = 'pending';
+            saveActivities(activities);
             showToast('活动已提交审核', 'success');
             renderActivityTable();
         }
@@ -794,6 +339,7 @@
 
             activity.status = 'published';
             activity.publishTime = new Date().toISOString().substring(0, 16);
+            saveActivities(activities);
             showToast('活动已发布', 'success');
             renderActivityTable();
         }
@@ -804,6 +350,7 @@
             if (!activity) return;
 
             activity.status = 'offline';
+            saveActivities(activities);
             showToast('活动已下线', 'success');
             renderActivityTable();
         }
@@ -831,6 +378,7 @@
                 const activity = activities.find(a => a.id === id);
                 if (activity && activity.status === 'draft') activity.status = 'pending';
             });
+            saveActivities(activities);
             showToast(`已提交 ${selectedIds.length} 个活动审核`, 'success');
             renderActivityTable();
         }
@@ -847,6 +395,7 @@
                     activity.publishTime = new Date().toISOString().substring(0, 16);
                 }
             });
+            saveActivities(activities);
             showToast(`已发布 ${selectedIds.length} 个活动`, 'success');
             renderActivityTable();
         }
@@ -860,6 +409,7 @@
                 const activity = activities.find(a => a.id === id);
                 if (activity && activity.status === 'published') activity.status = 'offline';
             });
+            saveActivities(activities);
             showToast(`已下线 ${selectedIds.length} 个活动`, 'success');
             renderActivityTable();
         }
@@ -872,6 +422,7 @@
             document.getElementById('deleteTitle').textContent = `已选择 ${selectedIds.length} 个活动`;
             document.getElementById('confirmDeleteBtn').onclick = function() {
                 activities = activities.filter(a => !selectedIds.includes(a.id));
+                saveActivities(activities);
                 closeModal('deleteModal');
                 showToast(`已删除 ${selectedIds.length} 个活动`, 'success');
                 selectedIds = [];
@@ -879,220 +430,6 @@
                 renderActivityTable();
             };
             openModal('deleteModal');
-        }
-
-        // 资源选择器
-        function openResourcePicker(mode, type) {
-            resourcePickerConfig.mode = type;
-            resourcePickerConfig.currentTab = 'image';
-            resourcePickerConfig.selected = [];
-            document.getElementById('pickerSearchInput').value = '';
-            updatePickerStatus();
-            renderPickerResourceList();
-
-            const modal = document.getElementById('resourcePickerModal');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
-
-        function closeResourcePicker() {
-            document.getElementById('resourcePickerModal').classList.add('hidden');
-            document.getElementById('resourcePickerModal').classList.remove('flex');
-        }
-
-        function switchResourcePickerTab(tab) {
-            resourcePickerConfig.currentTab = tab;
-            resourcePickerConfig.selected = [];
-            document.getElementById('pickerSearchInput').value = '';
-
-            ['image', 'file', 'video'].forEach(t => {
-                const btn = document.getElementById('pickerTab-' + t);
-                if (t === tab) {
-                    btn.className = 'px-6 py-3 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]';
-                } else {
-                    btn.className = 'px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900';
-                }
-            });
-
-            updatePickerStatus();
-            renderPickerResourceList();
-        }
-
-        function filterPickerResources() {
-            renderPickerResourceList();
-        }
-
-        function renderPickerResourceList() {
-            const list = document.getElementById('pickerResourceList');
-            const tab = resourcePickerConfig.currentTab;
-            const search = document.getElementById('pickerSearchInput').value.toLowerCase();
-            let resources = mockResources[tab] || [];
-
-            if (search) {
-                resources = resources.filter(r => r.name.toLowerCase().includes(search));
-            }
-
-            list.innerHTML = resources.map((r, index) => `
-                <div onclick="togglePickerResource(${tab === 'image' ? r.id : (r.id + '-' + index)}, '${tab}')"
-                     class="resource-card cursor-pointer rounded-lg overflow-hidden border-2 border-transparent hover:border-accent-blue transition-all ${resourcePickerConfig.selected.includes(tab === 'image' ? r.id : r.id) ? 'selected' : ''}"
-                     data-id="${r.id}">
-                    ${tab === 'image' ? `<img src="${r.url}" class="w-full h-24 object-cover">` :
-                      tab === 'video' ? `<div class="relative"><img src="${r.poster}" class="w-full h-24 object-cover"><div class="absolute inset-0 flex items-center justify-center bg-black/30"><i class="fas fa-play text-white text-xl"></i></div></div>` :
-                      `<div class="h-24 bg-gray-100 flex items-center justify-center"><i class="fas ${r.icon || 'fa-file'} text-3xl text-gray-400"></i></div>`}
-                    <div class="p-2 bg-white">
-                        <p class="text-xs truncate">${r.name}</p>
-                        <p class="text-xs text-gray-400">${r.size}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function togglePickerResource(id, tab) {
-            if (resourcePickerConfig.mode === 'single') {
-                resourcePickerConfig.selected = [id];
-            } else {
-                const index = resourcePickerConfig.selected.indexOf(id);
-                if (index === -1) {
-                    resourcePickerConfig.selected.push(id);
-                } else {
-                    resourcePickerConfig.selected.splice(index, 1);
-                }
-            }
-            updatePickerStatus();
-            renderPickerResourceList();
-        }
-
-        function updatePickerStatus() {
-            const count = resourcePickerConfig.selected.length;
-            document.getElementById('pickerSelectedInfo').textContent = count === 0 ? '请选择资源' : `已选择 ${count} 个资源`;
-            document.getElementById('pickerConfirmBtn').disabled = count === 0;
-        }
-
-        function confirmResourceSelection() {
-            const tab = resourcePickerConfig.currentTab;
-            const selected = resourcePickerConfig.selected;
-
-            if (resourcePickerConfig.mode === 'single') {
-                const resource = mockResources[tab].find(r => r.id === selected[0]);
-                if (resource) {
-                    document.getElementById('coverEmpty').classList.add('hidden');
-                    document.getElementById('coverPreview').classList.remove('hidden');
-                    document.getElementById('coverImg').src = resource.url;
-                    document.getElementById('coverName').textContent = resource.name;
-                    document.getElementById('coverSize').textContent = resource.size;
-                }
-            }
-
-            closeResourcePicker();
-            showToast('资源选择成功', 'success');
-        }
-
-        function triggerCoverUpload() {
-            document.getElementById('coverFileInput').click();
-        }
-
-        function handleCoverFileUpload(input) {
-            if (input.files && input.files[0]) {
-                const file = input.files[0];
-                document.getElementById('coverEmpty').classList.add('hidden');
-                document.getElementById('coverPreview').classList.remove('hidden');
-                document.getElementById('coverImg').src = URL.createObjectURL(file);
-                document.getElementById('coverName').textContent = file.name;
-                document.getElementById('coverSize').textContent = (file.size / 1024 / 1024).toFixed(2) + 'MB';
-            }
-        }
-
-        function removeCover() {
-            document.getElementById('coverEmpty').classList.remove('hidden');
-            document.getElementById('coverPreview').classList.add('hidden');
-        }
-
-        // 活动资源引用
-        function switchResourceTab(tab) {
-            ['image', 'file', 'video'].forEach(t => {
-                const btn = document.getElementById('resTab-' + t);
-                if (t === tab) {
-                    btn.className = 'px-4 py-2 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]';
-                } else {
-                    btn.className = 'px-4 py-2 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900';
-                }
-            });
-            renderActivityResourceList(tab);
-        }
-
-        function renderActivityResourceList(tab) {
-            const list = document.getElementById('activityResourceList');
-            const search = document.getElementById('resourceSearchInput').value.toLowerCase();
-            let resources = mockResources[tab] || [];
-
-            if (search) {
-                resources = resources.filter(r => r.name.toLowerCase().includes(search));
-            }
-
-            list.innerHTML = resources.map(r => `
-                <div onclick="toggleActivityResource(${r.id}, '${tab}')"
-                     class="cursor-pointer rounded-lg overflow-hidden border-2 ${selectedActivityResources.includes(r.id) ? 'border-accent-cyan bg-cyan-50' : 'border-transparent hover:border-accent-blue'} transition-all">
-                    ${tab === 'image' ? `<img src="${r.url}" class="w-full h-16 object-cover">` :
-                      `<div class="h-16 bg-gray-100 flex items-center justify-center"><i class="fas ${r.icon || 'fa-file'} text-xl text-gray-400"></i></div>`}
-                    <div class="p-1.5 bg-white">
-                        <p class="text-xs truncate">${r.name}</p>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function toggleActivityResource(id, tab) {
-            const index = selectedActivityResources.indexOf(id);
-            if (index === -1) {
-                selectedActivityResources.push(id);
-            } else {
-                selectedActivityResources.splice(index, 1);
-            }
-            renderActivityResourceList(tab);
-            renderSelectedResources();
-        }
-
-        function renderSelectedResources() {
-            const container = document.getElementById('selectedActivityResources');
-            if (selectedActivityResources.length === 0) {
-                container.innerHTML = '<p class="text-sm text-gray-400">暂无选择资源</p>';
-                return;
-            }
-
-            container.innerHTML = selectedActivityResources.map(id => {
-                let resource = null;
-                for (const tab of ['image', 'file', 'video']) {
-                    resource = mockResources[tab].find(r => r.id === id);
-                    if (resource) break;
-                }
-                if (!resource) return '';
-
-                return `
-                    <div class="flex items-center gap-2 bg-white rounded-lg p-2 border border-[#E2E8F0]">
-                        ${resource.url && resource.url !== '#' ? `<img src="${resource.url}" class="w-10 h-10 rounded object-cover">` :
-                          `<div class="w-10 h-10 rounded bg-gray-100 flex items-center justify-center"><i class="fas ${resource.icon || 'fa-file'} text-gray-400"></i></div>`}
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm truncate">${resource.name}</p>
-                        </div>
-                        <button onclick="removeActivityResource(${id})" class="text-gray-400 hover:text-accent-red">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        function removeActivityResource(id) {
-            selectedActivityResources = selectedActivityResources.filter(r => r !== id);
-            renderSelectedResources();
-            const currentTab = document.querySelector('#activityResourceList').dataset.tab || 'image';
-            renderActivityResourceList(currentTab);
-        }
-
-        function filterActivityResources() {
-            const currentTab = document.querySelector('#resTab-image')?.classList.contains('border-[#0A61FF]') ? 'image' :
-                              document.querySelector('#resTab-file')?.classList.contains('border-[#0A61FF]') ? 'file' : 'video';
-            renderActivityResourceList(currentTab);
         }
 
         // 弹窗操作

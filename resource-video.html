@@ -31,11 +31,15 @@
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
         .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
         .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .tab-pill { transition: all .15s ease; }
+        .video-card { position: relative; transition: all .15s ease; }
+        .video-card.selected { box-shadow: 0 0 0 2px #0891B2, 0 4px 12px rgba(8, 145, 178, 0.15); }
+        .video-card .card-checkbox { position: absolute; top: 8px; left: 8px; z-index: 5; opacity: 0; transition: opacity .15s; }
+        .video-card:hover .card-checkbox { opacity: 1; }
+        .video-card.selected .card-checkbox { opacity: 1; }
     </style>
 </head>
 <body class="bg-secondary-bg text-gray-900">
-
-    
 
     <main class="p-6">
         <div class="flex items-center justify-between mb-6">
@@ -53,223 +57,663 @@
         <div class="grid grid-cols-4 gap-5 mb-6">
             <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-accent-blue/20 flex items-center justify-center">
-                        <i class="fas fa-video text-accent-blue"></i>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold">48</div>
-                        <div class="text-sm text-gray-500">视频总数</div>
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-accent-blue/20 flex items-center justify-center"><i class="fas fa-video text-accent-blue"></i></div>
+                    <div><div class="text-2xl font-bold" id="statTotal">0</div><div class="text-sm text-gray-500">视频总数</div></div>
                 </div>
             </div>
             <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-accent-cyan/20 flex items-center justify-center">
-                        <i class="fas fa-play text-accent-cyan"></i>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold">15.6万</div>
-                        <div class="text-sm text-gray-500">总播放量</div>
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-accent-cyan/20 flex items-center justify-center"><i class="fas fa-play text-accent-cyan"></i></div>
+                    <div><div class="text-2xl font-bold" id="statPlay">0</div><div class="text-sm text-gray-500">总播放量</div></div>
                 </div>
             </div>
             <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-accent-amber/20 flex items-center justify-center">
-                        <i class="fas fa-hdd text-accent-amber"></i>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold">28.5GB</div>
-                        <div class="text-sm text-gray-500">占用空间</div>
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-accent-amber/20 flex items-center justify-center"><i class="fas fa-hdd text-accent-amber"></i></div>
+                    <div><div class="text-2xl font-bold" id="statSize">0 MB</div><div class="text-sm text-gray-500">占用空间</div></div>
                 </div>
             </div>
             <div class="bg-white rounded-xl p-4 border border-[#E2E8F0]">
                 <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-accent-green/20 flex items-center justify-center">
-                        <i class="fas fa-clock text-accent-green"></i>
-                    </div>
-                    <div>
-                        <div class="text-2xl font-bold">12.5h</div>
-                        <div class="text-sm text-gray-500">总时长</div>
-                    </div>
+                    <div class="w-10 h-10 rounded-xl bg-accent-green/20 flex items-center justify-center"><i class="fas fa-clock text-accent-green"></i></div>
+                    <div><div class="text-2xl font-bold" id="statDuration">0h</div><div class="text-sm text-gray-500">总时长</div></div>
                 </div>
             </div>
         </div>
 
-        <!-- 视频列表 -->
-        <div class="grid grid-cols-3 gap-6">
-            <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden cursor-pointer group">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
-                            <i class="fas fa-play text-white text-xl ml-1"></i>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">03:45</div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-medium mb-2 line-clamp-1">年度工作总结视频</h3>
-                    <div class="flex items-center justify-between text-xs text-gray-500">
-                        <span><i class="fas fa-play mr-1"></i>12,847</span>
-                        <span>2024-01-15</span>
-                    </div>
-                </div>
+        <!-- 筛选与搜索 -->
+        <div class="flex items-center gap-4 mb-4">
+            <div class="flex items-center gap-2 flex-wrap" id="tabBar">
+                <button data-cat="all" class="tab-pill px-4 py-2 bg-accent-blue text-white rounded-lg text-sm font-medium">全部</button>
+                <button data-cat="train" class="tab-pill px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">培训视频</button>
+                <button data-cat="promo" class="tab-pill px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">宣传视频</button>
+                <button data-cat="meeting" class="tab-pill px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">会议视频</button>
+                <button data-cat="other" class="tab-pill px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">其他</button>
             </div>
-            <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden cursor-pointer group">
+            <div class="flex-1"></div>
+            <div class="flex items-center gap-3">
+                <label class="flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+                    <input id="selectAll" type="checkbox" onchange="toggleSelectAll(this.checked)" class="w-4 h-4 accent-accent-blue cursor-pointer"> 全选
+                </label>
                 <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
-                            <i class="fas fa-play text-white text-xl ml-1"></i>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">05:23</div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-medium mb-2 line-clamp-1">数字化转型工作汇报</h3>
-                    <div class="flex items-center justify-between text-xs text-gray-500">
-                        <span><i class="fas fa-play mr-1"></i>8,932</span>
-                        <span>2024-01-12</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden cursor-pointer group">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
-                            <i class="fas fa-play text-white text-xl ml-1"></i>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">08:12</div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-medium mb-2 line-clamp-1">安全生产培训视频</h3>
-                    <div class="flex items-center justify-between text-xs text-gray-500">
-                        <span><i class="fas fa-play mr-1"></i>6,543</span>
-                        <span>2024-01-10</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden cursor-pointer group">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
-                            <i class="fas fa-play text-white text-xl ml-1"></i>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">04:56</div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-medium mb-2 line-clamp-1">智慧城市建设介绍</h3>
-                    <div class="flex items-center justify-between text-xs text-gray-500">
-                        <span><i class="fas fa-play mr-1"></i>4,231</span>
-                        <span>2024-01-08</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden cursor-pointer group">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
-                            <i class="fas fa-play text-white text-xl ml-1"></i>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">02:34</div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-medium mb-2 line-clamp-1">两会报道片段</h3>
-                    <div class="flex items-center justify-between text-xs text-gray-500">
-                        <span><i class="fas fa-play mr-1"></i>15,678</span>
-                        <span>2024-01-05</span>
-                    </div>
-                </div>
-            </div>
-            <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden cursor-pointer group">
-                <div class="relative">
-                    <img src="https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=400&h=200&fit=crop" class="w-full h-40 object-cover">
-                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                        <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
-                            <i class="fas fa-play text-white text-xl ml-1"></i>
-                        </div>
-                    </div>
-                    <div class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-2 py-1 rounded">06:18</div>
-                </div>
-                <div class="p-4">
-                    <h3 class="font-medium mb-2 line-clamp-1">党建工作纪实</h3>
-                    <div class="flex items-center justify-between text-xs text-gray-500">
-                        <span><i class="fas fa-play mr-1"></i>3,456</span>
-                        <span>2024-01-02</span>
-                    </div>
+                    <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                    <input id="searchInput" type="text" placeholder="搜索视频名称、标签、上传者..." class="bg-white border border-[#E2E8F0] rounded-xl pl-12 pr-4 py-2 text-sm focus:border-accent-blue focus:outline-none w-72">
                 </div>
             </div>
         </div>
+
+        <!-- 视频网格 -->
+        <div class="grid grid-cols-3 gap-6" id="videoGrid"></div>
+
+        <div id="emptyState" class="hidden text-center py-16 text-gray-500 bg-white rounded-xl border border-[#E2E8F0]">
+            <i class="fas fa-folder-open text-4xl mb-3 opacity-50"></i>
+            <p>暂无符合条件的视频</p>
+        </div>
+
+        <!-- 分页 -->
+        <div class="flex items-center justify-between mt-4 px-2" id="paginationBar"></div>
     </main>
 
     <!-- 上传弹窗 -->
     <div id="uploadModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[500px] border border-[#E2E8F0] shadow-2xl">
+        <div class="bg-white rounded-2xl w-[500px] border border-[#E2E8F0] shadow-2xl">
             <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">上传视频</h3>
-                <button onclick="closeModal('uploadModal')" class="text-gray-500 hover:text-white">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+                <button onclick="closeModal('uploadModal')" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label class="block text-sm text-gray-600 mb-2">视频标题</label>
-                    <input type="text" placeholder="请输入视频标题" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <label class="block text-sm text-gray-600 mb-2"><span class="text-accent-red">*</span> 视频标题</label>
+                    <input id="upName" type="text" placeholder="请输入视频标题" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">分类</label>
+                        <select id="upCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                            <option value="train">培训视频</option>
+                            <option value="promo">宣传视频</option>
+                            <option value="meeting">会议视频</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">时长</label>
+                        <input id="upDuration" type="text" placeholder="如 03:45" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-600 mb-2">视频分类</label>
-                    <select class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
-                        <option>培训视频</option>
-                        <option>宣传视频</option>
-                        <option>会议视频</option>
-                        <option>其他</option>
-                    </select>
+                    <label class="block text-sm text-gray-600 mb-2">标签（逗号分隔）</label>
+                    <input id="upTags" type="text" placeholder="如：培训,安全,2024" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-sm text-gray-600 mb-2">上传视频</label>
+                    <label class="block text-sm text-gray-600 mb-2">封面上传</label>
+                    <div class="border-2 border-dashed border-[#E2E8F0] rounded-xl p-4 text-center hover:border-accent-blue transition-colors cursor-pointer mb-3">
+                        <i class="fas fa-image text-2xl text-gray-400 mb-1"></i>
+                        <p class="text-xs text-gray-500">点击上传封面图</p>
+                    </div>
                     <div class="border-2 border-dashed border-[#E2E8F0] rounded-xl p-8 text-center hover:border-accent-blue transition-colors cursor-pointer">
-                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-500 mb-3"></i>
+                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
                         <p class="text-sm text-gray-600">点击或拖拽上传视频</p>
                         <p class="text-xs text-gray-500 mt-1">支持 MP4、AVI、MOV 格式，最大 500MB</p>
                     </div>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
-                <button onclick="closeModal('uploadModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
-                <button onclick="closeModal('uploadModal'); showToast('视频已上传')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认上传</button>
+                <button onclick="closeModal('uploadModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="handleUpload()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认上传</button>
             </div>
         </div>
     </div>
 
+    <!-- 编辑弹窗 -->
+    <div id="editModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[560px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">编辑视频信息</h3>
+                <button onclick="closeModal('editModal')" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div class="flex items-center gap-4">
+                    <img id="edPreview" class="w-28 h-16 rounded-lg object-cover border border-[#E2E8F0]">
+                    <div class="flex-1">
+                        <label class="block text-sm text-gray-600 mb-2"><span class="text-accent-red">*</span> 视频标题</label>
+                        <input id="edName" type="text" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">分类</label>
+                        <select id="edCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                            <option value="train">培训视频</option>
+                            <option value="promo">宣传视频</option>
+                            <option value="meeting">会议视频</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">时长</label>
+                        <input id="edDuration" type="text" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">标签（逗号分隔）</label>
+                    <input id="edTags" type="text" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div class="grid grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">上传者</label>
+                        <input id="edUploader" type="text" disabled class="w-full bg-gray-50 border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">大小</label>
+                        <input id="edSize" type="text" disabled class="w-full bg-gray-50 border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">上传时间</label>
+                        <input id="edUploadedAt" type="text" disabled class="w-full bg-gray-50 border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">描述</label>
+                    <textarea id="edDesc" rows="3" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">替换视频文件（可选）</label>
+                    <div class="border-2 border-dashed border-[#E2E8F0] rounded-xl p-4 text-center hover:border-accent-blue transition-colors cursor-pointer">
+                        <i class="fas fa-video text-2xl text-gray-400 mb-1"></i>
+                        <p class="text-xs text-gray-500">点击上传新视频替换原视频</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('editModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="handleSaveEdit()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 预览/详情弹窗 -->
+    <div id="previewModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[1000px] max-h-[90vh] overflow-hidden border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <div class="flex items-center gap-3">
+                    <span id="pvCatChip" class="px-2 py-0.5 bg-accent-blue/10 text-accent-blue text-xs rounded"></span>
+                    <h3 id="pvTitle" class="text-lg font-medium truncate max-w-[700px]"></h3>
+                </div>
+                <button onclick="closeModal('previewModal'); stopPreviewVideo()" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="flex max-h-[calc(90vh-140px)]">
+                <div class="flex-1 bg-black flex items-center justify-center">
+                    <video id="pvVideo" controls class="max-w-full max-h-full">
+                        <source src="" type="video/mp4">
+                        您的浏览器不支持视频标签。
+                    </video>
+                </div>
+                <div class="w-[320px] p-6 overflow-y-auto border-l border-[#E2E8F0]">
+                    <h4 class="text-sm font-medium text-gray-500 mb-3">视频信息</h4>
+                    <dl class="space-y-3 text-sm">
+                        <div class="flex"><dt class="w-20 text-gray-500 shrink-0">标题</dt><dd id="pvName" class="flex-1 text-gray-900 font-medium break-all"></dd></div>
+                        <div class="flex"><dt class="w-20 text-gray-500 shrink-0">分类</dt><dd id="pvCategory" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-20 text-gray-500 shrink-0">时长</dt><dd id="pvDuration" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-20 text-gray-500 shrink-0">大小</dt><dd id="pvSize" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-20 text-gray-500 shrink-0">上传者</dt><dd id="pvUploader" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-20 text-gray-500 shrink-0">上传时间</dt><dd id="pvUploadedAt" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-20 text-gray-500 shrink-0">播放量</dt><dd id="pvPlay" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-20 text-gray-500 shrink-0">标签</dt><dd id="pvTags" class="flex-1 text-gray-900 break-all"></dd></div>
+                        <div class="flex"><dt class="w-20 text-gray-500 shrink-0">描述</dt><dd id="pvDesc" class="flex-1 text-gray-900 whitespace-pre-wrap break-all"></dd></div>
+                    </dl>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-gray-50">
+                <button onclick="handleCopyLinkFromPreview()" class="px-4 py-2 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2"><i class="fas fa-link"></i> 复制链接</button>
+                <button onclick="handleDownloadFromPreview()" class="px-4 py-2 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2"><i class="fas fa-download"></i> 下载</button>
+                <button onclick="handleEditFromPreview()" class="px-4 py-2 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2"><i class="fas fa-pen"></i> 编辑</button>
+                <button onclick="handleDeleteFromPreview()" class="px-4 py-2 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors flex items-center gap-2"><i class="fas fa-trash"></i> 删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量修改分类弹窗 -->
+    <div id="batchCatModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[440px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">批量修改分类</h3>
+                <button onclick="closeModal('batchCatModal')" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600 mb-3">将所选 <span id="bcCount" class="font-medium text-accent-blue"></span> 项的分类修改为：</p>
+                <select id="bcNewCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <option value="train">培训视频</option><option value="promo">宣传视频</option><option value="meeting">会议视频</option><option value="other">其他</option>
+                </select>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('batchCatModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="handleBatchCategory()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量打标签弹窗 -->
+    <div id="batchTagModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[440px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">批量打标签</h3>
+                <button onclick="closeModal('batchTagModal')" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600 mb-3">为所选 <span id="btCount" class="font-medium text-accent-blue"></span> 项追加标签：</p>
+                <input id="btNewTags" type="text" placeholder="多个标签用逗号分隔" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                <p class="text-xs text-gray-500 mt-2">已存在的标签会被跳过（不重复添加）</p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('batchTagModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="handleBatchTag()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div id="confirmModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[420px] border border-[#E2E8F0] shadow-2xl">
+            <div class="px-6 py-5 text-center">
+                <div class="w-12 h-12 rounded-full bg-accent-red/10 flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <h3 id="cfTitle" class="text-lg font-medium mb-2">确认删除</h3>
+                <p id="cfBody" class="text-sm text-gray-600">删除后无法恢复，确定继续吗？</p>
+            </div>
+            <div class="flex items-center gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('confirmModal')" class="flex-1 px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button id="cfConfirmBtn" class="flex-1 px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量操作栏 -->
+    <div id="batchBar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white shadow-2xl border border-[#E2E8F0] rounded-2xl px-6 py-4 flex items-center gap-4">
+        <span class="text-sm text-gray-700">已选 <span id="batchCount" class="font-semibold text-accent-blue">0</span> 项</span>
+        <div class="h-5 w-px bg-gray-200"></div>
+        <button onclick="openBatchCategory()" class="text-sm text-accent-cyan hover:underline flex items-center gap-1"><i class="fas fa-folder"></i> 修改分类</button>
+        <button onclick="openBatchTag()" class="text-sm text-accent-amber hover:underline flex items-center gap-1"><i class="fas fa-tag"></i> 打标签</button>
+        <button onclick="handleBatchDelete()" class="text-sm text-accent-red hover:underline flex items-center gap-1"><i class="fas fa-trash"></i> 批量删除</button>
+        <div class="h-5 w-px bg-gray-200"></div>
+        <button onclick="clearSelection()" class="text-sm text-gray-500 hover:text-gray-900">取消</button>
+    </div>
+
     <!-- Toast -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-accent-green text-white px-6 py-3 rounded-xl shadow-lg hidden z-50">
-        <i class="fas fa-check-circle mr-2"></i>
+    <div id="toast" class="hidden fixed bottom-6 right-6 bg-accent-green text-white px-6 py-3 rounded-xl shadow-lg z-50">
+        <i id="toastIcon" class="fas fa-check-circle mr-2"></i>
         <span id="toastText">操作成功</span>
     </div>
 
     <script>
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-            document.getElementById(id).classList.add('flex');
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-            document.getElementById(id).classList.remove('flex');
-        }
-        function showToast(message) {
+        // ========== Mock 数据 ==========
+        const VIDEOS = [
+            { id: 'v1', name: '年度工作总结视频.mp4', size: '128MB', duration: '03:45', uploader: '王建国', uploadedAt: '2024-01-15', category: 'meeting', tags: ['总结', '会议'], desc: '2023年度工作总结汇报视频。', poster: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 12847, refCount: 6 },
+            { id: 'v2', name: '数字化转型工作汇报.mp4', size: '215MB', duration: '05:23', uploader: '陈思远', uploadedAt: '2024-01-12', category: 'meeting', tags: ['数字化', '汇报'], desc: '数字化转型工作阶段性汇报。', poster: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 8932, refCount: 4 },
+            { id: 'v3', name: '安全生产培训视频.mp4', size: '186MB', duration: '08:12', uploader: '李晓华', uploadedAt: '2024-01-10', category: 'train', tags: ['安全', '培训'], desc: '全员安全生产培训视频。', poster: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 6543, refCount: 8 },
+            { id: 'v4', name: '智慧城市建设介绍.mp4', size: '142MB', duration: '04:56', uploader: '吴晓燕', uploadedAt: '2024-01-08', category: 'promo', tags: ['智慧城市', '宣传'], desc: '智慧城市建设成果介绍。', poster: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 4231, refCount: 3 },
+            { id: 'v5', name: '两会报道片段.mp4', size: '98MB', duration: '02:34', uploader: '周明杰', uploadedAt: '2024-01-05', category: 'meeting', tags: ['两会', '报道'], desc: '两会期间关键报道片段。', poster: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 15678, refCount: 12 },
+            { id: 'v6', name: '党建工作纪实.mp4', size: '256MB', duration: '06:18', uploader: '王建国', uploadedAt: '2024-01-02', category: 'promo', tags: ['党建', '纪实'], desc: '党建工作年度纪实。', poster: 'https://images.unsplash.com/photo-1531058020387-3be344556be6?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 3456, refCount: 5 },
+            { id: 'v7', name: '新员工入职培训.mp4', size: '320MB', duration: '12:45', uploader: '李晓华', uploadedAt: '2023-12-28', category: 'train', tags: ['培训', '入职'], desc: '新员工入职流程培训视频。', poster: 'https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 2180, refCount: 7 },
+            { id: 'v8', name: '政务服务宣传片.mp4', size: '178MB', duration: '04:12', uploader: '陈思远', uploadedAt: '2023-12-25', category: 'promo', tags: ['政务', '宣传'], desc: '政务服务标准化宣传片。', poster: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 5680, refCount: 4 },
+            { id: 'v9', name: '应急演练实录.mp4', size: '420MB', duration: '15:30', uploader: '吴晓燕', uploadedAt: '2023-12-20', category: 'train', tags: ['应急', '演练'], desc: '应急演练全过程实录。', poster: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 1240, refCount: 2 },
+            { id: 'v10', name: '年终表彰大会.mp4', size: '380MB', duration: '18:24', uploader: '周明杰', uploadedAt: '2023-12-18', category: 'meeting', tags: ['表彰', '会议'], desc: '年终总结表彰大会实况。', poster: 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 4520, refCount: 3 },
+            { id: 'v11', name: '企业品牌故事.mp4', size: '210MB', duration: '07:08', uploader: '王建国', uploadedAt: '2023-12-15', category: 'promo', tags: ['品牌', '宣传'], desc: '企业品牌发展历程故事片。', poster: 'https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 2890, refCount: 1 },
+            { id: 'v12', name: '系统操作培训.mp4', size: '156MB', duration: '09:42', uploader: '陈思远', uploadedAt: '2023-12-12', category: 'train', tags: ['系统', '培训'], desc: '业务系统操作流程培训。', poster: 'https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=400&h=200&fit=crop', url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 1850, refCount: 0 }
+        ];
+
+        const CATEGORY_LABEL = { train: '培训视频', promo: '宣传视频', meeting: '会议视频', other: '其他' };
+
+        const state = {
+            currentTab: 'all',
+            currentPage: 1,
+            pageSize: 9,
+            searchKeyword: '',
+            selectedIds: new Set(),
+            previewingId: null,
+            editingId: null
+        };
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
+        function closeModal(id) { const el = document.getElementById(id); el.classList.add('hidden'); el.classList.remove('flex'); }
+        function showToast(msg, kind = 'success') {
             const toast = document.getElementById('toast');
-            document.getElementById('toastText').textContent = message;
+            const icon = document.getElementById('toastIcon');
+            const colors = { success: 'bg-accent-green', error: 'bg-accent-red', info: 'bg-accent-cyan' };
+            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', info: 'fa-info-circle' };
+            toast.className = `fixed bottom-6 right-6 ${colors[kind]} text-white px-6 py-3 rounded-xl shadow-lg z-50`;
+            icon.className = `fas ${icons[kind]} mr-2`;
+            document.getElementById('toastText').textContent = msg;
             toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 2000);
+            clearTimeout(toast._t);
+            toast._t = setTimeout(() => toast.classList.add('hidden'), 2000);
         }
+        function findItem(id) { return VIDEOS.find(v => v.id === id); }
+        function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+        function sizeToMB(s) { const m = String(s).match(/^([\d.]+)(KB|MB|GB)$/i); if (!m) return 0; const v = parseFloat(m[1]); return m[2].toUpperCase() === 'KB' ? v/1024 : m[2].toUpperCase() === 'GB' ? v*1024 : v; }
+        function durationToSec(d) { const m = String(d).match(/^(\d+):(\d+)$/); return m ? parseInt(m[1])*60 + parseInt(m[2]) : 0; }
+        function secToDuration(sec) { const h = Math.floor(sec/3600); const m = Math.floor((sec%3600)/60); const s = sec%60; return (h>0?h+':':'') + String(m).padStart(2,'0') + ':' + String(s).padStart(2,'0'); }
+
+        function getFiltered() {
+            const kw = state.searchKeyword.toLowerCase().trim();
+            return VIDEOS.filter(v => {
+                if (state.currentTab !== 'all' && v.category !== state.currentTab) return false;
+                if (!kw) return true;
+                const hay = [v.name, v.uploader, CATEGORY_LABEL[v.category] || '', ...(v.tags || [])].join(' ').toLowerCase();
+                return hay.includes(kw);
+            });
+        }
+
+        function renderGrid() {
+            const all = getFiltered();
+            const totalPages = Math.max(1, Math.ceil(all.length / state.pageSize));
+            if (state.currentPage > totalPages) state.currentPage = totalPages;
+            const start = (state.currentPage - 1) * state.pageSize;
+            const slice = all.slice(start, start + state.pageSize);
+
+            const grid = document.getElementById('videoGrid');
+            const empty = document.getElementById('emptyState');
+            if (slice.length === 0) {
+                grid.innerHTML = '';
+                grid.classList.add('hidden');
+                empty.classList.remove('hidden');
+            } else {
+                grid.classList.remove('hidden');
+                empty.classList.add('hidden');
+                grid.innerHTML = slice.map(v => {
+                    const isSel = state.selectedIds.has(v.id);
+                    return `
+                        <div class="video-card bg-white rounded-xl border border-[#E2E8F0] overflow-hidden cursor-pointer group ${isSel ? 'selected' : ''}">
+                            <input type="checkbox" class="card-checkbox w-5 h-5 rounded accent-accent-blue cursor-pointer" ${isSel ? 'checked' : ''} onchange="toggleSelect('${v.id}', this.checked)">
+                            <div class="relative" onclick="event.target.tagName !== 'INPUT' && openPreview('${v.id}')">
+                                <img src="${v.poster}" class="w-full h-40 object-cover">
+                                <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                    <div class="w-14 h-14 rounded-full bg-white/30 flex items-center justify-center backdrop-blur">
+                                        <i class="fas fa-play text-white text-xl ml-1"></i>
+                                    </div>
+                                </div>
+                                <div class="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-0.5 rounded">${v.duration}</div>
+                                ${v.refCount > 0 ? `<div class="absolute top-2 right-2 bg-accent-cyan/90 text-white text-xs px-2 py-0.5 rounded flex items-center gap-1"><i class="fas fa-link"></i>${v.refCount}</div>` : ''}
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-start justify-between gap-2">
+                                    <h3 class="font-medium text-sm line-clamp-1 flex-1">${escapeHtml(v.name)}</h3>
+                                    <div class="flex items-center gap-1 shrink-0">
+                                        <button title="编辑" onclick="event.stopPropagation(); openEdit('${v.id}')" class="w-7 h-7 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-accent-blue"><i class="fas fa-pen text-xs"></i></button>
+                                        <button title="复制" onclick="event.stopPropagation(); handleCopy('${v.id}')" class="w-7 h-7 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-accent-cyan"><i class="fas fa-link text-xs"></i></button>
+                                        <button title="删除" onclick="event.stopPropagation(); confirmDelete('${v.id}')" class="w-7 h-7 rounded-lg hover:bg-gray-100 text-gray-500 hover:text-accent-red"><i class="fas fa-trash text-xs"></i></button>
+                                    </div>
+                                </div>
+                                <div class="flex items-center justify-between text-xs text-gray-500 mt-2">
+                                    <span><i class="fas fa-play mr-1 text-accent-cyan"></i>${v.plays.toLocaleString()}</span>
+                                    <span>${v.uploadedAt}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            const totalSize = VIDEOS.reduce((s, v) => s + sizeToMB(v.size), 0);
+            const totalPlays = VIDEOS.reduce((s, v) => s + (v.plays || 0), 0);
+            const totalSec = VIDEOS.reduce((s, v) => s + durationToSec(v.duration), 0);
+            document.getElementById('statTotal').textContent = VIDEOS.length;
+            document.getElementById('statPlay').textContent = (totalPlays/10000).toFixed(1) + '万';
+            document.getElementById('statSize').textContent = totalSize >= 1024 ? (totalSize/1024).toFixed(1) + ' GB' : totalSize.toFixed(0) + ' MB';
+            document.getElementById('statDuration').textContent = secToDuration(totalSec);
+
+            renderPagination(all.length, totalPages);
+            updateBatchBar();
+            updateSelectAllState(slice);
+        }
+
+        function renderPagination(total, totalPages) {
+            const bar = document.getElementById('paginationBar');
+            const start = (state.currentPage - 1) * state.pageSize + 1;
+            const end = Math.min(state.currentPage * state.pageSize, total);
+            bar.innerHTML = `
+                <span class="text-sm text-gray-500">${total === 0 ? '共 0 个' : `显示 ${start}-${end} 个，共 ${total} 个`}</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="changePage(${state.currentPage - 1})" ${state.currentPage <= 1 ? 'disabled' : ''} class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-gray-900 hover:border-accent-blue transition-colors text-sm disabled:opacity-40 disabled:cursor-not-allowed">上一页</button>
+                    <span class="px-3 text-sm text-gray-700">${state.currentPage} / ${totalPages}</span>
+                    <button onclick="changePage(${state.currentPage + 1})" ${state.currentPage >= totalPages ? 'disabled' : ''} class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-gray-900 hover:border-accent-blue transition-colors text-sm disabled:opacity-40 disabled:cursor-not-allowed">下一页</button>
+                </div>
+            `;
+        }
+
+        document.getElementById('tabBar').addEventListener('click', e => {
+            const btn = e.target.closest('button[data-cat]');
+            if (!btn) return;
+            state.currentTab = btn.dataset.cat;
+            state.currentPage = 1;
+            document.querySelectorAll('#tabBar button').forEach(b => {
+                const active = b === btn;
+                b.className = `tab-pill px-4 py-2 rounded-lg text-sm font-medium ${active ? 'bg-accent-blue text-white' : 'text-gray-600 hover:bg-gray-100'}`;
+            });
+            renderGrid();
+        });
+
+        document.getElementById('searchInput').addEventListener('input', e => {
+            state.searchKeyword = e.target.value;
+            state.currentPage = 1;
+            renderGrid();
+        });
+
+        function changePage(p) {
+            const all = getFiltered();
+            const totalPages = Math.max(1, Math.ceil(all.length / state.pageSize));
+            if (p < 1 || p > totalPages) return;
+            state.currentPage = p;
+            renderGrid();
+        }
+
+        function toggleSelect(id, checked) {
+            if (checked) state.selectedIds.add(id); else state.selectedIds.delete(id);
+            updateBatchBar();
+            updateSelectAllState();
+            const card = document.querySelector(`.video-card input[onchange*="${id}"]`)?.closest('.video-card');
+            if (card) card.classList.toggle('selected', checked);
+        }
+        function toggleSelectAll(checked) {
+            const slice = getFiltered().slice((state.currentPage - 1) * state.pageSize, state.currentPage * state.pageSize);
+            slice.forEach(v => checked ? state.selectedIds.add(v.id) : state.selectedIds.delete(v.id));
+            renderGrid();
+        }
+        function updateSelectAllState(slice) {
+            slice = slice || getFiltered().slice((state.currentPage - 1) * state.pageSize, state.currentPage * state.pageSize);
+            const all = document.getElementById('selectAll');
+            if (!all) return;
+            const ids = slice.map(v => v.id);
+            const checkedCount = ids.filter(id => state.selectedIds.has(id)).length;
+            all.checked = ids.length > 0 && checkedCount === ids.length;
+            all.indeterminate = checkedCount > 0 && checkedCount < ids.length;
+        }
+        function clearSelection() { state.selectedIds.clear(); renderGrid(); }
+        function updateBatchBar() {
+            const bar = document.getElementById('batchBar');
+            const n = state.selectedIds.size;
+            if (n > 0) { bar.classList.remove('hidden'); document.getElementById('batchCount').textContent = n; }
+            else bar.classList.add('hidden');
+        }
+
+        function handleUpload() {
+            const name = document.getElementById('upName').value.trim();
+            if (!name) { showToast('请填写视频标题', 'error'); return; }
+            const category = document.getElementById('upCategory').value;
+            const duration = document.getElementById('upDuration').value.trim() || '00:00';
+            const tagsRaw = document.getElementById('upTags').value.trim();
+            const tags = tagsRaw ? tagsRaw.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
+            const id = 'v' + (VIDEOS.length + 1) + '_' + Date.now();
+            const posters = ['https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=200&fit=crop','https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=200&fit=crop','https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=200&fit=crop'];
+            VIDEOS.unshift({ id, name, size: '150MB', duration, uploader: '当前用户', uploadedAt: new Date().toISOString().slice(0,10), category, tags, desc: '', poster: posters[VIDEOS.length % posters.length], url: 'https://www.w3schools.com/html/mov_bbb.mp4', plays: 0, refCount: 0 });
+            closeModal('uploadModal');
+            document.getElementById('upName').value = ''; document.getElementById('upTags').value = ''; document.getElementById('upDuration').value = '';
+            state.currentTab = 'all'; state.currentPage = 1;
+            document.querySelectorAll('#tabBar button').forEach(b => {
+                const active = b.dataset.cat === 'all';
+                b.className = `tab-pill px-4 py-2 rounded-lg text-sm font-medium ${active ? 'bg-accent-blue text-white' : 'text-gray-600 hover:bg-gray-100'}`;
+            });
+            renderGrid();
+            showToast('视频已上传');
+        }
+
+        function openEdit(id) {
+            const v = findItem(id);
+            if (!v) return;
+            state.editingId = id;
+            document.getElementById('edPreview').src = v.poster;
+            document.getElementById('edName').value = v.name;
+            document.getElementById('edCategory').value = v.category;
+            document.getElementById('edDuration').value = v.duration;
+            document.getElementById('edTags').value = (v.tags || []).join(',');
+            document.getElementById('edUploader').value = v.uploader;
+            document.getElementById('edSize').value = v.size;
+            document.getElementById('edUploadedAt').value = v.uploadedAt;
+            document.getElementById('edDesc').value = v.desc || '';
+            openModal('editModal');
+        }
+        function handleSaveEdit() {
+            const v = findItem(state.editingId);
+            if (!v) return;
+            const name = document.getElementById('edName').value.trim();
+            if (!name) { showToast('标题不能为空', 'error'); return; }
+            v.name = name;
+            v.category = document.getElementById('edCategory').value;
+            v.duration = document.getElementById('edDuration').value.trim() || v.duration;
+            const tagsRaw = document.getElementById('edTags').value.trim();
+            v.tags = tagsRaw ? tagsRaw.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
+            v.desc = document.getElementById('edDesc').value.trim();
+            closeModal('editModal');
+            renderGrid();
+            showToast('保存成功');
+        }
+
+        function openPreview(id) {
+            const v = findItem(id);
+            if (!v) return;
+            state.previewingId = id;
+            document.getElementById('pvCatChip').textContent = CATEGORY_LABEL[v.category];
+            document.getElementById('pvTitle').textContent = v.name;
+            const video = document.getElementById('pvVideo');
+            const source = video.querySelector('source');
+            source.src = v.url;
+            video.poster = v.poster;
+            video.load();
+            document.getElementById('pvName').textContent = v.name;
+            document.getElementById('pvCategory').textContent = CATEGORY_LABEL[v.category];
+            document.getElementById('pvDuration').textContent = v.duration;
+            document.getElementById('pvSize').textContent = v.size;
+            document.getElementById('pvUploader').textContent = v.uploader;
+            document.getElementById('pvUploadedAt').textContent = v.uploadedAt;
+            document.getElementById('pvPlay').textContent = v.plays.toLocaleString();
+            document.getElementById('pvTags').textContent = (v.tags && v.tags.length) ? v.tags.map(t => '#'+t).join('  ') : '—';
+            document.getElementById('pvDesc').textContent = v.desc || '—';
+            openModal('previewModal');
+        }
+        function stopPreviewVideo() {
+            const video = document.getElementById('pvVideo');
+            if (video) { video.pause(); video.currentTime = 0; }
+        }
+        function handleCopy(id) {
+            const v = findItem(id);
+            if (!v) return;
+            const fakeUrl = `https://cdn.example.com/videos/${v.id}/${encodeURIComponent(v.name)}`;
+            try { navigator.clipboard.writeText(fakeUrl); } catch(e) {}
+            showToast('链接已复制', 'info');
+        }
+        function handleCopyLinkFromPreview() { handleCopy(state.previewingId); }
+        function handleDownloadFromPreview() {
+            const v = findItem(state.previewingId);
+            if (!v) return;
+            showToast('下载已开始', 'info');
+            setTimeout(() => {
+                try {
+                    const blob = new Blob([`Mock video: ${v.name}`], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a'); a.href = url; a.download = v.name + '.txt';
+                    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                } catch(e) {}
+            }, 300);
+        }
+        function handleEditFromPreview() { closeModal('previewModal'); openEdit(state.previewingId); }
+        function handleDeleteFromPreview() { closeModal('previewModal'); confirmDelete(state.previewingId); }
+
+        function confirmDelete(id) {
+            const v = findItem(id);
+            if (!v) return;
+            document.getElementById('cfTitle').textContent = '删除视频';
+            document.getElementById('cfBody').textContent = `确定要删除「${v.name}」吗？删除后无法恢复。`;
+            const btn = document.getElementById('cfConfirmBtn');
+            btn.textContent = '确认删除';
+            btn.onclick = () => { doDelete(id); closeModal('confirmModal'); };
+            openModal('confirmModal');
+        }
+        function doDelete(id) {
+            const idx = VIDEOS.findIndex(v => v.id === id);
+            if (idx === -1) return;
+            VIDEOS.splice(idx, 1);
+            state.selectedIds.delete(id);
+            renderGrid();
+            showToast('视频已删除');
+        }
+
+        function openBatchCategory() {
+            if (state.selectedIds.size === 0) return;
+            document.getElementById('bcCount').textContent = state.selectedIds.size;
+            openModal('batchCatModal');
+        }
+        function handleBatchCategory() {
+            const newCat = document.getElementById('bcNewCategory').value;
+            let n = 0;
+            state.selectedIds.forEach(id => { const v = findItem(id); if (v) { v.category = newCat; n++; } });
+            closeModal('batchCatModal');
+            showToast(`已更新 ${n} 项的分类`);
+            state.selectedIds.clear();
+            renderGrid();
+        }
+        function openBatchTag() {
+            if (state.selectedIds.size === 0) return;
+            document.getElementById('btCount').textContent = state.selectedIds.size;
+            document.getElementById('btNewTags').value = '';
+            openModal('batchTagModal');
+        }
+        function handleBatchTag() {
+            const raw = document.getElementById('btNewTags').value.trim();
+            if (!raw) { showToast('请输入标签', 'error'); return; }
+            const newTags = raw.split(/[,，]/).map(t => t.trim()).filter(Boolean);
+            let n = 0;
+            state.selectedIds.forEach(id => {
+                const v = findItem(id);
+                if (v) {
+                    v.tags = v.tags || [];
+                    newTags.forEach(t => { if (!v.tags.includes(t)) v.tags.push(t); });
+                    n++;
+                }
+            });
+            closeModal('batchTagModal');
+            showToast(`已为 ${n} 项添加标签`);
+            state.selectedIds.clear();
+            renderGrid();
+        }
+        function handleBatchDelete() {
+            if (state.selectedIds.size === 0) return;
+            document.getElementById('cfTitle').textContent = '批量删除';
+            document.getElementById('cfBody').textContent = `确定要删除选中的 ${state.selectedIds.size} 个视频吗？删除后无法恢复。`;
+            const btn = document.getElementById('cfConfirmBtn');
+            btn.textContent = '确认删除';
+            btn.onclick = () => {
+                const n = state.selectedIds.size;
+                state.selectedIds.forEach(id => { const idx = VIDEOS.findIndex(v => v.id === id); if (idx !== -1) VIDEOS.splice(idx, 1); });
+                state.selectedIds.clear();
+                renderGrid(); closeModal('confirmModal');
+                showToast(`已删除 ${n} 个视频`);
+            };
+            openModal('confirmModal');
+        }
+
+        renderGrid();
     </script>
 </body>
 </html>

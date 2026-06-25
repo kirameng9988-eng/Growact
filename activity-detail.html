@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动详情 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'secondary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        .tab-btn.active { border-bottom: 2px solid #0A61FF; color: #0A61FF; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+        .breadcrumb-item + .breadcrumb-item::before { content: '/'; margin: 0 8px; color: #94A3B8; }
+    </style>
+</head>
+<body class="bg-secondary-bg text-gray-900">
+
+    <!-- 主内容区 -->
+    <main class="p-6 w-full">
+        <!-- 页面标题 -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold text-gray-900">活动详情</h1>
+                <p class="text-gray-500 mt-1">查看活动的完整信息</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="activity-list.html" class="px-4 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2 text-gray-600 hover:text-gray-900">
+                    <i class="fas fa-arrow-left"></i>
+                    返回列表
+                </a>
+                <a id="editLink" href="#" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                    <i class="fas fa-edit"></i>
+                    编辑
+                </a>
+            </div>
+        </div>
+
+        <!-- 详情卡片 -->
+        <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
+            <!-- 顶部封面与基本信息 -->
+            <div class="relative">
+                <img id="viewCover" src="https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=400&fit=crop" class="w-full h-64 object-cover">
+                <div class="absolute top-4 right-4 flex items-center gap-2">
+                    <span id="viewStatus" class="px-3 py-1 text-xs rounded-full bg-white/90 backdrop-blur"></span>
+                </div>
+            </div>
+
+            <div class="p-6 border-b border-[#E2E8F0]">
+                <h2 id="viewTitle" class="text-2xl font-semibold text-gray-900 mb-3"></h2>
+                <div class="flex items-center gap-4 text-sm text-gray-600 flex-wrap mb-3">
+                    <span><i class="fas fa-folder mr-1 text-gray-400"></i><span id="viewCategory">-</span></span>
+                    <span><i class="fas fa-user mr-1 text-gray-400"></i><span id="viewOrganizer">-</span></span>
+                    <span><i class="fas fa-map-marker-alt mr-1 text-gray-400"></i><span id="viewLocation">-</span></span>
+                    <span><i class="fas fa-users mr-1 text-gray-400"></i><span id="viewParticipants">-</span></span>
+                </div>
+                <div id="viewTags" class="text-sm text-gray-500"></div>
+            </div>
+
+            <!-- Tab导航 -->
+            <div class="flex border-b border-[#E2E8F0] px-6 bg-gray-50">
+                <button type="button" onclick="switchTab('basic')" id="tab-basic" class="tab-btn active px-6 py-3 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]">基础信息</button>
+                <button type="button" onclick="switchTab('detail')" id="tab-detail" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">活动详情</button>
+                <button type="button" onclick="switchTab('resource')" id="tab-resource" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">资源引用</button>
+            </div>
+
+            <div class="p-6">
+                <!-- Tab1: 基础信息 -->
+                <div id="panel-basic" class="tab-panel">
+                    <div class="grid grid-cols-2 gap-6">
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">活动名称</div>
+                            <div id="detailName" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">活动分类</div>
+                            <div id="detailCategory" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">活动地点</div>
+                            <div id="detailLocation" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">主办单位</div>
+                            <div id="detailOrganizer" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">最大报名人数</div>
+                            <div id="detailMaxParticipants" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">已报名人数</div>
+                            <div id="detailParticipants" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="text-sm text-gray-500 mb-1">活动时间</div>
+                            <div id="detailTimeRange" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="text-sm text-gray-500 mb-1">报名时间</div>
+                            <div id="detailRegTimeRange" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="text-sm text-gray-500 mb-1">标签</div>
+                            <div id="detailTags" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div class="col-span-2">
+                            <div class="text-sm text-gray-500 mb-1">活动简介</div>
+                            <div id="detailSummary" class="text-sm text-gray-900 leading-relaxed">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">创建人</div>
+                            <div id="detailCreator" class="text-sm text-gray-900">-</div>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500 mb-1">发布时间</div>
+                            <div id="detailPublishTime" class="text-sm text-gray-900">-</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab2: 活动详情 -->
+                <div id="panel-detail" class="tab-panel hidden">
+                    <div>
+                        <div class="text-sm text-gray-500 mb-2">活动详情</div>
+                        <div id="detailContent" class="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap bg-gray-50 p-4 rounded-xl min-h-[200px]">-</div>
+                    </div>
+                </div>
+
+                <!-- Tab3: 资源引用 -->
+                <div id="panel-resource" class="tab-panel hidden">
+                    <div>
+                        <div class="text-sm text-gray-500 mb-3">已引用资源</div>
+                        <div id="detailResources" class="grid grid-cols-5 gap-3 min-h-[80px]">
+                            <p class="text-sm text-gray-400 col-span-5">暂无引用资源</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部按钮 -->
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-gray-50 sticky bottom-0">
+                <a href="activity-list.html" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-colors">返回</a>
+                <a id="editLinkBottom" href="#" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                    <i class="fas fa-edit"></i>
+                    编辑活动
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <script>
+        // 资源数据（与编辑页一致）
+        const mockResources = {
+            image: [
+                { id: 1, name: '会议现场.jpg', url: 'https://images.unsplash.com/photo-1504711434969-e33886168f5c?w=400&h=300&fit=crop', size: '2.3MB' },
+                { id: 2, name: '活动现场.jpg', url: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=400&h=300&fit=crop', size: '3.1MB' },
+                { id: 3, name: '团队建设.jpg', url: 'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=300&fit=crop', size: '3.5MB' },
+                { id: 4, name: '培训现场.jpg', url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=300&fit=crop', size: '2.8MB' },
+            ],
+            file: [
+                { id: 101, name: '活动策划书.pdf', url: '#', size: '2.3MB', icon: 'fa-file-pdf' },
+                { id: 102, name: '会议资料.docx', url: '#', size: '1.8MB', icon: 'fa-file-word' },
+                { id: 103, name: '报名表.xlsx', url: '#', size: '890KB', icon: 'fa-file-excel' },
+            ],
+            video: [
+                { id: 201, name: '活动回顾.mp4', url: '#', size: '25.3MB', duration: '5:30', poster: 'https://images.unsplash.com/photo-1574717024653-61fd2cf7d944?w=400&h=300&fit=crop' },
+                { id: 202, name: '培训教程.mp4', url: '#', size: '128.5MB', duration: '45:20', poster: 'https://images.unsplash.com/photo-1516321318423-f06f85b5f7c1?w=400&h=300&fit=crop' },
+            ]
+        };
+
+        let currentActivityId = null;
+        let currentActivity = null;
+
+        // 从 URL 读取 id 参数
+        function getActivityIdFromUrl() {
+            const params = new URLSearchParams(window.location.search);
+            const id = params.get('id');
+            return id ? parseInt(id) : null;
+        }
+
+        // 获取活动数据
+        function getAllActivities() {
+            try {
+                const stored = sessionStorage.getItem('activities_data');
+                if (stored) {
+                    return JSON.parse(stored);
+                }
+            } catch (e) {}
+            return getDefaultActivities();
+        }
+
+        function getDefaultActivities() {
+            return [
+                { id: 1, name: '2024数字化转型高峰论坛', category: 'tech', categoryName: '科技创新', status: 'published', participants: 328, maxParticipants: 500, startTime: '2024-03-15 09:00', endTime: '2024-03-15 17:00', regStartTime: '2024-02-01 00:00', regEndTime: '2024-03-10 23:59', publishTime: '2024-02-01 10:00', creator: '张明远', organizer: '数字化转型研究院', location: '北京国际会议中心', summary: '汇聚行业专家，共商企业数字化转型之路', tags: '数字化,转型,高峰论坛', content: '本次论坛将邀请国内外知名专家分享数字化转型最新实践案例...' },
+                { id: 2, name: '企业文化创意大赛', category: 'culture', categoryName: '文化活动', status: 'pending', participants: 156, maxParticipants: 200, startTime: '2024-04-20 14:00', endTime: '2024-04-20 18:00', regStartTime: '2024-03-01 00:00', regEndTime: '2024-04-15 23:59', publishTime: '', creator: '李晓华', organizer: '企业文化部', location: '集团总部报告厅', summary: '激发创意，展示企业文化魅力', tags: '创意,文化,大赛', content: '大赛分为初赛和决赛两个阶段...' },
+                { id: 3, name: '春季篮球友谊赛', category: 'sports', categoryName: '体育运动', status: 'draft', participants: 0, maxParticipants: 100, startTime: '2024-05-10 09:00', endTime: '2024-05-10 16:00', regStartTime: '2024-04-01 00:00', regEndTime: '2024-05-05 23:59', publishTime: '', creator: '王建国', organizer: '工会体育部', location: '集团篮球场', summary: '增进友谊，强身健体', tags: '篮球,友谊赛,春季', content: '比赛采用循环赛制...' },
+                { id: 4, name: '新员工入职培训', category: 'education', categoryName: '教育培训', status: 'published', participants: 45, maxParticipants: 50, startTime: '2024-03-05 09:00', endTime: '2024-03-07 17:00', regStartTime: '2024-02-15 00:00', regEndTime: '2024-03-01 23:59', publishTime: '2024-02-15 08:00', creator: '陈思远', organizer: '人力资源部', location: '培训中心', summary: '帮助新员工快速融入团队', tags: '培训,入职,新员工', content: '培训内容包括公司文化、规章制度、业务介绍...' },
+                { id: 5, name: '网络安全知识竞赛', category: 'tech', categoryName: '科技创新', status: 'ended', participants: 289, maxParticipants: 300, startTime: '2024-01-20 14:00', endTime: '2024-01-20 18:00', regStartTime: '2024-01-01 00:00', regEndTime: '2024-01-15 23:59', publishTime: '2024-01-01 10:00', creator: '张明远', organizer: '信息技术部', location: '线上活动', summary: '提升网络安全意识', tags: '安全,竞赛,网络', content: '竞赛采用线上答题形式...' },
+                { id: 6, name: '读书分享会', category: 'culture', categoryName: '文化活动', status: 'published', participants: 38, maxParticipants: 60, startTime: '2024-03-25 19:00', endTime: '2024-03-25 21:00', regStartTime: '2024-03-01 00:00', regEndTime: '2024-03-20 23:59', publishTime: '2024-03-01 10:00', creator: '周明杰', organizer: '读书协会', location: '员工书屋', summary: '分享阅读心得，交流思想', tags: '读书,分享,交流', content: '本期主题：《百年孤独》...' },
+                { id: 7, name: '周末登山活动', category: 'sports', categoryName: '体育运动', status: 'offline', participants: 42, maxParticipants: 50, startTime: '2024-02-25 08:00', endTime: '2024-02-25 16:00', regStartTime: '2024-02-10 00:00', regEndTime: '2024-02-20 23:59', publishTime: '2024-02-10 10:00', creator: '王建国', organizer: '工会体育部', location: '香山公园', summary: '亲近自然，锻炼身体', tags: '登山,户外,周末', content: '路线全程约8公里...' },
+                { id: 8, name: '数据分析技能培训', category: 'education', categoryName: '教育培训', status: 'published', participants: 65, maxParticipants: 80, startTime: '2024-04-08 09:00', endTime: '2024-04-08 17:00', regStartTime: '2024-03-15 00:00', regEndTime: '2024-04-01 23:59', publishTime: '2024-03-15 10:00', creator: '陈思远', organizer: '数据学院', location: '数据中心会议室', summary: '提升数据分析能力', tags: '数据,培训,技能', content: '培训内容包括Python数据分析基础、Pandas库使用...' },
+                { id: 9, name: '科技创新成果展', category: 'tech', categoryName: '科技创新', status: 'pending', participants: 0, maxParticipants: 200, startTime: '2024-05-20 09:00', endTime: '2024-05-25 17:00', regStartTime: '2024-04-15 00:00', regEndTime: '2024-05-15 23:59', publishTime: '', creator: '张明远', organizer: '科技创新部', location: '展览中心', summary: '展示年度科技创新成果', tags: '科技,创新,成果展', content: '展览将分为多个展区...' },
+                { id: 10, name: '心理健康讲座', category: 'education', categoryName: '教育培训', status: 'draft', participants: 0, maxParticipants: 100, startTime: '2024-04-15 15:00', endTime: '2024-04-15 17:00', regStartTime: '2024-03-20 00:00', regEndTime: '2024-04-10 23:59', publishTime: '', creator: '李晓华', organizer: '人力资源部', location: '集团总部多功能厅', summary: '关注员工心理健康', tags: '心理,健康,讲座', content: '讲座特邀心理专家主讲...' },
+                { id: 11, name: '端午龙舟赛', category: 'sports', categoryName: '体育运动', status: 'published', participants: 120, maxParticipants: 150, startTime: '2024-06-10 08:00', endTime: '2024-06-10 14:00', regStartTime: '2024-05-15 00:00', regEndTime: '2024-06-05 23:59', publishTime: '2024-05-15 10:00', creator: '王建国', organizer: '工会体育部', location: '郊外湖面', summary: '传承传统文化，强身健体', tags: '龙舟,端午,团队', content: '比赛分为预赛和决赛两个阶段...' },
+                { id: 12, name: '中秋联欢晚会', category: 'culture', categoryName: '文化活动', status: 'draft', participants: 0, maxParticipants: 300, startTime: '2024-09-17 19:00', endTime: '2024-09-17 22:00', regStartTime: '2024-08-20 00:00', regEndTime: '2024-09-10 23:59', publishTime: '', creator: '李晓华', organizer: '工会', location: '集团大礼堂', summary: '共庆中秋佳节', tags: '中秋,晚会,联欢', content: '晚会节目丰富多彩...' }
+            ];
+        }
+
+        // 状态徽章
+        function getStatusBadge(status) {
+            const statusMap = {
+                draft: '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600">草稿</span>',
+                pending: '<span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">待审核</span>',
+                published: '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">已发布</span>',
+                ended: '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">已结束</span>',
+                offline: '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-500">已下线</span>'
+            };
+            return statusMap[status] || status;
+        }
+
+        // 加载并渲染详情
+        function loadActivityDetail(id) {
+            const activities = getAllActivities();
+            const activity = activities.find(a => a.id === id);
+            if (!activity) {
+                showToast('未找到对应活动', 'error');
+                setTimeout(() => {
+                    window.location.href = 'activity-list.html';
+                }, 1000);
+                return;
+            }
+
+            currentActivity = activity;
+            currentActivityId = id;
+
+            // 顶部区域
+            if (activity.coverUrl) {
+                document.getElementById('viewCover').src = activity.coverUrl;
+            }
+            document.getElementById('viewStatus').outerHTML = getStatusBadge(activity.status).replace('<span ', '<span id="viewStatus" ');
+            document.getElementById('viewTitle').textContent = activity.name || '-';
+            document.getElementById('viewCategory').textContent = activity.categoryName || '-';
+            document.getElementById('viewOrganizer').textContent = activity.organizer || '-';
+            document.getElementById('viewLocation').textContent = activity.location || '-';
+            document.getElementById('viewParticipants').textContent = `${activity.participants || 0}/${activity.maxParticipants || 0}`;
+            document.getElementById('viewTags').textContent = activity.tags ? `#${activity.tags.replace(/,/g, ' #')}` : '无标签';
+
+            // 基础信息 Tab
+            document.getElementById('detailName').textContent = activity.name || '-';
+            document.getElementById('detailCategory').textContent = activity.categoryName || '-';
+            document.getElementById('detailLocation').textContent = activity.location || '-';
+            document.getElementById('detailOrganizer').textContent = activity.organizer || '-';
+            document.getElementById('detailMaxParticipants').textContent = activity.maxParticipants || '不限';
+            document.getElementById('detailParticipants').textContent = `${activity.participants || 0} 人`;
+            document.getElementById('detailTimeRange').textContent = activity.startTime && activity.endTime ? `${activity.startTime} 至 ${activity.endTime}` : '-';
+            document.getElementById('detailRegTimeRange').textContent = activity.regStartTime && activity.regEndTime ? `${activity.regStartTime} 至 ${activity.regEndTime}` : '-';
+            document.getElementById('detailTags').textContent = activity.tags ? activity.tags.split(',').map(t => `#${t.trim()}`).join(' ') : '无标签';
+            document.getElementById('detailSummary').textContent = activity.summary || '暂无简介';
+            document.getElementById('detailCreator').textContent = activity.creator || '-';
+            document.getElementById('detailPublishTime').textContent = activity.publishTime || '尚未发布';
+
+            // 活动详情 Tab
+            document.getElementById('detailContent').textContent = activity.content || '暂无详情';
+
+            // 资源引用 Tab
+            renderDetailResources(activity.selectedResources || []);
+
+            // 编辑链接
+            document.getElementById('editLink').href = `activity-edit.html?id=${id}`;
+            document.getElementById('editLinkBottom').href = `activity-edit.html?id=${id}`;
+        }
+
+        function renderDetailResources(selectedIds) {
+            const container = document.getElementById('detailResources');
+            if (!selectedIds || selectedIds.length === 0) {
+                container.innerHTML = '<p class="text-sm text-gray-400 col-span-5">暂无引用资源</p>';
+                return;
+            }
+
+            container.innerHTML = selectedIds.map(id => {
+                let resource = null;
+                for (const tab of ['image', 'file', 'video']) {
+                    resource = mockResources[tab].find(r => r.id === id);
+                    if (resource) break;
+                }
+                if (!resource) return '';
+
+                return `
+                    <div class="rounded-lg overflow-hidden border border-[#E2E8F0] bg-white">
+                        ${resource.url && resource.url !== '#' ? `<img src="${resource.url}" class="w-full h-20 object-cover">` :
+                          `<div class="h-20 bg-gray-100 flex items-center justify-center"><i class="fas ${resource.icon || 'fa-file'} text-2xl text-gray-400"></i></div>`}
+                        <div class="p-2">
+                            <p class="text-xs truncate">${resource.name}</p>
+                            <p class="text-xs text-gray-400">${resource.size}</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Tab切换
+        function switchTab(tab) {
+            ['basic', 'detail', 'resource'].forEach(t => {
+                document.getElementById('tab-' + t).classList.remove('active');
+                document.getElementById('tab-' + t).classList.add('border-transparent', 'text-gray-600');
+                document.getElementById('tab-' + t).classList.remove('border-[#0A61FF]', 'text-[#0A61FF]');
+                document.getElementById('panel-' + t).classList.add('hidden');
+            });
+
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('tab-' + tab).classList.remove('border-transparent', 'text-gray-600');
+            document.getElementById('tab-' + tab).classList.add('border-[#0A61FF]', 'text-[#0A61FF]');
+            document.getElementById('panel-' + tab).classList.remove('hidden');
+        }
+
+        // Toast提示
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColors = {
+                success: 'bg-accent-green',
+                error: 'bg-accent-red',
+                warning: 'bg-accent-amber'
+            };
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle'
+            };
+
+            toast.className = `toast ${bgColors[type]} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `
+                <i class="fas ${icons[type]}"></i>
+                <span class="text-sm">${message}</span>
+            `;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // 页面初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const id = getActivityIdFromUrl();
+            if (!id) {
+                showToast('缺少活动ID', 'error');
+                setTimeout(() => {
+                    window.location.href = 'activity-list.html';
+                }, 1000);
+                return;
+            }
+            loadActivityDetail(id);
+        });
+    </script>
+</body>
+</html>

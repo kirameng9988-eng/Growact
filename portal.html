@@ -6,6 +6,8 @@
     <title>天机∙智信</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Lucide Icons (一级菜单使用) -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
     <!-- React 18 (UMD) + Babel Standalone - 用于在浏览器中直接运行 JSX -->
     <script crossorigin src="https://unpkg.com/react@18.3.1/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js"></script>
@@ -41,16 +43,66 @@
         ::-webkit-scrollbar-track { background: #F1F5F9; }
         ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
         ::-webkit-scrollbar-thumb:hover { background: #94A3B8; }
-        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
-        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; color: #0A61FF; }
-        .sidebar-menu-item.active i { color: #0A61FF; }
-        .menu-group-header { user-select: none; cursor: pointer; }
-        .menu-group-header:hover { color: #0A61FF; }
+
+        /* === 一级菜单（带 Lucide 图标） === */
+        .sidebar-group-trigger { user-select: none; cursor: pointer; transition: background-color 0.15s, color 0.15s; }
+        .sidebar-group-trigger:hover { background: rgba(10, 97, 255, 0.04); }
+        .sidebar-group-trigger:hover .lucide { color: #0A61FF; }
+        .sidebar-group-trigger.active { background: rgba(10, 97, 255, 0.10); color: #0A61FF; font-weight: 500; }
+        .sidebar-group-trigger.active .lucide { color: #0A61FF; }
+        .sidebar-group-trigger .group-arrow { transition: transform 0.25s ease; }
+        .sidebar-group-trigger.collapsed .group-arrow { transform: rotate(-90deg); }
+
+        /* === 二级菜单（无图标，仅文字） === */
+        .sidebar-child-item {
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding: 8px 16px 8px 44px;
+            font-size: 13px;
+            color: #475569;
+            cursor: pointer;
+            transition: background-color 0.15s, color 0.15s;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-child-item:hover { background: rgba(10, 97, 255, 0.04); color: #0A61FF; }
+        .sidebar-child-item.active {
+            color: #0A61FF;
+            background: rgba(10, 97, 255, 0.08);
+            border-left-color: #0A61FF;
+            font-weight: 500;
+        }
+
+        /* 子菜单容器展开收起动画 */
         .menu-children { transition: max-height 0.3s ease-in-out, opacity 0.2s ease; overflow: hidden; }
         .menu-children.collapsed { max-height: 0; opacity: 0; }
         .menu-children.expanded { max-height: 1000px; opacity: 1; }
-        .group-arrow { transition: transform 0.3s; }
-        .group-arrow.collapsed { transform: rotate(-90deg); }
+
+        /* === 模块标识头部 === */
+        .sidebar-module-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
+            border-bottom: 1px solid #E2E8F0;
+        }
+        .sidebar-module-logo {
+            width: 32px; height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #0A61FF 0%, #3B82F6 100%);
+            display: flex; align-items: center; justify-content: center;
+            color: #fff;
+            box-shadow: 0 2px 6px rgba(10, 97, 255, 0.25);
+            flex-shrink: 0;
+        }
+        .sidebar-module-meta { line-height: 1.2; min-width: 0; }
+        .sidebar-module-title { font-size: 14px; font-weight: 600; color: #0F172A; }
+        .sidebar-module-subtitle { font-size: 11px; color: #94A3B8; margin-top: 2px; }
+
+        /* Lucide 图标尺寸继承 */
+        .lucide { stroke-width: 1.8; }
+
         .content-frame { width: 100%; height: 100%; border: 0; display: block; background: #F8FAFC; }
         .breadcrumb-item + .breadcrumb-item::before { content: '/'; margin: 0 8px; color: #94A3B8; }
     </style>
@@ -58,8 +110,12 @@
 <body class="bg-secondary-bg text-gray-900 min-h-screen">
     <!-- 顶部导航 -->
     <header class="fixed top-0 left-0 right-0 h-14 bg-[#030714] border-b border-[#1a2744] z-50 flex items-center px-6">
-        <!-- 面包屑式产品切换器 (React 挂载点) -->
-        <div id="hamburger-root" class="flex items-center"></div>
+        <!-- 产品切换器汉堡按钮 (React 挂载点) -->
+        <div id="hamburger-root" class="flex items-center mr-3"></div>
+        <div class="flex items-center gap-3">
+            <img src="images/logo.png" alt="logo" class="h-9">
+            <span class="text-lg font-semibold text-white">天机∙智信</span>
+        </div>
         <div class="flex-1"></div>
         <div class="flex items-center gap-4">
             <button class="relative text-gray-600 hover:text-white transition-colors">
@@ -78,14 +134,24 @@
     </header>
 
     <!-- 左侧菜单 -->
-    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40">
-        <nav class="py-4" id="sidebar-nav">
+    <aside class="fixed top-14 left-0 bottom-0 w-[220px] bg-white border-r border-[#E2E8F0] overflow-y-auto z-40 flex flex-col">
+        <!-- 模块标识 -->
+        <div class="sidebar-module-header">
+            <div class="sidebar-module-logo">
+                <i data-lucide="calendar-range" class="w-5 h-5"></i>
+            </div>
+            <div class="sidebar-module-meta">
+                <div class="sidebar-module-title">活动运营中心</div>
+                <div class="sidebar-module-subtitle">天机智信 · TianJi</div>
+            </div>
+        </div>
+        <nav class="py-2 flex-1" id="sidebar-nav">
             <!-- 菜单由 JS 动态生成 -->
         </nav>
     </aside>
 
-    <!-- 面包屑 -->
-    <div class="fixed top-14 left-[220px] right-0 h-10 bg-white border-b border-[#E2E8F0] z-30 flex items-center px-6 text-sm">
+    <!-- 面包屑（首页隐藏，按 docs/面包屑优化提示词.md 规则渲染：仅显示 一级菜单 / 当前页） -->
+    <div id="breadcrumb-bar" class="fixed top-14 left-[220px] right-0 h-10 bg-white border-b border-[#E2E8F0] z-30 flex items-center px-6 text-sm">
         <nav class="flex items-center text-gray-500" id="breadcrumb">
             <span class="breadcrumb-item text-gray-700">首页</span>
         </nav>
@@ -110,8 +176,12 @@
 
         // 活动运营（5 项核心菜单）
         activityManage:      { url: 'activity-list.html',            title: '活动管理',       section: '活动运营' },
+        activityCreate:      { url: 'activity-create.html',          title: '创建活动',       section: '活动运营',    parentTitle: '活动管理' },
+        activityEdit:        { url: 'activity-edit.html',            title: '编辑活动',       section: '活动运营',    parentTitle: '活动管理' },
+        activityDetail:      { url: 'activity-detail.html',          title: '活动详情',       section: '活动运营',    parentTitle: '活动管理' },
         activityReview:      { url: 'content-review.html',           title: '活动审核',       section: '活动运营' },
-        activityPublish:     { url: 'content-publish.html',          title: '活动发布',       section: '活动运营' },
+        activityPublish:     { url: 'activity-publish.html',         title: '活动发布',       section: '活动运营' },
+        activityPublishList: { url: 'activity-publish-list.html',    title: '发布记录',       section: '活动运营',    parentTitle: '活动发布' },
         activityRegister:    { url: 'activity-registration.html',    title: '报名管理',       section: '活动运营' },
         activitySign:        { url: 'activity-signin.html',          title: '活动签到',       section: '活动运营' },
         // 活动运营下保留的辅助入口（菜单不展示，但 hash 可直达）
@@ -181,55 +251,55 @@
         {
             key: 'dashboard',
             section: '首页',
-            icon: 'fas fa-th-large',
+            icon: 'home',
             label: '首页',
             children: null
         },
         {
             key: 'activity',
             section: '活动运营',
-            icon: 'fas fa-calendar-alt',
+            icon: 'calendar-range',
             label: '活动运营',
             children: [
-                { key: 'activityManage',   icon: 'fas fa-list',            label: '活动管理' },
-                { key: 'activityReview',   icon: 'fas fa-clipboard-check', label: '活动审核', badge: 5 },
-                { key: 'activityPublish',  icon: 'fas fa-paper-plane',     label: '活动发布' },
-                { key: 'activityRegister', icon: 'fas fa-users',           label: '报名管理' },
-                { key: 'activitySign',     icon: 'fas fa-qrcode',          label: '活动签到' }
+                { key: 'activityManage',   label: '活动管理' },
+                { key: 'activityReview',   label: '活动审核', badge: 5 },
+                { key: 'activityPublish',  label: '活动发布' },
+                { key: 'activityRegister', label: '报名管理' },
+                { key: 'activitySign',     label: '活动签到' }
             ]
         },
         {
             key: 'operation',
             section: '运营配置',
-            icon: 'fas fa-sliders-h',
+            icon: 'settings-2',
             label: '运营配置',
             children: [
-                { key: 'activityCategory',     icon: 'fas fa-folder-open', label: '活动分类' },
-                { key: 'activityTag',          icon: 'fas fa-tags',        label: '活动标签' },
-                { key: 'activityPortalConfig', icon: 'fas fa-cog',         label: '专区配置' }
+                { key: 'activityCategory',     label: '活动分类' },
+                { key: 'activityTag',          label: '活动标签' },
+                { key: 'activityPortalConfig', label: '专区配置' }
             ]
         },
         {
             key: 'resource',
             section: '资源中心',
-            icon: 'fas fa-images',
+            icon: 'folder-open',
             label: '资源中心',
             children: [
-                { key: 'imageManage', icon: 'fas fa-image',       label: '图片管理' },
-                { key: 'fileManage',  icon: 'fas fa-folder-open', label: '文件管理' },
-                { key: 'videoManage', icon: 'fas fa-video',       label: '视频管理' }
+                { key: 'imageManage', label: '图片管理' },
+                { key: 'fileManage',  label: '文件管理' },
+                { key: 'videoManage', label: '视频管理' }
             ]
         },
         {
             key: 'system',
             section: '系统管理',
-            icon: 'fas fa-cog',
+            icon: 'shield-check',
             label: '系统管理',
             children: [
-                { key: 'userManage',     icon: 'fas fa-users-cog', label: '用户管理' },
-                { key: 'rolePermission', icon: 'fas fa-shield-alt', label: '角色权限' },
-                { key: 'systemSetting',  icon: 'fas fa-sliders-h', label: '系统设置' },
-                { key: 'loginLog',       icon: 'fas fa-history',   label: '日志管理' }
+                { key: 'userManage',     label: '用户管理' },
+                { key: 'rolePermission', label: '角色权限' },
+                { key: 'systemSetting',  label: '系统设置' },
+                { key: 'loginLog',       label: '日志管理' }
             ]
         }
     ];
@@ -264,25 +334,26 @@
 
     /* =========================================================================
      * 渲染侧边栏
+     *  - 一级菜单：[Lucide 图标] 文字  [chevron]，可点击展开/收起
+     *  - 二级菜单：缩进的纯文字项，active 时显示蓝色左边框
      * ========================================================================= */
     function renderSidebar() {
         const nav = document.getElementById('sidebar-nav');
         nav.innerHTML = '';
 
         menuConfig.forEach(group => {
-            // 一级菜单
             const groupEl = document.createElement('div');
-            groupEl.className = 'mb-2';
+            groupEl.className = 'mb-1';
 
             if (!group.children) {
-                // 单项菜单（如工作台）
+                // 单项一级菜单（如首页）
                 const isActive = state.currentPage === group.key;
                 const link = document.createElement('a');
                 link.href = '#/' + group.key;
-                link.className = 'sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer ' +
-                    (isActive ? 'active text-accent-blue' : 'text-gray-600');
+                link.className = 'sidebar-group-trigger flex items-center gap-3 px-4 py-3 text-sm ' +
+                    (isActive ? 'active text-accent-blue' : 'text-gray-700');
                 link.innerHTML = `
-                    <i class="${group.icon} w-5 ${isActive ? 'text-accent-blue' : 'text-gray-500'}"></i>
+                    <i data-lucide="${group.icon}" class="lucide w-5 h-5 ${isActive ? 'text-accent-blue' : 'text-gray-500'}"></i>
                     <span>${group.label}</span>
                 `;
                 link.addEventListener('click', (e) => {
@@ -291,16 +362,24 @@
                 });
                 groupEl.appendChild(link);
             } else {
-                // 分组菜单
+                // 分组一级菜单
                 const isExpanded = state.expandedGroups.includes(group.key);
-                const header = document.createElement('div');
-                header.className = 'menu-group-header flex items-center justify-between px-4 py-2 text-xs text-gray-500 uppercase tracking-wider';
-                header.innerHTML = `
-                    <span>${group.section}</span>
-                    <i class="fas fa-chevron-down group-arrow text-[10px] ${isExpanded ? '' : 'collapsed'}"></i>
+                const isGroupActive = isGroupActiveByPage(group.key);
+                const trigger = document.createElement('a');
+                trigger.href = 'javascript:void(0)';
+                trigger.className = 'sidebar-group-trigger flex items-center gap-3 px-4 py-3 text-sm ' +
+                    (isExpanded ? '' : 'collapsed ') +
+                    (isGroupActive ? 'active text-accent-blue' : 'text-gray-700');
+                trigger.innerHTML = `
+                    <i data-lucide="${group.icon}" class="lucide w-5 h-5 ${isGroupActive ? 'text-accent-blue' : 'text-gray-500'}"></i>
+                    <span>${group.label}</span>
+                    <i data-lucide="chevron-down" class="lucide group-arrow w-4 h-4 ml-auto text-gray-400"></i>
                 `;
-                header.addEventListener('click', () => toggleGroup(group.key));
-                groupEl.appendChild(header);
+                trigger.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    toggleGroup(group.key);
+                });
+                groupEl.appendChild(trigger);
 
                 // 子菜单容器
                 const children = document.createElement('div');
@@ -311,13 +390,11 @@
                     const isActive = state.currentPage === item.key;
                     const link = document.createElement('a');
                     link.href = '#/' + item.key;
-                    link.className = 'sidebar-menu-item flex items-center gap-3 px-4 py-3 text-sm cursor-pointer ' +
-                        (isActive ? 'active text-accent-blue' : 'text-gray-600');
+                    link.className = 'sidebar-child-item ' + (isActive ? 'active' : '');
                     link.dataset.key = item.key;
                     link.innerHTML = `
-                        <i class="${item.icon} w-5 ${isActive ? 'text-accent-blue' : 'text-gray-500'}"></i>
                         <span>${item.label}</span>
-                        ${item.badge ? `<span class="ml-auto bg-accent-red text-white text-xs px-2 py-0.5 rounded-full">${item.badge}</span>` : ''}
+                        ${item.badge ? `<span class="ml-auto bg-accent-red text-white text-[11px] px-1.5 py-[1px] rounded-full">${item.badge}</span>` : ''}
                     `;
                     link.addEventListener('click', (e) => {
                         e.preventDefault();
@@ -331,6 +408,18 @@
 
             nav.appendChild(groupEl);
         });
+
+        // 渲染完 HTML 后，让 Lucide 把 <i data-lucide="..."> 替换为 SVG
+        if (window.lucide && typeof window.lucide.createIcons === 'function') {
+            window.lucide.createIcons({ attrs: { class: 'lucide' }, nameAttr: 'data-lucide' });
+        }
+    }
+
+    /* 判断一级分组下是否有当前激活的子项（用于一级菜单高亮） */
+    function isGroupActiveByPage(groupKey) {
+        const group = menuConfig.find(g => g.key === groupKey);
+        if (!group || !group.children) return state.currentPage === groupKey;
+        return group.children.some(c => c.key === state.currentPage);
     }
 
     /* =========================================================================
@@ -400,36 +489,39 @@
 
     /* =========================================================================
      * 面包屑
-     *  - 特殊处理：当页面就是"首页"（dashboard）时，只显示一个当前指示项
+     *  - 规则见 docs/面包屑优化提示词.md
+     *  - 首页（dashboard）→ 隐藏整条面包屑区
+     *  - 其他页面 → 仅显示 "一级菜单 / 当前页"，不再显示"首页"
+     *  - 支持三级面包屑：当 page.parentTitle 存在时，渲染 一级菜单 / 父页 / 当前页
+     *    （用于创建活动 / 编辑活动 / 活动详情 等子页面）
      * ========================================================================= */
     function renderBreadcrumb(page) {
+        const bar = document.getElementById('breadcrumb-bar');
         const bc = document.getElementById('breadcrumb');
         bc.innerHTML = '';
 
-        // 当访问的就是首页（dashboard），避免显示『首页 / 首页 / 首页』
+        // 首页：直接隐藏面包屑区
         if (page.key === 'dashboard' || page.section === '首页') {
-            const current = document.createElement('span');
-            current.className = 'breadcrumb-item text-gray-700 font-medium';
-            current.textContent = '首页';
-            bc.appendChild(current);
+            bar.classList.add('hidden');
             return;
         }
+        bar.classList.remove('hidden');
 
-        const home = document.createElement('a');
-        home.href = '#/dashboard';
-        home.className = 'breadcrumb-item text-gray-500 hover:text-accent-blue';
-        home.textContent = '首页';
-        home.addEventListener('click', (e) => {
-            e.preventDefault();
-            loadPage('dashboard');
-        });
-        bc.appendChild(home);
-
+        // 一级菜单
         const section = document.createElement('span');
         section.className = 'breadcrumb-item text-gray-500';
         section.textContent = page.section;
         bc.appendChild(section);
 
+        // 二级父页（可选，用于创建/编辑/查看活动等场景）
+        if (page.parentTitle && page.parentTitle !== page.title) {
+            const parent = document.createElement('span');
+            parent.className = 'breadcrumb-item text-gray-500';
+            parent.textContent = page.parentTitle;
+            bc.appendChild(parent);
+        }
+
+        // 当前页
         const current = document.createElement('span');
         current.className = 'breadcrumb-item text-gray-700 font-medium';
         current.textContent = page.title;

@@ -31,11 +31,16 @@
         * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
         .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
         .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .file-icon-pdf { background: rgba(220, 38, 38, 0.1); color: #DC2626; }
+        .file-icon-word { background: rgba(10, 97, 255, 0.1); color: #0A61FF; }
+        .file-icon-excel { background: rgba(5, 150, 105, 0.1); color: #059669; }
+        .file-icon-ppt { background: rgba(217, 119, 6, 0.1); color: #D97706; }
+        .file-icon-other { background: rgba(100, 116, 139, 0.1); color: #64748B; }
+        .tab-pill { transition: all .15s ease; }
+        .row-checkbox { width: 16px; height: 16px; cursor: pointer; accent-color: #0A61FF; }
     </style>
 </head>
 <body class="bg-secondary-bg text-gray-900">
-
-    
 
     <main class="p-6">
         <div class="flex items-center justify-between mb-6">
@@ -43,198 +48,671 @@
                 <h1 class="text-2xl font-semibold">文件管理</h1>
                 <p class="text-gray-500 mt-1">管理文档和附件文件</p>
             </div>
-            <button onclick="openModal('uploadModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
-                <i class="fas fa-upload"></i>
-                上传文件
-            </button>
+            <div class="flex items-center gap-3">
+                <span class="text-sm text-gray-500"><span id="totalCount">0</span> 个文件</span>
+                <button onclick="openModal('uploadModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                    <i class="fas fa-upload"></i>
+                    上传文件
+                </button>
+            </div>
+        </div>
+
+        <!-- 筛选与搜索 -->
+        <div class="flex items-center gap-4 mb-4">
+            <div class="flex items-center gap-2 flex-wrap" id="tabBar">
+                <button data-cat="all" class="tab-pill px-4 py-2 bg-accent-blue text-white rounded-lg text-sm font-medium">全部</button>
+                <button data-cat="pdf" class="tab-pill px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">PDF</button>
+                <button data-cat="word" class="tab-pill px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">Word</button>
+                <button data-cat="excel" class="tab-pill px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">Excel</button>
+                <button data-cat="ppt" class="tab-pill px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">PPT</button>
+                <button data-cat="other" class="tab-pill px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg text-sm">其他</button>
+            </div>
+            <div class="flex-1"></div>
+            <div class="relative">
+                <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input id="searchInput" type="text" placeholder="搜索文件名称、标签、上传者..." class="bg-white border border-[#E2E8F0] rounded-xl pl-12 pr-4 py-2 text-sm focus:border-accent-blue focus:outline-none w-72">
+            </div>
         </div>
 
         <!-- 文件列表 -->
         <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
             <table class="w-full">
                 <thead>
-                    <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-primary-bg/50">
+                    <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-gray-50">
+                        <th class="px-4 py-3 font-medium w-10">
+                            <input type="checkbox" id="selectAll" class="row-checkbox" onchange="toggleSelectAll(this.checked)">
+                        </th>
                         <th class="px-4 py-3 font-medium">文件名</th>
-                        <th class="px-4 py-3 font-medium w-24">类型</th>
-                        <th class="px-4 py-3 font-medium w-24">大小</th>
-                        <th class="px-4 py-3 font-medium w-28">上传者</th>
+                        <th class="px-4 py-3 font-medium w-20">类型</th>
+                        <th class="px-4 py-3 font-medium w-20">大小</th>
+                        <th class="px-4 py-3 font-medium w-24">上传者</th>
                         <th class="px-4 py-3 font-medium w-28">上传时间</th>
-                        <th class="px-4 py-3 font-medium w-28 text-right">操作</th>
+                        <th class="px-4 py-3 font-medium text-right w-44">操作</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr class="table-row border-b border-[#E2E8F0]/50 transition-colors">
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-accent-blue/20 flex items-center justify-center">
-                                    <i class="fas fa-file-pdf text-accent-blue"></i>
-                                </div>
-                                <div>
-                                    <div class="font-medium">数字化转型工作方案.pdf</div>
-                                    <div class="text-xs text-gray-500">PDF文档</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">PDF</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">2.4MB</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">王建国</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">2024-01-15</td>
-                        <td class="px-4 py-3 text-right">
-                            <button class="text-accent-blue hover:underline text-sm mr-3">下载</button>
-                            <button class="text-accent-red hover:underline text-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr class="table-row border-b border-[#E2E8F0]/50 transition-colors">
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-accent-green/20 flex items-center justify-center">
-                                    <i class="fas fa-file-word text-accent-green"></i>
-                                </div>
-                                <div>
-                                    <div class="font-medium">安全生产管理制度.docx</div>
-                                    <div class="text-xs text-gray-500">Word文档</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">DOCX</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">1.8MB</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">李晓华</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">2024-01-12</td>
-                        <td class="px-4 py-3 text-right">
-                            <button class="text-accent-blue hover:underline text-sm mr-3">下载</button>
-                            <button class="text-accent-red hover:underline text-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr class="table-row border-b border-[#E2E8F0]/50 transition-colors">
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-accent-amber/20 flex items-center justify-center">
-                                    <i class="fas fa-file-excel text-accent-amber"></i>
-                                </div>
-                                <div>
-                                    <div class="font-medium">年度数据统计表.xlsx</div>
-                                    <div class="text-xs text-gray-500">Excel表格</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">XLSX</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">856KB</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">陈思远</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">2024-01-10</td>
-                        <td class="px-4 py-3 text-right">
-                            <button class="text-accent-blue hover:underline text-sm mr-3">下载</button>
-                            <button class="text-accent-red hover:underline text-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr class="table-row border-b border-[#E2E8F0]/50 transition-colors">
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-accent-blue/20 flex items-center justify-center">
-                                    <i class="fas fa-file-pdf text-accent-blue"></i>
-                                </div>
-                                <div>
-                                    <div class="font-medium">绩效考核办法.pdf</div>
-                                    <div class="text-xs text-gray-500">PDF文档</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">PDF</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">1.2MB</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">周明杰</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">2024-01-08</td>
-                        <td class="px-4 py-3 text-right">
-                            <button class="text-accent-blue hover:underline text-sm mr-3">下载</button>
-                            <button class="text-accent-red hover:underline text-sm">删除</button>
-                        </td>
-                    </tr>
-                    <tr class="table-row transition-colors">
-                        <td class="px-4 py-3">
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 rounded-lg bg-accent-blue/10 flex items-center justify-center">
-                                    <i class="fas fa-file-powerpoint text-accent-blue"></i>
-                                </div>
-                                <div>
-                                    <div class="font-medium">年度总结汇报.pptx</div>
-                                    <div class="text-xs text-gray-500">PowerPoint</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">PPTX</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">5.6MB</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">吴晓燕</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">2024-01-05</td>
-                        <td class="px-4 py-3 text-right">
-                            <button class="text-accent-blue hover:underline text-sm mr-3">下载</button>
-                            <button class="text-accent-red hover:underline text-sm">删除</button>
-                        </td>
-                    </tr>
-                </tbody>
+                <tbody id="fileRows"></tbody>
             </table>
 
-            <!-- 分页 -->
-            <div class="flex items-center justify-between px-4 py-3 border-t border-[#E2E8F0]">
-                <span class="text-sm text-gray-500">显示 1-5 条，共 45 条</span>
-                <div class="flex items-center gap-2">
-                    <button class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 text-sm">上一页</button>
-                    <button class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
-                    <button class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 text-sm">2</button>
-                    <button class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 text-sm">下一页</button>
-                </div>
+            <div id="emptyState" class="hidden text-center py-16 text-gray-500">
+                <i class="fas fa-folder-open text-4xl mb-3 opacity-50"></i>
+                <p>暂无符合条件的文件</p>
             </div>
+
+            <!-- 分页 -->
+            <div class="flex items-center justify-between px-4 py-3 border-t border-[#E2E8F0]" id="paginationBar"></div>
         </div>
     </main>
 
     <!-- 上传弹窗 -->
     <div id="uploadModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
-        <div class="bg-card-bg rounded-2xl w-[500px] border border-[#E2E8F0] shadow-2xl">
+        <div class="bg-white rounded-2xl w-[500px] border border-[#E2E8F0] shadow-2xl">
             <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
                 <h3 class="text-lg font-medium">上传文件</h3>
-                <button onclick="closeModal('uploadModal')" class="text-gray-500 hover:text-white">
-                    <i class="fas fa-times text-xl"></i>
-                </button>
+                <button onclick="closeModal('uploadModal')" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
             </div>
             <div class="p-6 space-y-4">
                 <div>
-                    <label class="block text-sm text-gray-600 mb-2">文件名称</label>
-                    <input type="text" placeholder="请输入文件名称" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <label class="block text-sm text-gray-600 mb-2"><span class="text-accent-red">*</span> 文件名称</label>
+                    <input id="upName" type="text" placeholder="请输入文件名称" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">分类</label>
+                    <select id="upCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="pdf">PDF</option>
+                        <option value="word">Word</option>
+                        <option value="excel">Excel</option>
+                        <option value="ppt">PPT</option>
+                        <option value="other">其他</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">标签（逗号分隔）</label>
+                    <input id="upTags" type="text" placeholder="如：制度,2024,数字化" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-sm text-gray-600 mb-2">上传文件</label>
                     <div class="border-2 border-dashed border-[#E2E8F0] rounded-xl p-8 text-center hover:border-accent-blue transition-colors cursor-pointer">
-                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-500 mb-3"></i>
+                        <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3"></i>
                         <p class="text-sm text-gray-600">点击或拖拽上传文件</p>
-                        <p class="text-xs text-gray-500 mt-1">支持 PDF、Word、Excel、PPT 格式</p>
+                        <p class="text-xs text-gray-500 mt-1">支持 PDF、Word、Excel、PPT 格式，单文件 ≤ 50MB</p>
                     </div>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
-                <button onclick="closeModal('uploadModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-white transition-colors">取消</button>
-                <button onclick="closeModal('uploadModal'); showToast('文件已上传')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认上传</button>
+                <button onclick="closeModal('uploadModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="handleUpload()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认上传</button>
             </div>
         </div>
     </div>
 
+    <!-- 编辑弹窗 -->
+    <div id="editModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[560px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">编辑文件信息</h3>
+                <button onclick="closeModal('editModal')" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2"><span class="text-accent-red">*</span> 文件名称</label>
+                    <input id="edName" type="text" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">分类</label>
+                        <select id="edCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                            <option value="pdf">PDF</option>
+                            <option value="word">Word</option>
+                            <option value="excel">Excel</option>
+                            <option value="ppt">PPT</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">文件大小</label>
+                        <input id="edSize" type="text" disabled class="w-full bg-gray-50 border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">标签（逗号分隔）</label>
+                    <input id="edTags" type="text" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">上传者</label>
+                        <input id="edUploader" type="text" disabled class="w-full bg-gray-50 border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-500">
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-600 mb-2">上传时间</label>
+                        <input id="edUploadedAt" type="text" disabled class="w-full bg-gray-50 border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-500">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">描述</label>
+                    <textarea id="edDesc" rows="3" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('editModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="handleSaveEdit()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">保存修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 预览/详情弹窗 -->
+    <div id="previewModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[900px] max-h-[90vh] overflow-hidden border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <div class="flex items-center gap-3">
+                    <span id="pvTypeChip" class="px-2 py-0.5 bg-accent-blue/10 text-accent-blue text-xs rounded"></span>
+                    <h3 id="pvTitle" class="text-lg font-medium truncate max-w-[600px]"></h3>
+                </div>
+                <button onclick="closeModal('previewModal')" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="flex max-h-[calc(90vh-140px)]">
+                <div class="w-[420px] bg-gray-50 flex items-center justify-center p-8 border-r border-[#E2E8F0]">
+                    <div id="pvIcon" class="w-32 h-32 rounded-2xl flex items-center justify-center text-5xl"></div>
+                </div>
+                <div class="flex-1 p-6 overflow-y-auto">
+                    <h4 class="text-sm font-medium text-gray-500 mb-3">文件信息</h4>
+                    <dl class="space-y-3 text-sm">
+                        <div class="flex"><dt class="w-24 text-gray-500">名称</dt><dd id="pvName" class="flex-1 text-gray-900 font-medium"></dd></div>
+                        <div class="flex"><dt class="w-24 text-gray-500">分类</dt><dd id="pvCategory" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-24 text-gray-500">大小</dt><dd id="pvSize" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-24 text-gray-500">上传者</dt><dd id="pvUploader" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-24 text-gray-500">上传时间</dt><dd id="pvUploadedAt" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-24 text-gray-500">标签</dt><dd id="pvTags" class="flex-1 text-gray-900"></dd></div>
+                        <div class="flex"><dt class="w-24 text-gray-500">描述</dt><dd id="pvDesc" class="flex-1 text-gray-900 whitespace-pre-wrap"></dd></div>
+                    </dl>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-gray-50">
+                <button onclick="handleCopyLinkFromPreview()" class="px-4 py-2 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2"><i class="fas fa-link"></i> 复制链接</button>
+                <button onclick="handleDownloadFromPreview()" class="px-4 py-2 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-2"><i class="fas fa-download"></i> 下载</button>
+                <button onclick="handleEditFromPreview()" class="px-4 py-2 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2"><i class="fas fa-pen"></i> 编辑</button>
+                <button onclick="handleDeleteFromPreview()" class="px-4 py-2 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors flex items-center gap-2"><i class="fas fa-trash"></i> 删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量修改分类弹窗 -->
+    <div id="batchCatModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[440px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">批量修改分类</h3>
+                <button onclick="closeModal('batchCatModal')" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600 mb-3">将所选 <span id="bcCount" class="font-medium text-accent-blue"></span> 项的分类修改为：</p>
+                <select id="bcNewCategory" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                    <option value="pdf">PDF</option>
+                    <option value="word">Word</option>
+                    <option value="excel">Excel</option>
+                    <option value="ppt">PPT</option>
+                    <option value="other">其他</option>
+                </select>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('batchCatModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="handleBatchCategory()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认修改</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量打标签弹窗 -->
+    <div id="batchTagModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[440px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">批量打标签</h3>
+                <button onclick="closeModal('batchTagModal')" class="text-gray-500 hover:text-gray-900"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600 mb-3">为所选 <span id="btCount" class="font-medium text-accent-blue"></span> 项追加标签：</p>
+                <input id="btNewTags" type="text" placeholder="多个标签用逗号分隔" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                <p class="text-xs text-gray-500 mt-2">已存在的标签会被跳过（不重复添加）</p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('batchTagModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="handleBatchTag()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认添加</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div id="confirmModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[420px] border border-[#E2E8F0] shadow-2xl">
+            <div class="px-6 py-5 text-center">
+                <div class="w-12 h-12 rounded-full bg-accent-red/10 flex items-center justify-center mx-auto mb-3">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <h3 id="cfTitle" class="text-lg font-medium mb-2">确认删除</h3>
+                <p id="cfBody" class="text-sm text-gray-600">删除后无法恢复，确定继续吗？</p>
+            </div>
+            <div class="flex items-center gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('confirmModal')" class="flex-1 px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button id="cfConfirmBtn" class="flex-1 px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量操作栏 -->
+    <div id="batchBar" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-40 bg-white shadow-2xl border border-[#E2E8F0] rounded-2xl px-6 py-4 flex items-center gap-4">
+        <span class="text-sm text-gray-700">已选 <span id="batchCount" class="font-semibold text-accent-blue">0</span> 项</span>
+        <div class="h-5 w-px bg-gray-200"></div>
+        <button onclick="openBatchCategory()" class="text-sm text-accent-cyan hover:underline flex items-center gap-1"><i class="fas fa-folder"></i> 修改分类</button>
+        <button onclick="openBatchTag()" class="text-sm text-accent-amber hover:underline flex items-center gap-1"><i class="fas fa-tag"></i> 打标签</button>
+        <button onclick="handleBatchDelete()" class="text-sm text-accent-red hover:underline flex items-center gap-1"><i class="fas fa-trash"></i> 批量删除</button>
+        <div class="h-5 w-px bg-gray-200"></div>
+        <button onclick="clearSelection()" class="text-sm text-gray-500 hover:text-gray-900">取消</button>
+    </div>
+
     <!-- Toast -->
-    <div id="toast" class="fixed bottom-6 right-6 bg-accent-green text-white px-6 py-3 rounded-xl shadow-lg hidden z-50">
-        <i class="fas fa-check-circle mr-2"></i>
+    <div id="toast" class="hidden fixed bottom-6 right-6 bg-accent-green text-white px-6 py-3 rounded-xl shadow-lg z-50">
+        <i id="toastIcon" class="fas fa-check-circle mr-2"></i>
         <span id="toastText">操作成功</span>
     </div>
 
     <script>
-        function openModal(id) {
-            document.getElementById(id).classList.remove('hidden');
-            document.getElementById(id).classList.add('flex');
-        }
-        function closeModal(id) {
-            document.getElementById(id).classList.add('hidden');
-            document.getElementById(id).classList.remove('flex');
-        }
-        function showToast(message) {
+        // ========== Mock 数据 ==========
+        const filesData = [
+            { id: 'f1', name: '数字化转型工作方案.pdf', type: 'PDF', size: '2.4MB', uploader: '王建国', uploadedAt: '2024-01-15', category: 'pdf', tags: ['方案', '数字化'], desc: '2024年数字化转型总体工作方案，包括目标、任务、保障措施等。' },
+            { id: 'f2', name: '安全生产管理制度.docx', type: 'DOCX', size: '1.8MB', uploader: '李晓华', uploadedAt: '2024-01-12', category: 'word', tags: ['制度', '安全'], desc: '公司安全生产管理制度汇编，含岗位责任与应急处理流程。' },
+            { id: 'f3', name: '年度数据统计表.xlsx', type: 'XLSX', size: '856KB', uploader: '陈思远', uploadedAt: '2024-01-10', category: 'excel', tags: ['数据', '年度'], desc: '2023年度各项业务数据汇总统计。' },
+            { id: 'f4', name: '绩效考核办法.pdf', type: 'PDF', size: '1.2MB', uploader: '周明杰', uploadedAt: '2024-01-08', category: 'pdf', tags: ['制度', '绩效'], desc: '员工绩效考核管理办法与评分细则。' },
+            { id: 'f5', name: '年度总结汇报.pptx', type: 'PPTX', size: '5.6MB', uploader: '吴晓燕', uploadedAt: '2024-01-05', category: 'ppt', tags: ['汇报', '年度'], desc: '2023年度工作总结及2024年工作规划。' },
+            { id: 'f6', name: '财务预算方案.pdf', type: 'PDF', size: '3.1MB', uploader: '陈思远', uploadedAt: '2024-01-03', category: 'pdf', tags: ['财务', '预算'], desc: '2024年财务预算详细方案，含收支明细。' },
+            { id: 'f7', name: '员工培训手册.docx', type: 'DOCX', size: '2.5MB', uploader: '李晓华', uploadedAt: '2023-12-28', category: 'word', tags: ['培训', '手册'], desc: '新员工入职培训手册。' },
+            { id: 'f8', name: '销售业绩报表.xlsx', type: 'XLSX', size: '1.2MB', uploader: '周明杰', uploadedAt: '2023-12-25', category: 'excel', tags: ['销售', '报表'], desc: '2023年Q4销售业绩统计与同比分析。' },
+            { id: 'f9', name: '项目计划书.pptx', type: 'PPTX', size: '8.4MB', uploader: '王建国', uploadedAt: '2023-12-20', category: 'ppt', tags: ['项目', '计划'], desc: '2024年重点建设项目计划书与里程碑。' },
+            { id: 'f10', name: '会议纪要.pdf', type: 'PDF', size: '460KB', uploader: '吴晓燕', uploadedAt: '2023-12-18', category: 'pdf', tags: ['会议'], desc: '12月份月度工作会议纪要。' },
+            { id: 'f11', name: '设备维护指南.docx', type: 'DOCX', size: '3.8MB', uploader: '王建国', uploadedAt: '2023-12-15', category: 'word', tags: ['设备', '维护'], desc: '办公设备日常维护操作指南。' },
+            { id: 'f12', name: '成本分析报告.xlsx', type: 'XLSX', size: '2.1MB', uploader: '陈思远', uploadedAt: '2023-12-12', category: 'excel', tags: ['财务', '成本'], desc: '2023年Q4成本结构分析报告。' },
+            { id: 'f13', name: '品牌视觉规范.pdf', type: 'PDF', size: '4.7MB', uploader: '吴晓燕', uploadedAt: '2023-12-10', category: 'pdf', tags: ['品牌', '规范'], desc: '公司品牌视觉识别系统规范手册。' },
+            { id: 'f14', name: '季度述职模板.pptx', type: 'PPTX', size: '1.6MB', uploader: '李晓华', uploadedAt: '2023-12-08', category: 'ppt', tags: ['模板', '述职'], desc: '季度述职汇报标准模板。' },
+            { id: 'f15', name: '招聘需求表.xlsx', type: 'XLSX', size: '320KB', uploader: '周明杰', uploadedAt: '2023-12-05', category: 'excel', tags: ['招聘', 'HR'], desc: '2024年Q1各部门招聘需求汇总。' }
+        ];
+
+        // ========== 状态 ==========
+        const state = {
+            currentTab: 'all',
+            currentPage: 1,
+            pageSize: 8,
+            searchKeyword: '',
+            selectedIds: new Set(),
+            previewingId: null,
+            editingId: null
+        };
+
+        // ========== 工具 ==========
+        const ICON_MAP = {
+            pdf: { cls: 'file-icon-pdf', icon: 'fa-file-pdf' },
+            word: { cls: 'file-icon-word', icon: 'fa-file-word' },
+            excel: { cls: 'file-icon-excel', icon: 'fa-file-excel' },
+            ppt: { cls: 'file-icon-ppt', icon: 'fa-file-powerpoint' },
+            other: { cls: 'file-icon-other', icon: 'fa-file' }
+        };
+        const CATEGORY_LABEL = { pdf: 'PDF', word: 'Word', excel: 'Excel', ppt: 'PPT', other: '其他' };
+
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); document.getElementById(id).classList.add('flex'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); document.getElementById(id).classList.add('flex'); document.getElementById(id).classList.remove('flex'); }
+        function showToast(msg, kind = 'success') {
             const toast = document.getElementById('toast');
-            document.getElementById('toastText').textContent = message;
+            const icon = document.getElementById('toastIcon');
+            const colors = { success: 'bg-accent-green', error: 'bg-accent-red', info: 'bg-accent-cyan' };
+            const icons = { success: 'fa-check-circle', error: 'fa-times-circle', info: 'fa-info-circle' };
+            toast.className = `fixed bottom-6 right-6 ${colors[kind]} text-white px-6 py-3 rounded-xl shadow-lg z-50`;
+            icon.className = `fas ${icons[kind]} mr-2`;
+            document.getElementById('toastText').textContent = msg;
             toast.classList.remove('hidden');
-            setTimeout(() => { toast.classList.add('hidden'); }, 2000);
+            clearTimeout(toast._t);
+            toast._t = setTimeout(() => toast.classList.add('hidden'), 2000);
         }
+        function findItem(id) { return filesData.find(f => f.id === id); }
+
+        // ========== 渲染 ==========
+        function getFiltered() {
+            const kw = state.searchKeyword.toLowerCase().trim();
+            return filesData.filter(f => {
+                if (state.currentTab !== 'all' && f.category !== state.currentTab) return false;
+                if (!kw) return true;
+                const hay = [f.name, f.uploader, CATEGORY_LABEL[f.category] || '', ...(f.tags || [])].join(' ').toLowerCase();
+                return hay.includes(kw);
+            });
+        }
+        function renderTable() {
+            const all = getFiltered();
+            const total = all.length;
+            const totalPages = Math.max(1, Math.ceil(total / state.pageSize));
+            if (state.currentPage > totalPages) state.currentPage = totalPages;
+            const start = (state.currentPage - 1) * state.pageSize;
+            const slice = all.slice(start, start + state.pageSize);
+
+            const tbody = document.getElementById('fileRows');
+            const empty = document.getElementById('emptyState');
+            if (slice.length === 0) {
+                tbody.innerHTML = '';
+                empty.classList.remove('hidden');
+            } else {
+                empty.classList.add('hidden');
+                tbody.innerHTML = slice.map(f => {
+                    const m = ICON_MAP[f.category] || ICON_MAP.other;
+                    const isSel = state.selectedIds.has(f.id);
+                    return `
+                        <tr class="border-b border-[#E2E8F0]/50 hover:bg-gray-50 transition-colors ${isSel ? 'bg-accent-blue/5' : ''}">
+                            <td class="px-4 py-3"><input type="checkbox" class="row-checkbox" ${isSel ? 'checked' : ''} onchange="toggleSelect('${f.id}', this.checked)"></td>
+                            <td class="px-4 py-3">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg ${m.cls} flex items-center justify-center"><i class="fas ${m.icon} text-lg"></i></div>
+                                    <div class="min-w-0">
+                                        <div class="font-medium truncate max-w-xs">${escapeHtml(f.name)}</div>
+                                        <div class="text-xs text-gray-500">${CATEGORY_LABEL[f.category]}文档${f.tags && f.tags.length ? ' · ' + f.tags.slice(0, 3).map(t => '#'+t).join(' ') : ''}</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="px-4 py-3 text-sm text-gray-500">${f.type}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">${f.size}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">${f.uploader}</td>
+                            <td class="px-4 py-3 text-sm text-gray-500">${f.uploadedAt}</td>
+                            <td class="px-4 py-3 text-right">
+                                <div class="inline-flex items-center gap-1">
+                                    <button title="预览" onclick="openPreview('${f.id}')" class="w-8 h-8 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-accent-blue"><i class="fas fa-eye"></i></button>
+                                    <button title="下载" onclick="handleDownload('${f.id}')" class="w-8 h-8 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-accent-green"><i class="fas fa-download"></i></button>
+                                    <button title="编辑" onclick="openEdit('${f.id}')" class="w-8 h-8 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-accent-blue"><i class="fas fa-pen"></i></button>
+                                    <button title="删除" onclick="confirmDelete('${f.id}')" class="w-8 h-8 rounded-lg hover:bg-gray-100 text-gray-600 hover:text-accent-red"><i class="fas fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+
+            renderPagination(total, totalPages);
+            document.getElementById('totalCount').textContent = filesData.length;
+            updateBatchBar();
+            updateSelectAllState();
+        }
+        function renderPagination(total, totalPages) {
+            const bar = document.getElementById('paginationBar');
+            const start = (state.currentPage - 1) * state.pageSize + 1;
+            const end = Math.min(state.currentPage * state.pageSize, total);
+            bar.innerHTML = `
+                <span class="text-sm text-gray-500">${total === 0 ? '共 0 条' : `显示 ${start}-${end} 条，共 ${total} 条`}</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="changePage(${state.currentPage - 1})" ${state.currentPage <= 1 ? 'disabled' : ''} class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-gray-900 hover:border-accent-blue transition-colors text-sm disabled:opacity-40 disabled:cursor-not-allowed">上一页</button>
+                    <span class="px-3 text-sm text-gray-700">${state.currentPage} / ${totalPages}</span>
+                    <button onclick="changePage(${state.currentPage + 1})" ${state.currentPage >= totalPages ? 'disabled' : ''} class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-gray-900 hover:border-accent-blue transition-colors text-sm disabled:opacity-40 disabled:cursor-not-allowed">下一页</button>
+                </div>
+            `;
+        }
+        function escapeHtml(s) { return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c])); }
+
+        // ========== Tab ==========
+        document.getElementById('tabBar').addEventListener('click', e => {
+            const btn = e.target.closest('button[data-cat]');
+            if (!btn) return;
+            state.currentTab = btn.dataset.cat;
+            state.currentPage = 1;
+            document.querySelectorAll('#tabBar button').forEach(b => {
+                const active = b === btn;
+                b.className = `tab-pill px-4 py-2 rounded-lg text-sm font-medium ${active ? 'bg-accent-blue text-white' : 'text-gray-600 hover:bg-gray-100'}`;
+            });
+            renderTable();
+        });
+
+        // ========== 搜索 ==========
+        document.getElementById('searchInput').addEventListener('input', e => {
+            state.searchKeyword = e.target.value;
+            state.currentPage = 1;
+            renderTable();
+        });
+
+        // ========== 分页 ==========
+        function changePage(p) {
+            const all = getFiltered();
+            const totalPages = Math.max(1, Math.ceil(all.length / state.pageSize));
+            if (p < 1 || p > totalPages) return;
+            state.currentPage = p;
+            renderTable();
+        }
+
+        // ========== 选择 ==========
+        function toggleSelect(id, checked) {
+            if (checked) state.selectedIds.add(id); else state.selectedIds.delete(id);
+            updateBatchBar();
+            updateSelectAllState();
+            // 行高亮切换（不重渲染整个表）
+            const row = document.querySelector(`#fileRows tr:has(input[onchange*="${id}"])`);
+            if (row) row.classList.toggle('bg-accent-blue/5', checked);
+        }
+        function toggleSelectAll(checked) {
+            const slice = getFiltered().slice((state.currentPage - 1) * state.pageSize, state.currentPage * state.pageSize);
+            slice.forEach(f => checked ? state.selectedIds.add(f.id) : state.selectedIds.delete(f.id));
+            renderTable();
+        }
+        function updateSelectAllState() {
+            const slice = getFiltered().slice((state.currentPage - 1) * state.pageSize, state.currentPage * state.pageSize);
+            const all = document.getElementById('selectAll');
+            if (!all) return;
+            const sliceIds = slice.map(f => f.id);
+            const checkedCount = sliceIds.filter(id => state.selectedIds.has(id)).length;
+            all.checked = sliceIds.length > 0 && checkedCount === sliceIds.length;
+            all.indeterminate = checkedCount > 0 && checkedCount < sliceIds.length;
+        }
+        function clearSelection() { state.selectedIds.clear(); renderTable(); }
+        function updateBatchBar() {
+            const bar = document.getElementById('batchBar');
+            const n = state.selectedIds.size;
+            if (n > 0) {
+                bar.classList.remove('hidden');
+                document.getElementById('batchCount').textContent = n;
+            } else {
+                bar.classList.add('hidden');
+            }
+        }
+
+        // ========== 上传 ==========
+        function handleUpload() {
+            const name = document.getElementById('upName').value.trim();
+            if (!name) { showToast('请填写文件名称', 'error'); return; }
+            const category = document.getElementById('upCategory').value;
+            const tagsRaw = document.getElementById('upTags').value.trim();
+            const tags = tagsRaw ? tagsRaw.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
+            const typeMap = { pdf: 'PDF', word: 'DOCX', excel: 'XLSX', ppt: 'PPTX', other: 'FILE' };
+            const id = 'f' + (filesData.length + 1) + '_' + Date.now();
+            filesData.unshift({
+                id, name, type: typeMap[category], size: '1.2MB', uploader: '当前用户', uploadedAt: new Date().toISOString().slice(0, 10),
+                category, tags, desc: ''
+            });
+            closeModal('uploadModal');
+            document.getElementById('upName').value = '';
+            document.getElementById('upTags').value = '';
+            state.currentTab = 'all';
+            state.currentPage = 1;
+            document.querySelectorAll('#tabBar button').forEach(b => {
+                const active = b.dataset.cat === 'all';
+                b.className = `tab-pill px-4 py-2 rounded-lg text-sm font-medium ${active ? 'bg-accent-blue text-white' : 'text-gray-600 hover:bg-gray-100'}`;
+            });
+            renderTable();
+            showToast('文件已上传');
+        }
+
+        // ========== 编辑 ==========
+        function openEdit(id) {
+            const f = findItem(id);
+            if (!f) return;
+            state.editingId = id;
+            document.getElementById('edName').value = f.name;
+            document.getElementById('edCategory').value = f.category;
+            document.getElementById('edSize').value = f.size;
+            document.getElementById('edTags').value = (f.tags || []).join(',');
+            document.getElementById('edUploader').value = f.uploader;
+            document.getElementById('edUploadedAt').value = f.uploadedAt;
+            document.getElementById('edDesc').value = f.desc || '';
+            openModal('editModal');
+        }
+        function handleSaveEdit() {
+            const f = findItem(state.editingId);
+            if (!f) return;
+            const name = document.getElementById('edName').value.trim();
+            if (!name) { showToast('名称不能为空', 'error'); return; }
+            const category = document.getElementById('edCategory').value;
+            const tagsRaw = document.getElementById('edTags').value.trim();
+            f.name = name;
+            f.category = category;
+            f.type = { pdf: 'PDF', word: 'DOCX', excel: 'XLSX', ppt: 'PPTX', other: 'FILE' }[category];
+            f.tags = tagsRaw ? tagsRaw.split(/[,，]/).map(t => t.trim()).filter(Boolean) : [];
+            f.desc = document.getElementById('edDesc').value.trim();
+            closeModal('editModal');
+            renderTable();
+            showToast('保存成功');
+        }
+
+        // ========== 预览 ==========
+        function openPreview(id) {
+            const f = findItem(id);
+            if (!f) return;
+            state.previewingId = id;
+            const m = ICON_MAP[f.category] || ICON_MAP.other;
+            document.getElementById('pvTypeChip').textContent = f.type + ' · ' + CATEGORY_LABEL[f.category];
+            document.getElementById('pvTitle').textContent = f.name;
+            const iconEl = document.getElementById('pvIcon');
+            iconEl.className = `w-32 h-32 rounded-2xl ${m.cls} flex items-center justify-center text-5xl`;
+            iconEl.innerHTML = `<i class="fas ${m.icon}"></i>`;
+            document.getElementById('pvName').textContent = f.name;
+            document.getElementById('pvCategory').textContent = CATEGORY_LABEL[f.category];
+            document.getElementById('pvSize').textContent = f.size;
+            document.getElementById('pvUploader').textContent = f.uploader;
+            document.getElementById('pvUploadedAt').textContent = f.uploadedAt;
+            document.getElementById('pvTags').textContent = (f.tags && f.tags.length) ? f.tags.map(t => '#'+t).join('  ') : '—';
+            document.getElementById('pvDesc').textContent = f.desc || '—';
+            openModal('previewModal');
+        }
+        function handleCopyLinkFromPreview() {
+            const f = findItem(state.previewingId);
+            if (!f) return;
+            const fakeUrl = `https://cdn.example.com/files/${f.id}/${encodeURIComponent(f.name)}`;
+            try { navigator.clipboard.writeText(fakeUrl); } catch(e) {}
+            showToast('链接已复制到剪贴板', 'info');
+        }
+        function handleDownloadFromPreview() {
+            const f = findItem(state.previewingId);
+            if (!f) return;
+            handleDownload(f.id);
+        }
+        function handleEditFromPreview() {
+            closeModal('previewModal');
+            openEdit(state.previewingId);
+        }
+        function handleDeleteFromPreview() {
+            closeModal('previewModal');
+            confirmDelete(state.previewingId);
+        }
+        function handleDownload(id) {
+            showToast('下载已开始', 'info');
+            setTimeout(() => {
+                const f = findItem(id);
+                if (!f) return;
+                // mock 下载：构造一个空 Blob 触发浏览器下载行为
+                try {
+                    const blob = new Blob([`Mock content of ${f.name}`], { type: 'text/plain' });
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url; a.download = f.name;
+                    document.body.appendChild(a); a.click();
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                } catch(e) { /* 静默 */ }
+            }, 300);
+        }
+
+        // ========== 删除 ==========
+        function confirmDelete(id) {
+            const f = findItem(id);
+            if (!f) return;
+            document.getElementById('cfTitle').textContent = '删除文件';
+            document.getElementById('cfBody').textContent = `确定要删除「${f.name}」吗？删除后无法恢复。`;
+            const btn = document.getElementById('cfConfirmBtn');
+            btn.textContent = '确认删除';
+            btn.onclick = () => {
+                doDelete(id);
+                closeModal('confirmModal');
+            };
+            openModal('confirmModal');
+        }
+        function doDelete(id) {
+            const idx = filesData.findIndex(f => f.id === id);
+            if (idx === -1) return;
+            filesData.splice(idx, 1);
+            state.selectedIds.delete(id);
+            renderTable();
+            showToast('文件已删除');
+        }
+
+        // ========== 批量 ==========
+        function openBatchCategory() {
+            if (state.selectedIds.size === 0) return;
+            document.getElementById('bcCount').textContent = state.selectedIds.size;
+            document.getElementById('bcNewCategory').value = 'pdf';
+            openModal('batchCatModal');
+        }
+        function handleBatchCategory() {
+            const newCat = document.getElementById('bcNewCategory').value;
+            let n = 0;
+            state.selectedIds.forEach(id => {
+                const f = findItem(id);
+                if (f) { f.category = newCat; f.type = { pdf: 'PDF', word: 'DOCX', excel: 'XLSX', ppt: 'PPTX', other: 'FILE' }[newCat]; n++; }
+            });
+            closeModal('batchCatModal');
+            showToast(`已更新 ${n} 项的分类`);
+            state.selectedIds.clear();
+            renderTable();
+        }
+        function openBatchTag() {
+            if (state.selectedIds.size === 0) return;
+            document.getElementById('btCount').textContent = state.selectedIds.size;
+            document.getElementById('btNewTags').value = '';
+            openModal('batchTagModal');
+        }
+        function handleBatchTag() {
+            const raw = document.getElementById('btNewTags').value.trim();
+            if (!raw) { showToast('请输入标签', 'error'); return; }
+            const newTags = raw.split(/[,，]/).map(t => t.trim()).filter(Boolean);
+            let n = 0;
+            state.selectedIds.forEach(id => {
+                const f = findItem(id);
+                if (f) {
+                    f.tags = f.tags || [];
+                    newTags.forEach(t => { if (!f.tags.includes(t)) f.tags.push(t); });
+                    n++;
+                }
+            });
+            closeModal('batchTagModal');
+            showToast(`已为 ${n} 项添加标签`);
+            state.selectedIds.clear();
+            renderTable();
+        }
+        function handleBatchDelete() {
+            if (state.selectedIds.size === 0) return;
+            document.getElementById('cfTitle').textContent = '批量删除';
+            document.getElementById('cfBody').textContent = `确定要删除选中的 ${state.selectedIds.size} 个文件吗？删除后无法恢复。`;
+            const btn = document.getElementById('cfConfirmBtn');
+            btn.textContent = '确认删除';
+            btn.onclick = () => {
+                const n = state.selectedIds.size;
+                state.selectedIds.forEach(id => {
+                    const idx = filesData.findIndex(f => f.id === id);
+                    if (idx !== -1) filesData.splice(idx, 1);
+                });
+                state.selectedIds.clear();
+                renderTable();
+                closeModal('confirmModal');
+                showToast(`已删除 ${n} 个文件`);
+            };
+            openModal('confirmModal');
+        }
+
+        // ========== 初始化 ==========
+        renderTable();
     </script>
 </body>
 </html>

@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>活动发布 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'secondary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* === 日历单元格 === */
+        .calendar-day { transition: all 0.2s; min-height: 96px; }
+        .calendar-day:hover { background: rgba(10, 97, 255, 0.04); }
+        .calendar-day.has-content { cursor: pointer; }
+        .calendar-day.has-content:hover { background: rgba(10, 97, 255, 0.08); }
+        .calendar-day.selected { background: rgba(10, 97, 255, 0.10) !important; border-color: #0A61FF !important; }
+        .calendar-day.is-today { border-color: rgba(10, 97, 255, 0.35) !important; }
+        .calendar-day.is-today .day-num { background: #0A61FF; color: #fff; }
+
+        /* === 分段堆叠条 === */
+        .stacked-bar { display: flex; height: 6px; border-radius: 999px; overflow: hidden; background: #F1F5F9; }
+        .stacked-bar > div { transition: filter 0.2s; }
+        .stacked-bar > div:hover { filter: brightness(0.92); }
+
+        /* === 状态徽点 === */
+        .status-dot { display: inline-flex; align-items: center; gap: 3px; font-size: 10px; color: #94A3B8; }
+
+        /* === 筛选图例 === */
+        .legend-chip { transition: all 0.15s; cursor: pointer; padding: 4px 8px; border-radius: 6px; }
+        .legend-chip:hover { background: rgba(10, 97, 255, 0.04); }
+        .legend-chip.active { background: rgba(10, 97, 255, 0.10); }
+
+        /* === 统计卡 === */
+        .stat-card { transition: all 0.2s; }
+        .stat-card:hover { transform: translateY(-2px); border-color: rgba(59, 130, 246, 0.5); }
+
+        /* === 队列项 === */
+        .queue-item { transition: all 0.2s; }
+        .queue-item:hover { border-color: rgba(59, 130, 246, 0.5); }
+
+        /* === 渠道徽章 === */
+        .channel-badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 500; }
+
+        .breadcrumb-item + .breadcrumb-item::before { content: '/'; margin: 0 8px; color: #94A3B8; }
+    </style>
+</head>
+<body class="bg-secondary-bg text-gray-900">
+
+    <main class="p-6">
+        <!-- 页面标题栏 -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <nav class="flex items-center text-sm text-gray-500 mb-2">
+                    <span class="text-gray-700 font-medium">活动发布</span>
+                </nav>
+                <h1 class="text-2xl font-semibold text-gray-900">活动发布管理</h1>
+                <p class="text-gray-500 mt-1">统筹活动上线计划，支持定时发布、多渠道分发与发布日历</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <a href="activity-publish-list.html" class="px-5 py-2.5 bg-card-bg border border-[#E2E8F0] text-gray-600 rounded-xl hover:text-gray-900 hover:border-accent-blue transition-colors flex items-center gap-2">
+                    <i class="fas fa-history"></i>
+                    发布记录
+                </a>
+                <button onclick="openModal('scheduleModal')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                    <i class="fas fa-paper-plane"></i>
+                    创建发布计划
+                </button>
+            </div>
+        </div>
+
+        <!-- 统计卡片 + 快捷操作 -->
+        <div class="grid grid-cols-5 gap-6 mb-6">
+            <div class="col-span-4 grid grid-cols-4 gap-4">
+                <div class="stat-card bg-white rounded-xl border border-[#E2E8F0] p-4 cursor-pointer" onclick="filterByStatus('pending')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-accent-blue/20 flex items-center justify-center">
+                            <i class="fas fa-clock text-accent-blue text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold" id="stat-pending">0</div>
+                            <div class="text-sm text-gray-500">待发布</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card bg-white rounded-xl border border-[#E2E8F0] p-4 cursor-pointer" onclick="filterByStatus('published-today')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-accent-green/20 flex items-center justify-center">
+                            <i class="fas fa-rocket text-accent-green text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold" id="stat-published-today">0</div>
+                            <div class="text-sm text-gray-500">今日发布</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card bg-white rounded-xl border border-[#E2E8F0] p-4 cursor-pointer" onclick="filterByStatus('scheduled-week')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-accent-cyan/20 flex items-center justify-center">
+                            <i class="fas fa-calendar-week text-accent-cyan text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold" id="stat-scheduled-week">0</div>
+                            <div class="text-sm text-gray-500">本周定时</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card bg-white rounded-xl border border-[#E2E8F0] p-4 cursor-pointer" onclick="filterByStatus('ended')">
+                    <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-xl bg-text-secondary/20 flex items-center justify-center">
+                            <i class="fas fa-flag-checkered text-text-secondary text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-bold" id="stat-ended">0</div>
+                            <div class="text-sm text-gray-500">已结束活动</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl border border-[#E2E8F0] p-4">
+                <h3 class="text-sm font-medium text-gray-500 mb-3">快捷提醒</h3>
+                <div class="space-y-2">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">今日待发布</span>
+                        <span class="text-accent-blue font-medium" id="remind-today">0</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">过期未发布</span>
+                        <span class="text-accent-red font-medium" id="remind-overdue">0</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-gray-600">本周将上线</span>
+                        <span class="text-accent-amber font-medium" id="remind-week">0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 日历 + 待发布队列 -->
+        <div class="grid grid-cols-5 gap-6">
+            <!-- 日历视图 -->
+            <div class="col-span-3 bg-white rounded-xl border border-[#E2E8F0] p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium">
+                        <i class="fas fa-calendar-alt mr-2 text-accent-blue"></i>发布日历
+                    </h3>
+                    <div class="flex items-center gap-2">
+                        <button onclick="changeMonth(-1)" class="p-2 hover:bg-primary-bg rounded-lg text-gray-500 hover:text-gray-900 transition-colors">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <span id="currentMonth" class="text-lg font-medium mx-4">2026年6月</span>
+                        <button onclick="changeMonth(1)" class="p-2 hover:bg-primary-bg rounded-lg text-gray-500 hover:text-gray-900 transition-colors">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                        <button onclick="goToday()" class="ml-2 px-3 py-1.5 text-xs border border-[#E2E8F0] rounded-lg text-gray-600 hover:text-gray-900 hover:border-accent-blue transition-colors">今天</button>
+                    </div>
+                </div>
+
+                <!-- 星期标题 -->
+                <div class="grid grid-cols-7 gap-2 mb-2">
+                    <div class="text-center text-sm text-gray-500 py-2">日</div>
+                    <div class="text-center text-sm text-gray-500 py-2">一</div>
+                    <div class="text-center text-sm text-gray-500 py-2">二</div>
+                    <div class="text-center text-sm text-gray-500 py-2">三</div>
+                    <div class="text-center text-sm text-gray-500 py-2">四</div>
+                    <div class="text-center text-sm text-gray-500 py-2">五</div>
+                    <div class="text-center text-sm text-gray-500 py-2">六</div>
+                </div>
+
+                <!-- 日期网格 -->
+                <div id="calendarGrid" class="grid grid-cols-7 gap-2">
+                    <!-- 动态渲染 -->
+                </div>
+
+                <!-- 图例（可点击） -->
+                <div class="flex items-center justify-center gap-3 mt-4 pt-4 border-t border-[#E2E8F0] flex-wrap">
+                    <button class="legend-chip active" data-status="all" onclick="toggleStatusFilter('all')">
+                        <span class="text-xs text-gray-700 font-medium">全部</span>
+                        <span class="text-xs text-text-muted ml-1" id="legend-count-all">0</span>
+                    </button>
+                    <span class="w-px h-4 bg-gray-200"></span>
+                    <button class="legend-chip" data-status="pending" onclick="toggleStatusFilter('pending')">
+                        <span class="w-2 h-2 rounded-full bg-accent-blue"></span>
+                        <span class="text-xs text-gray-700">待发布</span>
+                        <span class="text-xs text-text-muted" id="legend-count-pending">0</span>
+                    </button>
+                    <button class="legend-chip" data-status="publishing" onclick="toggleStatusFilter('publishing')">
+                        <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
+                        <span class="text-xs text-gray-700">发布中</span>
+                        <span class="text-xs text-text-muted" id="legend-count-publishing">0</span>
+                    </button>
+                    <button class="legend-chip" data-status="scheduled" onclick="toggleStatusFilter('scheduled')">
+                        <span class="w-2 h-2 rounded-full bg-accent-cyan"></span>
+                        <span class="text-xs text-gray-700">已定时</span>
+                        <span class="text-xs text-text-muted" id="legend-count-scheduled">0</span>
+                    </button>
+                    <button class="legend-chip" data-status="published" onclick="toggleStatusFilter('published')">
+                        <span class="w-2 h-2 rounded-full bg-accent-green"></span>
+                        <span class="text-xs text-gray-700">已发布</span>
+                        <span class="text-xs text-text-muted" id="legend-count-published">0</span>
+                    </button>
+                    <button class="legend-chip" data-status="withdrawn" onclick="toggleStatusFilter('withdrawn')">
+                        <span class="w-2 h-2 rounded-full bg-accent-amber"></span>
+                        <span class="text-xs text-gray-700">已撤回</span>
+                        <span class="text-xs text-text-muted" id="legend-count-withdrawn">0</span>
+                    </button>
+                    <button class="legend-chip" data-status="offline" onclick="toggleStatusFilter('offline')">
+                        <span class="w-2 h-2 rounded-full bg-text-muted"></span>
+                        <span class="text-xs text-gray-700">已下线</span>
+                        <span class="text-xs text-text-muted" id="legend-count-offline">0</span>
+                    </button>
+                    <button class="legend-chip" data-status="ended" onclick="toggleStatusFilter('ended')">
+                        <span class="w-2 h-2 rounded-full bg-text-secondary"></span>
+                        <span class="text-xs text-gray-700">已结束</span>
+                        <span class="text-xs text-text-muted" id="legend-count-ended">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 待发布队列 -->
+            <div class="col-span-2 bg-white rounded-xl border border-[#E2E8F0] p-5">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-medium">
+                        <i class="fas fa-list-ol mr-2 text-accent-cyan"></i>待发布队列
+                    </h3>
+                    <span id="pendingCount" class="px-2.5 py-0.5 bg-accent-amber/20 text-accent-amber text-xs rounded-full">0 条</span>
+                </div>
+
+                <div id="pendingQueue" class="space-y-3 max-h-[450px] overflow-y-auto pr-1">
+                    <!-- 动态渲染 -->
+                </div>
+
+                <div class="mt-4 pt-4 border-t border-[#E2E8F0]">
+                    <div class="flex items-center justify-between mb-3">
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="selectAllPending" onchange="toggleSelectAllPending()" class="accent-accent-blue">
+                            <span class="text-sm text-gray-500">全选</span>
+                        </label>
+                        <span id="selectedPendingCount" class="text-sm text-gray-500">已选 0 项</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button onclick="batchPublish()" class="py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center justify-center gap-2 text-sm">
+                            <i class="fas fa-rocket"></i>
+                            批量发布
+                        </button>
+                        <button onclick="batchSchedule()" class="py-2.5 border border-accent-blue text-accent-blue rounded-xl hover:bg-accent-blue/5 transition-colors flex items-center justify-center gap-2 text-sm">
+                            <i class="fas fa-clock"></i>
+                            批量定时
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- 创建发布计划弹窗 -->
+    <div id="scheduleModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[560px] border border-[#E2E8F0] shadow-2xl max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 class="text-lg font-medium">创建活动发布计划</h3>
+                <button onclick="closeModal('scheduleModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="p-6 space-y-5">
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">选择活动 <span class="text-accent-red">*</span></label>
+                    <select id="scheduleActivity" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="">请选择要发布的活动（仅显示已通过审核）</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1.5">数据来源：活动管理中已通过审核的活动</p>
+                </div>
+
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">发布模式 <span class="text-accent-red">*</span></label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="flex items-center gap-2 px-3 py-3 border border-[#E2E8F0] rounded-xl cursor-pointer hover:border-accent-blue transition-colors has-[:checked]:border-accent-blue has-[:checked]:bg-accent-blue/5">
+                            <input type="radio" name="publishMode" value="immediate" checked class="accent-accent-blue">
+                            <div>
+                                <div class="text-sm font-medium">立即发布</div>
+                                <div class="text-xs text-gray-500">审核后即时上线</div>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-3 border border-[#E2E8F0] rounded-xl cursor-pointer hover:border-accent-blue transition-colors has-[:checked]:border-accent-blue has-[:checked]:bg-accent-blue/5">
+                            <input type="radio" name="publishMode" value="scheduled" class="accent-accent-blue">
+                            <div>
+                                <div class="text-sm font-medium">定时发布</div>
+                                <div class="text-xs text-gray-500">指定时间自动上线</div>
+                            </div>
+                        </label>
+                        <label class="flex items-center gap-2 px-3 py-3 border border-[#E2E8F0] rounded-xl cursor-pointer hover:border-accent-blue transition-colors has-[:checked]:border-accent-blue has-[:checked]:bg-accent-blue/5">
+                            <input type="radio" name="publishMode" value="recurring" class="accent-accent-blue">
+                            <div>
+                                <div class="text-sm font-medium">周期发布</div>
+                                <div class="text-xs text-gray-500">每周/每月重复</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div id="scheduledTimeWrap">
+                    <label class="block text-sm text-gray-600 mb-2">发布时间 <span class="text-accent-red">*</span></label>
+                    <input type="datetime-local" id="scheduleTime" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-sm text-gray-600 mb-3">分发渠道 <span class="text-accent-red">*</span></label>
+                    <div class="grid grid-cols-3 gap-3">
+                        <label class="flex flex-col gap-2 px-4 py-4 border border-[#E2E8F0] rounded-xl cursor-pointer hover:border-accent-blue has-[:checked]:border-accent-blue has-[:checked]:bg-accent-blue/5 transition-colors">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" value="publicAuth" class="accent-accent-blue channel-checkbox" checked>
+                                <i class="fas fa-database text-accent-blue"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium leading-tight">公共数据授权运营</div>
+                                <div class="text-sm font-medium leading-tight">活动专区</div>
+                                <div class="text-xs text-gray-500 mt-1">面向授权数据运营场景</div>
+                            </div>
+                        </label>
+                        <label class="flex flex-col gap-2 px-4 py-4 border border-[#E2E8F0] rounded-xl cursor-pointer hover:border-accent-cyan has-[:checked]:border-accent-cyan has-[:checked]:bg-accent-cyan/5 transition-colors">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" value="trustedSpace" class="accent-accent-cyan channel-checkbox" checked>
+                                <i class="fas fa-shield-check text-accent-cyan"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium leading-tight">可信数据空间</div>
+                                <div class="text-sm font-medium leading-tight">活动专区</div>
+                                <div class="text-xs text-gray-500 mt-1">面向可信数据空间场景</div>
+                            </div>
+                        </label>
+                        <label class="flex flex-col gap-2 px-4 py-4 border border-[#E2E8F0] rounded-xl cursor-pointer hover:border-accent-green has-[:checked]:border-accent-green has-[:checked]:bg-accent-green/5 transition-colors">
+                            <div class="flex items-center gap-2">
+                                <input type="checkbox" value="h5Mobile" class="accent-accent-green channel-checkbox">
+                                <i class="fas fa-mobile-screen text-accent-green"></i>
+                            </div>
+                            <div>
+                                <div class="text-sm font-medium leading-tight">H5移动端</div>
+                                <div class="text-sm font-medium leading-tight">活动专区</div>
+                                <div class="text-xs text-gray-500 mt-1">面向手机端访问场景</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-sm text-gray-600 mb-2">备注</label>
+                    <textarea id="scheduleRemark" rows="2" placeholder="可选填写本次发布的备注信息" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('scheduleModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="createSchedule()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认创建</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 日期详情弹窗 -->
+    <div id="dateDetailModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[720px] max-h-[85vh] border border-[#E2E8F0] shadow-2xl flex flex-col">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <h3 id="dateDetailTitle" class="text-lg font-medium">日期详情</h3>
+                <button onclick="closeModal('dateDetailModal')" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+            <div class="flex-1 overflow-auto p-6">
+                <div id="dateDetailContent" class="space-y-3">
+                    <!-- 动态渲染 -->
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('dateDetailModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 确认发布弹窗 -->
+    <div id="confirmPublishModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[440px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
+                <div class="w-12 h-12 rounded-full bg-accent-blue/20 flex items-center justify-center">
+                    <i class="fas fa-rocket text-accent-blue text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认发布</h3>
+                    <p id="confirmPublishCount" class="text-sm text-gray-500 mt-1">确定要发布选中的活动吗？</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p id="confirmPublishDesc" class="text-sm text-gray-600">发布后活动将在选定渠道立即上线，用户可报名参与。</p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('confirmPublishModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="confirmBatchPublish()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认发布</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 单条撤回确认弹窗 -->
+    <div id="withdrawModal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div class="bg-card-bg rounded-2xl w-[440px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
+                <div class="w-12 h-12 rounded-full bg-accent-amber/20 flex items-center justify-center">
+                    <i class="fas fa-undo text-accent-amber text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">撤回发布</h3>
+                    <p class="text-sm text-gray-500 mt-1" id="withdrawTargetName">确定要撤回这条活动吗？</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <label class="block text-sm text-gray-600 mb-2">撤回原因（必填）</label>
+                <textarea id="withdrawReason" rows="3" placeholder="请输入撤回原因，将记录到操作日志" class="w-full bg-primary-bg border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm focus:border-accent-blue focus:outline-none resize-none"></textarea>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('withdrawModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="confirmWithdraw()" class="px-5 py-2.5 bg-accent-amber text-white rounded-xl hover:bg-amber-600 transition-colors">确认撤回</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* =========================================================================
+         * 状态与渠道配置
+         * ========================================================================= */
+        const statusConfig = {
+            pending:    { name: '待发布',   color: 'accent-blue',    bgColor: 'bg-accent-blue/20',    textColor: 'text-accent-blue',    icon: 'clock',             borderColor: 'border-accent-blue' },
+            publishing: { name: '发布中',   color: 'indigo-500',     bgColor: 'bg-indigo-500/20',     textColor: 'text-indigo-500',     icon: 'spinner',           borderColor: 'border-indigo-500' },
+            scheduled:  { name: '已定时',   color: 'accent-cyan',    bgColor: 'bg-accent-cyan/20',    textColor: 'text-accent-cyan',    icon: 'calendar-clock',   borderColor: 'border-accent-cyan' },
+            published:  { name: '已发布',   color: 'accent-green',   bgColor: 'bg-accent-green/20',   textColor: 'text-accent-green',   icon: 'check-circle',      borderColor: 'border-accent-green' },
+            withdrawn:  { name: '已撤回',   color: 'accent-amber',   bgColor: 'bg-accent-amber/20',   textColor: 'text-accent-amber',   icon: 'undo',              borderColor: 'border-accent-amber' },
+            offline:    { name: '已下线',   color: 'text-muted',     bgColor: 'bg-text-muted/20',     textColor: 'text-text-muted',     icon: 'arrow-circle-down', borderColor: 'border-text-muted' },
+            ended:      { name: '已结束',   color: 'text-secondary', bgColor: 'bg-text-secondary/20', textColor: 'text-text-secondary', icon: 'flag-checkered',    borderColor: 'border-text-secondary' }
+        };
+
+        const channelConfig = {
+            publicAuth:   { name: '公共数据授权运营活动专区', icon: 'database',          color: 'accent-blue' },
+            trustedSpace: { name: '可信数据空间活动专区',     icon: 'shield-check',      color: 'accent-cyan' },
+            h5Mobile:     { name: 'H5移动端活动专区',         icon: 'mobile-screen',     color: 'accent-green' }
+        };
+
+        const categoryConfig = {
+            tech:      { name: '科技创新', color: 'accent-blue',  icon: 'microchip' },
+            culture:   { name: '文化活动', color: 'accent-cyan',  icon: 'palette' },
+            sports:    { name: '体育运动', color: 'accent-green', icon: 'futbol' },
+            education: { name: '教育培训', color: 'accent-amber', icon: 'graduation-cap' },
+            charity:   { name: '公益慈善', color: 'accent-red',   icon: 'heart' },
+            summit:    { name: '行业峰会', color: 'indigo-500',   icon: 'landmark' },
+            team:      { name: '团队建设', color: 'purple-500',   icon: 'users' }
+        };
+
+        /* =========================================================================
+         * Mock 数据：18 条活动，覆盖各种状态、分类、渠道
+         * 当前日期 2026/06/25，故 mock 主要围绕本月与临近月份
+         * ========================================================================= */
+        let publishList = [
+            // === 本月：已发布（历史） ===
+            { id: 1, name: '2026 春季产品发布会',          category: 'summit',    status: 'published', publishTime: '2026-06-05 10:00:00', startTime: '2026-06-12', endTime: '2026-06-12', creator: '张明远', organizer: '产品中心',     location: '北京国际会议中心', participants: 328, maxParticipants: 500, channels: ['publicAuth', 'trustedSpace'] },
+            { id: 2, name: '6 月安全月启动仪式',            category: 'education', status: 'published', publishTime: '2026-06-01 09:00:00', startTime: '2026-06-01', endTime: '2026-06-30', creator: '李晓华', organizer: '安全部',       location: '集团大礼堂',     participants: 156, maxParticipants: 300, channels: ['publicAuth'] },
+
+            // === 本月：发布中（正在推送） ===
+            { id: 3, name: '新媒体运营沙龙 Vol.12',          category: 'culture',   status: 'publishing', publishTime: '2026-06-25 16:00:00', startTime: '2026-06-28', endTime: '2026-06-28', creator: '周明杰', organizer: '市场部',       location: '上海 · 思南公馆', participants: 0,   maxParticipants: 80,  channels: ['trustedSpace', 'h5Mobile'] },
+
+            // === 今日：定时 + 待发布混合（呼应用户反馈的"同日多种状态"） ===
+            { id: 4, name: 'AI Agent 实战工作坊',          category: 'tech',      status: 'scheduled',  publishTime: '2026-06-25 14:30:00', startTime: '2026-07-05', endTime: '2026-07-05', creator: '陈思远', organizer: 'AI 创新中心',  location: '线上 · 腾讯会议', participants: 0,   maxParticipants: 200, channels: ['publicAuth', 'trustedSpace'] },
+            { id: 5, name: '7 月员工生日会',                category: 'team',      status: 'pending',    publishTime: '2026-06-25 18:00:00', startTime: '2026-07-08', endTime: '2026-07-08', creator: '王建国', organizer: '人力资源部',   location: '员工活动中心',   participants: 0,   maxParticipants: 100, channels: ['trustedSpace'] },
+            { id: 6, name: '数字化转型案例分享（撤回重发）', category: 'tech',      status: 'withdrawn',  publishTime: '2026-06-25 11:00:00', startTime: '2026-06-30', endTime: '2026-06-30', creator: '张明远', organizer: '数字化部',     location: '集团多功能厅',   participants: 0,   maxParticipants: 150, channels: ['publicAuth'], withdrawnReason: '主讲人临时有会议冲突' },
+
+            // === 本月已结束 ===
+            { id: 7, name: '端午龙舟邀请赛',                category: 'sports',    status: 'ended',      publishTime: '2026-05-25 10:00:00', startTime: '2026-06-10', endTime: '2026-06-10', creator: '王建国', organizer: '工会',         location: '郊外湖面',       participants: 120, maxParticipants: 150, channels: ['publicAuth', 'trustedSpace'] },
+            { id: 8, name: '新员工入职培训 06 期',          category: 'education', status: 'ended',      publishTime: '2026-06-08 08:00:00', startTime: '2026-06-15', endTime: '2026-06-19', creator: '陈思远', organizer: '人力资源部',   location: '培训中心',       participants: 45,  maxParticipants: 50,  channels: ['trustedSpace'] },
+
+            // === 本月下旬：待发布 + 定时 ===
+            { id: 9, name: '科技创新成果展（预热）',         category: 'tech',      status: 'pending',    publishTime: '2026-06-26 10:00:00', startTime: '2026-08-15', endTime: '2026-08-20', creator: '张明远', organizer: '科技创新部',   location: '展览中心',       participants: 0,   maxParticipants: 500, channels: ['publicAuth', 'h5Mobile'] },
+            { id: 10, name: '心理健康讲座 Vol.04',           category: 'education', status: 'pending',    publishTime: '2026-06-28 15:00:00', startTime: '2026-07-12', endTime: '2026-07-12', creator: '李晓华', organizer: '人力资源部',   location: '线上 + 线下',     participants: 0,   maxParticipants: 200, channels: ['trustedSpace', 'h5Mobile'] },
+            { id: 11, name: '行业峰会赞助商洽谈会',         category: 'summit',    status: 'scheduled',  publishTime: '2026-06-30 09:00:00', startTime: '2026-09-20', endTime: '2026-09-22', creator: '张明远', organizer: '战略发展部',   location: '上海外滩茂悦',   participants: 0,   maxParticipants: 100, channels: ['h5Mobile'] },
+
+            // === 下月 + 后续 ===
+            { id: 12, name: '7 月数据分析技能培训',         category: 'education', status: 'scheduled',  publishTime: '2026-07-02 10:00:00', startTime: '2026-07-15', endTime: '2026-07-16', creator: '陈思远', organizer: '数据学院',     location: '数据中心会议室', participants: 0,   maxParticipants: 80,  channels: ['trustedSpace'] },
+            { id: 13, name: '7 月篮球友谊赛',               category: 'sports',    status: 'pending',    publishTime: '2026-07-05 09:00:00', startTime: '2026-07-20', endTime: '2026-07-20', creator: '王建国', organizer: '工会体育部',   location: '集团篮球场',     participants: 0,   maxParticipants: 100, channels: ['trustedSpace'] },
+            { id: 14, name: '中秋联欢晚会（提前预热）',      category: 'culture',   status: 'pending',    publishTime: '2026-08-01 10:00:00', startTime: '2026-09-17', endTime: '2026-09-17', creator: '李晓华', organizer: '工会',         location: '集团大礼堂',     participants: 0,   maxParticipants: 300, channels: ['publicAuth', 'trustedSpace', 'h5Mobile'] },
+            { id: 15, name: '客户答谢晚宴',                  category: 'summit',    status: 'pending',    publishTime: '2026-08-15 14:00:00', startTime: '2026-09-28', endTime: '2026-09-28', creator: '张明远', organizer: '客户成功部',   location: '北京 · 国贸大酒店', participants: 0, maxParticipants: 80,  channels: ['h5Mobile'] },
+
+            // === 跨年/已下线 ===
+            { id: 16, name: '2025 数字化转型高峰论坛',      category: 'tech',      status: 'offline',    publishTime: '2025-12-20 10:00:00', startTime: '2026-03-15', endTime: '2026-03-15', creator: '张明远', organizer: '数字化部',     location: '北京国际会议中心', participants: 328, maxParticipants: 500, channels: ['publicAuth', 'trustedSpace'] },
+            { id: 17, name: '2026 春节系列活动',            category: 'culture',   status: 'offline',    publishTime: '2026-01-15 10:00:00', startTime: '2026-02-01', endTime: '2026-02-15', creator: '李晓华', organizer: '工会',         location: '全集团',         participants: 850, maxParticipants: 1000, channels: ['publicAuth', 'trustedSpace'] },
+            { id: 18, name: '2025 年终总结大会',            category: 'team',      status: 'offline',    publishTime: '2025-12-28 14:00:00', startTime: '2026-01-10', endTime: '2026-01-10', creator: '张明远', organizer: '总裁办',       location: '集团大礼堂',     participants: 480, maxParticipants: 500, channels: ['publicAuth'] }
+        ];
+
+        /* =========================================================================
+         * 状态管理
+         * ========================================================================= */
+        let currentYear = 2026;
+        let currentMonth = 6;
+        let selectedDate = null;
+        let selectedPendingItems = [];
+        let statusFilter = 'all';  // 日历图例筛选
+        let withdrawTargetId = null;
+
+        const today = new Date(2026, 5, 25); // 2026-06-25（mock 锁定为该日期，避免真实时间漂移）
+
+        /* =========================================================================
+         * 初始化
+         * ========================================================================= */
+        function init() {
+            loadFromStorage();
+            renderAll();
+            bindModeRadios();
+            bindChannelCheckboxes();
+        }
+
+        function loadFromStorage() {
+            try {
+                const raw = sessionStorage.getItem('activity_publish_data');
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed) && parsed.length > 0) {
+                        publishList = parsed;
+                    }
+                }
+            } catch (e) { /* ignore */ }
+        }
+
+        function saveToStorage() {
+            try {
+                sessionStorage.setItem('activity_publish_data', JSON.stringify(publishList));
+            } catch (e) { /* ignore */ }
+        }
+
+        function renderAll() {
+            renderStats();
+            renderCalendar();
+            renderPendingQueue();
+            renderLegendCounts();
+            renderActivitySelector();
+        }
+
+        /* =========================================================================
+         * 统计卡
+         * ========================================================================= */
+        function renderStats() {
+            const todayStr = formatDate(today);
+            const weekEnd = new Date(today);
+            weekEnd.setDate(weekEnd.getDate() + 7);
+
+            let pendingCount = 0;
+            let publishedTodayCount = 0;
+            let scheduledWeekCount = 0;
+            let endedCount = 0;
+            let todayPendingCount = 0;
+            let overdueCount = 0;
+
+            publishList.forEach(item => {
+                const pt = new Date(item.publishTime);
+                if (item.status === 'pending') {
+                    pendingCount++;
+                    if (formatDate(pt) === todayStr) todayPendingCount++;
+                    if (pt < today) overdueCount++;
+                }
+                if (item.status === 'scheduled') {
+                    scheduledWeekCount++;
+                    if (pt <= weekEnd) scheduledWeekCount++;
+                }
+                if (item.status === 'published' && formatDate(pt) === todayStr) publishedTodayCount++;
+                if (item.status === 'ended') endedCount++;
+            });
+
+            document.getElementById('stat-pending').textContent = pendingCount;
+            document.getElementById('stat-published-today').textContent = publishedTodayCount;
+            document.getElementById('stat-scheduled-week').textContent = scheduledWeekCount;
+            document.getElementById('stat-ended').textContent = endedCount;
+            document.getElementById('remind-today').textContent = todayPendingCount;
+            document.getElementById('remind-overdue').textContent = overdueCount;
+            document.getElementById('remind-week').textContent = scheduledWeekCount;
+        }
+
+        /* =========================================================================
+         * 日历渲染（含分段堆叠条 + 总数徽章 + 状态徽点）
+         * ========================================================================= */
+        function renderCalendar() {
+            document.getElementById('currentMonth').textContent = `${currentYear}年${currentMonth}月`;
+
+            const grid = document.getElementById('calendarGrid');
+            const firstDay = new Date(currentYear, currentMonth - 1, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+
+            let html = '';
+
+            // 上月填充
+            for (let i = 0; i < firstDay; i++) {
+                const prevMonthDays = new Date(currentYear, currentMonth - 1, 0).getDate();
+                const day = prevMonthDays - firstDay + i + 1;
+                html += `<div class="calendar-day p-2 rounded-lg border border-transparent text-gray-400 text-sm flex items-start">${day}</div>`;
+            }
+
+            // 当月日期
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                let dayPublishItems = publishList.filter(p => p.publishTime.startsWith(dateStr));
+
+                // 应用状态筛选
+                if (statusFilter !== 'all') {
+                    dayPublishItems = dayPublishItems.filter(p => p.status === statusFilter);
+                }
+
+                const isToday = today.getFullYear() === currentYear && today.getMonth() + 1 === currentMonth && today.getDate() === day;
+                const isSelected = selectedDate === dateStr;
+                const hasContent = dayPublishItems.length > 0;
+                const totalCount = dayPublishItems.length;
+
+                // 状态分组
+                const statusGroups = {};
+                dayPublishItems.forEach(item => {
+                    statusGroups[item.status] = (statusGroups[item.status] || 0) + 1;
+                });
+
+                // 分段条（按状态比例填充）
+                let stackedBar = '';
+                if (hasContent) {
+                    const segments = Object.entries(statusGroups).map(([s, n]) => {
+                        const pct = (n / totalCount * 100).toFixed(1);
+                        return `<div class="bg-${statusConfig[s].color}" style="width:${pct}%" title="${statusConfig[s].name} ${n}"></div>`;
+                    }).join('');
+                    stackedBar = `<div class="stacked-bar mt-1.5">${segments}</div>`;
+                } else {
+                    stackedBar = `<div class="stacked-bar mt-1.5 opacity-30"><div class="bg-gray-200" style="width:100%"></div></div>`;
+                }
+
+                // 状态徽点 + 数字（最多 3 个，超出显示 +N）
+                let statusChips = '';
+                if (hasContent) {
+                    const visible = Object.entries(statusGroups).slice(0, 3);
+                    const overflow = Object.keys(statusGroups).length - visible.length;
+                    statusChips = visible.map(([s, n]) => `
+                        <span class="status-dot">
+                            <span class="w-1.5 h-1.5 rounded-full bg-${statusConfig[s].color}"></span>${n}
+                        </span>
+                    `).join('');
+                    if (overflow > 0) {
+                        statusChips += `<span class="status-dot text-text-muted">+${overflow}</span>`;
+                    }
+                }
+
+                // 总数徽章
+                const countBadge = hasContent ? `
+                    <span class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full bg-accent-blue/10 text-accent-blue text-[10px] font-medium">
+                        ${totalCount}
+                    </span>
+                ` : '';
+
+                html += `
+                    <div class="calendar-day p-2 rounded-lg border ${isSelected ? 'selected' : 'border-transparent'} ${hasContent ? 'has-content' : ''} ${isToday ? 'is-today' : ''}"
+                         onclick="selectDate('${dateStr}')">
+                        <div class="flex items-center justify-between">
+                            <span class="day-num text-sm font-medium ${isToday ? '' : ''} ${isToday ? 'w-6 h-6 rounded-full flex items-center justify-center' : ''}">${day}</span>
+                            ${countBadge}
+                        </div>
+                        ${stackedBar}
+                        <div class="flex items-center gap-2 mt-1 flex-wrap">${statusChips}</div>
+                    </div>
+                `;
+            }
+
+            // 下月填充
+            const totalCells = firstDay + daysInMonth;
+            const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
+            for (let i = 1; i <= remainingCells; i++) {
+                html += `<div class="calendar-day p-2 rounded-lg border border-transparent text-gray-400 text-sm flex items-start">${i}</div>`;
+            }
+
+            grid.innerHTML = html;
+        }
+
+        function changeMonth(delta) {
+            currentMonth += delta;
+            if (currentMonth > 12) {
+                currentMonth = 1;
+                currentYear++;
+            } else if (currentMonth < 1) {
+                currentMonth = 12;
+                currentYear--;
+            }
+            selectedDate = null;
+            renderCalendar();
+        }
+
+        function goToday() {
+            currentYear = today.getFullYear();
+            currentMonth = today.getMonth() + 1;
+            selectedDate = formatDate(today);
+            renderCalendar();
+            selectDate(formatDate(today));
+        }
+
+        function toggleStatusFilter(status) {
+            statusFilter = status;
+            document.querySelectorAll('.legend-chip').forEach(c => c.classList.remove('active'));
+            document.querySelector(`.legend-chip[data-status="${status}"]`).classList.add('active');
+            renderCalendar();
+        }
+
+        /* =========================================================================
+         * 图例计数
+         * ========================================================================= */
+        function renderLegendCounts() {
+            const counts = { all: publishList.length };
+            Object.keys(statusConfig).forEach(s => counts[s] = 0);
+            publishList.forEach(item => {
+                if (counts[item.status] !== undefined) counts[item.status]++;
+            });
+            Object.keys(counts).forEach(k => {
+                const el = document.getElementById('legend-count-' + k);
+                if (el) el.textContent = counts[k];
+            });
+        }
+
+        /* =========================================================================
+         * 日期详情弹窗
+         * ========================================================================= */
+        function selectDate(dateStr) {
+            selectedDate = dateStr;
+            renderCalendar();
+            showDateDetail(dateStr);
+        }
+
+        function showDateDetail(dateStr) {
+            const items = publishList.filter(p => p.publishTime.startsWith(dateStr));
+            const date = new Date(dateStr);
+            const dateTitle = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 · ${items.length} 条发布计划`;
+
+            document.getElementById('dateDetailTitle').textContent = dateTitle;
+
+            if (items.length === 0) {
+                document.getElementById('dateDetailContent').innerHTML = `
+                    <div class="text-center py-12 text-gray-500">
+                        <i class="fas fa-calendar-times text-4xl mb-3 opacity-50"></i>
+                        <p>当日暂无发布计划</p>
+                        <button onclick="openModal('scheduleModal'); closeModal('dateDetailModal');" class="mt-4 px-4 py-2 text-sm text-accent-blue border border-accent-blue/30 rounded-lg hover:bg-accent-blue/5 transition-colors">
+                            <i class="fas fa-plus mr-1"></i>为此日创建计划
+                        </button>
+                    </div>
+                `;
+            } else {
+                document.getElementById('dateDetailContent').innerHTML = items.map(item => {
+                    const status = statusConfig[item.status];
+                    const cat = categoryConfig[item.category];
+                    const time = item.publishTime.split(' ')[1].substring(0, 5);
+                    const channelsHtml = (item.channels || []).map(ch => {
+                        const chConfig = channelConfig[ch];
+                        if (!chConfig) return '';
+                        return `<span class="channel-badge bg-${chConfig.color}/10 text-${chConfig.color}"><i class="fas ${chConfig.icon}"></i>${chConfig.name}</span>`;
+                    }).join('');
+
+                    return `
+                        <div class="p-4 bg-white rounded-xl border border-[#E2E8F0]">
+                            <div class="flex items-start justify-between mb-2">
+                                <div class="flex-1 min-w-0">
+                                    <div class="flex items-center gap-2 mb-1 flex-wrap">
+                                        <span class="w-2 h-2 rounded-full bg-${status.color}"></span>
+                                        <a href="activity-detail.html?id=${item.id}" class="font-medium hover:text-accent-blue transition-colors">${item.name}</a>
+                                    </div>
+                                    <div class="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
+                                        <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-${cat.color}/10 text-${cat.color} rounded">
+                                            <i class="fas ${cat.icon}"></i>${cat.name}
+                                        </span>
+                                        <span>·</span>
+                                        <span><i class="fas fa-clock mr-1"></i>${time}</span>
+                                        <span>·</span>
+                                        <span><i class="fas fa-user mr-1"></i>${item.creator}</span>
+                                        <span>·</span>
+                                        <span><i class="fas fa-map-marker-alt mr-1"></i>${item.location}</span>
+                                    </div>
+                                </div>
+                                <span class="px-2 py-0.5 ${status.bgColor} ${status.textColor} text-xs rounded whitespace-nowrap">${status.name}</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 mt-3 flex-wrap">
+                                ${channelsHtml}
+                            </div>
+                            ${item.withdrawnReason ? `<div class="mt-3 p-2 bg-accent-amber/10 text-accent-amber text-xs rounded"><i class="fas fa-exclamation-circle mr-1"></i>撤回原因：${item.withdrawnReason}</div>` : ''}
+                            <div class="flex items-center gap-2 mt-3 pt-3 border-t border-[#E2E8F0]">
+                                <a href="activity-detail.html?id=${item.id}" class="px-3 py-1.5 text-xs text-gray-600 border border-[#E2E8F0] rounded-lg hover:text-gray-900 hover:border-gray-400 transition-colors">
+                                    <i class="fas fa-eye mr-1"></i>查看详情
+                                </a>
+                                ${item.status === 'pending' ? `
+                                    <button onclick="immediatePublish(${item.id})" class="px-3 py-1.5 bg-accent-green text-white text-xs rounded-lg hover:bg-green-600 transition-colors">
+                                        <i class="fas fa-rocket mr-1"></i>立即发布
+                                    </button>
+                                ` : ''}
+                                ${item.status === 'scheduled' ? `
+                                    <button onclick="rescheduleItem(${item.id})" class="px-3 py-1.5 border border-accent-cyan text-accent-cyan text-xs rounded-lg hover:bg-accent-cyan/5 transition-colors">
+                                        <i class="fas fa-calendar-alt mr-1"></i>改期
+                                    </button>
+                                ` : ''}
+                                ${item.status === 'published' ? `
+                                    <button onclick="openWithdrawModal(${item.id})" class="px-3 py-1.5 border border-accent-amber text-accent-amber text-xs rounded-lg hover:bg-accent-amber/5 transition-colors">
+                                        <i class="fas fa-undo mr-1"></i>撤回
+                                    </button>
+                                ` : ''}
+                                ${item.status === 'withdrawn' ? `
+                                    <button onclick="republishItem(${item.id})" class="px-3 py-1.5 bg-accent-blue text-white text-xs rounded-lg hover:bg-blue-600 transition-colors">
+                                        <i class="fas fa-redo mr-1"></i>重新发布
+                                    </button>
+                                ` : ''}
+                                ${item.status === 'offline' ? `
+                                    <button onclick="republishItem(${item.id})" class="px-3 py-1.5 bg-accent-blue text-white text-xs rounded-lg hover:bg-blue-600 transition-colors">
+                                        <i class="fas fa-arrow-up mr-1"></i>重新上线
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+
+            openModal('dateDetailModal');
+        }
+
+        /* =========================================================================
+         * 待发布队列
+         * ========================================================================= */
+        function renderPendingQueue() {
+            const pendingItems = publishList
+                .filter(p => p.status === 'pending' || p.status === 'scheduled')
+                .sort((a, b) => a.publishTime.localeCompare(b.publishTime));
+            document.getElementById('pendingCount').textContent = `${pendingItems.length} 条`;
+
+            const container = document.getElementById('pendingQueue');
+            if (pendingItems.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-8 text-gray-500">
+                        <i class="fas fa-check-circle text-4xl mb-3 opacity-50 text-accent-green"></i>
+                        <p class="text-sm">暂无待发布活动</p>
+                        <button onclick="openModal('scheduleModal')" class="mt-3 px-4 py-2 text-sm text-accent-blue border border-accent-blue/30 rounded-lg hover:bg-accent-blue/5 transition-colors">
+                            <i class="fas fa-plus mr-1"></i>创建计划
+                        </button>
+                    </div>
+                `;
+                document.getElementById('selectAllPending').disabled = true;
+                return;
+            }
+
+            document.getElementById('selectAllPending').disabled = false;
+            container.innerHTML = pendingItems.map(item => {
+                const status = statusConfig[item.status];
+                const cat = categoryConfig[item.category];
+                const dateParts = item.publishTime.split(' ');
+                const dateStr = dateParts[0].substring(5);
+                const timeStr = dateParts[1].substring(0, 5);
+                const isSelected = selectedPendingItems.includes(item.id);
+                const isOverdue = item.status === 'pending' && new Date(item.publishTime) < today;
+
+                const channelsHtml = (item.channels || []).slice(0, 2).map(ch => {
+                    const chConfig = channelConfig[ch];
+                    if (!chConfig) return '';
+                    return `<span class="inline-flex items-center gap-1 text-[10px] text-${chConfig.color}"><i class="fas ${chConfig.icon}"></i>${chConfig.name}</span>`;
+                }).join('');
+
+                return `
+                    <div class="queue-item p-3 bg-white rounded-xl border border-[#E2E8F0] ${isSelected ? 'border-accent-blue bg-accent-blue/5' : ''}">
+                        <div class="flex items-start gap-2">
+                            <input type="checkbox" ${isSelected ? 'checked' : ''} onchange="togglePendingItem(${item.id})" class="mt-1 accent-accent-blue">
+                            <div class="flex-1 min-w-0">
+                                <div class="text-sm font-medium mb-1 truncate">${item.name}</div>
+                                <div class="flex items-center gap-1.5 text-[11px] text-gray-500 flex-wrap">
+                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-${status.color}/10 ${status.textColor} rounded">
+                                        ${status.name}
+                                    </span>
+                                    <span class="px-1.5 py-0.5 bg-${cat.color}/10 text-${cat.color} rounded">${cat.name}</span>
+                                    <span>${dateStr} ${timeStr}</span>
+                                    ${isOverdue ? '<span class="px-1.5 py-0.5 bg-accent-red/10 text-accent-red rounded">已过期</span>' : ''}
+                                </div>
+                                <div class="flex items-center gap-2 mt-1.5">${channelsHtml}</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('selectedPendingCount').textContent = `已选 ${selectedPendingItems.length} 项`;
+        }
+
+        function togglePendingItem(id) {
+            const idx = selectedPendingItems.indexOf(id);
+            if (idx > -1) selectedPendingItems.splice(idx, 1);
+            else selectedPendingItems.push(id);
+            renderPendingQueue();
+        }
+
+        function toggleSelectAllPending() {
+            const selectAll = document.getElementById('selectAllPending').checked;
+            const pendingItems = publishList.filter(p => p.status === 'pending' || p.status === 'scheduled');
+            selectedPendingItems = selectAll ? pendingItems.map(p => p.id) : [];
+            renderPendingQueue();
+        }
+
+        /* =========================================================================
+         * 发布操作
+         * ========================================================================= */
+        function immediatePublish(id) {
+            const item = publishList.find(p => p.id === id);
+            if (!item) return;
+            item.status = 'published';
+            item.publishTime = formatDateTime(new Date());
+            item.channels = item.channels || ['publicAuth', 'trustedSpace'];
+            saveToStorage();
+            renderAll();
+            closeModal('dateDetailModal');
+            showToast(`「${item.name}」已发布`, 'success');
+        }
+
+        function batchPublish() {
+            if (selectedPendingItems.length === 0) {
+                showToast('请先选择要发布的活动', 'error');
+                return;
+            }
+            document.getElementById('confirmPublishCount').textContent = `确定要发布选中的 ${selectedPendingItems.length} 条活动吗？`;
+            openModal('confirmPublishModal');
+        }
+
+        function confirmBatchPublish() {
+            const now = formatDateTime(new Date());
+            selectedPendingItems.forEach(id => {
+                const item = publishList.find(p => p.id === id);
+                if (item && (item.status === 'pending' || item.status === 'scheduled')) {
+                    item.status = 'published';
+                    item.publishTime = now;
+                    if (!item.channels || item.channels.length === 0) {
+                        item.channels = ['publicAuth', 'trustedSpace'];
+                    }
+                }
+            });
+            selectedPendingItems = [];
+            saveToStorage();
+            closeModal('confirmPublishModal');
+            closeModal('dateDetailModal');
+            renderAll();
+            showToast('批量发布成功', 'success');
+        }
+
+        function batchSchedule() {
+            if (selectedPendingItems.length === 0) {
+                showToast('请先选择要定时的活动', 'error');
+                return;
+            }
+            // 简化：直接把所有选中的 scheduled 改为 30 分钟后
+            const newTime = formatDateTime(new Date(Date.now() + 30 * 60 * 1000));
+            selectedPendingItems.forEach(id => {
+                const item = publishList.find(p => p.id === id);
+                if (item) {
+                    item.status = 'scheduled';
+                    item.publishTime = newTime;
+                }
+            });
+            selectedPendingItems = [];
+            saveToStorage();
+            renderAll();
+            showToast(`已批量定时为 30 分钟后发布`, 'success');
+        }
+
+        function openWithdrawModal(id) {
+            withdrawTargetId = id;
+            const item = publishList.find(p => p.id === id);
+            document.getElementById('withdrawTargetName').textContent = `确定要撤回「${item.name}」吗？`;
+            document.getElementById('withdrawReason').value = '';
+            closeModal('dateDetailModal');
+            openModal('withdrawModal');
+        }
+
+        function confirmWithdraw() {
+            const reason = document.getElementById('withdrawReason').value.trim();
+            if (!reason) {
+                showToast('请填写撤回原因', 'error');
+                return;
+            }
+            const item = publishList.find(p => p.id === withdrawTargetId);
+            if (item) {
+                item.status = 'withdrawn';
+                item.withdrawnReason = reason;
+                saveToStorage();
+                renderAll();
+                closeModal('withdrawModal');
+                showToast('已撤回', 'success');
+            }
+        }
+
+        function republishItem(id) {
+            const item = publishList.find(p => p.id === id);
+            if (!item) return;
+            item.status = 'published';
+            item.publishTime = formatDateTime(new Date());
+            item.withdrawnReason = '';
+            saveToStorage();
+            renderAll();
+            closeModal('dateDetailModal');
+            showToast('已重新发布', 'success');
+        }
+
+        function rescheduleItem(id) {
+            const newTime = prompt('请输入新的发布时间（格式：YYYY-MM-DD HH:mm）', item => formatDateTimeInput(new Date(Date.now() + 24 * 3600 * 1000)));
+            if (!newTime) return;
+            const item = publishList.find(p => p.id === id);
+            if (item) {
+                item.publishTime = newTime + ':00';
+                saveToStorage();
+                renderAll();
+                closeModal('dateDetailModal');
+                showToast('已改期', 'success');
+            }
+        }
+
+        /* =========================================================================
+         * 筛选（统计卡点击）
+         * ========================================================================= */
+        function filterByStatus(scope) {
+            const map = {
+                'pending': '待发布',
+                'published-today': '今日发布',
+                'scheduled-week': '本周定时',
+                'ended': '已结束'
+            };
+            showToast(`已筛选：${map[scope] || scope}`, 'info');
+        }
+
+        /* =========================================================================
+         * 创建发布计划
+         * ========================================================================= */
+        function renderActivitySelector() {
+            const sel = document.getElementById('scheduleActivity');
+            const eligible = publishList.filter(p => p.status === 'pending' || p.status === 'approved');
+            if (eligible.length === 0) {
+                sel.innerHTML = '<option value="">暂无已通过审核的活动，请先在活动管理中创建并审核通过</option>';
+                return;
+            }
+            sel.innerHTML = '<option value="">请选择要发布的活动（仅显示已通过审核）</option>' +
+                eligible.map(p => {
+                    const cat = categoryConfig[p.category];
+                    return `<option value="${p.id}">[${cat ? cat.name : '未分类'}] ${p.name} · ${p.creator}</option>`;
+                }).join('');
+        }
+
+        function bindModeRadios() {
+            document.querySelectorAll('input[name="publishMode"]').forEach(r => {
+                r.addEventListener('change', () => {
+                    const mode = document.querySelector('input[name="publishMode"]:checked').value;
+                    document.getElementById('scheduledTimeWrap').classList.toggle('hidden', mode === 'immediate');
+                });
+            });
+        }
+
+        function bindChannelCheckboxes() {
+            // 当前渠道无附加表单字段,保留扩展点
+        }
+
+        function createSchedule() {
+            const activityId = parseInt(document.getElementById('scheduleActivity').value);
+            const mode = document.querySelector('input[name="publishMode"]:checked').value;
+            const scheduleTime = document.getElementById('scheduleTime').value;
+            const remark = document.getElementById('scheduleRemark').value.trim();
+            const channels = [...document.querySelectorAll('.channel-checkbox:checked')].map(cb => cb.value);
+
+            if (!activityId) {
+                showToast('请选择要发布的活动', 'error');
+                return;
+            }
+            if (mode !== 'immediate' && !scheduleTime) {
+                showToast('请填写发布时间', 'error');
+                return;
+            }
+            if (channels.length === 0) {
+                showToast('请至少选择一个分发渠道', 'error');
+                return;
+            }
+
+            const item = publishList.find(p => p.id === activityId);
+            if (!item) return;
+
+            // 应用计划
+            if (mode === 'immediate') {
+                item.status = 'published';
+                item.publishTime = formatDateTime(new Date());
+            } else {
+                item.status = 'scheduled';
+                item.publishTime = scheduleTime.replace('T', ' ') + ':00';
+            }
+            item.channels = channels;
+            if (remark) item.remark = remark;
+
+            saveToStorage();
+            closeModal('scheduleModal');
+            renderAll();
+
+            // 清空表单
+            document.getElementById('scheduleActivity').value = '';
+            document.getElementById('scheduleTime').value = '';
+            document.getElementById('scheduleRemark').value = '';
+            document.querySelectorAll('.channel-checkbox').forEach(cb => {
+                if (cb.value !== 'publicAuth' && cb.value !== 'trustedSpace') cb.checked = false;
+            });
+            document.querySelector('input[name="publishMode"][value="immediate"]').checked = true;
+            document.getElementById('scheduledTimeWrap').classList.add('hidden');
+
+            showToast(mode === 'immediate' ? '活动已发布' : '发布计划已创建', 'success');
+        }
+
+        /* =========================================================================
+         * 弹窗
+         * ========================================================================= */
+        function openModal(id) {
+            document.getElementById(id).classList.remove('hidden');
+            document.getElementById(id).classList.add('flex');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.add('hidden');
+            document.getElementById(id).classList.remove('flex');
+        }
+
+        /* =========================================================================
+         * Toast
+         * ========================================================================= */
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColor = type === 'success' ? 'bg-accent-green' : type === 'error' ? 'bg-accent-red' : type === 'warning' ? 'bg-accent-amber' : 'bg-accent-blue';
+            const icon = type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle';
+            toast.className = `toast ${bgColor} text-white px-5 py-3 rounded-xl shadow-lg flex items-center gap-2`;
+            toast.innerHTML = `<i class="fas fa-${icon}"></i><span class="text-sm">${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        /* =========================================================================
+         * 工具
+         * ========================================================================= */
+        function formatDate(d) {
+            return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+        }
+        function formatDateTime(d) {
+            return `${formatDate(d)} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:00`;
+        }
+        function formatDateTimeInput(d) {
+            return `${formatDate(d)} ${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+        }
+
+        /* =========================================================================
+         * 启动
+         * ========================================================================= */
+        init();
+    </script>
+</body>
+</html>
