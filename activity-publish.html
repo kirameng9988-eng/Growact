@@ -37,7 +37,7 @@
         @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
         /* === 日历单元格 === */
-        .calendar-day { transition: all 0.2s; min-height: 96px; }
+        .calendar-day { transition: all 0.2s; min-height: 56px; }
         .calendar-day:hover { background: rgba(10, 97, 255, 0.04); }
         .calendar-day.has-content { cursor: pointer; }
         .calendar-day.has-content:hover { background: rgba(10, 97, 255, 0.08); }
@@ -46,7 +46,7 @@
         .calendar-day.is-today .day-num { background: #0A61FF; color: #fff; }
 
         /* === 分段堆叠条 === */
-        .stacked-bar { display: flex; height: 6px; border-radius: 999px; overflow: hidden; background: #F1F5F9; }
+        .stacked-bar { display: flex; height: 4px; border-radius: 999px; overflow: hidden; background: #F1F5F9; }
         .stacked-bar > div { transition: filter 0.2s; }
         .stacked-bar > div:hover { filter: brightness(0.92); }
 
@@ -97,7 +97,7 @@
         </div>
 
         <!-- 统计卡片 + 快捷操作 -->
-        <div class="grid grid-cols-5 gap-6 mb-6">
+        <div class="grid grid-cols-7 gap-4 mb-6">
             <div class="col-span-4 grid grid-cols-4 gap-4">
                 <div class="stat-card bg-white rounded-xl border border-[#E2E8F0] p-4 cursor-pointer" onclick="filterByStatus('pending')">
                     <div class="flex items-center gap-3">
@@ -164,9 +164,9 @@
         </div>
 
         <!-- 日历 + 待发布队列 -->
-        <div class="grid grid-cols-5 gap-6">
+        <div class="grid grid-cols-7 gap-4">
             <!-- 日历视图 -->
-            <div class="col-span-3 bg-white rounded-xl border border-[#E2E8F0] p-5">
+            <div class="col-span-4 bg-white rounded-xl border border-[#E2E8F0] p-4">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium">
                         <i class="fas fa-calendar-alt mr-2 text-accent-blue"></i>发布日历
@@ -179,23 +179,23 @@
                         <button onclick="changeMonth(1)" class="p-2 hover:bg-primary-bg rounded-lg text-gray-500 hover:text-gray-900 transition-colors">
                             <i class="fas fa-chevron-right"></i>
                         </button>
-                        <button onclick="goToday()" class="ml-2 px-3 py-1.5 text-xs border border-[#E2E8F0] rounded-lg text-gray-600 hover:text-gray-900 hover:border-accent-blue transition-colors">今天</button>
+                        <button onclick="goToday()" class="px-3 py-1.5 text-xs border border-[#E2E8F0] rounded-lg text-gray-600 hover:text-gray-900 hover:border-accent-blue transition-colors">今天</button>
                     </div>
                 </div>
 
                 <!-- 星期标题 -->
                 <div class="grid grid-cols-7 gap-2 mb-2">
-                    <div class="text-center text-sm text-gray-500 py-2">日</div>
-                    <div class="text-center text-sm text-gray-500 py-2">一</div>
-                    <div class="text-center text-sm text-gray-500 py-2">二</div>
-                    <div class="text-center text-sm text-gray-500 py-2">三</div>
-                    <div class="text-center text-sm text-gray-500 py-2">四</div>
-                    <div class="text-center text-sm text-gray-500 py-2">五</div>
-                    <div class="text-center text-sm text-gray-500 py-2">六</div>
+                    <div class="text-center text-sm text-gray-500 py-1">日</div>
+                    <div class="text-center text-sm text-gray-500 py-1">一</div>
+                    <div class="text-center text-sm text-gray-500 py-1">二</div>
+                    <div class="text-center text-sm text-gray-500 py-1">三</div>
+                    <div class="text-center text-sm text-gray-500 py-1">四</div>
+                    <div class="text-center text-sm text-gray-500 py-1">五</div>
+                    <div class="text-center text-sm text-gray-500 py-1">六</div>
                 </div>
 
                 <!-- 日期网格 -->
-                <div id="calendarGrid" class="grid grid-cols-7 gap-2">
+                <div id="calendarGrid" class="grid grid-cols-7 gap-1">
                     <!-- 动态渲染 -->
                 </div>
 
@@ -211,41 +211,16 @@
                         <span class="text-xs text-gray-700">待发布</span>
                         <span class="text-xs text-text-muted" id="legend-count-pending">0</span>
                     </button>
-                    <button class="legend-chip" data-status="publishing" onclick="toggleStatusFilter('publishing')">
-                        <span class="w-2 h-2 rounded-full bg-indigo-500"></span>
-                        <span class="text-xs text-gray-700">发布中</span>
-                        <span class="text-xs text-text-muted" id="legend-count-publishing">0</span>
-                    </button>
-                    <button class="legend-chip" data-status="scheduled" onclick="toggleStatusFilter('scheduled')">
-                        <span class="w-2 h-2 rounded-full bg-accent-cyan"></span>
-                        <span class="text-xs text-gray-700">已定时</span>
-                        <span class="text-xs text-text-muted" id="legend-count-scheduled">0</span>
-                    </button>
                     <button class="legend-chip" data-status="published" onclick="toggleStatusFilter('published')">
                         <span class="w-2 h-2 rounded-full bg-accent-green"></span>
                         <span class="text-xs text-gray-700">已发布</span>
                         <span class="text-xs text-text-muted" id="legend-count-published">0</span>
                     </button>
-                    <button class="legend-chip" data-status="withdrawn" onclick="toggleStatusFilter('withdrawn')">
-                        <span class="w-2 h-2 rounded-full bg-accent-amber"></span>
-                        <span class="text-xs text-gray-700">已撤回</span>
-                        <span class="text-xs text-text-muted" id="legend-count-withdrawn">0</span>
-                    </button>
-                    <button class="legend-chip" data-status="offline" onclick="toggleStatusFilter('offline')">
-                        <span class="w-2 h-2 rounded-full bg-text-muted"></span>
-                        <span class="text-xs text-gray-700">已下线</span>
-                        <span class="text-xs text-text-muted" id="legend-count-offline">0</span>
-                    </button>
-                    <button class="legend-chip" data-status="ended" onclick="toggleStatusFilter('ended')">
-                        <span class="w-2 h-2 rounded-full bg-text-secondary"></span>
-                        <span class="text-xs text-gray-700">已结束</span>
-                        <span class="text-xs text-text-muted" id="legend-count-ended">0</span>
-                    </button>
                 </div>
             </div>
 
             <!-- 待发布队列 -->
-            <div class="col-span-2 bg-white rounded-xl border border-[#E2E8F0] p-5">
+            <div class="col-span-3 bg-white rounded-xl border border-[#E2E8F0] p-4">
                 <div class="flex items-center justify-between mb-4">
                     <h3 class="text-lg font-medium">
                         <i class="fas fa-list-ol mr-2 text-accent-cyan"></i>待发布队列
@@ -412,16 +387,16 @@
                     <i class="fas fa-rocket text-accent-blue text-xl"></i>
                 </div>
                 <div>
-                    <h3 class="text-lg font-medium">确认发布</h3>
-                    <p id="confirmPublishCount" class="text-sm text-gray-500 mt-1">确定要发布选中的活动吗？</p>
+                    <h3 class="text-lg font-medium">创建发布计划</h3>
+                    <p id="confirmPublishCount" class="text-sm text-gray-500 mt-1">确定为选中的活动创建发布计划吗？</p>
                 </div>
             </div>
             <div class="p-6">
-                <p id="confirmPublishDesc" class="text-sm text-gray-600">发布后活动将在选定渠道立即上线，用户可报名参与。</p>
+                <p id="confirmPublishDesc" class="text-sm text-gray-600">发布计划创建后将按计划时间在选定渠道上线。</p>
             </div>
             <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
                 <button onclick="closeModal('confirmPublishModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
-                <button onclick="confirmBatchPublish()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认发布</button>
+                <button onclick="confirmBatchPublish()" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">确认创建</button>
             </div>
         </div>
     </div>
@@ -453,14 +428,10 @@
         /* =========================================================================
          * 状态与渠道配置
          * ========================================================================= */
+        // 日历用 2 态：publishTime < 今天 → 已发布(绿)；>= 今天 → 待发布(蓝)
         const statusConfig = {
-            pending:    { name: '待发布',   color: 'accent-blue',    bgColor: 'bg-accent-blue/20',    textColor: 'text-accent-blue',    icon: 'clock',             borderColor: 'border-accent-blue' },
-            publishing: { name: '发布中',   color: 'indigo-500',     bgColor: 'bg-indigo-500/20',     textColor: 'text-indigo-500',     icon: 'spinner',           borderColor: 'border-indigo-500' },
-            scheduled:  { name: '已定时',   color: 'accent-cyan',    bgColor: 'bg-accent-cyan/20',    textColor: 'text-accent-cyan',    icon: 'calendar-clock',   borderColor: 'border-accent-cyan' },
-            published:  { name: '已发布',   color: 'accent-green',   bgColor: 'bg-accent-green/20',   textColor: 'text-accent-green',   icon: 'check-circle',      borderColor: 'border-accent-green' },
-            withdrawn:  { name: '已撤回',   color: 'accent-amber',   bgColor: 'bg-accent-amber/20',   textColor: 'text-accent-amber',   icon: 'undo',              borderColor: 'border-accent-amber' },
-            offline:    { name: '已下线',   color: 'text-muted',     bgColor: 'bg-text-muted/20',     textColor: 'text-text-muted',     icon: 'arrow-circle-down', borderColor: 'border-text-muted' },
-            ended:      { name: '已结束',   color: 'text-secondary', bgColor: 'bg-text-secondary/20', textColor: 'text-text-secondary', icon: 'flag-checkered',    borderColor: 'border-text-secondary' }
+            pending:    { name: '待发布', color: 'accent-blue',    bgColor: 'bg-accent-blue/20',    textColor: 'text-accent-blue',    icon: 'clock' },
+            published:  { name: '已发布', color: 'accent-green',   bgColor: 'bg-accent-green/20',   textColor: 'text-accent-green',   icon: 'check-circle' }
         };
 
         const channelConfig = {
@@ -480,41 +451,32 @@
         };
 
         /* =========================================================================
-         * Mock 数据：18 条活动，覆盖各种状态、分类、渠道
-         * 当前日期 2026/06/25，故 mock 主要围绕本月与临近月份
+         * Mock 数据
+         * 逻辑：publishTime 存在 → 在日历显示（按日期自动判定已发布/待发布）
+         *       publishTime 不存在 → 在"待发布活动"队列
+         * 当前日期 2026/06/25
          * ========================================================================= */
         let publishList = [
-            // === 本月：已发布（历史） ===
-            { id: 1, name: '2026 春季产品发布会',          category: 'summit',    status: 'published', publishTime: '2026-06-05 10:00:00', startTime: '2026-06-12', endTime: '2026-06-12', creator: '张明远', organizer: '产品中心',     location: '北京国际会议中心', participants: 328, maxParticipants: 500, channels: ['publicAuth', 'trustedSpace'] },
-            { id: 2, name: '6 月安全月启动仪式',            category: 'education', status: 'published', publishTime: '2026-06-01 09:00:00', startTime: '2026-06-01', endTime: '2026-06-30', creator: '李晓华', organizer: '安全部',       location: '集团大礼堂',     participants: 156, maxParticipants: 300, channels: ['publicAuth'] },
+            // === 日历：有 publishTime，按日期自动判定状态 ===
+            // 已发布（publishTime < 今天）
+            { id: 1,  name: '2026 春季产品发布会',      category: 'summit',    publishTime: '2026-06-05 10:00:00', startTime: '2026-06-12', endTime: '2026-06-12', creator: '张明远', organizer: '产品中心',       location: '北京国际会议中心', participants: 328, maxParticipants: 500, channels: ['publicAuth', 'trustedSpace'] },
+            { id: 2,  name: '6 月安全月启动仪式',      category: 'education', publishTime: '2026-06-01 09:00:00', startTime: '2026-06-01', endTime: '2026-06-30', creator: '李晓华', organizer: '安全部',         location: '集团大礼堂',       participants: 156, maxParticipants: 300, channels: ['publicAuth'] },
+            { id: 3,  name: '新员工入职培训 06 期',    category: 'education', publishTime: '2026-06-08 08:00:00', startTime: '2026-06-15', endTime: '2026-06-19', creator: '陈思远', organizer: '人力资源部',   location: '培训中心',         participants: 45,  maxParticipants: 50,  channels: ['trustedSpace'] },
+            // 待发布（publishTime >= 今天）
+            { id: 4,  name: 'AI Agent 实战工作坊',      category: 'tech',      publishTime: '2026-06-25 14:30:00', startTime: '2026-07-05', endTime: '2026-07-05', creator: '陈思远', organizer: 'AI 创新中心',    location: '线上 · 腾讯会议', participants: 0,   maxParticipants: 200, channels: ['publicAuth', 'trustedSpace'] },
+            { id: 5,  name: '7 月员工生日会',            category: 'team',      publishTime: '2026-06-25 18:00:00', startTime: '2026-07-08', endTime: '2026-07-08', creator: '王建国', organizer: '人力资源部',   location: '员工活动中心',     participants: 0,   maxParticipants: 100, channels: ['trustedSpace'] },
+            { id: 6,  name: '科技创新成果展（预热）',   category: 'tech',      publishTime: '2026-06-26 10:00:00', startTime: '2026-08-15', endTime: '2026-08-20', creator: '张明远', organizer: '科技创新部',   location: '展览中心',         participants: 0,   maxParticipants: 500, channels: ['publicAuth', 'h5Mobile'] },
+            { id: 7,  name: '心理健康讲座 Vol.04',       category: 'education', publishTime: '2026-06-28 15:00:00', startTime: '2026-07-12', endTime: '2026-07-12', creator: '李晓华', organizer: '人力资源部',   location: '线上 + 线下',     participants: 0,   maxParticipants: 200, channels: ['trustedSpace', 'h5Mobile'] },
+            { id: 8,  name: '行业峰会赞助商洽谈会',     category: 'summit',    publishTime: '2026-06-30 09:00:00', startTime: '2026-09-20', endTime: '2026-09-22', creator: '张明远', organizer: '战略发展部',   location: '上海外滩茂悦',   participants: 0,   maxParticipants: 100, channels: ['h5Mobile'] },
+            { id: 9,  name: '7 月数据分析技能培训',     category: 'education', publishTime: '2026-07-02 10:00:00', startTime: '2026-07-15', endTime: '2026-07-16', creator: '陈思远', organizer: '数据学院',       location: '数据中心会议室', participants: 0,   maxParticipants: 80,  channels: ['trustedSpace'] },
+            { id: 10, name: '7 月篮球友谊赛',            category: 'sports',    publishTime: '2026-07-05 09:00:00', startTime: '2026-07-20', endTime: '2026-07-20', creator: '王建国', organizer: '工会体育部',   location: '集团篮球场',     participants: 0,   maxParticipants: 100, channels: ['trustedSpace'] },
+            { id: 11, name: '中秋联欢晚会（预热）',     category: 'culture',   publishTime: '2026-08-01 10:00:00', startTime: '2026-09-17', endTime: '2026-09-17', creator: '李晓华', organizer: '工会',           location: '集团大礼堂',     participants: 0,   maxParticipants: 300, channels: ['publicAuth', 'trustedSpace', 'h5Mobile'] },
+            { id: 12, name: '客户答谢晚宴',              category: 'summit',    publishTime: '2026-08-15 14:00:00', startTime: '2026-09-28', endTime: '2026-09-28', creator: '张明远', organizer: '客户成功部',     location: '北京 · 国贸大酒店', participants: 0, maxParticipants: 80,  channels: ['h5Mobile'] },
 
-            // === 本月：发布中（正在推送） ===
-            { id: 3, name: '新媒体运营沙龙 Vol.12',          category: 'culture',   status: 'publishing', publishTime: '2026-06-25 16:00:00', startTime: '2026-06-28', endTime: '2026-06-28', creator: '周明杰', organizer: '市场部',       location: '上海 · 思南公馆', participants: 0,   maxParticipants: 80,  channels: ['trustedSpace', 'h5Mobile'] },
-
-            // === 今日：定时 + 待发布混合（呼应用户反馈的"同日多种状态"） ===
-            { id: 4, name: 'AI Agent 实战工作坊',          category: 'tech',      status: 'scheduled',  publishTime: '2026-06-25 14:30:00', startTime: '2026-07-05', endTime: '2026-07-05', creator: '陈思远', organizer: 'AI 创新中心',  location: '线上 · 腾讯会议', participants: 0,   maxParticipants: 200, channels: ['publicAuth', 'trustedSpace'] },
-            { id: 5, name: '7 月员工生日会',                category: 'team',      status: 'pending',    publishTime: '2026-06-25 18:00:00', startTime: '2026-07-08', endTime: '2026-07-08', creator: '王建国', organizer: '人力资源部',   location: '员工活动中心',   participants: 0,   maxParticipants: 100, channels: ['trustedSpace'] },
-            { id: 6, name: '数字化转型案例分享（撤回重发）', category: 'tech',      status: 'withdrawn',  publishTime: '2026-06-25 11:00:00', startTime: '2026-06-30', endTime: '2026-06-30', creator: '张明远', organizer: '数字化部',     location: '集团多功能厅',   participants: 0,   maxParticipants: 150, channels: ['publicAuth'], withdrawnReason: '主讲人临时有会议冲突' },
-
-            // === 本月已结束 ===
-            { id: 7, name: '端午龙舟邀请赛',                category: 'sports',    status: 'ended',      publishTime: '2026-05-25 10:00:00', startTime: '2026-06-10', endTime: '2026-06-10', creator: '王建国', organizer: '工会',         location: '郊外湖面',       participants: 120, maxParticipants: 150, channels: ['publicAuth', 'trustedSpace'] },
-            { id: 8, name: '新员工入职培训 06 期',          category: 'education', status: 'ended',      publishTime: '2026-06-08 08:00:00', startTime: '2026-06-15', endTime: '2026-06-19', creator: '陈思远', organizer: '人力资源部',   location: '培训中心',       participants: 45,  maxParticipants: 50,  channels: ['trustedSpace'] },
-
-            // === 本月下旬：待发布 + 定时 ===
-            { id: 9, name: '科技创新成果展（预热）',         category: 'tech',      status: 'pending',    publishTime: '2026-06-26 10:00:00', startTime: '2026-08-15', endTime: '2026-08-20', creator: '张明远', organizer: '科技创新部',   location: '展览中心',       participants: 0,   maxParticipants: 500, channels: ['publicAuth', 'h5Mobile'] },
-            { id: 10, name: '心理健康讲座 Vol.04',           category: 'education', status: 'pending',    publishTime: '2026-06-28 15:00:00', startTime: '2026-07-12', endTime: '2026-07-12', creator: '李晓华', organizer: '人力资源部',   location: '线上 + 线下',     participants: 0,   maxParticipants: 200, channels: ['trustedSpace', 'h5Mobile'] },
-            { id: 11, name: '行业峰会赞助商洽谈会',         category: 'summit',    status: 'scheduled',  publishTime: '2026-06-30 09:00:00', startTime: '2026-09-20', endTime: '2026-09-22', creator: '张明远', organizer: '战略发展部',   location: '上海外滩茂悦',   participants: 0,   maxParticipants: 100, channels: ['h5Mobile'] },
-
-            // === 下月 + 后续 ===
-            { id: 12, name: '7 月数据分析技能培训',         category: 'education', status: 'scheduled',  publishTime: '2026-07-02 10:00:00', startTime: '2026-07-15', endTime: '2026-07-16', creator: '陈思远', organizer: '数据学院',     location: '数据中心会议室', participants: 0,   maxParticipants: 80,  channels: ['trustedSpace'] },
-            { id: 13, name: '7 月篮球友谊赛',               category: 'sports',    status: 'pending',    publishTime: '2026-07-05 09:00:00', startTime: '2026-07-20', endTime: '2026-07-20', creator: '王建国', organizer: '工会体育部',   location: '集团篮球场',     participants: 0,   maxParticipants: 100, channels: ['trustedSpace'] },
-            { id: 14, name: '中秋联欢晚会（提前预热）',      category: 'culture',   status: 'pending',    publishTime: '2026-08-01 10:00:00', startTime: '2026-09-17', endTime: '2026-09-17', creator: '李晓华', organizer: '工会',         location: '集团大礼堂',     participants: 0,   maxParticipants: 300, channels: ['publicAuth', 'trustedSpace', 'h5Mobile'] },
-            { id: 15, name: '客户答谢晚宴',                  category: 'summit',    status: 'pending',    publishTime: '2026-08-15 14:00:00', startTime: '2026-09-28', endTime: '2026-09-28', creator: '张明远', organizer: '客户成功部',   location: '北京 · 国贸大酒店', participants: 0, maxParticipants: 80,  channels: ['h5Mobile'] },
-
-            // === 跨年/已下线 ===
-            { id: 16, name: '2025 数字化转型高峰论坛',      category: 'tech',      status: 'offline',    publishTime: '2025-12-20 10:00:00', startTime: '2026-03-15', endTime: '2026-03-15', creator: '张明远', organizer: '数字化部',     location: '北京国际会议中心', participants: 328, maxParticipants: 500, channels: ['publicAuth', 'trustedSpace'] },
-            { id: 17, name: '2026 春节系列活动',            category: 'culture',   status: 'offline',    publishTime: '2026-01-15 10:00:00', startTime: '2026-02-01', endTime: '2026-02-15', creator: '李晓华', organizer: '工会',         location: '全集团',         participants: 850, maxParticipants: 1000, channels: ['publicAuth', 'trustedSpace'] },
-            { id: 18, name: '2025 年终总结大会',            category: 'team',      status: 'offline',    publishTime: '2025-12-28 14:00:00', startTime: '2026-01-10', endTime: '2026-01-10', creator: '张明远', organizer: '总裁办',       location: '集团大礼堂',     participants: 480, maxParticipants: 500, channels: ['publicAuth'] }
+            // === 待发布队列：无 publishTime（未创建发布计划） ===
+            { id: 13, name: '国庆主题演讲比赛',           category: 'culture',   creator: '李晓华', organizer: '工会',           location: '集团大礼堂',     participants: 0,   maxParticipants: 300, channels: ['publicAuth', 'trustedSpace'] },
+            { id: 14, name: 'Q4 数字化转型培训计划',    category: 'tech',      creator: '张明远', organizer: '数字化部',     location: '待定',           participants: 0,   maxParticipants: 200, channels: ['publicAuth'] },
+            { id: 15, name: '冬季运动会筹备',            category: 'sports',    creator: '王建国', organizer: '工会体育部',   location: '集团体育场',     participants: 0,   maxParticipants: 150, channels: ['trustedSpace', 'h5Mobile'] }
         ];
 
         /* =========================================================================
@@ -569,39 +531,40 @@
          * 统计卡
          * ========================================================================= */
         function renderStats() {
+            // 日历：有 publishTime 的活动
+            const calendarItems = publishList.filter(item => !!item.publishTime);
+            // 待发布队列：无 publishTime 的活动
+            const queueItems = publishList.filter(item => !item.publishTime);
+
+            // 日历中今日待发布（publishTime 是今天）
             const todayStr = formatDate(today);
-            const weekEnd = new Date(today);
-            weekEnd.setDate(weekEnd.getDate() + 7);
-
-            let pendingCount = 0;
-            let publishedTodayCount = 0;
-            let scheduledWeekCount = 0;
-            let endedCount = 0;
-            let todayPendingCount = 0;
-            let overdueCount = 0;
-
-            publishList.forEach(item => {
-                const pt = new Date(item.publishTime);
-                if (item.status === 'pending') {
-                    pendingCount++;
-                    if (formatDate(pt) === todayStr) todayPendingCount++;
-                    if (pt < today) overdueCount++;
-                }
-                if (item.status === 'scheduled') {
-                    scheduledWeekCount++;
-                    if (pt <= weekEnd) scheduledWeekCount++;
-                }
-                if (item.status === 'published' && formatDate(pt) === todayStr) publishedTodayCount++;
-                if (item.status === 'ended') endedCount++;
+            const todayPending = calendarItems.filter(item => {
+                const pt = item.publishTime.substring(0, 10);
+                return pt === todayStr;
             });
+            // 日历中本周待发布（publishTime 在未来 7 天内）
+            const weekEnd = new Date(today); weekEnd.setDate(weekEnd.getDate() + 7);
+            const weekPending = calendarItems.filter(item => {
+                const pt = new Date(item.publishTime);
+                return pt >= today && pt <= weekEnd;
+            });
+            // 日历中本月已发布（publishTime 在当月且 < 今天）
+            const monthStart = new Date(currentYear, currentMonth - 1, 1);
+            const monthEnd = new Date(currentYear, currentMonth, 0);
+            const monthPublished = calendarItems.filter(item => {
+                const pt = new Date(item.publishTime);
+                return pt >= monthStart && pt <= monthEnd && pt < today;
+            });
+            // 日历中已发布总数（publishTime < 今天）
+            const totalPublished = calendarItems.filter(item => new Date(item.publishTime) < today);
 
-            document.getElementById('stat-pending').textContent = pendingCount;
-            document.getElementById('stat-published-today').textContent = publishedTodayCount;
-            document.getElementById('stat-scheduled-week').textContent = scheduledWeekCount;
-            document.getElementById('stat-ended').textContent = endedCount;
-            document.getElementById('remind-today').textContent = todayPendingCount;
-            document.getElementById('remind-overdue').textContent = overdueCount;
-            document.getElementById('remind-week').textContent = scheduledWeekCount;
+            document.getElementById('stat-pending').textContent = todayPending.length;       // 今日待发布
+            document.getElementById('stat-published-today').textContent = totalPublished.length; // 已发布
+            document.getElementById('stat-scheduled-week').textContent = weekPending.length;    // 本周待发布
+            document.getElementById('stat-ended').textContent = queueItems.length;             // 待发布活动（队列）
+            document.getElementById('remind-today').textContent = todayPending.length;
+            document.getElementById('remind-overdue').textContent = 0;
+            document.getElementById('remind-week').textContent = weekPending.length;
         }
 
         /* =========================================================================
@@ -620,17 +583,22 @@
             for (let i = 0; i < firstDay; i++) {
                 const prevMonthDays = new Date(currentYear, currentMonth - 1, 0).getDate();
                 const day = prevMonthDays - firstDay + i + 1;
-                html += `<div class="calendar-day p-2 rounded-lg border border-transparent text-gray-400 text-sm flex items-start">${day}</div>`;
+                html += `<div class="calendar-day p-1 rounded-lg border border-transparent text-gray-400 text-sm flex items-start">${day}</div>`;
             }
 
             // 当月日期
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                let dayPublishItems = publishList.filter(p => p.publishTime.startsWith(dateStr));
 
-                // 应用状态筛选
+                // 只显示有 publishTime 的活动，且按日期过滤
+                let dayPublishItems = publishList.filter(p => p.publishTime && p.publishTime.startsWith(dateStr));
+
+                // 应用状态筛选（已发布/待发布）
                 if (statusFilter !== 'all') {
-                    dayPublishItems = dayPublishItems.filter(p => p.status === statusFilter);
+                    dayPublishItems = dayPublishItems.filter(p => {
+                        const pt = new Date(p.publishTime);
+                        return statusFilter === 'published' ? pt < today : pt >= today;
+                    });
                 }
 
                 const isToday = today.getFullYear() === currentYear && today.getMonth() + 1 === currentMonth && today.getDate() === day;
@@ -638,37 +606,31 @@
                 const hasContent = dayPublishItems.length > 0;
                 const totalCount = dayPublishItems.length;
 
-                // 状态分组
-                const statusGroups = {};
-                dayPublishItems.forEach(item => {
-                    statusGroups[item.status] = (statusGroups[item.status] || 0) + 1;
-                });
+                // 自动判定：publishTime < 今天 → 已发布(绿)；>= 今天 → 待发布(蓝)
+                const publishedCount = dayPublishItems.filter(p => new Date(p.publishTime) < today).length;
+                const pendingCount = dayPublishItems.length - publishedCount;
 
-                // 分段条（按状态比例填充）
+                // 分段条
                 let stackedBar = '';
                 if (hasContent) {
-                    const segments = Object.entries(statusGroups).map(([s, n]) => {
-                        const pct = (n / totalCount * 100).toFixed(1);
-                        return `<div class="bg-${statusConfig[s].color}" style="width:${pct}%" title="${statusConfig[s].name} ${n}"></div>`;
-                    }).join('');
-                    stackedBar = `<div class="stacked-bar mt-1.5">${segments}</div>`;
+                    const pubPct = (publishedCount / totalCount * 100).toFixed(1);
+                    const penPct = (pendingCount / totalCount * 100).toFixed(1);
+                    stackedBar = `
+                        <div class="stacked-bar mt-1.5">
+                            ${publishedCount > 0 ? `<div class="bg-accent-green" style="width:${pubPct}%" title="已发布 ${publishedCount}"></div>` : ''}
+                            ${pendingCount > 0 ? `<div class="bg-accent-blue" style="width:${penPct}%" title="待发布 ${pendingCount}"></div>` : ''}
+                        </div>`;
                 } else {
-                    stackedBar = `<div class="stacked-bar mt-1.5 opacity-30"><div class="bg-gray-200" style="width:100%"></div></div>`;
+                    stackedBar = `<div class="stacked-bar mt-1.5 opacity-20"><div class="bg-gray-200" style="width:100%"></div></div>`;
                 }
 
-                // 状态徽点 + 数字（最多 3 个，超出显示 +N）
+                // 状态徽点
                 let statusChips = '';
                 if (hasContent) {
-                    const visible = Object.entries(statusGroups).slice(0, 3);
-                    const overflow = Object.keys(statusGroups).length - visible.length;
-                    statusChips = visible.map(([s, n]) => `
-                        <span class="status-dot">
-                            <span class="w-1.5 h-1.5 rounded-full bg-${statusConfig[s].color}"></span>${n}
-                        </span>
-                    `).join('');
-                    if (overflow > 0) {
-                        statusChips += `<span class="status-dot text-text-muted">+${overflow}</span>`;
-                    }
+                    statusChips = `
+                        ${publishedCount > 0 ? `<span class="status-dot"><span class="w-1.5 h-1.5 rounded-full bg-accent-green"></span>${publishedCount}</span>` : ''}
+                        ${pendingCount > 0 ? `<span class="status-dot"><span class="w-1.5 h-1.5 rounded-full bg-accent-blue"></span>${pendingCount}</span>` : ''}
+                    `;
                 }
 
                 // 总数徽章
@@ -679,14 +641,13 @@
                 ` : '';
 
                 html += `
-                    <div class="calendar-day p-2 rounded-lg border ${isSelected ? 'selected' : 'border-transparent'} ${hasContent ? 'has-content' : ''} ${isToday ? 'is-today' : ''}"
+                    <div class="calendar-day p-1 rounded-lg border ${isSelected ? 'selected' : 'border-transparent'} ${hasContent ? 'has-content' : ''} ${isToday ? 'is-today' : ''}"
                          onclick="selectDate('${dateStr}')">
-                        <div class="flex items-center justify-between">
-                            <span class="day-num text-sm font-medium ${isToday ? '' : ''} ${isToday ? 'w-6 h-6 rounded-full flex items-center justify-center' : ''}">${day}</span>
+                        <div class="flex items-center justify-between mb-0.5">
+                            <span class="day-num text-xs font-medium ${isToday ? 'w-5 h-5 rounded-full flex items-center justify-center' : ''}">${day}</span>
                             ${countBadge}
                         </div>
                         ${stackedBar}
-                        <div class="flex items-center gap-2 mt-1 flex-wrap">${statusChips}</div>
                     </div>
                 `;
             }
@@ -695,7 +656,7 @@
             const totalCells = firstDay + daysInMonth;
             const remainingCells = totalCells % 7 === 0 ? 0 : 7 - (totalCells % 7);
             for (let i = 1; i <= remainingCells; i++) {
-                html += `<div class="calendar-day p-2 rounded-lg border border-transparent text-gray-400 text-sm flex items-start">${i}</div>`;
+                html += `<div class="calendar-day p-1 rounded-lg border border-transparent text-gray-400 text-sm flex items-start">${i}</div>`;
             }
 
             grid.innerHTML = html;
@@ -733,15 +694,12 @@
          * 图例计数
          * ========================================================================= */
         function renderLegendCounts() {
-            const counts = { all: publishList.length };
-            Object.keys(statusConfig).forEach(s => counts[s] = 0);
-            publishList.forEach(item => {
-                if (counts[item.status] !== undefined) counts[item.status]++;
-            });
-            Object.keys(counts).forEach(k => {
-                const el = document.getElementById('legend-count-' + k);
-                if (el) el.textContent = counts[k];
-            });
+            const calItems = publishList.filter(p => !!p.publishTime);
+            const publishedCount = calItems.filter(p => new Date(p.publishTime) < today).length;
+            const pendingCount = calItems.filter(p => new Date(p.publishTime) >= today).length;
+            document.getElementById('legend-count-all').textContent = calItems.length;
+            document.getElementById('legend-count-published').textContent = publishedCount;
+            document.getElementById('legend-count-pending').textContent = pendingCount;
         }
 
         /* =========================================================================
@@ -754,7 +712,8 @@
         }
 
         function showDateDetail(dateStr) {
-            const items = publishList.filter(p => p.publishTime.startsWith(dateStr));
+            // 只显示有 publishTime 且日期匹配的活动
+            const items = publishList.filter(p => p.publishTime && p.publishTime.startsWith(dateStr));
             const date = new Date(dateStr);
             const dateTitle = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日 · ${items.length} 条发布计划`;
 
@@ -765,14 +724,13 @@
                     <div class="text-center py-12 text-gray-500">
                         <i class="fas fa-calendar-times text-4xl mb-3 opacity-50"></i>
                         <p>当日暂无发布计划</p>
-                        <button onclick="openModal('scheduleModal'); closeModal('dateDetailModal');" class="mt-4 px-4 py-2 text-sm text-accent-blue border border-accent-blue/30 rounded-lg hover:bg-accent-blue/5 transition-colors">
-                            <i class="fas fa-plus mr-1"></i>为此日创建计划
-                        </button>
                     </div>
                 `;
             } else {
                 document.getElementById('dateDetailContent').innerHTML = items.map(item => {
-                    const status = statusConfig[item.status];
+                    const pt = new Date(item.publishTime);
+                    const isPublished = pt < today;
+                    const sc = isPublished ? statusConfig.published : statusConfig.pending;
                     const cat = categoryConfig[item.category];
                     const time = item.publishTime.split(' ')[1].substring(0, 5);
                     const channelsHtml = (item.channels || []).map(ch => {
@@ -786,7 +744,7 @@
                             <div class="flex items-start justify-between mb-2">
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center gap-2 mb-1 flex-wrap">
-                                        <span class="w-2 h-2 rounded-full bg-${status.color}"></span>
+                                        <span class="w-2 h-2 rounded-full bg-${sc.color}"></span>
                                         <a href="activity-detail.html?id=${item.id}" class="font-medium hover:text-accent-blue transition-colors">${item.name}</a>
                                     </div>
                                     <div class="flex items-center gap-2 text-xs text-gray-500 flex-wrap">
@@ -801,41 +759,24 @@
                                         <span><i class="fas fa-map-marker-alt mr-1"></i>${item.location}</span>
                                     </div>
                                 </div>
-                                <span class="px-2 py-0.5 ${status.bgColor} ${status.textColor} text-xs rounded whitespace-nowrap">${status.name}</span>
+                                <span class="px-2 py-0.5 ${sc.bgColor} ${sc.textColor} text-xs rounded whitespace-nowrap">${sc.name}</span>
                             </div>
                             <div class="flex items-center gap-1.5 mt-3 flex-wrap">
                                 ${channelsHtml}
                             </div>
-                            ${item.withdrawnReason ? `<div class="mt-3 p-2 bg-accent-amber/10 text-accent-amber text-xs rounded"><i class="fas fa-exclamation-circle mr-1"></i>撤回原因：${item.withdrawnReason}</div>` : ''}
                             <div class="flex items-center gap-2 mt-3 pt-3 border-t border-[#E2E8F0]">
                                 <a href="activity-detail.html?id=${item.id}" class="px-3 py-1.5 text-xs text-gray-600 border border-[#E2E8F0] rounded-lg hover:text-gray-900 hover:border-gray-400 transition-colors">
                                     <i class="fas fa-eye mr-1"></i>查看详情
                                 </a>
-                                ${item.status === 'pending' ? `
+                                ${!isPublished ? `
                                     <button onclick="immediatePublish(${item.id})" class="px-3 py-1.5 bg-accent-green text-white text-xs rounded-lg hover:bg-green-600 transition-colors">
                                         <i class="fas fa-rocket mr-1"></i>立即发布
                                     </button>
-                                ` : ''}
-                                ${item.status === 'scheduled' ? `
-                                    <button onclick="rescheduleItem(${item.id})" class="px-3 py-1.5 border border-accent-cyan text-accent-cyan text-xs rounded-lg hover:bg-accent-cyan/5 transition-colors">
-                                        <i class="fas fa-calendar-alt mr-1"></i>改期
-                                    </button>
-                                ` : ''}
-                                ${item.status === 'published' ? `
+                                ` : `
                                     <button onclick="openWithdrawModal(${item.id})" class="px-3 py-1.5 border border-accent-amber text-accent-amber text-xs rounded-lg hover:bg-accent-amber/5 transition-colors">
                                         <i class="fas fa-undo mr-1"></i>撤回
                                     </button>
-                                ` : ''}
-                                ${item.status === 'withdrawn' ? `
-                                    <button onclick="republishItem(${item.id})" class="px-3 py-1.5 bg-accent-blue text-white text-xs rounded-lg hover:bg-blue-600 transition-colors">
-                                        <i class="fas fa-redo mr-1"></i>重新发布
-                                    </button>
-                                ` : ''}
-                                ${item.status === 'offline' ? `
-                                    <button onclick="republishItem(${item.id})" class="px-3 py-1.5 bg-accent-blue text-white text-xs rounded-lg hover:bg-blue-600 transition-colors">
-                                        <i class="fas fa-arrow-up mr-1"></i>重新上线
-                                    </button>
-                                ` : ''}
+                                `}
                             </div>
                         </div>
                     `;
@@ -849,9 +790,10 @@
          * 待发布队列
          * ========================================================================= */
         function renderPendingQueue() {
+            // 无 publishTime 的活动进入待发布队列（未创建发布计划）
             const pendingItems = publishList
-                .filter(p => p.status === 'pending' || p.status === 'scheduled')
-                .sort((a, b) => a.publishTime.localeCompare(b.publishTime));
+                .filter(p => !p.publishTime)
+                .sort((a, b) => a.id - b.id);
             document.getElementById('pendingCount').textContent = `${pendingItems.length} 条`;
 
             const container = document.getElementById('pendingQueue');
@@ -871,13 +813,8 @@
 
             document.getElementById('selectAllPending').disabled = false;
             container.innerHTML = pendingItems.map(item => {
-                const status = statusConfig[item.status];
                 const cat = categoryConfig[item.category];
-                const dateParts = item.publishTime.split(' ');
-                const dateStr = dateParts[0].substring(5);
-                const timeStr = dateParts[1].substring(0, 5);
                 const isSelected = selectedPendingItems.includes(item.id);
-                const isOverdue = item.status === 'pending' && new Date(item.publishTime) < today;
 
                 const channelsHtml = (item.channels || []).slice(0, 2).map(ch => {
                     const chConfig = channelConfig[ch];
@@ -892,21 +829,29 @@
                             <div class="flex-1 min-w-0">
                                 <div class="text-sm font-medium mb-1 truncate">${item.name}</div>
                                 <div class="flex items-center gap-1.5 text-[11px] text-gray-500 flex-wrap">
-                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-${status.color}/10 ${status.textColor} rounded">
-                                        ${status.name}
+                                    <span class="inline-flex items-center gap-1 px-1.5 py-0.5 bg-accent-blue/10 text-accent-blue rounded">
+                                        <i class="fas fa-clock"></i>待创建发布计划
                                     </span>
                                     <span class="px-1.5 py-0.5 bg-${cat.color}/10 text-${cat.color} rounded">${cat.name}</span>
-                                    <span>${dateStr} ${timeStr}</span>
-                                    ${isOverdue ? '<span class="px-1.5 py-0.5 bg-accent-red/10 text-accent-red rounded">已过期</span>' : ''}
+                                    <span><i class="fas fa-calendar mr-1"></i>${item.startTime}</span>
                                 </div>
                                 <div class="flex items-center gap-2 mt-1.5">${channelsHtml}</div>
                             </div>
+                            <button onclick="openCreatePublishPlan(${item.id})" class="px-3 py-1.5 bg-accent-blue text-white text-xs rounded-lg hover:bg-blue-600 transition-colors whitespace-nowrap">
+                                <i class="fas fa-plus mr-1"></i>创建计划
+                            </button>
                         </div>
                     </div>
                 `;
             }).join('');
 
             document.getElementById('selectedPendingCount').textContent = `已选 ${selectedPendingItems.length} 项`;
+        }
+
+        // 为队列中无 publishTime 的活动创建发布计划（打开弹窗并预填活动）
+        function openCreatePublishPlan(id) {
+            document.getElementById('scheduleActivity').value = id;
+            openModal('scheduleModal');
         }
 
         function togglePendingItem(id) {
@@ -929,9 +874,7 @@
         function immediatePublish(id) {
             const item = publishList.find(p => p.id === id);
             if (!item) return;
-            item.status = 'published';
             item.publishTime = formatDateTime(new Date());
-            item.channels = item.channels || ['publicAuth', 'trustedSpace'];
             saveToStorage();
             renderAll();
             closeModal('dateDetailModal');
@@ -940,10 +883,10 @@
 
         function batchPublish() {
             if (selectedPendingItems.length === 0) {
-                showToast('请先选择要发布的活动', 'error');
+                showToast('请先选择要创建发布计划的活动', 'error');
                 return;
             }
-            document.getElementById('confirmPublishCount').textContent = `确定要发布选中的 ${selectedPendingItems.length} 条活动吗？`;
+            document.getElementById('confirmPublishCount').textContent = `确定为选中的 ${selectedPendingItems.length} 条活动创建发布计划吗？`;
             openModal('confirmPublishModal');
         }
 
@@ -951,12 +894,8 @@
             const now = formatDateTime(new Date());
             selectedPendingItems.forEach(id => {
                 const item = publishList.find(p => p.id === id);
-                if (item && (item.status === 'pending' || item.status === 'scheduled')) {
-                    item.status = 'published';
+                if (item && !item.publishTime) {
                     item.publishTime = now;
-                    if (!item.channels || item.channels.length === 0) {
-                        item.channels = ['publicAuth', 'trustedSpace'];
-                    }
                 }
             });
             selectedPendingItems = [];
@@ -964,27 +903,25 @@
             closeModal('confirmPublishModal');
             closeModal('dateDetailModal');
             renderAll();
-            showToast('批量发布成功', 'success');
+            showToast('批量创建发布计划成功', 'success');
         }
 
         function batchSchedule() {
             if (selectedPendingItems.length === 0) {
-                showToast('请先选择要定时的活动', 'error');
+                showToast('请先选择要创建发布计划的活动', 'error');
                 return;
             }
-            // 简化：直接把所有选中的 scheduled 改为 30 分钟后
             const newTime = formatDateTime(new Date(Date.now() + 30 * 60 * 1000));
             selectedPendingItems.forEach(id => {
                 const item = publishList.find(p => p.id === id);
-                if (item) {
-                    item.status = 'scheduled';
+                if (item && !item.publishTime) {
                     item.publishTime = newTime;
                 }
             });
             selectedPendingItems = [];
             saveToStorage();
             renderAll();
-            showToast(`已批量定时为 30 分钟后发布`, 'success');
+            showToast('已批量创建发布计划', 'success');
         }
 
         function openWithdrawModal(id) {
@@ -1004,8 +941,7 @@
             }
             const item = publishList.find(p => p.id === withdrawTargetId);
             if (item) {
-                item.status = 'withdrawn';
-                item.withdrawnReason = reason;
+                item.publishTime = '';
                 saveToStorage();
                 renderAll();
                 closeModal('withdrawModal');
@@ -1016,9 +952,7 @@
         function republishItem(id) {
             const item = publishList.find(p => p.id === id);
             if (!item) return;
-            item.status = 'published';
             item.publishTime = formatDateTime(new Date());
-            item.withdrawnReason = '';
             saveToStorage();
             renderAll();
             closeModal('dateDetailModal');
@@ -1026,16 +960,15 @@
         }
 
         function rescheduleItem(id) {
-            const newTime = prompt('请输入新的发布时间（格式：YYYY-MM-DD HH:mm）', item => formatDateTimeInput(new Date(Date.now() + 24 * 3600 * 1000)));
-            if (!newTime) return;
             const item = publishList.find(p => p.id === id);
-            if (item) {
-                item.publishTime = newTime + ':00';
-                saveToStorage();
-                renderAll();
-                closeModal('dateDetailModal');
-                showToast('已改期', 'success');
-            }
+            if (!item) return;
+            const newTime = prompt('请输入新的发布时间（格式：YYYY-MM-DD HH:mm）', formatDateTimeInput(new Date(Date.now() + 24 * 3600 * 1000)));
+            if (!newTime) return;
+            item.publishTime = newTime + ':00';
+            saveToStorage();
+            renderAll();
+            closeModal('dateDetailModal');
+            showToast('已改期', 'success');
         }
 
         /* =========================================================================
