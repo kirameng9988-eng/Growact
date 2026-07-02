@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>活动报名 - 移动端</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#0A61FF',
+                        'success': '#10B981',
+                        'warning': '#F59E0B',
+                        'error': '#EF4444',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        html, body { height: 100%; overscroll-behavior: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; background: #F8FAFC; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+        .safe-top { padding-top: env(safe-area-inset-top); }
+        .form-input:focus { outline: none; border-color: #0A61FF; box-shadow: 0 0 0 3px rgba(10,97,255,0.1); }
+        .form-input { font-size: 16px !important; }
+        .slide-up { animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+    </style>
+</head>
+<body class="bg-bg-page min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 safe-top">
+        <div class="h-14 flex items-center px-4">
+            <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center -ml-2">
+                <i class="fas fa-chevron-left text-gray-600 text-lg"></i>
+            </button>
+            <h1 class="flex-1 text-base font-semibold text-gray-900 text-center pr-10">活动报名</h1>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="pt-14 pb-24 safe-bottom">
+        <div class="px-4 py-4 space-y-4">
+            <!-- 活动信息卡片 -->
+            <div id="activityCard" class="bg-white rounded-2xl p-4 card-shadow">
+                <div class="flex gap-3">
+                    <img id="activityCover" src="" class="w-20 h-16 rounded-xl object-cover" alt="">
+                    <div class="flex-1 min-w-0">
+                        <h3 id="activityTitle" class="text-sm font-semibold text-gray-900 mb-1 line-clamp-2 leading-tight"></h3>
+                        <div class="flex items-center gap-1 text-xs text-gray-500">
+                            <i class="far fa-calendar w-3"></i>
+                            <span id="activityTime"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 认证提示 -->
+            <div class="p-4 bg-blue-50 border border-blue-100 rounded-2xl">
+                <div class="flex items-center gap-2 mb-1">
+                    <i class="fas fa-shield-check text-primary"></i>
+                    <span class="text-sm font-medium text-primary">统一身份认证</span>
+                </div>
+                <p class="text-xs text-blue-600">以下信息已通过实名认证，可直接提交报名</p>
+            </div>
+
+            <!-- 报名表单 -->
+            <form id="registrationForm" class="bg-white rounded-2xl p-4 card-shadow space-y-5">
+                <!-- 姓名 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-user text-gray-400 mr-1"></i>姓名 <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="regName" value="张明远" readonly
+                        class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 cursor-not-allowed">
+                </div>
+
+                <!-- 企业名称 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-building text-gray-400 mr-1"></i>企业名称 <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="regCompany" value="上海数据集团有限公司" readonly
+                        class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 cursor-not-allowed">
+                </div>
+
+                <!-- 手机号 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-phone text-gray-400 mr-1"></i>手机号 <span class="text-red-500">*</span>
+                    </label>
+                    <input type="tel" id="regPhone" value="138****8888" readonly
+                        class="form-input w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm text-gray-900 cursor-not-allowed">
+                </div>
+
+                <!-- 邮箱 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-envelope text-gray-400 mr-1"></i>邮箱
+                    </label>
+                    <input type="email" id="regEmail" placeholder="请输入邮箱地址"
+                        class="form-input w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 transition-all">
+                </div>
+
+                <!-- 职位 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-briefcase text-gray-400 mr-1"></i>职位
+                    </label>
+                    <input type="text" id="regPosition" placeholder="请输入您的职位"
+                        class="form-input w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 transition-all">
+                </div>
+
+                <!-- 备注 -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-comment text-gray-400 mr-1"></i>备注
+                    </label>
+                    <textarea id="regNote" rows="3" placeholder="如有其他需求请备注说明"
+                        class="form-input w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm text-gray-900 transition-all resize-none"></textarea>
+                </div>
+            </form>
+
+            <!-- 协议提示 -->
+            <p class="text-xs text-gray-500 text-center px-4">提交报名即表示同意<a href="#" class="text-primary hover:underline">《活动协议》</a></p>
+        </div>
+    </main>
+
+    <!-- 底部提交按钮 -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-bottom">
+        <div class="px-4 py-3">
+            <button type="submit" form="registrationForm" id="submitBtn" onclick="handleSubmit(event)"
+                class="w-full py-4 bg-gradient-to-r from-primary to-blue-400 text-white text-base font-semibold rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform shadow-lg shadow-primary/30">
+                <i class="fas fa-paper-plane"></i>
+                提交报名
+            </button>
+        </div>
+    </div>
+
+    <!-- 成功弹窗 -->
+    <div id="successModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="closeSuccessModal()"></div>
+        <div class="absolute inset-x-4 top-1/2 -translate-y-1/2 bg-white rounded-2xl overflow-hidden fade-in">
+            <div class="p-8 flex flex-col items-center">
+                <div class="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mb-4">
+                    <i class="fas fa-check text-green-500 text-4xl"></i>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 mb-2">报名成功</h3>
+                <p class="text-sm text-gray-500 text-center mb-6">您的报名信息已提交，请等待审核结果</p>
+                <button onclick="goToMyActivities()" class="w-full py-3 bg-primary text-white text-sm font-medium rounded-xl">
+                    查看我的活动
+                </button>
+                <button onclick="closeSuccessModal(); history.back();" class="w-full py-3 mt-2 text-gray-600 text-sm font-medium rounded-xl">
+                    返回活动列表
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // 活动数据
+    const activityData = {
+        id: 101,
+        title: '2024上海数据开放创新应用大赛',
+        time: '2024年10月15日-12月20日',
+        cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop'
+    };
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        renderActivityInfo();
+    });
+
+    function renderActivityInfo() {
+        document.getElementById('activityCover').src = activityData.cover;
+        document.getElementById('activityTitle').textContent = activityData.title;
+        document.getElementById('activityTime').textContent = activityData.time;
+    }
+
+    // 表单提交
+    function handleSubmit(e) {
+        e.preventDefault();
+
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> 提交中...';
+
+        // 模拟提交
+        setTimeout(() => {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-paper-plane"></i> 提交报名';
+            showSuccessModal();
+        }, 1500);
+    }
+
+    function showSuccessModal() {
+        document.getElementById('successModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSuccessModal() {
+        document.getElementById('successModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function goToMyActivities() {
+        window.location.href = 'my.html';
+    }
+    </script>
+</body>
+</html>

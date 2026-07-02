@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>我的活动 - 移动端</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#0A61FF',
+                        'success': '#10B981',
+                        'warning': '#F59E0B',
+                        'error': '#EF4444',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        html, body { height: 100%; overscroll-behavior: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; background: #F8FAFC; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+        .safe-top { padding-top: env(safe-area-inset-top); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .tab-pill.active { background: #0A61FF; color: white; }
+        .tab-pill:not(.active) { background: #F1F5F9; color: #64748B; }
+        .card-shadow { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .slide-up { animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-bg-page min-h-screen">
+    <!-- 顶部导航栏 -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200 safe-top">
+        <div class="h-14 flex items-center px-4">
+            <button onclick="history.back()" class="w-10 h-10 flex items-center justify-center -ml-2">
+                <i class="fas fa-chevron-left text-gray-600 text-lg"></i>
+            </button>
+            <h1 class="flex-1 text-base font-semibold text-gray-900 text-center pr-10">我的活动</h1>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="pt-14 pb-20 safe-bottom">
+        <!-- 用户信息卡片 -->
+        <div class="px-4 py-4">
+            <div class="bg-white rounded-2xl p-4 card-shadow">
+                <div class="flex items-center gap-4">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face" class="w-14 h-14 rounded-full object-cover" alt="">
+                    <div>
+                        <h2 class="text-base font-semibold text-gray-900">张明远</h2>
+                        <p class="text-sm text-gray-500">上海数据集团有限公司</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 状态Tab筛选 -->
+        <div class="sticky top-14 z-30 bg-bg-page/95 backdrop-blur-sm border-b border-gray-100">
+            <div class="flex gap-2 px-4 py-3 overflow-x-auto scrollbar-hide">
+                <button onclick="filterByStatus('all')" class="tab-pill active px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-1.5" data-status="all">
+                    全部 <span id="countAll" class="text-xs opacity-80"></span>
+                </button>
+                <button onclick="filterByStatus('pending')" class="tab-pill px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-1.5" data-status="pending">
+                    待审核 <span id="countPending" class="text-xs opacity-80"></span>
+                </button>
+                <button onclick="filterByStatus('approved')" class="tab-pill px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-1.5" data-status="approved">
+                    已通过 <span id="countApproved" class="text-xs opacity-80"></span>
+                </button>
+                <button onclick="filterByStatus('signPending')" class="tab-pill px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-1.5" data-status="signPending">
+                    待签到 <span id="countSignPending" class="text-xs opacity-80"></span>
+                </button>
+                <button onclick="filterByStatus('signed')" class="tab-pill px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-1.5" data-status="signed">
+                    已签到 <span id="countSigned" class="text-xs opacity-80"></span>
+                </button>
+                <button onclick="filterByStatus('ended')" class="tab-pill px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all flex items-center gap-1.5" data-status="ended">
+                    已结束 <span id="countEnded" class="text-xs opacity-80"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 活动列表 -->
+        <div id="activityList" class="px-4 py-4 space-y-4">
+            <!-- 由JS渲染 -->
+        </div>
+    </main>
+
+    <!-- 底部TabBar -->
+    <nav class="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 safe-bottom">
+        <div class="h-14 flex items-center justify-around">
+            <button onclick="goToHome()" class="tab-btn flex-1 flex flex-col items-center justify-center gap-0.5" data-tab="home">
+                <i class="fas fa-home text-lg text-gray-400"></i>
+                <span class="text-xs text-gray-400">首页</span>
+            </button>
+            <button onclick="goToAll()" class="tab-btn flex-1 flex flex-col items-center justify-center gap-0.5" data-tab="all">
+                <i class="fas fa-list text-lg text-gray-400"></i>
+                <span class="text-xs text-gray-400">全部</span>
+            </button>
+            <button onclick="switchTab('my')" class="tab-btn flex-1 flex flex-col items-center justify-center gap-0.5 active" data-tab="my">
+                <i class="fas fa-user text-lg text-primary"></i>
+                <span class="text-xs font-medium text-primary">我的</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 签到码弹窗 -->
+    <div id="signInModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="closeSignInModal()"></div>
+        <div class="absolute inset-x-4 bottom-4 bg-white rounded-2xl overflow-hidden slide-up">
+            <div class="px-5 py-4 bg-gradient-to-r from-primary to-blue-400 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                        <i class="fas fa-qrcode text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-semibold text-white">活动签到码</h3>
+                        <p class="text-xs text-white/80">请在活动现场出示此码</p>
+                    </div>
+                </div>
+                <button onclick="closeSignInModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-white"></i>
+                </button>
+            </div>
+            <div class="p-5">
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-5 mb-4 flex items-center justify-center">
+                    <div class="w-48 h-48 bg-white rounded-xl shadow flex items-center justify-center border-2 border-gray-100">
+                        <div class="grid grid-cols-8 gap-0.5 w-36 h-36">
+                            ${Array(64).fill().map(() => `<div class="${Math.random() > 0.5 ? 'bg-gray-900' : 'bg-white'}"></div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-calendar-day text-gray-400"></i>
+                            <span class="text-sm text-gray-600">活动名称</span>
+                        </div>
+                        <span id="modalActivityName" class="text-sm font-medium text-gray-900">-</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-clock text-gray-400"></i>
+                            <span class="text-sm text-gray-600">签到时间</span>
+                        </div>
+                        <span class="text-sm font-medium text-gray-900">09:00-10:00</span>
+                    </div>
+                </div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                    <div class="flex items-start gap-2">
+                        <i class="fas fa-exclamation-circle text-amber-500 mt-0.5"></i>
+                        <p class="text-xs text-amber-700">请在活动现场出示签到码完成签到</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ==================== Mock数据 ====================
+    const myActivities = [
+        // 待审核
+        { id: 102, title: '数据资产入表与评估培训', time: '2024-11-12 09:00', location: '线上直播', applyStatus: 'pending', applyStatusText: '待审核', signInStatus: null, activityStatus: 'registration', activityStatusText: '报名中', cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop' },
+        { id: 118, title: '可信数据空间标准宣贯会', time: '2024-12-03 09:00', location: '线上+线下', applyStatus: 'pending', applyStatusText: '待审核', signInStatus: null, activityStatus: 'upcoming', activityStatusText: '即将开始', cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+        // 已通过+待签到
+        { id: 109, title: 'AI公共数据开放培训会', time: '2024-11-05 09:00', location: '上海数据交易所', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'pending', activityStatus: 'ongoing', activityStatusText: '进行中', cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=250&fit=crop' },
+        { id: 107, title: '数据要素市场化配置改革培训班', time: '2024-11-10 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'pending', activityStatus: 'upcoming', activityStatusText: '即将开始', cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
+        // 已签到
+        { id: 110, title: '数据安全工程师认证培训', time: '2024-11-06 14:00', location: '线上直播', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '09:23', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop' },
+        { id: 106, title: '可信数据空间建设研讨会', time: '2024-11-08 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '13:55', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+        { id: 111, title: '2024数据要素市场建设峰会', time: '2024-09-28 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '08:58', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+        // 已结束
+        { id: 112, title: '数据安全法实施三周年研讨会', time: '2024-09-15 14:00', location: '线上直播', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'absent', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop', hasMaterials: true },
+        { id: 113, title: '公共数据开放应用大赛颁奖典礼', time: '2024-08-20 10:00', location: '上海世博中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '10:05', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
+        { id: 115, title: '2023数据要素市场建设峰会', time: '2023-09-28 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '09:00', activityStatus: 'review', activityStatusText: '精彩回顾', cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop', hasMaterials: true, hasVideo: true },
+    ];
+
+    // 状态映射
+    const activityStatusMap = {
+        'registration': { text: '报名中', class: 'bg-blue-100 text-blue-700' },
+        'upcoming': { text: '即将开始', class: 'bg-amber-100 text-amber-700' },
+        'ongoing': { text: '进行中', class: 'bg-green-100 text-green-700' },
+        'ended': { text: '已结束', class: 'bg-gray-100 text-gray-500' },
+        'review': { text: '精彩回顾', class: 'bg-purple-100 text-purple-700' }
+    };
+
+    const applyStatusMap = {
+        'pending': { text: '待审核', class: 'bg-amber-100 text-amber-700' },
+        'approved': { text: '已通过', class: 'bg-green-100 text-green-700' },
+        'rejected': { text: '审核驳回', class: 'bg-red-100 text-red-700' }
+    };
+
+    const signStatusMap = {
+        'pending': { text: '待签到', class: 'bg-amber-100 text-amber-700' },
+        'signed': { text: '已签到', class: 'bg-green-100 text-green-700' },
+        'absent': { text: '缺席', class: 'bg-red-100 text-red-700' }
+    };
+
+    let currentFilter = 'all';
+
+    // ==================== 初始化 ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCounts();
+        filterByStatus('all');
+    });
+
+    // ==================== 计数 ====================
+    function updateCounts() {
+        document.getElementById('countAll').textContent = `(${myActivities.length})`;
+        document.getElementById('countPending').textContent = `(${myActivities.filter(a => a.applyStatus === 'pending').length})`;
+        document.getElementById('countApproved').textContent = `(${myActivities.filter(a => a.applyStatus === 'approved').length})`;
+        document.getElementById('countSignPending').textContent = `(${myActivities.filter(a => a.applyStatus === 'approved' && a.signInStatus === 'pending').length})`;
+        document.getElementById('countSigned').textContent = `(${myActivities.filter(a => a.signInStatus === 'signed').length})`;
+        document.getElementById('countEnded').textContent = `(${myActivities.filter(a => a.activityStatus === 'ended' || a.activityStatus === 'review').length})`;
+    }
+
+    // ==================== 筛选 ====================
+    function filterByStatus(status) {
+        currentFilter = status;
+
+        // 更新Tab高亮
+        document.querySelectorAll('.tab-pill').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.status === status);
+        });
+
+        renderActivityList();
+    }
+
+    // ==================== 渲染列表 ====================
+    function renderActivityList() {
+        const container = document.getElementById('activityList');
+        let activities = myActivities;
+
+        if (currentFilter === 'pending') {
+            activities = activities.filter(a => a.applyStatus === 'pending');
+        } else if (currentFilter === 'approved') {
+            activities = activities.filter(a => a.applyStatus === 'approved' && !a.signInStatus);
+        } else if (currentFilter === 'signPending') {
+            activities = activities.filter(a => a.applyStatus === 'approved' && a.signInStatus === 'pending');
+        } else if (currentFilter === 'signed') {
+            activities = activities.filter(a => a.signInStatus === 'signed');
+        } else if (currentFilter === 'ended') {
+            activities = activities.filter(a => a.activityStatus === 'ended' || a.activityStatus === 'review');
+        }
+
+        if (activities.length === 0) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-16 text-gray-400">
+                    <i class="fas fa-calendar-times text-5xl mb-4"></i>
+                    <p class="text-sm">暂无相关活动</p>
+                </div>
+            `;
+            return;
+        }
+
+        container.innerHTML = activities.map((activity, index) => `
+            <div class="activity-card bg-white rounded-2xl overflow-hidden card-shadow transition-all" style="animation: slideUp 0.3s ease-out ${index * 0.05}s both">
+                <div class="p-4">
+                    <div class="flex gap-3 mb-3">
+                        <img src="${activity.cover}" class="w-20 h-16 rounded-xl object-cover flex-shrink-0" alt="${activity.title}">
+                        <div class="flex-1 min-w-0">
+                            <h3 class="text-sm font-semibold text-gray-900 mb-1 line-clamp-2 leading-tight">${activity.title}</h3>
+                            <div class="text-xs text-gray-500">
+                                <i class="far fa-calendar w-3"></i> ${activity.time}
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 状态标签 -->
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="px-2 py-0.5 ${applyStatusMap[activity.applyStatus].class} text-xs font-medium rounded-full">${applyStatusMap[activity.applyStatus].text}</span>
+                        ${activity.signInStatus ? `<span class="px-2 py-0.5 ${signStatusMap[activity.signInStatus].class} text-xs font-medium rounded-full">${activity.signInStatus === 'signed' ? activity.signInTime ? '已签到 ' + activity.signInTime : '已签到' : signStatusMap[activity.signInStatus].text}</span>` : ''}
+                        <span class="px-2 py-0.5 ${activityStatusMap[activity.activityStatus].class} text-xs font-medium rounded-full">${activityStatusMap[activity.activityStatus].text}</span>
+                    </div>
+
+                    <!-- 操作按钮 -->
+                    <div class="flex items-center gap-2">
+                        ${renderActionButton(activity)}
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function renderActionButton(activity) {
+        const btnBase = 'px-3 py-1.5 text-xs font-medium rounded-lg transition-all';
+
+        // 待审核状态
+        if (activity.applyStatus === 'pending') {
+            return `<span class="${btnBase} text-gray-500">等待审核中</span>`;
+        }
+
+        // 已通过+待签到
+        if (activity.applyStatus === 'approved' && (activity.signInStatus === 'pending' || !activity.signInStatus)) {
+            if (activity.activityStatus === 'ongoing' || activity.activityStatus === 'upcoming') {
+                return `<button onclick="showSignInModal(${activity.id}, '${activity.title}')" class="${btnBase} bg-primary text-white"><i class="fas fa-qrcode mr-1"></i>查看签到码</button>`;
+            }
+        }
+
+        // 已签到
+        if (activity.signInStatus === 'signed') {
+            return `<button onclick="goToDetail(${activity.id})" class="${btnBase} text-primary border border-primary/30 bg-primary/5"><i class="fas fa-eye mr-1"></i>查看详情</button>`;
+        }
+
+        // 缺席
+        if (activity.signInStatus === 'absent') {
+            return `<button onclick="goToDetail(${activity.id})" class="${btnBase} text-gray-500 border border-gray-200 bg-gray-50"><i class="fas fa-eye mr-1"></i>查看详情</button>`;
+        }
+
+        // 已结束/精彩回顾
+        if (activity.activityStatus === 'ended' || activity.activityStatus === 'review') {
+            let buttons = [];
+            buttons.push(`<button onclick="goToDetail(${activity.id})" class="${btnBase} text-primary border border-primary/30 bg-primary/5"><i class="fas fa-eye mr-1"></i>查看详情</button>`);
+            if (activity.hasMaterials) {
+                buttons.push(`<button onclick="showToast('资料下载中...')" class="${btnBase} text-gray-600 border border-gray-200 bg-gray-50"><i class="fas fa-download mr-1"></i>资料</button>`);
+            }
+            if (activity.hasVideo) {
+                buttons.push(`<button onclick="showToast('正在打开回放...')" class="${btnBase} text-purple-500 border border-purple-200 bg-purple-50"><i class="fas fa-play mr-1"></i>回放</button>`);
+            }
+            return buttons.join('');
+        }
+
+        return `<button onclick="goToDetail(${activity.id})" class="${btnBase} text-primary border border-primary/30 bg-primary/5"><i class="fas fa-eye mr-1"></i>查看详情</button>`;
+    }
+
+    // ==================== 弹窗 ====================
+    function showSignInModal(id, title) {
+        document.getElementById('modalActivityName').textContent = title;
+        document.getElementById('signInModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSignInModal() {
+        document.getElementById('signInModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function showToast(msg) {
+        alert(msg);
+    }
+
+    // ==================== 导航 ====================
+    function goToHome() {
+        window.location.href = 'index.html';
+    }
+
+    function goToAll() {
+        window.location.href = 'index.html';
+    }
+
+    function goToDetail(id) {
+        window.location.href = `detail.html?id=${id}`;
+    }
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            const isActive = btn.dataset.tab === tab;
+            btn.classList.toggle('active', isActive);
+            const icon = btn.querySelector('i');
+            const text = btn.querySelector('span');
+            if (isActive) {
+                icon.classList.remove('text-gray-400');
+                icon.classList.add('text-primary');
+                text.classList.remove('text-gray-400');
+                text.classList.add('text-primary');
+            } else {
+                icon.classList.add('text-gray-400');
+                icon.classList.remove('text-primary');
+                text.classList.add('text-gray-400');
+                text.classList.remove('text-primary');
+            }
+        });
+    }
+    </script>
+</body>
+</html>

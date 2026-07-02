@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>活动详情 - 移动端</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#0A61FF',
+                        'success': '#10B981',
+                        'warning': '#F59E0B',
+                        'error': '#EF4444',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        html, body { height: 100%; overscroll-behavior: none; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; }
+        .safe-bottom { padding-bottom: env(safe-area-inset-bottom); }
+        .safe-top { padding-top: env(safe-area-inset-top); }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .tab-indicator { transition: all 0.3s ease; }
+        .slide-up { animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body class="bg-white min-h-screen">
+    <!-- 透明导航 (覆盖在封面上) -->
+    <header class="fixed top-0 left-0 right-0 z-50 safe-top">
+        <div class="h-14 flex items-center px-4 relative">
+            <button onclick="history.back()" class="w-10 h-10 rounded-full bg-black/30 hover:bg-black/40 flex items-center justify-center transition-colors">
+                <i class="fas fa-chevron-left text-white"></i>
+            </button>
+            <h1 id="headerTitle" class="flex-1 text-base font-semibold text-white text-center pr-10 truncate px-4">活动详情</h1>
+            <button class="w-10 h-10 rounded-full bg-black/30 hover:bg-black/40 flex items-center justify-center transition-colors">
+                <i class="fas fa-share-alt text-white"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- 封面图 -->
+    <div class="relative h-56">
+        <img id="coverImage" src="" class="w-full h-full object-cover" alt="">
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+        <div class="absolute bottom-4 left-4 right-4">
+            <span id="statusTag" class="px-3 py-1 bg-white/90 text-sm font-medium rounded-full"></span>
+        </div>
+    </div>
+
+    <!-- 活动信息 -->
+    <div class="px-4 py-5 border-b border-gray-100">
+        <h1 id="activityTitle" class="text-xl font-bold text-gray-900 mb-3 leading-tight"></h1>
+        <div class="space-y-2.5 text-sm text-gray-600">
+            <div class="flex items-center gap-3">
+                <i class="far fa-calendar text-gray-400 w-5"></i>
+                <span id="activityTime"></span>
+            </div>
+            <div class="flex items-center gap-3">
+                <i class="fas fa-map-marker-alt text-gray-400 w-5"></i>
+                <span id="activityLocation"></span>
+            </div>
+            <div class="flex items-center gap-3">
+                <i class="fas fa-building text-gray-400 w-5"></i>
+                <span id="activityOrganizer"></span>
+            </div>
+            <div class="flex items-center gap-3">
+                <i class="fas fa-users text-gray-400 w-5"></i>
+                <span id="activityQuota"></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tab切换 -->
+    <div class="sticky top-14 z-30 bg-white border-b border-gray-100">
+        <div class="flex px-4 relative">
+            <button onclick="switchTab('detail')" class="tab-btn flex-1 py-3.5 text-sm font-medium text-primary border-b-2 border-primary" data-tab="detail">详情</button>
+            <button onclick="switchTab('agenda')" class="tab-btn flex-1 py-3.5 text-sm font-medium text-gray-500 border-b-2 border-transparent" data-tab="agenda">议程</button>
+            <button onclick="switchTab('attachments')" class="tab-btn flex-1 py-3.5 text-sm font-medium text-gray-500 border-b-2 border-transparent" data-tab="attachments">附件</button>
+        </div>
+    </div>
+
+    <!-- Tab内容 -->
+    <div id="tabContent" class="px-4 py-5 pb-24">
+        <!-- 由JS渲染 -->
+    </div>
+
+    <!-- 底部操作栏 -->
+    <div id="actionBar" class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 safe-bottom">
+        <div class="h-16 flex items-center justify-between px-4 gap-4">
+            <button onclick="showSignInModal()" id="actionBtn" class="flex-1 py-3 bg-primary text-white text-sm font-medium rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform">
+                立即报名
+            </button>
+        </div>
+    </div>
+
+    <!-- 签到码弹窗 -->
+    <div id="signInModal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="closeSignInModal()"></div>
+        <div class="absolute inset-x-4 bottom-4 bg-white rounded-2xl overflow-hidden slide-up">
+            <div class="px-5 py-4 bg-gradient-to-r from-primary to-blue-400 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                        <i class="fas fa-qrcode text-white text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-base font-semibold text-white">活动签到码</h3>
+                        <p class="text-xs text-white/80">请在活动现场出示此码</p>
+                    </div>
+                </div>
+                <button onclick="closeSignInModal()" class="w-8 h-8 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors">
+                    <i class="fas fa-times text-white"></i>
+                </button>
+            </div>
+            <div class="p-5">
+                <!-- 二维码区域 -->
+                <div class="bg-gradient-to-br from-blue-50 to-cyan-50 rounded-xl p-5 mb-4 flex items-center justify-center">
+                    <div class="w-48 h-48 bg-white rounded-xl shadow flex items-center justify-center border-2 border-gray-100">
+                        <div class="grid grid-cols-8 gap-0.5 w-36 h-36">
+                            ${Array(64).fill().map(() => `<div class="${Math.random() > 0.5 ? 'bg-gray-900' : 'bg-white'}"></div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                <div class="space-y-3 mb-4">
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-calendar-day text-gray-400"></i>
+                            <span class="text-sm text-gray-600">活动名称</span>
+                        </div>
+                        <span id="modalActivityName" class="text-sm font-medium text-gray-900">AI公共数据开放培训会</span>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-gray-50 rounded-xl">
+                        <div class="flex items-center gap-2">
+                            <i class="fas fa-clock text-gray-400"></i>
+                            <span class="text-sm text-gray-600">签到时间</span>
+                        </div>
+                        <span class="text-sm font-medium text-gray-900">09:00-10:00</span>
+                    </div>
+                </div>
+                <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl">
+                    <div class="flex items-start gap-2">
+                        <i class="fas fa-exclamation-circle text-amber-500 mt-0.5"></i>
+                        <p class="text-xs text-amber-700">请在活动现场打开「我的活动」，点击「查看签到码」完成签到。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    // ==================== Mock数据 ====================
+    const activityData = {
+        id: 101,
+        title: '2024上海数据开放创新应用大赛',
+        status: 'registration',
+        statusText: '报名中',
+        time: '2024年10月15日-12月20日',
+        location: '上海世博中心',
+        organizer: '上海市数据局',
+        coOrganizer: '上海数据集团有限公司',
+        cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=400&fit=crop',
+        description: '上海数据开放创新应用大赛是上海市数据局主办的重要赛事活动，旨在激发全社会对数据要素创新应用的热情，推动数据要素市场化配置改革。大赛设置多个赛道，覆盖智慧城市、数字政务、金融科技、医疗健康等领域，获奖团队将获得丰厚奖金及产业孵化支持。',
+        quota: { total: 2000, registered: 1256 },
+        deadline: '2024-11-30',
+        guests: [
+            { name: '王部长', title: '上海市数据局 局长' },
+            { name: '李院士', title: '中国科学院 院士' },
+            { name: '张总裁', title: '上海数据集团 总裁' }
+        ],
+        agenda: [
+            { time: '10月15日 09:00', title: '开幕式', location: '主会场' },
+            { time: '10月15日 10:00', title: '主旨演讲', location: '主会场' },
+            { time: '10月15日 14:00', title: '赛道说明会', location: '分会场A' },
+            { time: '10月16日-12月15日', title: '作品提交期', location: '线上' },
+            { time: '12月20日', title: '决赛及颁奖', location: '主会场' }
+        ],
+        attachments: [
+            { name: '大赛参赛指南.pdf', size: '2.5MB' },
+            { name: '数据开放清单.xlsx', size: '1.8MB' },
+            { name: '赛道说明材料.zip', size: '15.2MB' }
+        ],
+        notice: '1. 参赛作品须围绕数据开放创新应用展开，突出数据价值释放<br>2. 同一参赛者/团队最多提交3件作品<br>3. 初赛采用线上评审，决赛采取现场答辩形式',
+        userStatus: 'not_registered'
+    };
+
+    const activityStatusMap = {
+        'registration': { text: '报名中', class: 'bg-blue-100 text-blue-700' },
+        'registration_closed': { text: '报名截止', class: 'bg-gray-100 text-gray-600' },
+        'upcoming': { text: '即将开始', class: 'bg-amber-100 text-amber-700' },
+        'ongoing': { text: '进行中', class: 'bg-green-100 text-green-700' },
+        'ended': { text: '已结束', class: 'bg-gray-100 text-gray-500' },
+        'review': { text: '精彩回顾', class: 'bg-purple-100 text-purple-700' }
+    };
+
+    let currentTab = 'detail';
+
+    // ==================== 初始化 ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        renderActivityDetail();
+        switchTab('detail');
+    });
+
+    function renderActivityDetail() {
+        const data = activityData;
+        document.getElementById('coverImage').src = data.cover;
+        document.getElementById('statusTag').textContent = activityStatusMap[data.status].text;
+        document.getElementById('statusTag').className = `px-3 py-1 ${activityStatusMap[data.status].class} text-sm font-medium rounded-full`;
+        document.getElementById('headerTitle').textContent = data.title;
+        document.getElementById('activityTitle').textContent = data.title;
+        document.getElementById('activityTime').textContent = data.time;
+        document.getElementById('activityLocation').textContent = data.location;
+        document.getElementById('activityOrganizer').textContent = data.organizer;
+        document.getElementById('activityQuota').textContent = `${data.quota.registered} / ${data.quota.total} 人`;
+        document.getElementById('modalActivityName').textContent = data.title;
+
+        // 更新操作按钮
+        updateActionButton(data);
+    }
+
+    function updateActionButton(data) {
+        const btn = document.getElementById('actionBtn');
+        if (data.status === 'registration' && data.userStatus === 'not_registered') {
+            btn.innerHTML = '<i class="fas fa-edit"></i>立即报名';
+            btn.className = 'flex-1 py-3 bg-primary text-white text-sm font-medium rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform';
+            btn.onclick = () => window.location.href = `register.html?id=${data.id}`;
+        } else if (data.status === 'registration' && data.userStatus === 'pending') {
+            btn.innerHTML = '<i class="fas fa-clock"></i>审核中';
+            btn.className = 'flex-1 py-3 bg-amber-100 text-amber-700 text-sm font-medium rounded-xl flex items-center justify-center gap-2 cursor-not-allowed';
+            btn.disabled = true;
+        } else if (data.status === 'registration' && data.userStatus === 'approved') {
+            btn.innerHTML = '<i class="fas fa-check-circle"></i>已报名';
+            btn.className = 'flex-1 py-3 bg-green-100 text-green-700 text-sm font-medium rounded-xl flex items-center justify-center gap-2 cursor-not-allowed';
+            btn.disabled = true;
+        } else if ((data.status === 'upcoming' || data.status === 'ongoing') && (data.userStatus === 'approved' || data.userStatus === 'pending_signin')) {
+            btn.innerHTML = '<i class="fas fa-qrcode"></i>查看签到码';
+            btn.className = 'flex-1 py-3 bg-primary text-white text-sm font-medium rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform';
+            btn.onclick = showSignInModal;
+        } else if (data.status === 'ended' || data.status === 'review') {
+            btn.innerHTML = '<i class="fas fa-play-circle"></i>查看回顾';
+            btn.className = 'flex-1 py-3 bg-purple-500 text-white text-sm font-medium rounded-xl flex items-center justify-center gap-2 active:scale-[0.98] transition-transform';
+            btn.onclick = showSignInModal;
+        } else {
+            btn.innerHTML = '<i class="fas fa-eye"></i>查看详情';
+            btn.className = 'flex-1 py-3 bg-gray-100 text-gray-600 text-sm font-medium rounded-xl flex items-center justify-center gap-2 cursor-not-allowed';
+            btn.disabled = true;
+        }
+    }
+
+    // ==================== Tab切换 ====================
+    function switchTab(tab) {
+        currentTab = tab;
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            const isActive = btn.dataset.tab === tab;
+            btn.classList.toggle('text-primary', isActive);
+            btn.classList.toggle('border-primary', isActive);
+            btn.classList.toggle('text-gray-500', !isActive);
+            btn.classList.toggle('border-transparent', !isActive);
+        });
+        renderTabContent();
+    }
+
+    function renderTabContent() {
+        const container = document.getElementById('tabContent');
+        if (currentTab === 'detail') {
+            container.innerHTML = `
+                <div class="slide-up">
+                    <h3 class="text-base font-semibold text-gray-900 mb-3">活动介绍</h3>
+                    <p class="text-sm text-gray-600 leading-relaxed mb-6">${activityData.description}</p>
+
+                    <h3 class="text-base font-semibold text-gray-900 mb-3">活动嘉宾</h3>
+                    <div class="space-y-3 mb-6">
+                        ${activityData.guests.map(guest => `
+                            <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl">
+                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-blue-400 flex items-center justify-center text-white font-medium">
+                                    ${guest.name.charAt(0)}
+                                </div>
+                                <div>
+                                    <p class="text-sm font-medium text-gray-900">${guest.name}</p>
+                                    <p class="text-xs text-gray-500">${guest.title}</p>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+
+                    <h3 class="text-base font-semibold text-gray-900 mb-3">注意事项</h3>
+                    <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                        <p class="text-sm text-amber-800 leading-relaxed">${activityData.notice}</p>
+                    </div>
+                </div>
+            `;
+        } else if (currentTab === 'agenda') {
+            container.innerHTML = `
+                <div class="slide-up">
+                    <h3 class="text-base font-semibold text-gray-900 mb-4">活动议程</h3>
+                    <div class="relative">
+                        <div class="absolute left-4 top-4 bottom-4 w-0.5 bg-gray-200"></div>
+                        <div class="space-y-4">
+                            ${activityData.agenda.map((item, index) => `
+                                <div class="relative flex gap-4">
+                                    <div class="relative z-10 w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white text-xs font-medium flex-shrink-0">
+                                        ${index + 1}
+                                    </div>
+                                    <div class="flex-1 pb-4">
+                                        <div class="p-3 bg-gray-50 rounded-xl">
+                                            <p class="text-sm font-medium text-gray-900 mb-1">${item.title}</p>
+                                            <div class="flex items-center gap-3 text-xs text-gray-500">
+                                                <span><i class="far fa-clock mr-1"></i>${item.time}</span>
+                                                <span><i class="fas fa-map-marker-alt mr-1"></i>${item.location}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        } else if (currentTab === 'attachments') {
+            container.innerHTML = `
+                <div class="slide-up">
+                    <h3 class="text-base font-semibold text-gray-900 mb-4">附件资料</h3>
+                    <div class="space-y-3">
+                        ${activityData.attachments.map(file => `
+                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                                        <i class="fas fa-file-alt text-primary"></i>
+                                    </div>
+                                    <div>
+                                        <p class="text-sm font-medium text-gray-900">${file.name}</p>
+                                        <p class="text-xs text-gray-500">${file.size}</p>
+                                    </div>
+                                </div>
+                                <button onclick="downloadFile('${file.name}')" class="w-10 h-10 rounded-full bg-primary/10 hover:bg-primary/20 flex items-center justify-center transition-colors">
+                                    <i class="fas fa-download text-primary"></i>
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+    }
+
+    // ==================== 弹窗 ====================
+    function showSignInModal() {
+        document.getElementById('signInModal').classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeSignInModal() {
+        document.getElementById('signInModal').classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    function downloadFile(name) {
+        alert(`正在下载: ${name}`);
+    }
+    </script>
+</body>
+</html>
