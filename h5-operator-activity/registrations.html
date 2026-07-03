@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>报名管理 - 活动运营</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#0A61FF',
+                        'primary-light': '#3B82F6',
+                        'success': '#10B981',
+                        'warning': '#F59E0B',
+                        'error': '#EF4444',
+                        'bg-page': '#F8FAFC',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        html, body { height: 100%; overscroll-behavior: none; }
+        body { background: #F8FAFC; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; }
+        .scrollbar-hide::-webkit-scrollbar { display: none; }
+        .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+        .card-shadow { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        .slide-up { animation: slideUp 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .filter-pill.active { background: #0A61FF; color: white; }
+        .filter-pill:not(.active) { background: #F1F5F9; color: #64748B; }
+        .list-item:active { background: #F8FAFC; }
+        .modal-overlay { animation: fadeIn 0.2s ease-out; }
+        .modal-content { animation: slideUp 0.3s ease-out; }
+    </style>
+</head>
+<body class="bg-bg-page text-gray-900">
+    <!-- 顶部导航 -->
+    <header class="bg-white sticky top-0 z-50 border-b border-gray-100">
+        <div class="px-4 py-3 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+                <i class="fas fa-users-cog text-white text-sm"></i>
+            </div>
+            <h1 class="text-base font-semibold flex-1">报名管理</h1>
+            <button onclick="refreshList()" class="w-9 h-9 rounded-xl bg-gray-50 flex items-center justify-center">
+                <i class="fas fa-sync-alt text-gray-400 text-sm"></i>
+            </button>
+        </div>
+        <!-- 状态筛选 -->
+        <div class="px-4 pb-3 flex items-center gap-2 overflow-x-auto scrollbar-hide">
+            <button onclick="setFilter('')" class="filter-pill px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors active" data-filter="">全部</button>
+            <button onclick="setFilter('pending')" class="filter-pill px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors" data-filter="pending">待审核</button>
+            <button onclick="setFilter('approved')" class="filter-pill px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors" data-filter="approved">已通过</button>
+            <button onclick="setFilter('rejected')" class="filter-pill px-4 py-1.5 rounded-full text-xs font-medium whitespace-nowrap transition-colors" data-filter="rejected">已拒绝</button>
+        </div>
+    </header>
+
+    <!-- 主内容 -->
+    <main class="px-4 py-4">
+        <!-- 搜索栏 -->
+        <div class="relative mb-4">
+            <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+            <input type="text" id="searchInput" oninput="renderList()" placeholder="搜索报名人、手机号..." class="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:border-primary focus:outline-none transition-colors">
+        </div>
+
+        <!-- 待审核提示 -->
+        <div id="pendingBanner" class="bg-amber-50 border border-amber-100 rounded-xl p-3 mb-4 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-clock text-amber-500 text-sm"></i>
+                <span class="text-sm text-amber-700"><strong id="pendingCount">4</strong> 条待审核报名</span>
+            </div>
+            <button onclick="setFilter('pending')" class="text-xs text-amber-600 font-medium">立即处理</button>
+        </div>
+
+        <!-- 列表 -->
+        <div id="reviewList" class="space-y-3 pb-20">
+            <!-- 动态渲染 -->
+        </div>
+
+        <!-- 空状态 -->
+        <div id="emptyState" class="hidden py-16 text-center">
+            <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-gray-100 flex items-center justify-center">
+                <i class="fas fa-inbox text-2xl text-gray-300"></i>
+            </div>
+            <p class="text-sm text-gray-400">暂无报名记录</p>
+        </div>
+    </main>
+
+    <!-- 详情弹窗 -->
+    <div id="detailModal" class="fixed inset-0 z-[100] hidden">
+        <div class="modal-overlay absolute inset-0 bg-black/50" onclick="closeDetail()"></div>
+        <div class="modal-content absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl max-h-[90vh] overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="text-base font-semibold">报名详情</h3>
+                <button onclick="closeDetail()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                    <i class="fas fa-times text-gray-500 text-sm"></i>
+                </button>
+            </div>
+            <div class="p-5 overflow-y-auto max-h-[calc(90vh-130px)]">
+                <!-- 用户信息头部 -->
+                <div class="flex items-center gap-4 mb-5 pb-5 border-b border-gray-100">
+                    <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-user text-xl text-primary"></i>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <p id="detailName" class="text-base font-semibold text-gray-900">王建国</p>
+                        <p id="detailPhone" class="text-sm text-gray-400 mt-0.5">138****2520</p>
+                    </div>
+                    <span id="detailStatus" class="px-3 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-600">待审核</span>
+                </div>
+
+                <!-- 活动信息 -->
+                <div class="mb-5">
+                    <h4 class="text-xs text-gray-400 font-medium mb-3 uppercase tracking-wide">活动信息</h4>
+                    <div class="bg-gray-50 rounded-2xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500">活动名称</span>
+                            <span id="detailActivity" class="text-sm font-medium text-gray-900">企业文化创意大赛</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500">活动时间</span>
+                            <span id="detailTime" class="text-sm font-medium text-gray-900">2024-04-20 14:00</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500">活动地点</span>
+                            <span id="detailLocation" class="text-sm font-medium text-gray-900">集团总部报告厅</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 报名信息 -->
+                <div class="mb-5">
+                    <h4 class="text-xs text-gray-400 font-medium mb-3 uppercase tracking-wide">报名信息</h4>
+                    <div class="bg-gray-50 rounded-2xl p-4 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500">企业名称</span>
+                            <span id="detailCompany" class="text-sm font-medium text-gray-900">北京科技有限公司</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500">职位</span>
+                            <span id="detailPosition" class="text-sm font-medium text-gray-900">技术总监</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500">邮箱</span>
+                            <span id="detailEmail" class="text-sm font-medium text-gray-900">wanglei@bjtech.com</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-sm text-gray-500">报名时间</span>
+                            <span id="detailRegTime" class="text-sm font-medium text-gray-900">2024-03-10 10:30</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 备注信息 -->
+                <div id="noteGroup" class="mb-5">
+                    <h4 class="text-xs text-gray-400 font-medium mb-3 uppercase tracking-wide">备注</h4>
+                    <div class="bg-gray-50 rounded-2xl p-4">
+                        <span id="detailNote" class="text-sm text-gray-700">无</span>
+                    </div>
+                </div>
+
+                <!-- 驳回原因 -->
+                <div id="rejectGroup" class="hidden">
+                    <h4 class="text-xs text-gray-400 font-medium mb-3 uppercase tracking-wide">驳回原因</h4>
+                    <div class="bg-red-50 rounded-2xl p-4">
+                        <span id="detailRejectReason" class="text-sm text-red-600"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 操作按钮 -->
+            <div id="actionBtns" class="px-5 py-4 border-t border-gray-100 flex items-center gap-3">
+                <button onclick="closeDetail()" class="flex-1 py-3 border border-gray-200 rounded-xl text-sm text-gray-600 font-medium">关闭</button>
+                <button onclick="openRejectModal()" class="flex-1 py-3 border border-error text-error rounded-xl text-sm font-medium">拒绝</button>
+                <button onclick="approveRegistration()" class="flex-1 py-3 bg-success text-white rounded-xl text-sm font-medium">通过</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 拒绝弹窗 -->
+    <div id="rejectModal" class="fixed inset-0 z-[110] hidden">
+        <div class="modal-overlay absolute inset-0 bg-black/50" onclick="closeRejectModal()"></div>
+        <div class="modal-content absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl overflow-hidden">
+            <div class="px-5 py-4 border-b border-gray-100 flex items-center justify-between">
+                <h3 class="text-base font-semibold text-error">拒绝报名</h3>
+                <button onclick="closeRejectModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                    <i class="fas fa-times text-gray-500 text-sm"></i>
+                </button>
+            </div>
+            <div class="p-5">
+                <p class="text-sm text-gray-600 mb-2">请填写驳回原因：</p>
+                <textarea id="rejectReason" rows="4" placeholder="请输入驳回原因..." class="w-full bg-white border border-gray-200 rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-primary focus:outline-none resize-none"></textarea>
+            </div>
+            <div class="px-5 py-4 border-t border-gray-100 flex items-center gap-3">
+                <button onclick="closeRejectModal()" class="flex-1 py-3 border border-gray-200 rounded-xl text-sm text-gray-600 font-medium">取消</button>
+                <button onclick="confirmReject()" class="flex-1 py-3 bg-error text-white rounded-xl text-sm font-medium">确认拒绝</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toastContainer" class="fixed top-20 left-1/2 -translate-x-1/2 z-[200] flex flex-col gap-2"></div>
+
+    <!-- 底部TabBar -->
+    <nav class="bg-white border-t border-gray-100 fixed bottom-0 left-0 right-0 z-50">
+        <div class="flex items-center justify-center py-2 gap-16">
+            <div class="flex flex-col items-center gap-1 px-6 py-1 cursor-pointer" onclick="location.href='index.html'">
+                <i class="fas fa-home text-gray-400 text-lg"></i>
+                <span class="text-[10px] text-gray-400">首页</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 px-6 py-1">
+                <i class="fas fa-users text-primary text-lg"></i>
+                <span class="text-[10px] text-primary font-medium">报名管理</span>
+            </div>
+        </div>
+    </nav>
+
+    <script>
+        // Mock数据 - 参照PC端报名管理
+        let registrations = [
+            { id: 1, activityName: '2024数字化转型高峰论坛', name: '王磊', company: '北京科技有限公司', phone: '13812345601', position: '技术总监', email: 'wanglei@bjtech.com', activityTime: '2024-04-20 09:00', location: '国际会议中心', regTime: '2024-03-02 14:30', status: 'approved', note: '已缴费', rejectReason: '' },
+            { id: 2, activityName: '2024数字化转型高峰论坛', name: '李娜', company: '上海数字集团', phone: '13912345602', position: '项目经理', email: 'lina@shdigital.com', activityTime: '2024-04-20 09:00', location: '国际会议中心', regTime: '2024-03-03 09:15', status: 'approved', note: '团队报名', rejectReason: '' },
+            { id: 3, activityName: '2024数字化转型高峰论坛', name: '张伟', company: '深圳创新科技', phone: '13712345603', position: '研发工程师', email: 'zhangwei@szinno.com', activityTime: '2024-04-20 09:00', location: '国际会议中心', regTime: '2024-03-04 16:45', status: 'pending', note: '', rejectReason: '' },
+            { id: 4, activityName: '企业文化创意大赛', name: '刘芳', company: '杭州文化传媒', phone: '13612345604', position: '创意总监', email: 'liufang@hzccm.com', activityTime: '2024-04-25 14:00', location: '集团总部报告厅', regTime: '2024-03-05 11:20', status: 'approved', note: '提交作品已通过初选', rejectReason: '' },
+            { id: 5, activityName: '企业文化创意大赛', name: '陈晨', company: '广州创意设计', phone: '13512345605', position: '设计师', email: 'chenchen@gzdesign.com', activityTime: '2024-04-25 14:00', location: '集团总部报告厅', regTime: '2024-03-06 14:00', status: 'pending', note: '', rejectReason: '' },
+            { id: 6, activityName: '新员工入职培训', name: '赵敏', company: '集团总部', phone: '13412345606', position: '市场专员', email: 'zhaomin@group.com', activityTime: '2024-04-15 09:00', location: '集团总部培训室', regTime: '2024-03-01 10:00', status: 'approved', note: '新员工第一批', rejectReason: '' },
+            { id: 7, activityName: '新员工入职培训', name: '周杰', company: '集团总部', phone: '13312345607', position: '财务专员', email: 'zhoujie@group.com', activityTime: '2024-04-15 09:00', location: '集团总部培训室', regTime: '2024-03-01 10:30', status: 'approved', note: '新员工第一批', rejectReason: '' },
+            { id: 8, activityName: '新员工入职培训', name: '吴婷', company: '集团总部', phone: '13212345608', position: 'HR专员', email: 'wuting@group.com', activityTime: '2024-04-15 09:00', location: '集团总部培训室', regTime: '2024-03-02 09:45', status: 'pending', note: '', rejectReason: '' },
+            { id: 9, activityName: '读书分享会', name: '孙浩', company: '北京大学出版社', phone: '13112345609', position: '编辑', email: 'sunhao@bdup.com', activityTime: '2024-04-18 15:00', location: '图书馆多功能厅', regTime: '2024-03-10 15:30', status: 'approved', note: '已借阅书籍', rejectReason: '' },
+            { id: 10, activityName: '读书分享会', name: '许晴', company: '上海图书馆', phone: '13012345610', position: '馆员', email: 'xuqing@shtsg.com', activityTime: '2024-04-18 15:00', location: '图书馆多功能厅', regTime: '2024-03-11 10:15', status: 'rejected', note: '', rejectReason: '报名名额已满' },
+            { id: 11, activityName: '数据分析技能培训', name: '马超', company: '数据科技有限公司', phone: '12912345611', position: '数据分析师', email: 'machao@datatech.com', activityTime: '2024-04-22 09:00', location: '数据中心会议室', regTime: '2024-03-15 09:00', status: 'approved', note: '需自带电脑', rejectReason: '' },
+            { id: 12, activityName: '数据分析技能培训', name: '林青', company: '智能科技公司', phone: '12812345612', position: '运营专员', email: 'linqing@intech.com', activityTime: '2024-04-22 09:00', location: '数据中心会议室', regTime: '2024-03-15 14:20', status: 'pending', note: '', rejectReason: '' },
+        ];
+
+        let currentFilter = '';
+        let currentDetailId = null;
+
+        function updatePendingCount() {
+            const pending = registrations.filter(r => r.status === 'pending').length;
+            document.getElementById('pendingCount').textContent = pending;
+            document.getElementById('pendingBanner').style.display = pending > 0 ? 'flex' : 'none';
+        }
+
+        function getFilteredList() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            return registrations.filter(r => {
+                if (currentFilter && r.status !== currentFilter) return false;
+                if (search && !r.name.toLowerCase().includes(search) && !r.phone.includes(search)) return false;
+                return true;
+            });
+        }
+
+        function renderList() {
+            const container = document.getElementById('reviewList');
+            const emptyState = document.getElementById('emptyState');
+            const list = getFilteredList();
+            if (list.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+            emptyState.classList.add('hidden');
+            container.innerHTML = list.map(r => `
+                <div class="list-item bg-white rounded-2xl p-4 card-shadow cursor-pointer transition-colors" onclick="showDetail(${r.id})">
+                    <div class="flex items-start gap-3">
+                        <div class="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center flex-shrink-0">
+                            <i class="fas fa-user text-primary text-sm"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center justify-between mb-1">
+                                <p class="text-sm font-semibold text-gray-900">${r.name}</p>
+                                <span class="px-2.5 py-0.5 rounded-full text-xs font-medium ${getStatusClass(r.status)}">${getStatusText(r.status)}</span>
+                            </div>
+                            <p class="text-xs text-gray-400 truncate">${r.activityName}</p>
+                            <p class="text-xs text-gray-400 mt-1">${r.company} · ${r.phone}</p>
+                        </div>
+                    </div>
+                    ${r.status === 'pending' ? `
+                    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-100">
+                        <button onclick="event.stopPropagation(); openQuickReject(${r.id})" class="flex-1 py-2 border border-error text-error rounded-lg text-xs font-medium">拒绝</button>
+                        <button onclick="event.stopPropagation(); quickApprove(${r.id})" class="flex-1 py-2 bg-success text-white rounded-lg text-xs font-medium">通过</button>
+                    </div>
+                    ` : ''}
+                </div>
+            `).join('');
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-pill').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.filter === filter);
+            });
+            renderList();
+        }
+
+        function getStatusClass(status) {
+            const map = { pending: 'bg-amber-50 text-amber-600', approved: 'bg-green-50 text-green-600', rejected: 'bg-red-50 text-red-600' };
+            return map[status] || '';
+        }
+
+        function getStatusText(status) {
+            const map = { pending: '待审核', approved: '已通过', rejected: '已拒绝' };
+            return map[status] || status;
+        }
+
+        function quickApprove(id) {
+            const r = registrations.find(x => x.id === id);
+            if (r) r.status = 'approved';
+            showToast('已通过该报名');
+            updatePendingCount();
+            renderList();
+        }
+
+        function openQuickReject(id) {
+            currentDetailId = id;
+            document.getElementById('rejectReason').value = '';
+            document.getElementById('rejectModal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeRejectModal() {
+            document.getElementById('rejectModal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+            currentDetailId = null;
+        }
+
+        function confirmReject() {
+            const reason = document.getElementById('rejectReason').value.trim();
+            if (!reason) {
+                showToast('请填写驳回原因');
+                return;
+            }
+            if (!currentDetailId) return;
+            const r = registrations.find(x => x.id === currentDetailId);
+            if (r) {
+                r.status = 'rejected';
+                r.rejectReason = reason;
+            }
+            closeRejectModal();
+            closeDetail();
+            showToast('已拒绝该报名');
+            updatePendingCount();
+            renderList();
+        }
+
+        function showDetail(id) {
+            const r = registrations.find(x => x.id === id);
+            if (!r) return;
+            currentDetailId = id;
+
+            document.getElementById('detailName').textContent = r.name;
+            document.getElementById('detailPhone').textContent = r.phone;
+            document.getElementById('detailActivity').textContent = r.activityName;
+            document.getElementById('detailTime').textContent = r.activityTime;
+            document.getElementById('detailLocation').textContent = r.location;
+            document.getElementById('detailCompany').textContent = r.company;
+            document.getElementById('detailPosition').textContent = r.position;
+            document.getElementById('detailEmail').textContent = r.email;
+            document.getElementById('detailRegTime').textContent = r.regTime;
+            document.getElementById('detailNote').textContent = r.note || '无';
+
+            const statusEl = document.getElementById('detailStatus');
+            statusEl.className = `px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(r.status)}`;
+            statusEl.textContent = getStatusText(r.status);
+
+            // 驳回原因
+            const rejectGroup = document.getElementById('rejectGroup');
+            if (r.status === 'rejected' && r.rejectReason) {
+                rejectGroup.classList.remove('hidden');
+                document.getElementById('detailRejectReason').textContent = r.rejectReason;
+            } else {
+                rejectGroup.classList.add('hidden');
+            }
+
+            // 操作按钮
+            document.getElementById('actionBtns').style.display = r.status === 'pending' ? 'flex' : 'none';
+
+            document.getElementById('detailModal').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+
+        function closeDetail() {
+            document.getElementById('detailModal').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+            currentDetailId = null;
+        }
+
+        function openRejectModal() {
+            document.getElementById('rejectReason').value = '';
+            document.getElementById('rejectModal').classList.remove('hidden');
+        }
+
+        function approveRegistration() {
+            if (!currentDetailId) return;
+            const r = registrations.find(x => x.id === currentDetailId);
+            if (r) r.status = 'approved';
+            closeDetail();
+            showToast('已通过该报名');
+            updatePendingCount();
+            renderList();
+        }
+
+        function refreshList() {
+            showToast('列表已刷新');
+            renderList();
+        }
+
+        function showToast(msg) {
+            const t = document.createElement('div');
+            t.className = 'bg-gray-900/90 text-white px-4 py-2.5 rounded-xl text-sm fade-in';
+            t.textContent = msg;
+            document.getElementById('toastContainer').appendChild(t);
+            setTimeout(() => t.remove(), 2000);
+        }
+
+        updatePendingCount();
+        renderList();
+    </script>
+</body>
+</html>

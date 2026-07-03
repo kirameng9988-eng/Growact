@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#ffffff">
+    <title>活动运营中心</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary': '#0A61FF',
+                        'primary-light': '#3B82F6',
+                        'success': '#10B981',
+                        'warning': '#F59E0B',
+                        'error': '#EF4444',
+                        'bg-page': '#F8FAFC',
+                    },
+                    fontFamily: {
+                        sans: ['-apple-system', 'BlinkMacSystemFont', '"PingFang SC"', '"Helvetica Neue"', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        * { -webkit-tap-highlight-color: transparent; box-sizing: border-box; }
+        html, body { height: 100%; overscroll-behavior: none; }
+        body { background: #F8FAFC; font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif; }
+        .card-shadow { box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body class="bg-bg-page text-gray-900">
+    <!-- 顶部导航 -->
+    <header class="bg-white sticky top-0 z-50 border-b border-gray-100">
+        <div class="px-4 py-3 flex items-center gap-3">
+            <div class="w-9 h-9 rounded-xl bg-primary flex items-center justify-center">
+                <i class="fas fa-calendar-check text-white text-sm"></i>
+            </div>
+            <h1 class="text-base font-semibold flex-1">活动运营中心</h1>
+        </div>
+    </header>
+
+    <!-- 主内容 -->
+    <main class="px-4 py-4 pb-20">
+        <!-- 欢迎卡片 -->
+        <div class="bg-gradient-to-r from-primary to-primary-light rounded-2xl p-5 mb-5 text-white">
+            <p class="text-sm opacity-90 mb-1">欢迎回来</p>
+            <p class="text-lg font-semibold">今日运营概览</p>
+            <div class="flex items-center gap-2 mt-3">
+                <span class="px-2.5 py-1 bg-white/20 rounded-full text-xs">待处理: 12</span>
+                <span class="px-2.5 py-1 bg-white/20 rounded-full text-xs">进行中: 5</span>
+            </div>
+        </div>
+
+        <!-- 概览卡片 -->
+        <div class="grid grid-cols-2 gap-3 mb-5">
+            <div class="bg-white rounded-2xl p-4 card-shadow">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-blue-50 flex items-center justify-center">
+                        <i class="fas fa-calendar-check text-blue-500 text-xs"></i>
+                    </div>
+                    <span class="text-xs text-gray-400">进行中活动</span>
+                </div>
+                <p class="text-2xl font-bold text-gray-900">5</p>
+                <p class="text-xs text-gray-400 mt-1">较上月 <span class="text-success">+2</span></p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 card-shadow">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-green-50 flex items-center justify-center">
+                        <i class="fas fa-user-check text-green-500 text-xs"></i>
+                    </div>
+                    <span class="text-xs text-gray-400">总报名人数</span>
+                </div>
+                <p class="text-2xl font-bold text-gray-900">1,247</p>
+                <p class="text-xs text-gray-400 mt-1">较上月 <span class="text-success">+328</span></p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 card-shadow">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-amber-50 flex items-center justify-center">
+                        <i class="fas fa-clock text-amber-500 text-xs"></i>
+                    </div>
+                    <span class="text-xs text-gray-400">待审核</span>
+                </div>
+                <p class="text-2xl font-bold text-gray-900">12</p>
+                <p class="text-xs text-gray-400 mt-1">需尽快处理</p>
+            </div>
+            <div class="bg-white rounded-2xl p-4 card-shadow">
+                <div class="flex items-center gap-2 mb-2">
+                    <div class="w-8 h-8 rounded-lg bg-purple-50 flex items-center justify-center">
+                        <i class="fas fa-check-double text-purple-500 text-xs"></i>
+                    </div>
+                    <span class="text-xs text-gray-400">完成率</span>
+                </div>
+                <p class="text-2xl font-bold text-gray-900">94.2%</p>
+                <p class="text-xs text-gray-400 mt-1">审核通过率</p>
+            </div>
+        </div>
+
+        <!-- 快捷操作 -->
+        <div class="bg-white rounded-2xl card-shadow overflow-hidden mb-5">
+            <div class="px-4 py-3 border-b border-gray-100">
+                <h3 class="text-sm font-semibold">快捷操作</h3>
+            </div>
+            <div class="p-4 grid grid-cols-2 gap-3">
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl cursor-pointer" onclick="location.href='registrations.html'">
+                    <div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center">
+                        <i class="fas fa-users text-primary"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">报名管理</p>
+                        <p class="text-xs text-gray-400">处理报名申请</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl cursor-pointer" onclick="location.href='registrations.html'">
+                    <div class="w-10 h-10 rounded-lg bg-amber-50 flex items-center justify-center">
+                        <i class="fas fa-clipboard-list text-amber-500"></i>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-900">待审核</p>
+                        <p class="text-xs text-gray-400">12 条待处理</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 活动报名排行 -->
+        <div class="bg-white rounded-2xl card-shadow overflow-hidden mb-5">
+            <div class="px-4 py-3 border-b border-gray-100">
+                <h3 class="text-sm font-semibold">活动报名排行</h3>
+            </div>
+            <div class="p-4 space-y-3">
+                <div class="flex items-center gap-3">
+                    <span class="w-5 text-xs font-bold text-primary">1</span>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">科技创新成果展</p>
+                        <div class="mt-1.5 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary rounded-full" style="width: 100%"></div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-400 flex-shrink-0 ml-2">200人</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="w-5 text-xs font-bold text-primary">2</span>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">中秋联欢晚会</p>
+                        <div class="mt-1.5 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary rounded-full" style="width: 85%"></div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-400 flex-shrink-0 ml-2">170人</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="w-5 text-xs font-bold text-primary">3</span>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">企业文化创意大赛</p>
+                        <div class="mt-1.5 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-primary rounded-full" style="width: 78%"></div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-400 flex-shrink-0 ml-2">156人</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="w-5 text-xs font-bold text-gray-400">4</span>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">年度优秀员工表彰大会</p>
+                        <div class="mt-1.5 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-gray-300 rounded-full" style="width: 60%"></div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-400 flex-shrink-0 ml-2">120人</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="w-5 text-xs font-bold text-gray-400">5</span>
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate">心理健康讲座</p>
+                        <div class="mt-1.5 h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full bg-gray-300 rounded-full" style="width: 45%"></div>
+                        </div>
+                    </div>
+                    <span class="text-xs text-gray-400 flex-shrink-0 ml-2">90人</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部TabBar -->
+    <nav class="bg-white border-t border-gray-100 fixed bottom-0 left-0 right-0 z-50">
+        <div class="flex items-center justify-center py-2 gap-16">
+            <div class="flex flex-col items-center gap-1 px-6 py-1">
+                <i class="fas fa-home text-primary text-lg"></i>
+                <span class="text-[10px] text-primary font-medium">首页</span>
+            </div>
+            <div class="flex flex-col items-center gap-1 px-6 py-1 cursor-pointer" onclick="location.href='registrations.html'">
+                <i class="fas fa-users text-gray-400 text-lg"></i>
+                <span class="text-[10px] text-gray-400">报名管理</span>
+            </div>
+        </div>
+    </nav>
+</body>
+</html>
