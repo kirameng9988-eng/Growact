@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>填写问卷 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF', 'secondary-bg': '#F8FAFC',
+                        'accent-blue': '#0A61FF', 'accent-cyan': '#0891B2',
+                        'accent-green': '#059669', 'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A', 'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* 选项 hover */
+        .option-row { transition: all .15s; cursor: pointer; }
+        .option-row:hover { background: rgba(10, 97, 255, 0.04); border-color: #0A61FF; }
+        .option-row.selected { background: rgba(10, 97, 255, 0.08); border-color: #0A61FF; }
+
+        /* 选项 radio 圆点 */
+        .radio-dot { width: 18px; height: 18px; border: 2px solid #CBD5E1; border-radius: 50%; flex-shrink: 0; position: relative; transition: all .15s; }
+        .radio-dot.checked { border-color: #0A61FF; }
+        .radio-dot.checked::after { content: ''; position: absolute; inset: 3px; background: #0A61FF; border-radius: 50%; }
+
+        .check-box { width: 18px; height: 18px; border: 2px solid #CBD5E1; border-radius: 4px; flex-shrink: 0; position: relative; transition: all .15s; }
+        .check-box.checked { background: #0A61FF; border-color: #0A61FF; }
+        .check-box.checked::after { content: '✓'; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 12px; line-height: 1; }
+
+        .field-error { display: none; }
+        .field-error.show { display: flex; }
+    </style>
+</head>
+<body class="bg-secondary-bg text-gray-900">
+
+    <!-- 预览模式提示（在 iframe 内时显示） -->
+    <div id="previewBanner" class="bg-amber-50 border-b border-amber-200 px-6 py-2 text-xs text-amber-700 flex items-center justify-between">
+        <div class="flex items-center gap-2">
+            <i class="fas fa-info-circle"></i>
+            <span>预览模式 — 您正在填写问卷「<strong id="bannerTitle">…</strong>」</span>
+        </div>
+        <a id="previewBannerLink" href="portal.html" class="hover:text-amber-900">
+            <i class="fas fa-external-link-alt"></i> 打开后台
+        </a>
+    </div>
+
+    <main class="py-10 px-4">
+        <div class="max-w-[720px] mx-auto">
+            <!-- 加载中 -->
+            <div id="loadingState" class="text-center py-20 text-gray-400">
+                <i class="fas fa-spinner fa-spin text-3xl mb-3 block"></i>
+                <p class="text-sm">问卷加载中…</p>
+            </div>
+
+            <!-- 未找到 -->
+            <div id="notFoundState" class="bg-white rounded-xl p-10 text-center hidden">
+                <i class="fas fa-question-circle text-5xl text-gray-300 mb-3"></i>
+                <p class="text-gray-500">问卷不存在或已停止收集</p>
+                <a href="questionnaire-list.html" class="text-sm text-accent-blue hover:underline mt-3 inline-block">前往问卷列表</a>
+            </div>
+
+            <!-- 未发布 -->
+            <div id="notPublishedState" class="bg-white rounded-xl p-10 text-center hidden">
+                <i class="fas fa-clock text-5xl text-gray-300 mb-3"></i>
+                <p class="text-gray-500">该问卷尚未发布，敬请期待</p>
+                <a href="questionnaire-list.html" class="text-sm text-accent-blue hover:underline mt-3 inline-block">前往问卷列表</a>
+            </div>
+
+            <!-- 填写表单 -->
+            <div id="formContainer" class="hidden">
+                <div id="titleCard" class="bg-white rounded-xl p-8 border border-[#E2E8F0]">
+                    <h1 id="qTitle" class="text-2xl font-semibold text-center"></h1>
+                    <p id="qDescription" class="text-center text-gray-500 mt-3 text-sm"></p>
+                </div>
+
+                <div id="userInfoCard" class="bg-white rounded-xl p-8 mt-4 border border-[#E2E8F0]">
+                    <h3 class="text-base font-medium mb-4 flex items-center gap-2">
+                        <i class="fas fa-user-circle text-accent-blue"></i>
+                        填写人信息
+                    </h3>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">姓名 <span class="text-accent-red">*</span></label>
+                            <input id="userName" type="text" placeholder="请输入姓名" class="w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none">
+                            <p id="userNameError" class="field-error text-red-500 text-xs mt-1 items-center gap-1"><i class="fas fa-exclamation-circle"></i><span></span></p>
+                        </div>
+                        <div>
+                            <label class="block text-sm text-gray-600 mb-1">手机号 <span class="text-accent-red">*</span></label>
+                            <input id="userPhone" type="tel" placeholder="11 位手机号" class="w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none">
+                            <p id="userPhoneError" class="field-error text-red-500 text-xs mt-1 items-center gap-1"><i class="fas fa-exclamation-circle"></i><span></span></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="fieldsCard" class="bg-white rounded-xl p-8 mt-4 border border-[#E2E8F0] space-y-6">
+                    <!-- 字段通过 JS 渲染 -->
+                </div>
+
+                <div class="bg-white rounded-xl p-6 mt-4 border border-[#E2E8F0] flex items-center justify-between">
+                    <span class="text-xs text-gray-500">
+                        共 <strong id="totalCount" class="text-gray-900">0</strong> 题 · 必填 <strong id="requiredCount" class="text-accent-red">0</strong> 题
+                    </span>
+                    <button onclick="submitForm()" class="px-6 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                        <i class="fas fa-paper-plane"></i> 提交问卷
+                    </button>
+                </div>
+
+                <div id="deadlineHint" class="text-center text-xs text-gray-400 mt-3 hidden">
+                    <i class="fas fa-clock"></i>
+                    <span></span>
+                </div>
+            </div>
+
+            <!-- 已提交 -->
+            <div id="submittedCard" class="hidden bg-white rounded-xl p-10 border border-[#E2E8F0] text-center">
+                <div class="w-16 h-16 rounded-full bg-accent-green/10 mx-auto flex items-center justify-center">
+                    <i class="fas fa-check text-2xl text-accent-green"></i>
+                </div>
+                <h2 class="text-xl font-semibold mt-4">提交成功</h2>
+                <p id="thankYouText" class="text-gray-500 mt-2 text-sm"></p>
+                <button onclick="location.href='portal.html'" class="mt-6 px-5 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue text-sm">
+                    <i class="fas fa-home"></i> 返回首页
+                </button>
+                <p class="text-xs text-gray-400 mt-4">您的反馈已记录，编号：<span id="respId"></span></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <script>
+        const STORAGE_KEY = 'questionnaires_data';
+        const RESPONSES_KEY = 'questionnaire_responses';
+
+        function loadList() {
+            try {
+                const s = sessionStorage.getItem(STORAGE_KEY);
+                if (s) return JSON.parse(s);
+            } catch(e){}
+            // 直接访问 fill 页时（如分享链接），sessionStorage 可能为空
+            // 尝试从 defaultQuestionnaires 注入
+            if (typeof defaultQuestionnaires !== 'undefined' && defaultQuestionnaires.length) {
+                try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultQuestionnaires)); } catch(e){}
+                return JSON.parse(JSON.stringify(defaultQuestionnaires));
+            }
+            return [];
+        }
+        function loadResp() { try { return JSON.parse(sessionStorage.getItem(RESPONSES_KEY) || '[]'); } catch(e){ return []; } }
+        function saveResp(r) { try { sessionStorage.setItem(RESPONSES_KEY, JSON.stringify(r)); } catch(e){} }
+
+        // 与 list 页保持一致的默认数据（直接通过分享链接进入时使用）
+        const defaultQuestionnaires = [
+            {
+                id: 'q_demo_001', title: '2024 上海数据开放创新应用大赛 参赛意向调研',
+                description: '为更好筹备本届大赛，请您花 2 分钟填写以下信息。',
+                cover: '', category: 'tech', categoryName: '科技创新', status: 'collecting',
+                fields: [
+                    { id: 'f_1', type: 'text', label: '姓名', required: true, placeholder: '请输入您的真实姓名', maxLength: 20 },
+                    { id: 'f_2', type: 'radio', label: '您的角色', required: true, options: [
+                        { id: 'o_a', label: '开发者' }, { id: 'o_b', label: '产品经理' }, { id: 'o_c', label: '设计师' }, { id: 'o_d', label: '其他' }
+                    ]},
+                    { id: 'f_3', type: 'checkbox', label: '您感兴趣的赛道（多选）', required: true, maxSelected: 3, options: [
+                        { id: 'o_a', label: '智慧城市' }, { id: 'o_b', label: '金融科技' }, { id: 'o_c', label: '医疗健康' }, { id: 'o_d', label: '工业制造' }, { id: 'o_e', label: '教育文化' }
+                    ]},
+                    { id: 'f_4', type: 'textarea', label: '对本届大赛的建议', required: false, maxLength: 500 },
+                    { id: 'f_5', type: 'file', label: '上传个人简历 / 作品集（可选）', required: false, accept: '.pdf,.png,.jpg,.zip', maxSizeMB: 20, maxFiles: 1 }
+                ],
+                settings: { anonymous: false, allowMultiple: false, collectUserInfo: true, deadline: '2026-09-30 23:59', thankYouMessage: '感谢您的参与！' },
+                createdBy: '张明远', createdAt: '2026-07-09T10:30:00+08:00', updatedAt: '2026-07-09T10:30:00+08:00',
+                publishedAt: '2026-07-09T11:00:00+08:00', responseCount: 0
+            },
+            {
+                id: 'q_demo_002', title: '员工培训需求调研',
+                description: '了解大家对培训内容、形式、频率的真实想法，帮我们做得更好。',
+                cover: '', category: 'education', categoryName: '教育培训', status: 'collecting',
+                fields: [
+                    { id: 'f_1', type: 'radio', label: '您希望的培训频率', required: true, options: [
+                        { id: 'o_a', label: '每周一次' }, { id: 'o_b', label: '每月一次' }, { id: 'o_c', label: '每季度一次' }, { id: 'o_d', label: '不一定' }
+                    ]},
+                    { id: 'f_2', type: 'checkbox', label: '您感兴趣的培训方向', required: true, options: [
+                        { id: 'o_a', label: '专业技能' }, { id: 'o_b', label: '管理能力' }, { id: 'o_c', label: '通用素养' }, { id: 'o_d', label: '行业前沿' }
+                    ]},
+                    { id: 'f_3', type: 'textarea', label: '其他建议', required: false, maxLength: 300 }
+                ],
+                settings: { anonymous: true, allowMultiple: false, collectUserInfo: false, deadline: '2026-08-31 23:59', thankYouMessage: '已收到，谢谢！' },
+                createdBy: '李晓华', createdAt: '2026-07-05T09:00:00+08:00', updatedAt: '2026-07-05T09:00:00+08:00',
+                publishedAt: '2026-07-05T10:00:00+08:00', responseCount: 0
+            }
+        ];
+
+        function escapeHtml(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+        }
+
+        let q = null;
+        let answers = {};
+        let submitted = false;
+
+        /* =====================================================================
+         * 初始化
+         * ===================================================================== */
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(location.search);
+            const id = params.get('id');
+            if (!id) {
+                showState('notFound');
+                return;
+            }
+            const list = loadList();
+            q = list.find(x => x.id === id);
+            if (!q) { showState('notFound'); return; }
+            if (q.status === 'draft') { showState('notPublished'); return; }
+            if (!q.settings) q.settings = { anonymous:false, allowMultiple:false, collectUserInfo:false };
+
+            document.title = `${q.title || '问卷'} - 填写`;
+            document.getElementById('bannerTitle').textContent = q.title || '';
+            document.getElementById('qTitle').textContent = q.title || '未命名问卷';
+            document.getElementById('qDescription').textContent = q.description || '';
+
+            // 收集用户信息开关
+            const showUser = !!q.settings.collectUserInfo && !q.settings.anonymous;
+            document.getElementById('userInfoCard').classList.toggle('hidden', !showUser);
+
+            // 渲染题目
+            document.getElementById('fieldsCard').innerHTML = (q.fields || []).map((f, i) => renderField(f, i)).join('');
+            document.getElementById('totalCount').textContent = (q.fields || []).length;
+            document.getElementById('requiredCount').textContent = (q.fields || []).filter(f => f.required).length;
+
+            // 截止时间提示
+            if (q.settings.deadline) {
+                document.getElementById('deadlineHint').classList.remove('hidden');
+                document.querySelector('#deadlineHint span').textContent = `截止时间：${q.settings.deadline.replace('T', ' ')}`;
+            }
+
+            showState('form');
+        });
+
+        function showState(name) {
+            document.getElementById('loadingState').classList.add('hidden');
+            document.getElementById('notFoundState').classList.toggle('hidden', name !== 'notFound');
+            document.getElementById('notPublishedState').classList.toggle('hidden', name !== 'notPublished');
+            document.getElementById('formContainer').classList.toggle('hidden', name !== 'form');
+            document.getElementById('submittedCard').classList.toggle('hidden', name !== 'submitted');
+            if (name === 'loading') document.getElementById('loadingState').classList.remove('hidden');
+        }
+
+        /* =====================================================================
+         * 渲染字段（用户端）
+         * ===================================================================== */
+        function renderField(f, idx) {
+            const req = f.required ? '<span class="text-accent-red ml-1">*</span>' : '';
+            const errId = `err_${f.id}`;
+            let body = '';
+
+            if (f.type === 'text') {
+                body = `<input type="text" data-fid="${f.id}" data-type="text" maxlength="${f.maxLength || 200}"
+                              placeholder="${escapeHtml(f.placeholder || '')}"
+                              onblur="validateField('${f.id}')"
+                              class="w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none">`;
+            } else if (f.type === 'textarea') {
+                body = `<textarea data-fid="${f.id}" data-type="textarea" rows="${f.rows || 4}" maxlength="${f.maxLength || 500}"
+                              placeholder="${escapeHtml(f.placeholder || '')}"
+                              onblur="validateField('${f.id}')"
+                              class="w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none"></textarea>
+                       <p class="text-xs text-gray-400 text-right mt-1"><span data-counter="${f.id}">0</span> / ${f.maxLength || 500}</p>`;
+            } else if (f.type === 'radio') {
+                body = `<div class="space-y-2">${(f.options || []).map(o => `
+                    <div class="option-row border border-[#E2E8F0] rounded-lg px-3 py-2.5 flex items-center gap-3" data-fid="${f.id}" data-type="radio" data-opt="${o.id}" onclick="selectRadio('${f.id}', '${o.id}', this)">
+                        <div class="radio-dot"></div>
+                        <span class="text-sm text-gray-700">${escapeHtml(o.label)}</span>
+                    </div>
+                `).join('')}</div>`;
+            } else if (f.type === 'checkbox') {
+                body = `<div class="space-y-2">${(f.options || []).map(o => `
+                    <div class="option-row border border-[#E2E8F0] rounded-lg px-3 py-2.5 flex items-center gap-3" data-fid="${f.id}" data-type="checkbox" data-opt="${o.id}" onclick="toggleCheck('${f.id}', '${o.id}', this)">
+                        <div class="check-box"></div>
+                        <span class="text-sm text-gray-700">${escapeHtml(o.label)}</span>
+                    </div>
+                `).join('')}</div>
+                ${f.maxSelected ? `<p class="text-xs text-gray-400 mt-2">最多可选 ${f.maxSelected} 项</p>` : ''}`;
+            } else if (f.type === 'select') {
+                body = `<select data-fid="${f.id}" data-type="select" onchange="onSelect('${f.id}', this.value); validateField('${f.id}');"
+                              class="w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none">
+                    <option value="">请选择</option>
+                    ${(f.options || []).map(o => `<option value="${o.id}">${escapeHtml(o.label)}</option>`).join('')}
+                </select>`;
+            } else if (f.type === 'file') {
+                const acceptAttr = (f.accept || '').trim();
+                body = `
+                    <div id="drop_${f.id}" class="border-2 border-dashed border-[#E2E8F0] rounded-lg p-6 text-center cursor-pointer hover:border-accent-blue transition-colors"
+                         onclick="document.getElementById('file_${f.id}').click()">
+                        <input type="file" id="file_${f.id}" data-fid="${f.id}" data-type="file"
+                               accept="${escapeHtml(acceptAttr)}" multiple
+                               onchange="onFile('${f.id}', this.files)"
+                               class="hidden">
+                        <i class="fas fa-cloud-upload-alt text-2xl text-gray-300"></i>
+                        <p class="text-sm text-gray-500 mt-2">点击选择文件，或拖拽至此</p>
+                        <p class="text-xs text-gray-400 mt-1">${escapeHtml(acceptAttr || '*')} · 单个 ≤ ${f.maxSizeMB || 10}MB · 最多 ${f.maxFiles || 1} 个</p>
+                    </div>
+                    <div id="files_${f.id}" class="mt-2 space-y-1"></div>
+                `;
+            }
+
+            return `
+                <div>
+                    <div class="text-sm font-medium text-gray-900 mb-2">
+                        <span class="text-gray-400 mr-1">${idx + 1}.</span>${escapeHtml(f.label || '未命名题目')}${req}
+                    </div>
+                    ${body}
+                    <p id="${errId}" class="field-error text-red-500 text-xs mt-1 items-center gap-1">
+                        <i class="fas fa-exclamation-circle"></i><span></span>
+                    </p>
+                </div>
+            `;
+        }
+
+        /* =====================================================================
+         * 交互：radio / checkbox / select / file
+         * ===================================================================== */
+        function selectRadio(fid, oid, row) {
+            document.querySelectorAll(`[data-fid="${fid}"][data-type="radio"]`).forEach(r => {
+                r.classList.remove('selected');
+                r.querySelector('.radio-dot').classList.remove('checked');
+            });
+            row.classList.add('selected');
+            row.querySelector('.radio-dot').classList.add('checked');
+            answers[fid] = oid;
+            clearErr(fid);
+        }
+
+        function toggleCheck(fid, oid, row) {
+            const f = q.fields.find(x => x.id === fid);
+            const cur = (answers[fid] || []);
+            if (cur.includes(oid)) {
+                answers[fid] = cur.filter(id => id !== oid);
+                row.classList.remove('selected');
+                row.querySelector('.check-box').classList.remove('checked');
+            } else {
+                if (f.maxSelected && cur.length >= f.maxSelected) {
+                    showToast(`最多可选 ${f.maxSelected} 项`, 'warning');
+                    return;
+                }
+                answers[fid] = [...cur, oid];
+                row.classList.add('selected');
+                row.querySelector('.check-box').classList.add('checked');
+            }
+            clearErr(fid);
+        }
+
+        function onSelect(fid, val) { answers[fid] = val || null; }
+        function onText(fid, val) {
+            answers[fid] = val;
+            // textarea counter
+            const c = document.querySelector(`[data-counter="${fid}"]`);
+            if (c) c.textContent = val.length;
+        }
+
+        function onFile(fid, files) {
+            const f = q.fields.find(x => x.id === fid);
+            const maxSize = (f.maxSizeMB || 10) * 1024 * 1024;
+            const maxCount = f.maxFiles || 1;
+            const list = [];
+            for (const file of files) {
+                if (file.size > maxSize) { showToast(`「${file.name}」超过 ${f.maxSizeMB || 10}MB 上限`, 'error'); continue; }
+                list.push({ name: file.name, size: file.size, url: 'blob:fake' });
+                if (list.length >= maxCount) break;
+            }
+            answers[fid] = list;
+            // 渲染 chips
+            const wrap = document.getElementById('files_' + fid);
+            wrap.innerHTML = list.map((file, i) => `
+                <div class="flex items-center gap-2 text-sm bg-gray-50 px-3 py-1.5 rounded">
+                    <i class="fas fa-paperclip text-gray-400"></i>
+                    <span class="flex-1 truncate">${escapeHtml(file.name)}</span>
+                    <span class="text-xs text-gray-400">${(file.size/1024).toFixed(1)}KB</span>
+                    <button onclick="removeFile('${fid}', ${i})" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
+                </div>
+            `).join('');
+            clearErr(fid);
+        }
+        function removeFile(fid, idx) {
+            if (Array.isArray(answers[fid])) {
+                answers[fid].splice(idx, 1);
+                onFile(fid, []); // re-render
+                // simulate re-render without re-triggering onFile
+                const wrap = document.getElementById('files_' + fid);
+                wrap.innerHTML = answers[fid].map((file, i) => `
+                    <div class="flex items-center gap-2 text-sm bg-gray-50 px-3 py-1.5 rounded">
+                        <i class="fas fa-paperclip text-gray-400"></i>
+                        <span class="flex-1 truncate">${escapeHtml(file.name)}</span>
+                        <span class="text-xs text-gray-400">${(file.size/1024).toFixed(1)}KB</span>
+                        <button onclick="removeFile('${fid}', ${i})" class="text-gray-400 hover:text-red-500"><i class="fas fa-times"></i></button>
+                    </div>
+                `).join('');
+            }
+        }
+
+        /* =====================================================================
+         * 校验
+         * ===================================================================== */
+        function setErr(fid, msg) {
+            const el = document.getElementById('err_' + fid);
+            if (!el) return;
+            el.querySelector('span').textContent = msg;
+            el.classList.add('show');
+        }
+        function clearErr(fid) {
+            const el = document.getElementById('err_' + fid);
+            if (el) el.classList.remove('show');
+        }
+
+        function validateField(fid) {
+            const f = q.fields.find(x => x.id === fid);
+            if (!f || !f.required) return true;
+            const v = answers[fid];
+            const isEmpty = v == null || v === '' || (Array.isArray(v) && v.length === 0);
+            if (isEmpty) { setErr(fid, '此题为必填项'); return false; }
+            // text 长度/正则校验
+            if (f.type === 'text' || f.type === 'textarea') {
+                const s = String(v).trim();
+                if (s.length === 0) { setErr(fid, '此题为必填项'); return false; }
+                if (f.maxLength && s.length > f.maxLength) { setErr(fid, `超出最大长度 ${f.maxLength}`); return false; }
+            }
+            clearErr(fid);
+            return true;
+        }
+
+        function validateAll() {
+            let ok = true;
+            // 填写人信息
+            const showUser = !!q.settings.collectUserInfo && !q.settings.anonymous;
+            if (showUser) {
+                const name = document.getElementById('userName').value.trim();
+                const phone = document.getElementById('userPhone').value.trim();
+                if (!name) {
+                    document.querySelector('#userNameError span').textContent = '请输入姓名';
+                    document.getElementById('userNameError').classList.add('show');
+                    ok = false;
+                } else { document.getElementById('userNameError').classList.remove('show'); }
+                if (!/^1[3-9]\d{9}$/.test(phone)) {
+                    document.querySelector('#userPhoneError span').textContent = '请输入正确的 11 位手机号';
+                    document.getElementById('userPhoneError').classList.add('show');
+                    ok = false;
+                } else { document.getElementById('userPhoneError').classList.remove('show'); }
+            }
+            // 每题
+            (q.fields || []).forEach(f => {
+                if (f.required && !validateField(f.id)) ok = false;
+            });
+            return ok;
+        }
+
+        /* =====================================================================
+         * 提交
+         * ===================================================================== */
+        function submitForm() {
+            if (submitted) return;
+            // 收集 text/textarea 的值
+            document.querySelectorAll('input[data-type="text"], textarea[data-type="textarea"]').forEach(el => {
+                const fid = el.dataset.fid;
+                onText(fid, el.value);
+            });
+
+            if (!validateAll()) {
+                showToast('请完整填写所有必填项', 'warning');
+                // 滚动到第一个错误
+                const firstErr = document.querySelector('.field-error.show');
+                if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                return;
+            }
+
+            const resp = {
+                id: 'r_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+                questionnaireId: q.id,
+                submittedAt: new Date().toISOString(),
+                durationSec: Math.max(1, Math.round((Date.now() - startTime) / 1000)),
+                user: (q.settings.collectUserInfo && !q.settings.anonymous) ? {
+                    name: document.getElementById('userName').value.trim(),
+                    phone: document.getElementById('userPhone').value.trim()
+                } : null,
+                device: navigator.userAgent.includes('Chrome') ? 'Chrome' : navigator.userAgent.includes('Safari') ? 'Safari' : '其他',
+                answers: JSON.parse(JSON.stringify(answers)),
+                status: 'completed'
+            };
+            const all = loadResp();
+            all.push(resp);
+            saveResp(all);
+
+            // 更新问卷 responseCount
+            const list = loadList();
+            const idx = list.findIndex(x => x.id === q.id);
+            if (idx >= 0) { list[idx].responseCount = (list[idx].responseCount || 0) + 1; sessionStorage.setItem(STORAGE_KEY, JSON.stringify(list)); }
+
+            submitted = true;
+            document.getElementById('thankYouText').textContent = q.settings.thankYouMessage || '感谢您的反馈！';
+            document.getElementById('respId').textContent = resp.id;
+            showState('submitted');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        const startTime = Date.now();
+
+        /* =====================================================================
+         * Toast
+         * ===================================================================== */
+        function showToast(message, type='success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgs = { success:'bg-accent-green', error:'bg-accent-red', warning:'bg-accent-amber' };
+            const icons= { success:'fa-check-circle', error:'fa-exclamation-circle', warning:'fa-exclamation-triangle' };
+            toast.className = `toast ${bgs[type]} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `<i class="fas ${icons[type]}"></i><span class="text-sm">${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity='0'; toast.style.transform='translateX(100%)'; toast.style.transition='all 0.3s ease';
+                setTimeout(()=>toast.remove(), 300);
+            }, 3000);
+        }
+
+        /* =====================================================================
+         * 实时绑定 text/textarea input event
+         * ===================================================================== */
+        document.addEventListener('input', function (e) {
+            const el = e.target;
+            if (!el) return;
+            if (el.dataset?.type === 'text' || el.dataset?.type === 'textarea') {
+                const fid = el.dataset.fid;
+                onText(fid, el.value);
+                if (el.value.trim()) clearErr(fid);
+            } else if (el.id === 'userName' || el.id === 'userPhone') {
+                document.getElementById(el.id + 'Error').classList.remove('show');
+            }
+        });
+    </script>
+</body>
+</html>
