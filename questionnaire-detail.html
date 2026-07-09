@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问卷详情 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF', 'secondary-bg': '#F8FAFC',
+                        'accent-blue': '#0A61FF', 'accent-cyan': '#0891B2',
+                        'accent-green': '#059669', 'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A', 'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        .tab-btn.active { border-bottom: 2px solid #0A61FF; color: #0A61FF; }
+        .inner-tab.active { border-color: #0A61FF; color: #0A61FF; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* 右抽屉 */
+        .drawer-panel { transition: transform .3s ease; transform: translateX(100%); }
+        .drawer-panel.open { transform: translateX(0); }
+        .drawer-overlay { opacity: 0; pointer-events: none; transition: opacity .3s; }
+        .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+
+        .stat-bar { height: 8px; background: #E2E8F0; border-radius: 999px; overflow: hidden; }
+        .stat-bar-fill { height: 100%; background: linear-gradient(90deg, #0A61FF, #3B82F6); border-radius: 999px; transition: width .3s; }
+    </style>
+</head>
+<body class="bg-secondary-bg text-gray-900">
+
+    <main class="p-6">
+        <!-- 页头：标题 + 状态 + 操作 -->
+        <div class="flex items-start justify-between mb-6">
+            <div>
+                <a href="questionnaire-list.html" class="text-sm text-gray-500 hover:text-accent-blue inline-flex items-center gap-1 mb-2">
+                    <i class="fas fa-arrow-left text-xs"></i> 返回列表
+                </a>
+                <div class="flex items-center gap-3 mt-1">
+                    <h1 id="qTitle" class="text-2xl font-semibold">问卷详情</h1>
+                    <span id="qStatusBadge"></span>
+                </div>
+                <p id="qDescription" class="text-gray-500 mt-1 text-sm"></p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="stopCollect()" id="btnStop" class="px-4 py-2.5 border border-accent-amber text-accent-amber rounded-xl hover:bg-accent-amber hover:text-white transition-colors flex items-center gap-2 hidden">
+                    <i class="fas fa-pause"></i> 停止收集
+                </button>
+                <a id="btnEdit" href="#" class="px-4 py-2.5 border border-accent-blue text-accent-blue rounded-xl hover:bg-accent-blue hover:text-white transition-colors flex items-center gap-2">
+                    <i class="fas fa-edit"></i> 编辑
+                </a>
+                <button onclick="duplicateQ()" class="px-4 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2 text-gray-600">
+                    <i class="fas fa-copy"></i> 复制
+                </button>
+                <button onclick="deleteQ()" class="px-4 py-2.5 border border-accent-red text-accent-red rounded-xl hover:bg-accent-red hover:text-white transition-colors flex items-center gap-2">
+                    <i class="fas fa-trash-alt"></i> 删除
+                </button>
+            </div>
+        </div>
+
+        <!-- 内部 Tab 导航 -->
+        <div class="flex border-b border-[#E2E8F0] bg-white rounded-t-xl">
+            <button onclick="switchInnerTab('info')" id="inner-tab-info" class="inner-tab active px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                问卷信息
+            </button>
+            <button onclick="switchInnerTab('responses')" id="inner-tab-responses" class="inner-tab px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                答卷管理 <span id="respCountBadge" class="ml-1 px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500 text-xs">0</span>
+            </button>
+            <button onclick="switchInnerTab('stats')" id="inner-tab-stats" class="inner-tab px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                数据统计
+            </button>
+        </div>
+
+        <div class="bg-white rounded-b-xl border border-t-0 border-[#E2E8F0] p-6">
+            <!-- ========================== Tab1: 问卷信息 ========================== -->
+            <div id="inner-panel-info" class="inner-panel">
+                <div class="grid grid-cols-3 gap-4">
+                    <div class="col-span-2 space-y-4">
+                        <!-- 概要卡片 -->
+                        <div class="border border-[#E2E8F0] rounded-xl p-5">
+                            <h3 class="text-base font-medium mb-4">基本信息</h3>
+                            <dl class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                                <div><dt class="text-gray-500">分类</dt><dd id="infoCategory" class="text-gray-900 mt-1">—</dd></div>
+                                <div><dt class="text-gray-500">题目数</dt><dd id="infoFieldCount" class="text-gray-900 mt-1">—</dd></div>
+                                <div><dt class="text-gray-500">创建人</dt><dd id="infoCreator" class="text-gray-900 mt-1">—</dd></div>
+                                <div><dt class="text-gray-500">创建时间</dt><dd id="infoCreatedAt" class="text-gray-900 mt-1">—</dd></div>
+                                <div><dt class="text-gray-500">发布时间</dt><dd id="infoPublishedAt" class="text-gray-900 mt-1">—</dd></div>
+                                <div><dt class="text-gray-500">截止时间</dt><dd id="infoDeadline" class="text-gray-900 mt-1">—</dd></div>
+                                <div class="col-span-2"><dt class="text-gray-500">有效时间区间</dt><dd id="infoValidRange" class="text-gray-900 mt-1">—</dd></div>
+                            </dl>
+                        </div>
+                        <!-- 收集设置 -->
+                        <div class="border border-[#E2E8F0] rounded-xl p-5">
+                            <h3 class="text-base font-medium mb-4">收集设置</h3>
+                            <dl class="grid grid-cols-2 gap-x-6 gap-y-3 text-sm">
+                                <div><dt class="text-gray-500">匿名收集</dt><dd id="infoAnonymous" class="text-gray-900 mt-1">—</dd></div>
+                                <div><dt class="text-gray-500">允许重复提交</dt><dd id="infoAllowMultiple" class="text-gray-900 mt-1">—</dd></div>
+                                <div><dt class="text-gray-500">收集填写人</dt><dd id="infoCollectUser" class="text-gray-900 mt-1">—</dd></div>
+                                <div><dt class="text-gray-500">致谢文本</dt><dd id="infoThankYou" class="text-gray-900 mt-1">—</dd></div>
+                            </dl>
+                        </div>
+                        <!-- 题目预览 -->
+                        <div class="border border-[#E2E8F0] rounded-xl p-5">
+                            <h3 class="text-base font-medium mb-4">题目概览</h3>
+                            <ol id="infoFieldsList" class="space-y-2 text-sm list-decimal pl-5 marker:text-gray-400">
+                                <!-- JS 渲染 -->
+                            </ol>
+                        </div>
+                    </div>
+                    <!-- 分享区 -->
+                    <div class="space-y-4">
+                        <div class="border border-[#E2E8F0] rounded-xl p-5">
+                            <h3 class="text-base font-medium mb-3">分享问卷</h3>
+                            <p class="text-sm text-gray-500 mb-3">将链接或二维码发给填写者</p>
+                            <div class="bg-gray-50 border border-dashed border-[#E2E8F0] rounded-lg p-6 text-center">
+                                <div class="w-32 h-32 mx-auto bg-white border border-[#E2E8F0] flex items-center justify-center text-gray-300">
+                                    <i class="fas fa-qrcode text-5xl"></i>
+                                </div>
+                                <p class="text-xs text-gray-400 mt-2">二维码占位</p>
+                            </div>
+                            <div class="mt-3 text-xs text-gray-500">分享链接</div>
+                            <div class="flex items-center gap-1 mt-1">
+                                <input id="shareLink" readonly value="" class="flex-1 bg-gray-50 border border-[#E2E8F0] rounded-lg px-2 py-1.5 text-xs focus:outline-none">
+                                <button onclick="copyShareLink()" class="text-xs px-3 py-1.5 bg-accent-blue text-white rounded-lg hover:bg-blue-600">复制</button>
+                            </div>
+                        </div>
+                        <div class="border border-[#E2E8F0] rounded-xl p-5">
+                            <h3 class="text-base font-medium mb-3">预览填写</h3>
+                            <p class="text-sm text-gray-500 mb-3">在新窗口中按用户视角预览</p>
+                            <a id="previewLink" href="#" target="_blank" class="block text-center px-4 py-2 bg-secondary-bg border border-[#E2E8F0] rounded-lg hover:border-accent-blue text-sm">
+                                <i class="fas fa-external-link-alt mr-1"></i> 打开预览
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ========================== Tab2: 答卷管理 ========================== -->
+            <div id="inner-panel-responses" class="inner-panel hidden">
+                <div class="flex items-center justify-between mb-4">
+                    <div class="text-sm text-gray-500">共 <span id="respTotalCount" class="font-medium text-gray-900">0</span> 条答卷</div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="exportResponses()" class="px-3 py-1.5 border border-[#E2E8F0] rounded-lg text-sm hover:border-accent-blue">
+                            <i class="fas fa-download"></i> 导出
+                        </button>
+                    </div>
+                </div>
+                <div class="border border-[#E2E8F0] rounded-xl overflow-hidden">
+                    <table class="w-full">
+                        <thead>
+                            <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-primary-bg/50">
+                                <th class="px-4 py-3 font-medium w-12">#</th>
+                                <th class="px-4 py-3 font-medium w-40">填写人</th>
+                                <th class="px-4 py-3 font-medium w-40">提交时间</th>
+                                <th class="px-4 py-3 font-medium w-24">用时</th>
+                                <th class="px-4 py-3 font-medium w-32">设备</th>
+                                <th class="px-4 py-3 font-medium">预览</th>
+                                <th class="px-4 py-3 font-medium w-24 text-right">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody id="responsesTableBody">
+                            <!-- JS 渲染 -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ========================== Tab3: 数据统计 ========================== -->
+            <div id="inner-panel-stats" class="inner-panel hidden">
+                <div id="statsContainer">
+                    <!-- JS 渲染 KPI + 每字段统计 -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- 删除确认弹窗 -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
+                <div class="w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认删除</h3>
+                    <p class="text-sm text-gray-500 mt-1" id="deleteMessage">删除后无法恢复</p>
+                </div>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('deleteModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="confirmDelete()" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 答卷详情抽屉 -->
+    <div id="responseDrawer" class="fixed inset-0 z-[100] hidden">
+        <div class="drawer-overlay absolute inset-0 bg-black/40" onclick="closeResponseDrawer()"></div>
+        <div id="drawerPanel" class="drawer-panel absolute right-0 top-0 bottom-0 w-[560px] bg-white shadow-2xl overflow-y-auto">
+            <div class="sticky top-0 bg-white border-b border-[#E2E8F0] px-6 py-4 flex items-center justify-between z-10">
+                <div>
+                    <h3 class="text-lg font-medium">答卷详情</h3>
+                    <p id="drawerSubtitle" class="text-xs text-gray-500 mt-0.5">—</p>
+                </div>
+                <button onclick="closeResponseDrawer()" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div id="drawerBody" class="p-6 space-y-5">
+                <!-- JS 渲染 -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'questionnaires_data';
+        const RESPONSES_KEY = 'questionnaire_responses';
+        const TYPE_LABELS = { text:'单行文本', textarea:'多行文本', radio:'单选题', checkbox:'多选题', select:'下拉选择', file:'文件上传' };
+
+        function loadList() { try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]'); } catch(e){ return []; } }
+        function saveList(list) { try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch(e){} }
+        function loadResp() { try { return JSON.parse(sessionStorage.getItem(RESPONSES_KEY) || '[]'); } catch(e){ return []; } }
+        function saveResp(r) { try { sessionStorage.setItem(RESPONSES_KEY, JSON.stringify(r)); } catch(e){} }
+
+        function escapeHtml(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+                .replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+        }
+        function fmtDate(s) { if(!s) return '—'; const m=String(s).match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/); return m ? `${m[1]} ${m[2]}` : String(s).slice(0,16); }
+        function fmtSec(sec) { if(!sec && sec!==0) return '—'; if(sec<60) return sec+'秒'; return Math.floor(sec/60)+'分'+(sec%60)+'秒'; }
+        function statusBadge(s) {
+            const m = {
+                draft:      '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600">草稿</span>',
+                collecting: '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">收集中</span>',
+                stopped:    '<span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">已停止</span>',
+                ended:      '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">已结束</span>'
+            };
+            return m[s] || '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600">'+escapeHtml(s||'')+'</span>';
+        }
+        function yesNo(b) { return b ? '<span class="text-accent-green">是</span>' : '<span class="text-gray-500">否</span>'; }
+
+        let q = null;
+        let currentInnerTab = 'info';
+
+        /* =====================================================================
+         * 初始化
+         * ===================================================================== */
+        document.addEventListener('DOMContentLoaded', function () {
+            const params = new URLSearchParams(location.search);
+            const id = params.get('id');
+            if (!id) {
+                document.querySelector('main').innerHTML = '<p class="text-center text-gray-500 py-20">未提供问卷 ID</p>';
+                return;
+            }
+            const list = loadList();
+            q = list.find(x => x.id === id);
+            if (!q) {
+                document.querySelector('main').innerHTML = '<p class="text-center text-gray-500 py-20">问卷不存在</p>';
+                return;
+            }
+            ensureSettings();
+            renderHeader();
+            renderInfoTab();
+            renderResponsesTab();
+            renderStatsTab();
+
+            // 如果 URL 含 ?tab=responses 切到答卷管理
+            const wantTab = params.get('tab');
+            if (wantTab === 'responses' || wantTab === 'stats') switchInnerTab(wantTab);
+        });
+
+        function ensureSettings() {
+            if (!q.settings) q.settings = { anonymous:false, allowMultiple:false, collectUserInfo:false, deadline:'', thankYouMessage:'', otherNotes:'' };
+        }
+
+        /* =====================================================================
+         * 头部
+         * ===================================================================== */
+        function renderHeader() {
+            document.title = `${q.title || '问卷'} - 内容中台系统`;
+            document.getElementById('qTitle').textContent = q.title || '未命名问卷';
+            document.getElementById('qDescription').textContent = q.description || '';
+            document.getElementById('qStatusBadge').innerHTML = statusBadge(q.status);
+            document.getElementById('btnEdit').href = `questionnaire-create.html?id=${q.id}`;
+            document.getElementById('previewLink').href = `questionnaire-fill.html?id=${q.id}`;
+            document.getElementById('shareLink').value = `${location.origin}${location.pathname.replace(/[^/]*$/, '')}questionnaire-fill.html?id=${q.id}`;
+            const showStop = q.status === 'collecting';
+            document.getElementById('btnStop').classList.toggle('hidden', !showStop);
+
+            // 答卷数 badge
+            const responses = loadResp().filter(r => r.questionnaireId === q.id);
+            document.getElementById('respCountBadge').textContent = responses.length || (q.responseCount || 0);
+        }
+
+        /* =====================================================================
+         * Tab1: 问卷信息
+         * ===================================================================== */
+        function renderInfoTab() {
+            document.getElementById('infoCategory').textContent = q.categoryName || ({
+                tech:'科技创新', culture:'文化活动', sports:'体育运动', education:'教育培训', other:'其他'
+            }[q.category] || '—');
+            document.getElementById('infoFieldCount').textContent = `${(q.fields||[]).length} 题`;
+            document.getElementById('infoCreator').textContent = q.createdBy || '—';
+            document.getElementById('infoCreatedAt').textContent = fmtDate(q.createdAt);
+            document.getElementById('infoPublishedAt').textContent = q.publishedAt ? fmtDate(q.publishedAt) : '尚未发布';
+            document.getElementById('infoDeadline').textContent = q.settings.deadline ? q.settings.deadline.replace('T', ' ') : '不限';
+            const vr = (q.validStartTime || q.validEndTime) ? `${q.validStartTime ? q.validStartTime.replace('T',' ') : '不限'} ~ ${q.validEndTime ? q.validEndTime.replace('T',' ') : '不限'}` : '不限';
+            document.getElementById('infoValidRange').textContent = vr;
+
+            const s = q.settings;
+            document.getElementById('infoAnonymous').innerHTML = yesNo(!!s.anonymous);
+            document.getElementById('infoAllowMultiple').innerHTML = yesNo(!!s.allowMultiple);
+            document.getElementById('infoCollectUser').innerHTML = yesNo(!!s.collectUserInfo);
+            document.getElementById('infoThankYou').textContent = s.thankYouMessage || '—';
+
+            const list = document.getElementById('infoFieldsList');
+            if (!q.fields || q.fields.length === 0) {
+                list.innerHTML = '<li class="text-gray-400">尚未添加题目</li>';
+            } else {
+                list.innerHTML = q.fields.map((f,i) => `
+                    <li class="text-gray-700">
+                        <span class="font-medium">${escapeHtml(f.label||'未命名题目')}</span>
+                        <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded-full text-xs ${f.type === 'text' ? 'bg-blue-100 text-blue-700' : f.type === 'textarea' ? 'bg-indigo-100 text-indigo-700' : f.type === 'radio' ? 'bg-green-100 text-green-700' : f.type === 'checkbox' ? 'bg-amber-100 text-amber-700' : f.type === 'select' ? 'bg-purple-100 text-purple-700' : 'bg-rose-100 text-rose-700'}">${TYPE_LABELS[f.type]}</span>
+                        ${f.required ? '<span class="ml-1 text-accent-red text-xs">*必填</span>' : ''}
+                    </li>
+                `).join('');
+            }
+        }
+
+        /* =====================================================================
+         * Tab2: 答卷管理
+         * ===================================================================== */
+        function renderResponsesTab() {
+            const all = loadResp().filter(r => r.questionnaireId === q.id);
+            document.getElementById('respTotalCount').textContent = all.length;
+            const tbody = document.getElementById('responsesTableBody');
+            if (all.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="7" class="px-4 py-16 text-center text-gray-400">
+                        <i class="fas fa-inbox text-4xl mb-3 block text-gray-300"></i>
+                        暂无答卷。发布问卷后将自动出现在这里。
+                    </td></tr>`;
+                return;
+            }
+            tbody.innerHTML = all.map((r, i) => {
+                const userText = r.user ? `${escapeHtml(r.user.name || '匿名')} ${r.user.phone ? '· ' + escapeHtml(r.user.phone) : ''}` : '匿名';
+                const summary = summarizeAnswers(r.answers);
+                return `
+                    <tr class="border-b border-[#E2E8F0] hover:bg-gray-50/50">
+                        <td class="px-4 py-3 text-sm text-gray-500">${i + 1}</td>
+                        <td class="px-4 py-3 text-sm text-gray-900">${userText}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">${fmtDate(r.submittedAt)}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">${fmtSec(r.durationSec)}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">${escapeHtml(r.device || '—')}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600 truncate max-w-[180px]">${escapeHtml(summary)}</td>
+                        <td class="px-4 py-3 text-right">
+                            <button onclick="openResponseDrawer('${r.id}')" class="text-accent-blue hover:text-blue-700 text-sm">查看</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function summarizeAnswers(answers) {
+            if (!answers) return '';
+            const ids = Object.keys(answers);
+            if (ids.length === 0) return '';
+            // 取第一题作摘要
+            const v = answers[ids[0]];
+            if (Array.isArray(v)) return v.length ? `[${v.length}项] ` + (typeof v[0] === 'string' ? v[0] : '') : '';
+            if (typeof v === 'string') return v.length > 40 ? v.slice(0, 40) + '…' : v;
+            return '';
+        }
+
+        /* =====================================================================
+         * Tab3: 数据统计
+         * ===================================================================== */
+        function renderStatsTab() {
+            const container = document.getElementById('statsContainer');
+            const responses = loadResp().filter(r => r.questionnaireId === q.id);
+            const total = responses.length || (q.responseCount || 0);
+            const todayStr = new Date().toISOString().substring(0, 10);
+            const today = responses.filter(r => (r.submittedAt || '').substring(0, 10) === todayStr).length;
+            const avgDur = responses.length === 0 ? 0 : Math.round(responses.reduce((s, r) => s + (r.durationSec || 0), 0) / responses.length);
+
+            let html = `
+                <div class="grid grid-cols-4 gap-4 mb-6">
+                    <div class="border border-[#E2E8F0] rounded-xl p-4">
+                        <div class="text-sm text-gray-500">总答卷数</div>
+                        <div class="text-2xl font-semibold mt-1">${total}</div>
+                    </div>
+                    <div class="border border-[#E2E8F0] rounded-xl p-4">
+                        <div class="text-sm text-gray-500">今日新增</div>
+                        <div class="text-2xl font-semibold mt-1 text-accent-blue">${today}</div>
+                    </div>
+                    <div class="border border-[#E2E8F0] rounded-xl p-4">
+                        <div class="text-sm text-gray-500">完成率</div>
+                        <div class="text-2xl font-semibold mt-1 text-accent-green">${total > 0 ? '100%' : '—'}</div>
+                    </div>
+                    <div class="border border-[#E2E8F0] rounded-xl p-4">
+                        <div class="text-sm text-gray-500">平均用时</div>
+                        <div class="text-2xl font-semibold mt-1">${avgDur ? fmtSec(avgDur) : '—'}</div>
+                    </div>
+                </div>
+            `;
+
+            if ((q.fields || []).length === 0) {
+                html += '<p class="text-center text-gray-400 py-10">无题目数据</p>';
+                container.innerHTML = html;
+                return;
+            }
+
+            q.fields.forEach((f, idx) => {
+                html += `<div class="border border-[#E2E8F0] rounded-xl p-5 mb-4">`;
+                html += `<div class="flex items-center gap-2 mb-3">
+                            <span class="text-sm font-medium">${idx+1}. ${escapeHtml(f.label)}</span>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-500">${TYPE_LABELS[f.type]}</span>
+                            ${f.required ? '<span class="text-xs text-accent-red">*必填</span>' : ''}
+                        </div>`;
+
+                if (responses.length === 0) {
+                    html += '<p class="text-sm text-gray-400">暂无回答数据</p>';
+                } else if (f.type === 'radio' || f.type === 'select') {
+                    html += renderOptionStats(f, responses, false);
+                } else if (f.type === 'checkbox') {
+                    html += renderOptionStats(f, responses, true);
+                } else if (f.type === 'text' || f.type === 'textarea') {
+                    const arr = responses.map(r => r.answers && r.answers[f.id]).filter(v => typeof v === 'string' && v.trim());
+                    html += `<p class="text-sm text-gray-500">共 ${arr.length} 条回答</p>`;
+                    if (arr.length) {
+                        html += `<div class="mt-2 space-y-2">${arr.slice(-3).reverse().map(v => `<div class="bg-gray-50 px-3 py-2 rounded text-sm text-gray-700 italic">"${escapeHtml(v.length > 100 ? v.slice(0,100)+'…' : v)}"</div>`).join('')}</div>`;
+                    }
+                } else if (f.type === 'file') {
+                    const allFiles = responses.flatMap(r => (r.answers && r.answers[f.id]) || []);
+                    html += `<p class="text-sm text-gray-500">共 ${allFiles.length} 个附件</p>`;
+                    if (allFiles.length) {
+                        html += `<div class="mt-2 space-y-1">${allFiles.slice(0, 5).map(f2 => `<div class="flex items-center gap-2 text-sm text-gray-700"><i class="fas fa-paperclip text-gray-400"></i> ${escapeHtml(f2.name || '附件')} <span class="text-xs text-gray-400">${(f2.size ? (f2.size/1024).toFixed(1)+'KB' : '')}</span></div>`).join('')}</div>`;
+                    }
+                }
+                html += `</div>`;
+            });
+
+            container.innerHTML = html;
+        }
+
+        function renderOptionStats(f, responses, multi) {
+            const opts = f.options || [];
+            const counts = new Array(opts.length).fill(0);
+            let answerCount = 0;
+            responses.forEach(r => {
+                const v = r.answers && r.answers[f.id];
+                if (v == null) return;
+                if (multi && Array.isArray(v)) {
+                    answerCount++;
+                    v.forEach(optId => {
+                        const idx = opts.findIndex(o => o.id === optId);
+                        if (idx >= 0) counts[idx]++;
+                    });
+                } else if (!multi) {
+                    answerCount++;
+                    const idx = opts.findIndex(o => o.id === v);
+                    if (idx >= 0) counts[idx]++;
+                }
+            });
+            const max = Math.max(1, ...counts);
+            return `
+                <div class="space-y-2">
+                    ${opts.map((o, i) => {
+                        const c = counts[i];
+                        const pct = answerCount ? Math.round(c / answerCount * 100) : 0;
+                        return `
+                            <div>
+                                <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
+                                    <span>${escapeHtml(o.label)}</span>
+                                    <span>${c} 票 (${pct}%)</span>
+                                </div>
+                                <div class="stat-bar"><div class="stat-bar-fill" style="width: ${(c/max*100).toFixed(1)}%"></div></div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+
+        /* =====================================================================
+         * 内部 Tab 切换
+         * ===================================================================== */
+        function switchInnerTab(tab) {
+            currentInnerTab = tab;
+            document.querySelectorAll('.inner-tab').forEach(b => b.classList.toggle('active', b.id === 'inner-tab-' + tab));
+            document.querySelectorAll('.inner-panel').forEach(p => p.classList.toggle('hidden', p.id !== 'inner-panel-' + tab));
+        }
+
+        /* =====================================================================
+         * 答卷抽屉
+         * ===================================================================== */
+        let currentResponseId = null;
+        function openResponseDrawer(rid) {
+            currentResponseId = rid;
+            const responses = loadResp();
+            const r = responses.find(x => x.id === rid);
+            if (!r) return;
+            document.getElementById('drawerSubtitle').textContent = `提交于 ${fmtDate(r.submittedAt)} · 用时 ${fmtSec(r.durationSec)}`;
+            document.getElementById('drawerBody').innerHTML = renderResponseBody(r);
+            document.getElementById('responseDrawer').classList.remove('hidden');
+            setTimeout(() => {
+                document.getElementById('drawerPanel').classList.add('open');
+                document.querySelector('#responseDrawer .drawer-overlay').classList.add('open');
+            }, 10);
+        }
+        function closeResponseDrawer() {
+            document.getElementById('drawerPanel').classList.remove('open');
+            document.querySelector('#responseDrawer .drawer-overlay').classList.remove('open');
+            setTimeout(() => { document.getElementById('responseDrawer').classList.add('hidden'); currentResponseId = null; }, 300);
+        }
+        function renderResponseBody(r) {
+            let html = '';
+            if (r.user) {
+                html += `<div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm">
+                    <i class="fas fa-user text-blue-600"></i>
+                    <span class="ml-1">${escapeHtml(r.user.name || '匿名')}${r.user.phone ? ' · ' + escapeHtml(r.user.phone) : ''}</span>
+                </div>`;
+            }
+            (q.fields || []).forEach(f => {
+                const v = r.answers ? r.answers[f.id] : null;
+                html += `<div>
+                    <div class="text-sm font-medium text-gray-900 mb-1">${escapeHtml(f.label)} ${f.required ? '<span class="text-accent-red">*</span>' : ''}</div>
+                    <div class="bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-700">${renderAnswerValue(f, v)}</div>
+                </div>`;
+            });
+            return html;
+        }
+        function renderAnswerValue(f, v) {
+            if (v == null || v === '') return '<span class="text-gray-400">未填</span>';
+            if (f.type === 'text' || f.type === 'textarea') return escapeHtml(v);
+            if (f.type === 'radio' || f.type === 'select') {
+                const opt = (f.options || []).find(o => o.id === v);
+                return escapeHtml(opt ? opt.label : v);
+            }
+            if (f.type === 'checkbox') {
+                if (!Array.isArray(v) || v.length === 0) return '<span class="text-gray-400">未选</span>';
+                return (f.options || []).filter(o => v.includes(o.id)).map(o => `<span class="inline-block px-2 py-0.5 bg-accent-blue/10 text-accent-blue rounded mr-1 text-xs">${escapeHtml(o.label)}</span>`).join('');
+            }
+            if (f.type === 'file') {
+                if (!Array.isArray(v)) return '<span class="text-gray-400">无</span>';
+                return v.map(f2 => `<div class="flex items-center gap-2"><i class="fas fa-paperclip text-gray-400"></i> ${escapeHtml(f2.name)} <span class="text-xs text-gray-400">${f2.size ? (f2.size/1024).toFixed(1)+'KB' : ''}</span></div>`).join('');
+            }
+            return escapeHtml(JSON.stringify(v));
+        }
+
+        /* =====================================================================
+         * 操作：复制 / 删除 / 停止
+         * ===================================================================== */
+        function openModal(id) { const el=document.getElementById(id); el.classList.remove('hidden'); el.classList.add('flex'); }
+        function closeModal(id) { const el=document.getElementById(id); el.classList.add('hidden'); el.classList.remove('flex'); }
+
+        function deleteQ() {
+            const all = loadResp().filter(r => r.questionnaireId === q.id);
+            document.getElementById('deleteMessage').textContent = all.length > 0
+                ? `该问卷下还有 ${all.length} 条答卷，删除后无法恢复`
+                : '删除后无法恢复，请谨慎操作';
+            openModal('deleteModal');
+        }
+        function confirmDelete() {
+            let list = loadList().filter(x => x.id !== q.id);
+            saveList(list);
+            let responses = loadResp().filter(r => r.questionnaireId !== q.id);
+            saveResp(responses);
+            closeModal('deleteModal');
+            showToast('问卷已删除', 'success');
+            setTimeout(() => location.href = 'questionnaire-list.html', 600);
+        }
+
+        function duplicateQ() {
+            const list = loadList();
+            const copy = JSON.parse(JSON.stringify(q));
+            copy.id = 'q_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6);
+            copy.title = (q.title || '') + ' (副本)';
+            copy.status = 'draft';
+            copy.publishedAt = null;
+            copy.responseCount = 0;
+            copy.createdAt = new Date().toISOString();
+            copy.updatedAt = new Date().toISOString();
+            list.push(copy);
+            saveList(list);
+            showToast('已复制问卷', 'success');
+            setTimeout(() => location.href = `questionnaire-create.html?id=${copy.id}`, 600);
+        }
+
+        function stopCollect() {
+            if (!confirm('确认停止该问卷的收集？')) return;
+            q.status = 'stopped';
+            const list = loadList();
+            const idx = list.findIndex(x => x.id === q.id);
+            if (idx >= 0) { list[idx] = q; saveList(list); }
+            showToast('已停止收集', 'success');
+            renderHeader();
+        }
+
+        function copyShareLink() {
+            const input = document.getElementById('shareLink');
+            input.select();
+            try {
+                document.execCommand('copy');
+                showToast('链接已复制', 'success');
+            } catch(e) { showToast('请手动复制', 'warning'); }
+        }
+
+        function exportResponses() {
+            showToast('导出任务已加入队列', 'success');
+        }
+
+        /* =====================================================================
+         * Toast
+         * ===================================================================== */
+        function showToast(message, type='success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgs = { success:'bg-accent-green', error:'bg-accent-red', warning:'bg-accent-amber' };
+            const icons= { success:'fa-check-circle', error:'fa-exclamation-circle', warning:'fa-exclamation-triangle' };
+            toast.className = `toast ${bgs[type]} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `<i class="fas ${icons[type]}"></i><span class="text-sm">${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity='0'; toast.style.transform='translateX(100%)'; toast.style.transition='all 0.3s ease';
+                setTimeout(()=>toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
