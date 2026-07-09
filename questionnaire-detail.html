@@ -228,9 +228,11 @@
         </div>
     </div>
 
+    <script src="components/questionnaire-shared.js"></script>
     <script>
-        const STORAGE_KEY = 'questionnaires_data';
-        const RESPONSES_KEY = 'questionnaire_responses';
+        QM.seedIfEmpty();
+        const STORAGE_KEY = QM.STORAGE_KEY_Q;
+        const RESPONSES_KEY = QM.STORAGE_KEY_R;
         const TYPE_LABELS = { text:'单行文本', textarea:'多行文本', radio:'单选题', checkbox:'多选题', select:'下拉选择', file:'文件上传' };
 
         function loadList() { try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]'); } catch(e){ return []; } }
@@ -479,19 +481,20 @@
                     if (idx >= 0) counts[idx]++;
                 }
             });
-            const max = Math.max(1, ...counts);
             return `
                 <div class="space-y-2">
                     ${opts.map((o, i) => {
                         const c = counts[i];
                         const pct = answerCount ? Math.round(c / answerCount * 100) : 0;
+                        // 条宽 = 百分比：bar 长度与右侧百分比标签保持一致
+                        const widthPct = answerCount ? (c / answerCount * 100).toFixed(1) : 0;
                         return `
                             <div>
                                 <div class="flex items-center justify-between text-xs text-gray-600 mb-1">
                                     <span>${escapeHtml(o.label)}</span>
                                     <span>${c} 票 (${pct}%)</span>
                                 </div>
-                                <div class="stat-bar"><div class="stat-bar-fill" style="width: ${(c/max*100).toFixed(1)}%"></div></div>
+                                <div class="stat-bar"><div class="stat-bar-fill" style="width: ${widthPct}%"></div></div>
                             </div>
                         `;
                     }).join('')}

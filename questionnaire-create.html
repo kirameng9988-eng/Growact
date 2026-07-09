@@ -292,11 +292,13 @@
         </div>
     </div>
 
+    <script src="components/questionnaire-shared.js"></script>
     <script>
         /* =====================================================================
          * 默认值 / 工具
          * ===================================================================== */
-        const STORAGE_KEY = 'questionnaires_data';
+        QM.seedIfEmpty();
+        const STORAGE_KEY = QM.STORAGE_KEY_Q;
         const TYPE_LABELS = {
             text: '单行文本', textarea: '多行文本',
             radio: '单选题', checkbox: '多选题',

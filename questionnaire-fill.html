@@ -146,65 +146,18 @@
     <!-- Toast -->
     <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
 
+    <script src="components/questionnaire-shared.js"></script>
     <script>
-        const STORAGE_KEY = 'questionnaires_data';
-        const RESPONSES_KEY = 'questionnaire_responses';
+        /* 直接访问 fill 页时（如分享链接），seedIfEmpty() 会注入默认 5 条问卷 + 模拟答卷 */
+        QM.seedIfEmpty();
+        const STORAGE_KEY = QM.STORAGE_KEY_Q;
+        const RESPONSES_KEY = QM.STORAGE_KEY_R;
 
         function loadList() {
-            try {
-                const s = sessionStorage.getItem(STORAGE_KEY);
-                if (s) return JSON.parse(s);
-            } catch(e){}
-            // 直接访问 fill 页时（如分享链接），sessionStorage 可能为空
-            // 尝试从 defaultQuestionnaires 注入
-            if (typeof defaultQuestionnaires !== 'undefined' && defaultQuestionnaires.length) {
-                try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultQuestionnaires)); } catch(e){}
-                return JSON.parse(JSON.stringify(defaultQuestionnaires));
-            }
-            return [];
+            try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]'); } catch(e){ return []; }
         }
         function loadResp() { try { return JSON.parse(sessionStorage.getItem(RESPONSES_KEY) || '[]'); } catch(e){ return []; } }
         function saveResp(r) { try { sessionStorage.setItem(RESPONSES_KEY, JSON.stringify(r)); } catch(e){} }
-
-        // 与 list 页保持一致的默认数据（直接通过分享链接进入时使用）
-        const defaultQuestionnaires = [
-            {
-                id: 'q_demo_001', title: '2024 上海数据开放创新应用大赛 参赛意向调研',
-                description: '为更好筹备本届大赛，请您花 2 分钟填写以下信息。',
-                cover: '', category: 'tech', categoryName: '科技创新', status: 'collecting',
-                fields: [
-                    { id: 'f_1', type: 'text', label: '姓名', required: true, placeholder: '请输入您的真实姓名', maxLength: 20 },
-                    { id: 'f_2', type: 'radio', label: '您的角色', required: true, options: [
-                        { id: 'o_a', label: '开发者' }, { id: 'o_b', label: '产品经理' }, { id: 'o_c', label: '设计师' }, { id: 'o_d', label: '其他' }
-                    ]},
-                    { id: 'f_3', type: 'checkbox', label: '您感兴趣的赛道（多选）', required: true, maxSelected: 3, options: [
-                        { id: 'o_a', label: '智慧城市' }, { id: 'o_b', label: '金融科技' }, { id: 'o_c', label: '医疗健康' }, { id: 'o_d', label: '工业制造' }, { id: 'o_e', label: '教育文化' }
-                    ]},
-                    { id: 'f_4', type: 'textarea', label: '对本届大赛的建议', required: false, maxLength: 500 },
-                    { id: 'f_5', type: 'file', label: '上传个人简历 / 作品集（可选）', required: false, accept: '.pdf,.png,.jpg,.zip', maxSizeMB: 20, maxFiles: 1 }
-                ],
-                settings: { anonymous: false, allowMultiple: false, collectUserInfo: true, deadline: '2026-09-30 23:59', thankYouMessage: '感谢您的参与！' },
-                createdBy: '张明远', createdAt: '2026-07-09T10:30:00+08:00', updatedAt: '2026-07-09T10:30:00+08:00',
-                publishedAt: '2026-07-09T11:00:00+08:00', responseCount: 0
-            },
-            {
-                id: 'q_demo_002', title: '员工培训需求调研',
-                description: '了解大家对培训内容、形式、频率的真实想法，帮我们做得更好。',
-                cover: '', category: 'education', categoryName: '教育培训', status: 'collecting',
-                fields: [
-                    { id: 'f_1', type: 'radio', label: '您希望的培训频率', required: true, options: [
-                        { id: 'o_a', label: '每周一次' }, { id: 'o_b', label: '每月一次' }, { id: 'o_c', label: '每季度一次' }, { id: 'o_d', label: '不一定' }
-                    ]},
-                    { id: 'f_2', type: 'checkbox', label: '您感兴趣的培训方向', required: true, options: [
-                        { id: 'o_a', label: '专业技能' }, { id: 'o_b', label: '管理能力' }, { id: 'o_c', label: '通用素养' }, { id: 'o_d', label: '行业前沿' }
-                    ]},
-                    { id: 'f_3', type: 'textarea', label: '其他建议', required: false, maxLength: 300 }
-                ],
-                settings: { anonymous: true, allowMultiple: false, collectUserInfo: false, deadline: '2026-08-31 23:59', thankYouMessage: '已收到，谢谢！' },
-                createdBy: '李晓华', createdAt: '2026-07-05T09:00:00+08:00', updatedAt: '2026-07-05T09:00:00+08:00',
-                publishedAt: '2026-07-05T10:00:00+08:00', responseCount: 0
-            }
-        ];
 
         function escapeHtml(s) {
             return String(s == null ? '' : s)

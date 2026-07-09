@@ -170,167 +170,28 @@
         </div>
     </div>
 
+    <script src="components/questionnaire-shared.js"></script>
+
     <script>
         /* =====================================================================
-         * 默认 Mock 问卷数据（5 条，覆盖各种状态）
+         * 使用 QM.seedIfEmpty() 自动注入默认问卷 + 模拟答卷
          * ===================================================================== */
-        const defaultQuestionnaires = [
-            {
-                id: 'q_demo_001',
-                title: '2024 上海数据开放创新应用大赛 参赛意向调研',
-                description: '为更好筹备本届大赛，请您花 2 分钟填写以下信息。',
-                cover: '',
-                category: 'tech',
-                categoryName: '科技创新',
-                status: 'collecting',
-                fields: [
-                    { id: 'f_1', type: 'text', label: '姓名', required: true, placeholder: '请输入您的真实姓名', maxLength: 20 },
-                    { id: 'f_2', type: 'radio', label: '您的角色', required: true, options: [
-                        { id: 'o_a', label: '开发者' }, { id: 'o_b', label: '产品经理' }, { id: 'o_c', label: '设计师' }, { id: 'o_d', label: '其他' }
-                    ]},
-                    { id: 'f_3', type: 'checkbox', label: '您感兴趣的赛道（多选）', required: true, maxSelected: 3, options: [
-                        { id: 'o_a', label: '智慧城市' }, { id: 'o_b', label: '金融科技' }, { id: 'o_c', label: '医疗健康' }, { id: 'o_d', label: '工业制造' }, { id: 'o_e', label: '教育文化' }
-                    ]},
-                    { id: 'f_4', type: 'textarea', label: '对本届大赛的建议', required: false, maxLength: 500 },
-                    { id: 'f_5', type: 'file', label: '上传个人简历 / 作品集（可选）', required: false, accept: '.pdf,.png,.jpg,.zip', maxSizeMB: 20, maxFiles: 1 }
-                ],
-                settings: { anonymous: false, allowMultiple: false, collectUserInfo: true, deadline: '2026-09-30 23:59', thankYouMessage: '感谢您的参与！' },
-                createdBy: '张明远',
-                createdAt: '2026-07-09T10:30:00+08:00',
-                updatedAt: '2026-07-09T10:30:00+08:00',
-                publishedAt: '2026-07-09T11:00:00+08:00',
-                responseCount: 18
-            },
-            {
-                id: 'q_demo_002',
-                title: '员工培训需求调研',
-                description: '了解大家对培训内容、形式、频率的真实想法，帮我们做得更好。',
-                cover: '',
-                category: 'education',
-                categoryName: '教育培训',
-                status: 'collecting',
-                fields: [
-                    { id: 'f_1', type: 'radio', label: '您希望的培训频率', required: true, options: [
-                        { id: 'o_a', label: '每周一次' }, { id: 'o_b', label: '每月一次' }, { id: 'o_c', label: '每季度一次' }, { id: 'o_d', label: '不一定' }
-                    ]},
-                    { id: 'f_2', type: 'checkbox', label: '您感兴趣的培训方向', required: true, options: [
-                        { id: 'o_a', label: '专业技能' }, { id: 'o_b', label: '管理能力' }, { id: 'o_c', label: '通用素养' }, { id: 'o_d', label: '行业前沿' }
-                    ]},
-                    { id: 'f_3', type: 'textarea', label: '其他建议', required: false, maxLength: 300 }
-                ],
-                settings: { anonymous: true, allowMultiple: false, collectUserInfo: false, deadline: '2026-08-31 23:59', thankYouMessage: '已收到，谢谢！' },
-                createdBy: '李晓华',
-                createdAt: '2026-07-05T09:00:00+08:00',
-                updatedAt: '2026-07-05T09:00:00+08:00',
-                publishedAt: '2026-07-05T10:00:00+08:00',
-                responseCount: 42
-            },
-            {
-                id: 'q_demo_003',
-                title: '2025 春节团建活动报名',
-                description: '为了让大家度过一个难忘的春节，请填写以下信息。',
-                cover: '',
-                category: 'culture',
-                categoryName: '文化活动',
-                status: 'draft',
-                fields: [
-                    { id: 'f_1', type: 'text', label: '姓名', required: true, maxLength: 20 },
-                    { id: 'f_2', type: 'radio', label: '参加意向', required: true, options: [
-                        { id: 'o_a', label: '一定参加' }, { id: 'o_b', label: '可能参加' }, { id: 'o_c', label: '不参加' }
-                    ]}
-                ],
-                settings: { anonymous: false, allowMultiple: false, collectUserInfo: true, deadline: '', thankYouMessage: '感谢您的反馈。' },
-                createdBy: '王建国',
-                createdAt: '2026-07-08T15:00:00+08:00',
-                updatedAt: '2026-07-08T15:00:00+08:00',
-                publishedAt: null,
-                responseCount: 0
-            },
-            {
-                id: 'q_demo_004',
-                title: '团建活动满意度反馈',
-                description: '感谢您参加此次团建，请花费 1 分钟告诉我们您的真实感受。',
-                cover: '',
-                category: 'culture',
-                categoryName: '文化活动',
-                status: 'ended',
-                fields: [
-                    { id: 'f_1', type: 'radio', label: '整体满意度', required: true, options: [
-                        { id: 'o_a', label: '非常满意' }, { id: 'o_b', label: '满意' }, { id: 'o_c', label: '一般' }, { id: 'o_d', label: '不满意' }
-                    ]},
-                    { id: 'f_2', type: 'textarea', label: '改进建议', required: false, maxLength: 500 }
-                ],
-                settings: { anonymous: true, allowMultiple: false, collectUserInfo: false, deadline: '2026-06-30 23:59', thankYouMessage: '' },
-                createdBy: '陈思远',
-                createdAt: '2026-06-01T10:00:00+08:00',
-                updatedAt: '2026-06-30T10:00:00+08:00',
-                publishedAt: '2026-06-01T10:00:00+08:00',
-                responseCount: 56
-            },
-            {
-                id: 'q_demo_005',
-                title: '网络安全宣传周反馈',
-                description: '已结束 — 收集大家对网络安全周活动的反馈。',
-                cover: '',
-                category: 'tech',
-                categoryName: '科技创新',
-                status: 'stopped',
-                fields: [
-                    { id: 'f_1', type: 'text', label: '所在部门', required: true, maxLength: 30 },
-                    { id: 'f_2', type: 'radio', label: '是否参与线下活动', required: true, options: [
-                        { id: 'o_a', label: '是' }, { id: 'o_b', label: '否' }
-                    ]}
-                ],
-                settings: { anonymous: false, allowMultiple: false, collectUserInfo: true, deadline: '', thankYouMessage: '' },
-                createdBy: '张明远',
-                createdAt: '2026-04-01T09:00:00+08:00',
-                updatedAt: '2026-04-20T09:00:00+08:00',
-                publishedAt: '2026-04-01T10:00:00+08:00',
-                responseCount: 12
-            }
-        ];
+        QM.seedIfEmpty();
+        const STORAGE_KEY = QM.STORAGE_KEY_Q;
+        const RESPONSES_KEY = QM.STORAGE_KEY_R;
 
-        const STORAGE_KEY = 'questionnaires_data';
-        const RESPONSES_KEY = 'questionnaire_responses';
-
-        /* =====================================================================
-         * 数据存取（与 activity-list.html 一致：sessionStorage）
-         * ===================================================================== */
         function loadQuestionnaires() {
-            try {
-                const stored = sessionStorage.getItem(STORAGE_KEY);
-                if (stored) return JSON.parse(stored);
-            } catch (e) {}
-            try {
-                sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultQuestionnaires));
-            } catch (e) {}
-            return JSON.parse(JSON.stringify(defaultQuestionnaires));
+            try { return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '[]'); } catch (e) { return []; }
         }
-
         function saveQuestionnaires(list) {
-            try {
-                sessionStorage.setItem(STORAGE_KEY, JSON.stringify(list));
-            } catch (e) {}
+            try { sessionStorage.setItem(STORAGE_KEY, JSON.stringify(list)); } catch (e) {}
         }
-
         function loadResponses() {
-            try {
-                const stored = sessionStorage.getItem(RESPONSES_KEY);
-                if (stored) return JSON.parse(stored);
-            } catch (e) {}
-            return [];
+            try { return JSON.parse(sessionStorage.getItem(RESPONSES_KEY) || '[]'); } catch (e) { return []; }
         }
-
         function countResponsesFor(questionnaireId) {
-            // 优先统计 sessionStorage 中的答卷；fallback 到 mock 数据中的 responseCount
-            const responses = loadResponses();
-            const matched = responses.filter(r => r.questionnaireId === questionnaireId).length;
-            if (matched > 0) return matched;
-            const q = questionnaires.find(q => q.id === questionnaireId);
-            return q ? (q.responseCount || 0) : 0;
+            return loadResponses().filter(r => r.questionnaireId === questionnaireId).length;
         }
-
-        let questionnaires = loadQuestionnaires();
         let currentPage = 1;
         const PAGE_SIZE = 10;
         let selectedIds = [];
