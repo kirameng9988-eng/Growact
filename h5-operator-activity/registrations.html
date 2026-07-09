@@ -73,7 +73,7 @@
         <!-- 搜索栏 -->
         <div class="relative mb-4">
             <i class="fas fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
-            <input type="text" id="searchInput" oninput="renderList()" placeholder="搜索报名人、手机号..." class="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:border-primary focus:outline-none transition-colors">
+            <input type="text" id="searchInput" oninput="renderList()" placeholder="搜索报名人、手机号、企业..." class="w-full bg-white border border-gray-200 rounded-xl pl-10 pr-4 py-2.5 text-sm text-gray-700 placeholder-gray-400 focus:border-primary focus:outline-none transition-colors">
         </div>
 
         <!-- 待审核提示 -->
@@ -258,7 +258,7 @@
             const search = document.getElementById('searchInput').value.toLowerCase();
             return registrations.filter(r => {
                 if (currentFilter && r.status !== currentFilter) return false;
-                if (search && !r.name.toLowerCase().includes(search) && !r.phone.includes(search)) return false;
+                if (search && !r.name.toLowerCase().includes(search) && !r.phone.includes(search) && !(r.company || '').toLowerCase().includes(search)) return false;
                 return true;
             });
         }

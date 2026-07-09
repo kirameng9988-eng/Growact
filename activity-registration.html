@@ -52,6 +52,10 @@
                 <p class="text-gray-500 mt-1">管理活动报名信息，审核报名资格</p>
             </div>
             <div class="flex items-center gap-3">
+                <button onclick="openImportModal()" class="px-4 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                    <i class="fas fa-file-upload"></i>
+                    导入名单
+                </button>
                 <button onclick="exportData()" class="px-4 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
                     <i class="fas fa-download"></i>
                     导出数据
@@ -85,7 +89,7 @@
                 <div class="flex-1"></div>
                 <div class="relative">
                     <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
-                    <input type="text" id="searchInput" oninput="filterList()" placeholder="搜索报名人、手机号..." class="bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none w-64">
+                    <input type="text" id="searchInput" oninput="filterList()" placeholder="搜索报名人、手机号、企业..." class="bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none w-64">
                 </div>
             </div>
         </div>
@@ -202,14 +206,196 @@
             <div class="p-6">
                 <p id="reviewMessage" class="text-sm text-gray-600"></p>
                 <p id="reviewName" class="text-sm font-medium mt-2 text-gray-900"></p>
-                <div id="rejectReasonGroup" class="mt-4 hidden">
-                    <label class="block text-sm text-gray-600 mb-2">驳回原因</label>
-                    <textarea id="rejectReason" rows="3" placeholder="请输入驳回原因" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none resize-none"></textarea>
+                <div id="reviewRemarkGroup" class="mt-4">
+                    <label class="block text-sm text-gray-600 mb-2">备注信息 <span class="text-gray-400">(选填)</span></label>
+                    <textarea id="reviewRemark" rows="3" placeholder="可输入审核备注，供后续参考" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-4 py-3 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none resize-none"></textarea>
                 </div>
             </div>
             <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
                 <button onclick="closeModal('reviewModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
                 <button id="confirmReviewBtn" class="px-5 py-2.5 bg-accent-green text-white rounded-xl hover:bg-green-600 transition-colors">确认通过</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 导入名单弹窗 -->
+    <div id="importModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[640px] max-h-[90vh] overflow-hidden border border-[#E2E8F0] shadow-2xl flex flex-col">
+            <!-- Header -->
+            <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+                <div>
+                    <h3 class="text-lg font-medium">导入报名名单</h3>
+                    <p class="text-xs text-gray-500 mt-0.5">支持 .xlsx / .xls / .csv，单次最多 500 条</p>
+                </div>
+                <button onclick="closeImportModal()" class="text-gray-500 hover:text-gray-700">
+                    <i class="fas fa-times text-xl"></i>
+                </button>
+            </div>
+
+            <!-- 步骤指示器 -->
+            <div class="flex items-center gap-2 px-6 pt-4 pb-2 text-xs">
+                <div id="stepDot1" class="flex items-center gap-2 text-accent-blue font-medium">
+                    <span class="w-6 h-6 rounded-full bg-accent-blue text-white flex items-center justify-center text-xs">1</span>
+                    <span>上传文件</span>
+                </div>
+                <div class="flex-1 h-px bg-[#E2E8F0]"></div>
+                <div id="stepDot2" class="flex items-center gap-2 text-gray-400">
+                    <span class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs">2</span>
+                    <span>预览配置</span>
+                </div>
+                <div class="flex-1 h-px bg-[#E2E8F0]"></div>
+                <div id="stepDot3" class="flex items-center gap-2 text-gray-400">
+                    <span class="w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs">3</span>
+                    <span>导入结果</span>
+                </div>
+            </div>
+
+            <!-- Step 1: 上传文件 -->
+            <div id="importStep1" class="px-6 py-5 overflow-y-auto flex-1">
+                <div id="uploadZone" onclick="document.getElementById('fileInput').click()" ondragover="event.preventDefault();this.classList.add('border-accent-blue','bg-accent-blue/5')" ondragleave="this.classList.remove('border-accent-blue','bg-accent-blue/5')" ondrop="handleFileDrop(event)" class="border-2 border-dashed border-[#CBD5E1] rounded-xl py-10 px-6 text-center cursor-pointer hover:border-accent-blue transition-colors">
+                    <i class="fas fa-cloud-upload-alt text-4xl text-accent-blue/70 mb-3"></i>
+                    <p class="text-sm text-gray-700">点击或拖拽文件到此处上传</p>
+                    <p class="text-xs text-gray-400 mt-1">支持 .xlsx / .xls / .csv，单文件 ≤ 5MB</p>
+                    <input type="file" id="fileInput" accept=".xlsx,.xls,.csv" class="hidden" onchange="handleFileSelect(event)">
+                </div>
+                <div id="fileInfo" class="hidden mt-3 flex items-center gap-3 bg-accent-blue/5 border border-accent-blue/20 rounded-xl px-4 py-3">
+                    <i class="fas fa-file-excel text-accent-green text-xl"></i>
+                    <div class="flex-1">
+                        <p id="fileName" class="text-sm text-gray-900 font-medium"></p>
+                        <p id="fileMeta" class="text-xs text-gray-500"></p>
+                    </div>
+                    <button onclick="clearFile()" class="text-gray-400 hover:text-accent-red">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="mt-4 flex items-center gap-2 text-sm">
+                    <i class="fas fa-link text-accent-blue"></i>
+                    <a href="javascript:void(0)" onclick="downloadTemplate()" class="text-accent-blue hover:underline">下载导入模板</a>
+                    <span class="text-gray-400 text-xs">（含姓名、手机号、企业名称、职位、邮箱 5 个字段）</span>
+                </div>
+            </div>
+
+            <!-- Step 2: 预览与配置 -->
+            <div id="importStep2" class="px-6 py-5 overflow-y-auto flex-1 hidden">
+                <div class="flex items-center gap-2 mb-3">
+                    <i class="fas fa-table text-accent-blue text-sm"></i>
+                    <span class="text-sm font-medium text-gray-900">数据预览</span>
+                    <span id="previewCount" class="text-xs text-gray-400"></span>
+                </div>
+                <div class="border border-[#E2E8F0] rounded-xl overflow-hidden mb-4">
+                    <div class="max-h-44 overflow-y-auto">
+                        <table class="w-full text-sm">
+                            <thead class="bg-gray-50 sticky top-0">
+                                <tr class="text-left text-gray-500 text-xs">
+                                    <th class="px-3 py-2 font-medium w-12">#</th>
+                                    <th class="px-3 py-2 font-medium">姓名</th>
+                                    <th class="px-3 py-2 font-medium">手机号</th>
+                                    <th class="px-3 py-2 font-medium">企业</th>
+                                    <th class="px-3 py-2 font-medium">职位</th>
+                                </tr>
+                            </thead>
+                            <tbody id="previewTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div>
+                        <label class="block text-sm text-gray-700 mb-2">目标活动 <span class="text-accent-red">*</span></label>
+                        <select id="importActivity" class="w-full bg-white border border-[#E2E8F0] rounded-xl px-3 py-2.5 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                            <option value="">未分配（导入后再指定）</option>
+                            <option value="1">2024数字化转型高峰论坛</option>
+                            <option value="2">企业文化创意大赛</option>
+                            <option value="4">新员工入职培训</option>
+                            <option value="6">读书分享会</option>
+                            <option value="8">数据分析技能培训</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm text-gray-700 mb-2">默认审核状态</label>
+                        <div class="flex items-center gap-4">
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="importStatus" value="approved" class="accent-accent-blue">
+                                <span class="text-sm text-gray-700">直接通过</span>
+                            </label>
+                            <label class="flex items-center gap-2 cursor-pointer">
+                                <input type="radio" name="importStatus" value="pending" checked class="accent-accent-blue">
+                                <span class="text-sm text-gray-700">设为待审核</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="flex items-center gap-2 cursor-pointer">
+                            <input type="checkbox" id="dedupeCheck" checked class="accent-accent-blue">
+                            <span class="text-sm text-gray-700">按手机号自动去重（手机号相同视为同一人，跳过导入）</span>
+                        </label>
+                    </div>
+                    <div id="importWarn" class="hidden bg-accent-amber/10 border border-accent-amber/30 rounded-xl px-4 py-3 flex items-start gap-2">
+                        <i class="fas fa-exclamation-triangle text-accent-amber mt-0.5"></i>
+                        <p id="importWarnText" class="text-xs text-amber-700"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: 导入结果 -->
+            <div id="importStep3" class="px-6 py-5 overflow-y-auto flex-1 hidden">
+                <div class="flex items-center justify-center mb-4">
+                    <div id="resultIcon" class="w-16 h-16 rounded-full bg-accent-green/20 flex items-center justify-center">
+                        <i class="fas fa-check text-accent-green text-3xl"></i>
+                    </div>
+                </div>
+                <p id="resultTitle" class="text-center text-lg font-medium text-gray-900 mb-1">导入完成</p>
+                <p id="resultSubtitle" class="text-center text-sm text-gray-500 mb-5"></p>
+                <div class="grid grid-cols-3 gap-3 mb-4">
+                    <div class="bg-accent-green/10 rounded-xl p-3 text-center">
+                        <p id="statSuccess" class="text-2xl font-semibold text-accent-green">0</p>
+                        <p class="text-xs text-gray-600 mt-1">成功导入</p>
+                    </div>
+                    <div class="bg-accent-amber/10 rounded-xl p-3 text-center">
+                        <p id="statDuplicate" class="text-2xl font-semibold text-accent-amber">0</p>
+                        <p class="text-xs text-gray-600 mt-1">重复跳过</p>
+                    </div>
+                    <div class="bg-accent-red/10 rounded-xl p-3 text-center">
+                        <p id="statFailed" class="text-2xl font-semibold text-accent-red">0</p>
+                        <p class="text-xs text-gray-600 mt-1">失败</p>
+                    </div>
+                </div>
+                <div id="failedSection" class="hidden">
+                    <div class="flex items-center gap-2 mb-2">
+                        <i class="fas fa-exclamation-circle text-accent-red text-sm"></i>
+                        <span class="text-sm font-medium text-gray-900">失败明细</span>
+                    </div>
+                    <div class="border border-[#E2E8F0] rounded-xl overflow-hidden">
+                        <div class="max-h-40 overflow-y-auto">
+                            <table class="w-full text-sm">
+                                <thead class="bg-gray-50 sticky top-0">
+                                    <tr class="text-left text-gray-500 text-xs">
+                                        <th class="px-3 py-2 font-medium w-16">行号</th>
+                                        <th class="px-3 py-2 font-medium">姓名 / 手机号</th>
+                                        <th class="px-3 py-2 font-medium">失败原因</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="failedTableBody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="flex items-center justify-between gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-gray-50">
+                <button id="importStepBack" onclick="goImportStep('back')" class="hidden px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors flex items-center gap-1">
+                    <i class="fas fa-chevron-left text-xs"></i> 上一步
+                </button>
+                <div class="flex-1"></div>
+                <button onclick="closeImportModal()" id="importCancelBtn" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button onclick="goImportStep('next')" id="importNextBtn" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-1" disabled>
+                    下一步 <i class="fas fa-chevron-right text-xs"></i>
+                </button>
+                <button onclick="confirmImport()" id="importConfirmBtn" class="hidden px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-1">
+                    <i class="fas fa-check text-xs"></i> 确认导入
+                </button>
+                <button onclick="closeImportModal()" id="importDoneBtn" class="hidden px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">完成</button>
             </div>
         </div>
     </div>
@@ -282,7 +468,7 @@
             const status = document.getElementById('filterStatus').value;
 
             return registrations.filter(r => {
-                if (search && !r.name.toLowerCase().includes(search) && !r.phone.includes(search)) return false;
+                if (search && !r.name.toLowerCase().includes(search) && !r.phone.includes(search) && !(r.company || '').toLowerCase().includes(search)) return false;
                 if (activityId && r.activityId !== parseInt(activityId)) return false;
                 if (status && r.status !== status) return false;
                 return true;
@@ -345,7 +531,7 @@
             document.getElementById('reviewSubtitle').textContent = '确认报名信息无误';
             document.getElementById('reviewMessage').textContent = '确定要通过以下报名申请？';
             document.getElementById('reviewName').textContent = `${reg.name} - ${reg.company}`;
-            document.getElementById('rejectReasonGroup').classList.add('hidden');
+            document.getElementById('reviewRemarkGroup').classList.remove('hidden');
             document.getElementById('confirmReviewBtn').className = 'px-5 py-2.5 bg-accent-green text-white rounded-xl hover:bg-green-600 transition-colors';
             document.getElementById('confirmReviewBtn').textContent = '确认通过';
 
@@ -364,7 +550,7 @@
             document.getElementById('reviewSubtitle').textContent = '请填写驳回原因';
             document.getElementById('reviewMessage').textContent = '确定要驳回以下报名申请？';
             document.getElementById('reviewName').textContent = `${reg.name} - ${reg.company}`;
-            document.getElementById('rejectReasonGroup').classList.remove('hidden');
+            document.getElementById('reviewRemarkGroup').classList.remove('hidden');
             document.getElementById('confirmReviewBtn').className = 'px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors';
             document.getElementById('confirmReviewBtn').textContent = '确认驳回';
 
@@ -378,6 +564,344 @@
             }, 1500);
         }
 
+        // ===== 导入名单 =====
+        // 状态：currentStep: 1|2|3, parsedData: [], fileMeta: {name, size}
+        const importState = {
+            currentStep: 1,
+            fileMeta: null,
+            parsedData: []
+        };
+
+        function openImportModal() {
+            importState.currentStep = 1;
+            importState.fileMeta = null;
+            importState.parsedData = [];
+            goImportStep(1);
+            clearFile();
+            document.getElementById('fileInput').value = '';
+            openModal('importModal');
+        }
+
+        function closeImportModal() {
+            closeModal('importModal');
+            // 关闭后短暂延迟清状态，避免视觉跳变
+            setTimeout(() => {
+                importState.currentStep = 1;
+                importState.fileMeta = null;
+                importState.parsedData = [];
+            }, 200);
+        }
+
+        function goImportStep(direction) {
+            // direction: 'next' | 'back' | 数字(直接跳)
+            let target;
+            if (typeof direction === 'number') {
+                target = direction;
+            } else if (direction === 'next') {
+                if (importState.currentStep === 1) {
+                    if (!importState.fileMeta) {
+                        showToast('请先上传文件', 'warning');
+                        return;
+                    }
+                    if (importState.parsedData.length === 0) {
+                        showToast('未解析到有效数据，请检查模板格式', 'error');
+                        return;
+                    }
+                    target = 2;
+                } else if (importState.currentStep === 2) {
+                    confirmImport();
+                    return;
+                } else {
+                    return;
+                }
+            } else if (direction === 'back') {
+                if (importState.currentStep > 1) target = importState.currentStep - 1;
+            }
+
+            if (!target) return;
+            importState.currentStep = target;
+            renderImportStep();
+        }
+
+        function renderImportStep() {
+            const step = importState.currentStep;
+            // 切换面板
+            document.getElementById('importStep1').classList.toggle('hidden', step !== 1);
+            document.getElementById('importStep2').classList.toggle('hidden', step !== 2);
+            document.getElementById('importStep3').classList.toggle('hidden', step !== 3);
+
+            // 步骤指示器
+            ['1','2','3'].forEach(n => {
+                const dot = document.getElementById(`stepDot${n}`);
+                const num = parseInt(n);
+                const reached = num <= step;
+                dot.classList.toggle('text-accent-blue', reached);
+                dot.classList.toggle('text-gray-400', !reached);
+                dot.classList.toggle('font-medium', reached);
+                const circle = dot.querySelector('span');
+                if (reached) {
+                    circle.className = 'w-6 h-6 rounded-full bg-accent-blue text-white flex items-center justify-center text-xs';
+                    circle.textContent = num;
+                } else {
+                    circle.className = 'w-6 h-6 rounded-full bg-gray-200 text-gray-500 flex items-center justify-center text-xs';
+                    circle.textContent = num;
+                }
+            });
+
+            // Footer 按钮
+            const back = document.getElementById('importStepBack');
+            const cancel = document.getElementById('importCancelBtn');
+            const next = document.getElementById('importNextBtn');
+            const confirm = document.getElementById('importConfirmBtn');
+            const done = document.getElementById('importDoneBtn');
+
+            back.classList.toggle('hidden', step === 1);
+            cancel.classList.toggle('hidden', step === 3);
+            next.classList.toggle('hidden', step === 3);
+            confirm.classList.toggle('hidden', step !== 2);
+            done.classList.toggle('hidden', step !== 3);
+
+            if (step === 1) {
+                next.disabled = !importState.fileMeta;
+                next.innerHTML = '下一步 <i class="fas fa-chevron-right text-xs"></i>';
+            } else if (step === 2) {
+                next.innerHTML = '<i class="fas fa-check text-xs"></i> 确认导入';
+            }
+
+            // Step 2: 渲染预览
+            if (step === 2) renderPreview();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) processFile(file);
+        }
+
+        function handleFileDrop(event) {
+            event.preventDefault();
+            const zone = document.getElementById('uploadZone');
+            zone.classList.remove('border-accent-blue','bg-accent-blue/5');
+            const file = event.dataTransfer.files[0];
+            if (file) processFile(file);
+        }
+
+        function processFile(file) {
+            const validExts = ['xlsx','xls','csv'];
+            const ext = file.name.split('.').pop().toLowerCase();
+            if (!validExts.includes(ext)) {
+                showToast('文件格式不支持，请上传 .xlsx / .xls / .csv', 'error');
+                return;
+            }
+            if (file.size > 5 * 1024 * 1024) {
+                showToast('文件大小超过 5MB 上限', 'error');
+                return;
+            }
+
+            // 模拟解析：生成 8-15 条 mock 数据
+            const sampleNames = ['陈静','吴磊','郑爽','冯鑫','钱琪','王芳','李强','张敏','赵勇','周华','黄丽','孙鹏','林涛','徐丽'];
+            const sampleCompanies = ['北京科技公司','上海数字集团','深圳创新科技','杭州文化传媒','广州设计公司','成都科技集团','武汉光谷科技','南京软件园'];
+            const samplePositions = ['产品经理','技术总监','市场专员','运营经理','HR 主管','财务经理','设计师','研发工程师','CEO','编辑'];
+            const count = 8 + Math.floor(Math.random() * 8); // 8-15
+            const parsed = [];
+            for (let i = 0; i < count; i++) {
+                parsed.push({
+                    row: i + 2, // 第 1 行为表头
+                    name: sampleNames[i % sampleNames.length] + (i >= sampleNames.length ? Math.floor(i/sampleNames.length)+1 : ''),
+                    phone: '139' + String(10000000 + Math.floor(Math.random() * 89999999)).slice(0,8),
+                    company: sampleCompanies[i % sampleCompanies.length],
+                    position: samplePositions[i % samplePositions.length],
+                    email: ''
+                });
+            }
+            // 故意制造 1 条失败行（缺姓名）做演示
+            if (count >= 6) {
+                parsed[parsed.length - 1] = { row: count + 1, name: '', phone: '13800002222', company: '某公司', position: '', email: '' };
+            }
+
+            importState.fileMeta = { name: file.name, size: file.size, ext };
+            importState.parsedData = parsed;
+
+            // 展示文件信息
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileMeta').textContent = `${(file.size/1024).toFixed(1)} KB · ${ext.toUpperCase()} · 解析到 ${parsed.length} 条数据`;
+            document.getElementById('fileInfo').classList.remove('hidden');
+            document.getElementById('uploadZone').classList.add('hidden');
+            document.getElementById('importNextBtn').disabled = false;
+
+            showToast(`已解析 ${parsed.length} 条数据`, 'success');
+        }
+
+        function clearFile() {
+            importState.fileMeta = null;
+            importState.parsedData = [];
+            document.getElementById('fileInfo').classList.add('hidden');
+            document.getElementById('uploadZone').classList.remove('hidden');
+            document.getElementById('importNextBtn').disabled = true;
+            document.getElementById('fileInput').value = '';
+        }
+
+        function renderPreview() {
+            const data = importState.parsedData;
+            document.getElementById('previewCount').textContent = `共 ${data.length} 条，仅显示前 10 条`;
+
+            // 必填校验（缺姓名 / 缺手机号视为失败）
+            const invalidRows = data.filter(r => !r.name || !r.phone).map(r => r.row);
+
+            const body = document.getElementById('previewTableBody');
+            body.innerHTML = data.slice(0, 10).map((r, idx) => {
+                const missingName = !r.name;
+                const missingPhone = !r.phone;
+                return `
+                    <tr class="border-t border-[#E2E8F0]">
+                        <td class="px-3 py-2 text-xs text-gray-400">${idx + 1}</td>
+                        <td class="px-3 py-2 text-sm ${missingName ? 'text-accent-red' : 'text-gray-700'}">${r.name || '<空>'}</td>
+                        <td class="px-3 py-2 text-sm ${missingPhone ? 'text-accent-red' : 'text-gray-700'}">${r.phone || '<空>'}</td>
+                        <td class="px-3 py-2 text-sm text-gray-600">${r.company || '-'}</td>
+                        <td class="px-3 py-2 text-sm text-gray-600">${r.position || '-'}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            const warn = document.getElementById('importWarn');
+            const warnText = document.getElementById('importWarnText');
+            if (invalidRows.length > 0) {
+                warn.classList.remove('hidden');
+                warnText.textContent = `检测到 ${invalidRows.length} 条数据缺少必填项（姓名或手机号），将作为失败行处理。`;
+            } else {
+                warn.classList.add('hidden');
+            }
+        }
+
+        function downloadTemplate() {
+            // 实际项目应返回服务端模板链接；这里用 CSV 模拟下载
+            const csv = '﻿' + '姓名,手机号,企业名称,职位,邮箱\n张三,13800001111,XX 科技有限公司,产品经理,zhangsan@example.com\n';
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '报名名单导入模板.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+            showToast('模板已下载', 'success');
+        }
+
+        function confirmImport() {
+            const data = importState.parsedData;
+            const targetActivityId = document.getElementById('importActivity').value;
+            const defaultStatus = document.querySelector('input[name="importStatus"]:checked').value;
+            const dedupe = document.getElementById('dedupeCheck').checked;
+
+            const activityNameMap = {
+                '1': '2024数字化转型高峰论坛',
+                '2': '企业文化创意大赛',
+                '4': '新员工入职培训',
+                '6': '读书分享会',
+                '8': '数据分析技能培训'
+            };
+            const targetActivityName = targetActivityId ? activityNameMap[targetActivityId] : '未分配';
+
+            // 查重：手机号已存在
+            const existingPhones = new Set(registrations.map(r => r.phone));
+            // 模拟导入批次内查重
+            const seenInBatch = new Set();
+
+            const result = { success: 0, duplicate: 0, failed: 0, failedList: [], newRegs: [] };
+            const importTag = `导入于 ${new Date().toISOString().slice(0,10)}`;
+
+            data.forEach(row => {
+                if (!row.name || !row.phone) {
+                    result.failed++;
+                    result.failedList.push({ row: row.row, name: row.name, phone: row.phone, reason: '必填项缺失（姓名/手机号）' });
+                    return;
+                }
+                if (dedupe) {
+                    if (existingPhones.has(row.phone)) {
+                        result.duplicate++;
+                        result.failedList.push({ row: row.row, name: row.name, phone: row.phone, reason: '手机号已存在（视为同人）' });
+                        return;
+                    }
+                    if (seenInBatch.has(row.phone)) {
+                        result.duplicate++;
+                        result.failedList.push({ row: row.row, name: row.name, phone: row.phone, reason: '本批次内重复' });
+                        return;
+                    }
+                }
+                seenInBatch.add(row.phone);
+                existingPhones.add(row.phone);
+
+                const newReg = {
+                    id: registrations.length ? Math.max(...registrations.map(r => r.id)) + 1 + result.newRegs.length : 1,
+                    activityId: targetActivityId ? parseInt(targetActivityId) : null,
+                    activityName: targetActivityName,
+                    name: row.name,
+                    company: row.company || '',
+                    phone: row.phone,
+                    position: row.position || '',
+                    email: row.email || '',
+                    time: new Date().toISOString().slice(0,16).replace('T',' '),
+                    status: defaultStatus,
+                    note: importTag
+                };
+                result.newRegs.push(newReg);
+                result.success++;
+            });
+
+            // 写入到 registrations（头部插入，倒序展示用）
+            registrations = result.newRegs.concat(registrations);
+            currentPage = 1;
+
+            // 渲染结果
+            renderImportResult(result);
+            importState.currentStep = 3;
+            renderImportStep();
+        }
+
+        function renderImportResult(result) {
+            document.getElementById('statSuccess').textContent = result.success;
+            document.getElementById('statDuplicate').textContent = result.duplicate;
+            document.getElementById('statFailed').textContent = result.failed;
+
+            const failedSection = document.getElementById('failedSection');
+            const failedBody = document.getElementById('failedTableBody');
+            if (result.failedList.length > 0) {
+                failedSection.classList.remove('hidden');
+                failedBody.innerHTML = result.failedList.map(f => `
+                    <tr class="border-t border-[#E2E8F0]">
+                        <td class="px-3 py-2 text-xs text-gray-500">第 ${f.row} 行</td>
+                        <td class="px-3 py-2 text-sm text-gray-700">${f.name || '<空>'} / ${f.phone || '<空>'}</td>
+                        <td class="px-3 py-2 text-sm text-accent-red">${f.reason}</td>
+                    </tr>
+                `).join('');
+            } else {
+                failedSection.classList.add('hidden');
+            }
+
+            // 标题与图标
+            const resultTitle = document.getElementById('resultTitle');
+            const resultSubtitle = document.getElementById('resultSubtitle');
+            const resultIcon = document.getElementById('resultIcon');
+            if (result.success > 0) {
+                resultTitle.textContent = '导入完成';
+                resultSubtitle.textContent = `成功导入 ${result.success} 条${result.duplicate ? `，跳过 ${result.duplicate} 条重复` : ''}${result.failed ? `，${result.failed} 条失败` : ''}`;
+                resultIcon.className = 'w-16 h-16 rounded-full bg-accent-green/20 flex items-center justify-center';
+                resultIcon.innerHTML = '<i class="fas fa-check text-accent-green text-3xl"></i>';
+            } else if (result.duplicate > 0 && result.failed === 0) {
+                resultTitle.textContent = '全部跳过';
+                resultSubtitle.textContent = `导入的 ${result.duplicate} 条均为已存在用户`;
+                resultIcon.className = 'w-16 h-16 rounded-full bg-accent-amber/20 flex items-center justify-center';
+                resultIcon.innerHTML = '<i class="fas fa-info-circle text-accent-amber text-3xl"></i>';
+            } else {
+                resultTitle.textContent = '导入失败';
+                resultSubtitle.textContent = '请检查文件格式与必填项';
+                resultIcon.className = 'w-16 h-16 rounded-full bg-accent-red/20 flex items-center justify-center';
+                resultIcon.innerHTML = '<i class="fas fa-times text-accent-red text-3xl"></i>';
+            }
+
+            // 同步列表
+            renderTable();
+            showToast(`成功导入 ${result.success} 条`, 'success');
+        }
+
         // 弹窗操作
         function openModal(modalId) {
             document.getElementById(modalId).classList.remove('hidden');
@@ -388,7 +912,7 @@
             document.getElementById(modalId).classList.add('hidden');
             document.getElementById(modalId).classList.remove('flex');
             if (modalId === 'reviewModal') {
-                document.getElementById('rejectReason').value = '';
+                document.getElementById('reviewRemark').value = '';
             }
         }
 
@@ -399,17 +923,15 @@
             const reg = registrations.find(r => r.id === currentReviewId);
             if (!reg) return;
 
+            const remark = document.getElementById('reviewRemark').value.trim();
+
             if (reviewAction === 'approve') {
                 reg.status = 'approved';
+                if (remark) reg.note = remark;
                 showToast('报名已审核通过', 'success');
             } else {
-                const reason = document.getElementById('rejectReason').value.trim();
-                if (!reason) {
-                    showToast('请填写驳回原因', 'warning');
-                    return;
-                }
                 reg.status = 'rejected';
-                reg.note = `驳回原因：${reason}`;
+                reg.note = remark ? `驳回说明：${remark}` : '';
                 showToast('报名已驳回', 'success');
             }
 
