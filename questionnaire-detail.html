@@ -152,31 +152,79 @@
 
             <!-- ========================== Tab2: 答卷管理 ========================== -->
             <div id="inner-panel-responses" class="inner-panel hidden">
+                <!-- 顶部条：计数 + 导出 -->
                 <div class="flex items-center justify-between mb-4">
-                    <div class="text-sm text-gray-500">共 <span id="respTotalCount" class="font-medium text-gray-900">0</span> 条答卷</div>
+                    <div class="text-sm text-gray-500">
+                        共 <span id="respTotalCount" class="font-medium text-gray-900">0</span> 条答卷
+                        <span id="respFilteredInfo" class="ml-2 text-xs text-gray-400 hidden"></span>
+                    </div>
                     <div class="flex items-center gap-2">
                         <button onclick="exportResponses()" class="px-3 py-1.5 border border-[#E2E8F0] rounded-lg text-sm hover:border-accent-blue">
                             <i class="fas fa-download"></i> 导出
                         </button>
                     </div>
                 </div>
+
+                <!-- 搜索 + 筛选条 -->
+                <div class="bg-white rounded-xl border border-[#E2E8F0] mb-3">
+                    <div class="flex items-center gap-3 px-4 py-3">
+                        <div class="relative flex-1">
+                            <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                            <input id="respSearch" type="text" placeholder="搜索填写人姓名 / 手机号 / 任意题目答案..."
+                                   oninput="applyRespFilters()"
+                                   class="w-full bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm focus:border-accent-blue focus:outline-none">
+                        </div>
+                        <button onclick="toggleFilterPanel()" id="respFilterToggle"
+                                class="px-3 py-2 border border-[#E2E8F0] rounded-lg text-sm hover:border-accent-blue flex items-center gap-1">
+                            <i class="fas fa-filter"></i> 筛选 <span id="respFilterBadge" class="hidden w-2 h-2 rounded-full bg-accent-blue"></span>
+                        </button>
+                        <button onclick="clearRespFilters()" id="respClearBtn" class="hidden px-3 py-2 text-sm text-gray-500 hover:text-accent-red">
+                            清空 <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <!-- 筛选面板（默认收起） -->
+                    <div id="respFilterPanel" class="hidden border-t border-[#E2E8F0] px-4 py-3 bg-gray-50">
+                        <div class="grid grid-cols-4 gap-3">
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">提交起</label>
+                                <input id="filterDateFrom" type="date" onchange="applyRespFilters()"
+                                       class="w-full bg-white border border-[#E2E8F0] rounded-lg px-2 py-1.5 text-sm focus:border-accent-blue focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">提交止</label>
+                                <input id="filterDateTo" type="date" onchange="applyRespFilters()"
+                                       class="w-full bg-white border border-[#E2E8F0] rounded-lg px-2 py-1.5 text-sm focus:border-accent-blue focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">填写人</label>
+                                <select id="filterUser" onchange="applyRespFilters()"
+                                        class="w-full bg-white border border-[#E2E8F0] rounded-lg px-2 py-1.5 text-sm focus:border-accent-blue focus:outline-none">
+                                    <option value="">全部</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs text-gray-500 mb-1">设备</label>
+                                <select id="filterDevice" onchange="applyRespFilters()"
+                                        class="w-full bg-white border border-[#E2E8F0] rounded-lg px-2 py-1.5 text-sm focus:border-accent-blue focus:outline-none">
+                                    <option value="">全部</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 答卷表格 — 横向滚动 -->
                 <div class="border border-[#E2E8F0] rounded-xl overflow-hidden">
-                    <table class="w-full">
-                        <thead>
-                            <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-primary-bg/50">
-                                <th class="px-4 py-3 font-medium w-12">#</th>
-                                <th class="px-4 py-3 font-medium w-40">填写人</th>
-                                <th class="px-4 py-3 font-medium w-40">提交时间</th>
-                                <th class="px-4 py-3 font-medium w-24">用时</th>
-                                <th class="px-4 py-3 font-medium w-32">设备</th>
-                                <th class="px-4 py-3 font-medium">预览</th>
-                                <th class="px-4 py-3 font-medium w-24 text-right">操作</th>
-                            </tr>
-                        </thead>
-                        <tbody id="responsesTableBody">
-                            <!-- JS 渲染 -->
-                        </tbody>
-                    </table>
+                    <div class="overflow-x-auto" style="max-height: calc(100vh - 320px);">
+                        <table id="responsesTable" class="w-full text-sm" style="min-width: 1100px;">
+                            <thead id="responsesTableHead">
+                                <!-- JS 渲染（动态列数 = 内置 5 + 题目 N + 编号 + 操作） -->
+                            </thead>
+                            <tbody id="responsesTableBody">
+                                <!-- JS 渲染 -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
@@ -211,19 +259,31 @@
         </div>
     </div>
 
-    <!-- 答卷详情抽屉 -->
+    <!-- 答卷详情/编辑抽屉 -->
     <div id="responseDrawer" class="fixed inset-0 z-[100] hidden">
         <div class="drawer-overlay absolute inset-0 bg-black/40" onclick="closeResponseDrawer()"></div>
         <div id="drawerPanel" class="drawer-panel absolute right-0 top-0 bottom-0 w-[560px] bg-white shadow-2xl overflow-y-auto">
             <div class="sticky top-0 bg-white border-b border-[#E2E8F0] px-6 py-4 flex items-center justify-between z-10">
                 <div>
-                    <h3 class="text-lg font-medium">答卷详情</h3>
+                    <h3 class="text-lg font-medium" id="drawerTitle">答卷详情</h3>
                     <p id="drawerSubtitle" class="text-xs text-gray-500 mt-0.5">—</p>
                 </div>
-                <button onclick="closeResponseDrawer()" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
+                <div class="flex items-center gap-2">
+                    <button id="drawerEditBtn" onclick="toggleDrawerEdit()" class="text-accent-blue hover:text-blue-700 text-sm flex items-center gap-1">
+                        <i class="fas fa-edit"></i> 编辑
+                    </button>
+                    <button onclick="closeResponseDrawer()" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
+                </div>
             </div>
             <div id="drawerBody" class="p-6 space-y-5">
                 <!-- JS 渲染 -->
+            </div>
+            <!-- 底部固定操作区（编辑模式才显示） -->
+            <div id="drawerFooter" class="hidden sticky bottom-0 bg-white border-t border-[#E2E8F0] px-6 py-3 flex items-center justify-end gap-3">
+                <button onclick="cancelDrawerEdit()" class="px-4 py-2 border border-[#E2E8F0] rounded-xl text-sm text-gray-600 hover:text-gray-900">取消</button>
+                <button onclick="saveDrawerEdit()" class="px-4 py-2 bg-accent-blue text-white rounded-xl text-sm hover:bg-blue-600 flex items-center gap-1">
+                    <i class="fas fa-save"></i> 保存修改
+                </button>
             </div>
         </div>
     </div>
@@ -347,47 +407,219 @@
         }
 
         /* =====================================================================
-         * Tab2: 答卷管理
+         * Tab2: 答卷管理（宽表格 + 筛选 + 搜索 + 抽屉编辑）
          * ===================================================================== */
-        function renderResponsesTab() {
+
+        // 当前筛选条件
+        const respFilters = {
+            search: '',
+            dateFrom: '',
+            dateTo: '',
+            user: '',
+            device: ''
+        };
+        let drawerEditMode = false;
+        let drawerWorkingResponse = null; // 编辑时的暂存对象（避免直接改 storage）
+
+        function getFilteredResponses() {
             const all = loadResp().filter(r => r.questionnaireId === q.id);
-            document.getElementById('respTotalCount').textContent = all.length;
+            return all.filter(r => {
+                // 搜索：姓名 + 手机号 + 任意答案文本
+                if (respFilters.search) {
+                    const k = respFilters.search.toLowerCase();
+                    const inUser = r.user && (r.user.name || '').toLowerCase().includes(k)
+                        || (r.user && r.user.phone || '').toLowerCase().includes(k);
+                    const inAnswers = Object.values(r.answers || {}).some(v => {
+                        if (v == null) return false;
+                        const s = Array.isArray(v) ? v.join(' ') : String(v);
+                        return s.toLowerCase().includes(k);
+                    });
+                    if (!inUser && !inAnswers) return false;
+                }
+                if (respFilters.dateFrom) {
+                    const d = (r.submittedAt || '').substring(0, 10);
+                    if (d < respFilters.dateFrom) return false;
+                }
+                if (respFilters.dateTo) {
+                    const d = (r.submittedAt || '').substring(0, 10);
+                    if (d > respFilters.dateTo) return false;
+                }
+                if (respFilters.user) {
+                    if (!r.user || (r.user.name || '') !== respFilters.user) return false;
+                }
+                if (respFilters.device) {
+                    if ((r.device || '未知') !== respFilters.device) return false;
+                }
+                return true;
+            });
+        }
+
+        function applyRespFilters() {
+            respFilters.search = document.getElementById('respSearch').value.trim();
+            respFilters.dateFrom = document.getElementById('filterDateFrom').value;
+            respFilters.dateTo = document.getElementById('filterDateTo').value;
+            respFilters.user = document.getElementById('filterUser').value;
+            respFilters.device = document.getElementById('filterDevice').value;
+            // 同步上一次状态（如果筛选面板当时是关的）
+            updateFilterUI();
+            renderResponsesTable();
+        }
+
+        function updateFilterUI() {
+            const hasFilter = !!respFilters.search || !!respFilters.dateFrom || !!respFilters.dateTo || !!respFilters.user || !!respFilters.device;
+            document.getElementById('respClearBtn').classList.toggle('hidden', !hasFilter);
+            document.getElementById('respFilterBadge').classList.toggle('hidden', !hasFilter);
+        }
+
+        function toggleFilterPanel() {
+            const p = document.getElementById('respFilterPanel');
+            p.classList.toggle('hidden');
+            // 打开时确保下拉选项是最新的
+            if (!p.classList.contains('hidden')) populateFilterSelects();
+        }
+
+        function populateFilterSelects() {
+            const all = loadResp().filter(r => r.questionnaireId === q.id);
+            const userSet = new Set();
+            const deviceSet = new Set();
+            all.forEach(r => {
+                if (r.user && r.user.name) userSet.add(r.user.name);
+                deviceSet.add(r.device || '未知');
+            });
+            const userSel = document.getElementById('filterUser');
+            const devSel = document.getElementById('filterDevice');
+            // 保留"全部" + 已选项
+            userSel.innerHTML = '<option value="">全部</option>' + Array.from(userSet).sort().map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+            userSel.value = respFilters.user;
+            devSel.innerHTML = '<option value="">全部</option>' + Array.from(deviceSet).sort().map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+            devSel.value = respFilters.device;
+        }
+
+        function clearRespFilters() {
+            document.getElementById('respSearch').value = '';
+            document.getElementById('filterDateFrom').value = '';
+            document.getElementById('filterDateTo').value = '';
+            document.getElementById('filterUser').value = '';
+            document.getElementById('filterDevice').value = '';
+            applyRespFilters();
+        }
+
+        function renderResponsesTab() {
+            // 仅初次进入或题目结构变化时填充筛选 select
+            populateFilterSelects();
+            renderResponsesTable();
+        }
+
+        function renderResponsesTable() {
+            const fields = q.fields || [];
+            const filtered = getFilteredResponses();
+            const allCount = loadResp().filter(r => r.questionnaireId === q.id).length;
+
+            document.getElementById('respTotalCount').textContent = allCount;
+            const infoEl = document.getElementById('respFilteredInfo');
+            if (filtered.length !== allCount) {
+                infoEl.classList.remove('hidden');
+                infoEl.textContent = `（已筛选：${filtered.length} 条）`;
+            } else {
+                infoEl.classList.add('hidden');
+            }
+
+            // 表头：内置列 + 题目列 + 操作
+            const head = document.getElementById('responsesTableHead');
+            head.innerHTML = `
+                <tr class="text-left text-gray-500 text-xs border-b border-[#E2E8F0] bg-primary-bg/50">
+                    <th class="px-3 py-3 font-medium w-12">#</th>
+                    <th class="px-3 py-3 font-medium whitespace-nowrap">提交时间 ↓</th>
+                    <th class="px-3 py-3 font-medium whitespace-nowrap">更新时间</th>
+                    <th class="px-3 py-3 font-medium whitespace-nowrap">填写人</th>
+                    <th class="px-3 py-3 font-medium whitespace-nowrap">用时</th>
+                    <th class="px-3 py-3 font-medium whitespace-nowrap">设备</th>
+                    ${fields.map((f, idx) => `
+                        <th class="px-3 py-3 font-medium whitespace-nowrap" title="${escapeHtml(f.label)}">
+                            <span class="text-gray-400 mr-1">Q${idx + 1}</span>${escapeHtml(f.label)}${f.required ? '<span class="text-accent-red ml-0.5">*</span>' : ''}
+                        </th>
+                    `).join('')}
+                    <th class="px-3 py-3 font-medium w-24 text-right whitespace-nowrap bg-primary-bg sticky right-0">操作</th>
+                </tr>
+            `;
+
             const tbody = document.getElementById('responsesTableBody');
-            if (all.length === 0) {
+            if (filtered.length === 0) {
+                const colCount = 6 + fields.length + 1;
                 tbody.innerHTML = `
-                    <tr><td colspan="7" class="px-4 py-16 text-center text-gray-400">
+                    <tr><td colspan="${colCount}" class="px-4 py-16 text-center text-gray-400">
                         <i class="fas fa-inbox text-4xl mb-3 block text-gray-300"></i>
-                        暂无答卷。发布问卷后将自动出现在这里。
+                        ${allCount === 0 ? '暂无答卷。发布问卷后将自动出现在这里。' : '当前筛选下没有匹配的答卷。'}
                     </td></tr>`;
                 return;
             }
-            tbody.innerHTML = all.map((r, i) => {
-                const userText = r.user ? `${escapeHtml(r.user.name || '匿名')} ${r.user.phone ? '· ' + escapeHtml(r.user.phone) : ''}` : '匿名';
-                const summary = summarizeAnswers(r.answers);
+
+            tbody.innerHTML = filtered.map((r, i) => {
+                const userName = r.user && r.user.name ? escapeHtml(r.user.name) : '<span class="text-gray-400">匿名</span>';
+                const userPhone = r.user && r.user.phone ? `<span class="text-gray-400 text-xs"> ${escapeHtml(r.user.phone)}</span>` : '';
+                const submitted = fmtDate(r.submittedAt);
+                const updated = r.lastModifiedAt ? `<span title="${escapeHtml(fmtDate(r.lastModifiedAt))}">${fmtDate(r.lastModifiedAt)}</span>` : '<span class="text-gray-300">—</span>';
+                const dur = fmtSec(r.durationSec);
+                const device = escapeHtml(r.device || '—');
                 return `
                     <tr class="border-b border-[#E2E8F0] hover:bg-gray-50/50">
-                        <td class="px-4 py-3 text-sm text-gray-500">${i + 1}</td>
-                        <td class="px-4 py-3 text-sm text-gray-900">${userText}</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">${fmtDate(r.submittedAt)}</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">${fmtSec(r.durationSec)}</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">${escapeHtml(r.device || '—')}</td>
-                        <td class="px-4 py-3 text-sm text-gray-600 truncate max-w-[180px]">${escapeHtml(summary)}</td>
-                        <td class="px-4 py-3 text-right">
-                            <button onclick="openResponseDrawer('${r.id}')" class="text-accent-blue hover:text-blue-700 text-sm">查看</button>
+                        <td class="px-3 py-2 text-sm text-gray-500">${i + 1}</td>
+                        <td class="px-3 py-2 text-sm text-gray-700 whitespace-nowrap">${submitted}</td>
+                        <td class="px-3 py-2 text-sm whitespace-nowrap">${updated}</td>
+                        <td class="px-3 py-2 text-sm text-gray-900">${userName}${userPhone}</td>
+                        <td class="px-3 py-2 text-sm text-gray-500">${dur}</td>
+                        <td class="px-3 py-2 text-sm text-gray-500 whitespace-nowrap">${device}</td>
+                        ${fields.map(f => `<td class="px-3 py-2 text-sm text-gray-700 max-w-[220px] truncate" title="${escapeHtml(cellTitle(f, r))}">${formatCell(f, r)}</td>`).join('')}
+                        <td class="px-3 py-2 text-right whitespace-nowrap bg-white sticky right-0">
+                            <button onclick="openResponseDrawer('${r.id}')" class="text-accent-blue hover:text-blue-700 text-xs mr-2">查看</button>
+                            <button onclick="openResponseDrawer('${r.id}', true)" class="text-accent-amber hover:text-amber-700 text-xs">编辑</button>
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        function summarizeAnswers(answers) {
-            if (!answers) return '';
-            const ids = Object.keys(answers);
-            if (ids.length === 0) return '';
-            // 取第一题作摘要
-            const v = answers[ids[0]];
-            if (Array.isArray(v)) return v.length ? `[${v.length}项] ` + (typeof v[0] === 'string' ? v[0] : '') : '';
-            if (typeof v === 'string') return v.length > 40 ? v.slice(0, 40) + '…' : v;
+        // 单格展示（按题型）
+        function formatCell(f, r) {
+            const v = r.answers ? r.answers[f.id] : null;
+            if (v == null || v === '') return '<span class="text-gray-300">—</span>';
+            if (f.type === 'text' || f.type === 'textarea') {
+                const s = String(v);
+                return escapeHtml(s.length > 30 ? s.slice(0, 30) + '…' : s);
+            }
+            if (f.type === 'radio' || f.type === 'select') {
+                const opt = (f.options || []).find(o => o.id === v);
+                return `<span class="inline-block px-2 py-0.5 rounded bg-accent-blue/10 text-accent-blue text-xs whitespace-nowrap">${escapeHtml(opt ? opt.label : v)}</span>`;
+            }
+            if (f.type === 'checkbox') {
+                if (!Array.isArray(v) || v.length === 0) return '<span class="text-gray-300">—</span>';
+                const labels = v.map(oid => {
+                    const o = (f.options || []).find(o => o.id === oid);
+                    return o ? o.label : oid;
+                });
+                return labels.map(l => `<span class="inline-block px-2 py-0.5 rounded bg-accent-blue/10 text-accent-blue text-xs whitespace-nowrap mr-0.5">${escapeHtml(l)}</span>`).join('');
+            }
+            if (f.type === 'file') {
+                if (!Array.isArray(v) || v.length === 0) return '<span class="text-gray-300">—</span>';
+                return `<i class="fas fa-paperclip text-gray-400"></i> ${escapeHtml(v[0].name)}${v.length > 1 ? ' +' + (v.length - 1) : ''}`;
+            }
+            return escapeHtml(JSON.stringify(v));
+        }
+
+        function cellTitle(f, r) {
+            const v = r.answers ? r.answers[f.id] : null;
+            if (v == null || v === '') return '';
+            if (f.type === 'text' || f.type === 'textarea') return String(v);
+            if (f.type === 'radio' || f.type === 'select') {
+                const opt = (f.options || []).find(o => o.id === v);
+                return opt ? opt.label : v;
+            }
+            if (f.type === 'checkbox' && Array.isArray(v)) {
+                return (f.options || []).filter(o => v.includes(o.id)).map(o => o.label).join('，');
+            }
+            if (f.type === 'file' && Array.isArray(v)) {
+                return v.map(f2 => f2.name).join('，');
+            }
             return '';
         }
 
@@ -512,44 +744,81 @@
         }
 
         /* =====================================================================
-         * 答卷抽屉
+         * 答卷抽屉（查看 + 编辑）
          * ===================================================================== */
         let currentResponseId = null;
-        function openResponseDrawer(rid) {
+
+        function openResponseDrawer(rid, editMode = false) {
             currentResponseId = rid;
             const responses = loadResp();
-            const r = responses.find(x => x.id === rid);
+            const r = JSON.parse(JSON.stringify(responses.find(x => x.id === rid))); // 深拷贝避免直接改 storage
             if (!r) return;
-            document.getElementById('drawerSubtitle').textContent = `提交于 ${fmtDate(r.submittedAt)} · 用时 ${fmtSec(r.durationSec)}`;
-            document.getElementById('drawerBody').innerHTML = renderResponseBody(r);
+            drawerWorkingResponse = r;
+            drawerEditMode = editMode;
+            renderDrawerBody();
             document.getElementById('responseDrawer').classList.remove('hidden');
             setTimeout(() => {
                 document.getElementById('drawerPanel').classList.add('open');
                 document.querySelector('#responseDrawer .drawer-overlay').classList.add('open');
             }, 10);
         }
+
         function closeResponseDrawer() {
             document.getElementById('drawerPanel').classList.remove('open');
             document.querySelector('#responseDrawer .drawer-overlay').classList.remove('open');
-            setTimeout(() => { document.getElementById('responseDrawer').classList.add('hidden'); currentResponseId = null; }, 300);
+            setTimeout(() => {
+                document.getElementById('responseDrawer').classList.add('hidden');
+                currentResponseId = null;
+                drawerEditMode = false;
+                drawerWorkingResponse = null;
+            }, 300);
         }
-        function renderResponseBody(r) {
+
+        function renderDrawerBody() {
+            const r = drawerWorkingResponse;
+            if (!r) return;
+            // 标题与副标题
+            const editTitle = drawerEditMode ? '编辑答卷' : '答卷详情';
+            document.getElementById('drawerTitle').textContent = editTitle;
+            const subParts = [`提交于 ${fmtDate(r.submittedAt)}`, `用时 ${fmtSec(r.durationSec)}`];
+            if (r.lastModifiedAt) subParts.push(`修改于 ${fmtDate(r.lastModifiedAt)}`);
+            document.getElementById('drawerSubtitle').textContent = subParts.join(' · ');
+            // 操作按钮 / 底部 footer 显示
+            document.getElementById('drawerEditBtn').classList.toggle('hidden', drawerEditMode);
+            document.getElementById('drawerFooter').classList.toggle('hidden', !drawerEditMode);
+
             let html = '';
-            if (r.user) {
+            // 顶部元信息
+            html += `<div class="grid grid-cols-2 gap-3 text-xs mb-2">
+                <div class="bg-gray-50 rounded-lg px-3 py-2">
+                    <span class="text-gray-500">编号</span><br><span class="font-mono text-gray-700">${escapeHtml(r.id)}</span>
+                </div>
+                <div class="bg-gray-50 rounded-lg px-3 py-2">
+                    <span class="text-gray-500">设备</span><br><span class="text-gray-700">${escapeHtml(r.device || '—')}</span>
+                </div>
+            </div>`;
+            // 填写人
+            const showUser = q.settings && q.settings.collectUserInfo && !q.settings.anonymous;
+            if (showUser) {
                 html += `<div class="bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm">
                     <i class="fas fa-user text-blue-600"></i>
-                    <span class="ml-1">${escapeHtml(r.user.name || '匿名')}${r.user.phone ? ' · ' + escapeHtml(r.user.phone) : ''}</span>
+                    <span class="ml-1">${escapeHtml((r.user && r.user.name) || '匿名')}${(r.user && r.user.phone) ? ' · ' + escapeHtml(r.user.phone) : ''}</span>
                 </div>`;
             }
+            // 题目
             (q.fields || []).forEach(f => {
                 const v = r.answers ? r.answers[f.id] : null;
                 html += `<div>
-                    <div class="text-sm font-medium text-gray-900 mb-1">${escapeHtml(f.label)} ${f.required ? '<span class="text-accent-red">*</span>' : ''}</div>
-                    <div class="bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-700">${renderAnswerValue(f, v)}</div>
+                    <div class="text-sm font-medium text-gray-900 mb-1">
+                        ${escapeHtml(f.label)} ${f.required ? '<span class="text-accent-red">*</span>' : ''}
+                        <span class="ml-2 text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">${TYPE_LABELS[f.type] || f.type}</span>
+                    </div>
+                    ${drawerEditMode ? renderDrawerFieldInput(f, v) : `<div class="bg-gray-50 rounded-lg px-3 py-2 text-sm text-gray-700 min-h-[36px]">${renderAnswerValue(f, v)}</div>`}
                 </div>`;
             });
-            return html;
+            document.getElementById('drawerBody').innerHTML = html;
         }
+
         function renderAnswerValue(f, v) {
             if (v == null || v === '') return '<span class="text-gray-400">未填</span>';
             if (f.type === 'text' || f.type === 'textarea') return escapeHtml(v);
@@ -566,6 +835,105 @@
                 return v.map(f2 => `<div class="flex items-center gap-2"><i class="fas fa-paperclip text-gray-400"></i> ${escapeHtml(f2.name)} <span class="text-xs text-gray-400">${f2.size ? (f2.size/1024).toFixed(1)+'KB' : ''}</span></div>`).join('');
             }
             return escapeHtml(JSON.stringify(v));
+        }
+
+        // 编辑模式：渲染输入控件
+        function renderDrawerFieldInput(f, v) {
+            if (f.type === 'text' || f.type === 'textarea') {
+                const isArea = f.type === 'textarea';
+                const max = f.maxLength || 500;
+                if (isArea) {
+                    const rows = f.rows || 4;
+                    return `<textarea id="df_${f.id}" data-fid="${f.id}" data-type="textarea" maxlength="${max}" rows="${rows}"
+                                  class="w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none">${escapeHtml(v || '')}</textarea>`;
+                }
+                return `<input type="text" id="df_${f.id}" data-fid="${f.id}" data-type="text" maxlength="${max}"
+                              value="${escapeHtml(v || '')}"
+                              class="w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none">`;
+            }
+            if (f.type === 'radio' || f.type === 'select') {
+                if (f.type === 'select') {
+                    const opts = (f.options || []).map(o => `<option value="${o.id}" ${o.id === v ? 'selected' : ''}>${escapeHtml(o.label)}</option>`).join('');
+                    return `<select id="df_${f.id}" data-fid="${f.id}" data-type="select"
+                                  class="w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none">
+                        <option value="">（未选）</option>${opts}
+                    </select>`;
+                }
+                const rows = (f.options || []).map(o => `
+                    <label class="flex items-center gap-2 text-sm py-1 cursor-pointer">
+                        <input type="radio" name="df_${f.id}" data-fid="${f.id}" data-type="radio" value="${o.id}" ${o.id === v ? 'checked' : ''} class="accent-accent-blue">
+                        ${escapeHtml(o.label)}
+                    </label>`).join('');
+                return `<div class="space-y-0.5" id="df_wrap_${f.id}">${rows}</div>`;
+            }
+            if (f.type === 'checkbox') {
+                const arr = Array.isArray(v) ? v : [];
+                const rows = (f.options || []).map(o => `
+                    <label class="flex items-center gap-2 text-sm py-1 cursor-pointer">
+                        <input type="checkbox" data-fid="${f.id}" data-type="checkbox" value="${o.id}" ${arr.includes(o.id) ? 'checked' : ''} class="accent-accent-blue">
+                        ${escapeHtml(o.label)}
+                    </label>`).join('');
+                return `<div class="space-y-0.5" id="df_wrap_${f.id}">${rows}</div>`;
+            }
+            if (f.type === 'file') {
+                const list = Array.isArray(v) ? v : [];
+                return `<div class="space-y-1">
+                    ${list.map((f2, i) => `<div class="flex items-center gap-2 text-sm bg-gray-50 px-3 py-1.5 rounded">
+                        <i class="fas fa-paperclip text-gray-400"></i> ${escapeHtml(f2.name)} <span class="text-xs text-gray-400 ml-auto">只读</span>
+                    </div>`).join('')}
+                    <p class="text-xs text-gray-500 mt-1">附件不支持直接编辑。如需修改，请联系用户重新提交。</p>
+                </div>`;
+            }
+            return '<span class="text-gray-400">不支持编辑</span>';
+        }
+
+        function toggleDrawerEdit() {
+            if (!drawerWorkingResponse) return;
+            drawerEditMode = true;
+            renderDrawerBody();
+        }
+
+        function cancelDrawerEdit() {
+            // 取消 → 重新加载原始数据
+            const responses = loadResp();
+            const r = responses.find(x => x.id === currentResponseId);
+            if (r) drawerWorkingResponse = JSON.parse(JSON.stringify(r));
+            drawerEditMode = false;
+            renderDrawerBody();
+        }
+
+        function saveDrawerEdit() {
+            if (!drawerWorkingResponse) return;
+            const r = drawerWorkingResponse;
+            // 从 DOM 收集编辑后的值
+            document.querySelectorAll('[data-fid]').forEach(el => {
+                const fid = el.dataset.fid;
+                const type = el.dataset.type;
+                if (!fid) return;
+                const f = (q.fields || []).find(x => x.id === fid);
+                if (!f || f.type === 'file') return; // file 跳过
+                if (type === 'text' || type === 'textarea') {
+                    r.answers[fid] = el.value;
+                } else if (type === 'select') {
+                    r.answers[fid] = el.value || null;
+                } else if (type === 'radio') {
+                    const checked = document.querySelector(`input[name="df_${fid}"]:checked`);
+                    r.answers[fid] = checked ? checked.value : null;
+                } else if (type === 'checkbox') {
+                    const checked = Array.from(document.querySelectorAll(`input[data-fid="${fid}"]:checked`)).map(i => i.value);
+                    r.answers[fid] = checked;
+                }
+            });
+            r.lastModifiedAt = new Date().toISOString();
+            // 写回 storage
+            const responses = loadResp();
+            const idx = responses.findIndex(x => x.id === r.id);
+            if (idx >= 0) { responses[idx] = r; saveResp(responses); }
+            drawerEditMode = false;
+            renderDrawerBody();
+            // 刷新列表（更新时间列）
+            renderResponsesTable();
+            showToast('已保存修改', 'success');
         }
 
         /* =====================================================================
