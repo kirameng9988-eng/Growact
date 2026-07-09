@@ -87,6 +87,7 @@
                 <button type="button" onclick="switchTab('basic')" id="tab-basic" class="tab-btn active px-6 py-3 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]">基础信息</button>
                 <button type="button" onclick="switchTab('detail')" id="tab-detail" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">活动详情</button>
                 <button type="button" onclick="switchTab('resource')" id="tab-resource" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">资源引用</button>
+                <button type="button" onclick="switchTab('review')" id="tab-review" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">审核记录</button>
             </div>
 
             <div class="p-6">
@@ -159,6 +160,13 @@
                         <div id="detailResources" class="grid grid-cols-5 gap-3 min-h-[80px]">
                             <p class="text-sm text-gray-400 col-span-5">暂无引用资源</p>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Tab4: 审核记录 -->
+                <div id="panel-review" class="tab-panel hidden">
+                    <div id="reviewHistoryList" class="space-y-4">
+                        <p class="text-sm text-gray-400">暂无审核记录</p>
                     </div>
                 </div>
             </div>
@@ -242,7 +250,8 @@
                 pending: '<span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">待审核</span>',
                 published: '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">已发布</span>',
                 ended: '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">已结束</span>',
-                offline: '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-500">已下线</span>'
+                offline: '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-500">已下线</span>',
+                rejected: '<span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">已驳回</span>'
             };
             return statusMap[status] || status;
         }
@@ -294,6 +303,9 @@
             // 资源引用 Tab
             renderDetailResources(activity.selectedResources || []);
 
+            // 审核记录 Tab
+            renderReviewHistory(activity.reviewHistory || []);
+
             // 编辑链接
             document.getElementById('editLink').href = `activity-edit.html?id=${id}`;
             document.getElementById('editLinkBottom').href = `activity-edit.html?id=${id}`;
@@ -327,9 +339,30 @@
             }).join('');
         }
 
+        // 渲染审核记录
+        function renderReviewHistory(history) {
+            const container = document.getElementById('reviewHistoryList');
+            if (!history || history.length === 0) {
+                container.innerHTML = '<p class="text-sm text-gray-400">暂无审核记录</p>';
+                return;
+            }
+            container.innerHTML = history.map(record => `
+                <div class="border border-[#E2E8F0] rounded-xl p-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="px-2 py-1 text-xs rounded-full ${record.action === 'approved' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                            ${record.action === 'approved' ? '审核通过' : '已驳回'}
+                        </span>
+                        <span class="text-xs text-gray-400">${record.time}</span>
+                    </div>
+                    ${record.reason ? `<p class="text-sm text-gray-600 mt-2">驳回原因：${record.reason}</p>` : ''}
+                    <p class="text-xs text-gray-400 mt-2">审核人：${record.reviewer}</p>
+                </div>
+            `).join('');
+        }
+
         // Tab切换
         function switchTab(tab) {
-            ['basic', 'detail', 'resource'].forEach(t => {
+            ['basic', 'detail', 'resource', 'review'].forEach(t => {
                 document.getElementById('tab-' + t).classList.remove('active');
                 document.getElementById('tab-' + t).classList.add('border-transparent', 'text-gray-600');
                 document.getElementById('tab-' + t).classList.remove('border-[#0A61FF]', 'text-[#0A61FF]');

@@ -77,6 +77,7 @@
                         <option value="">全部状态</option>
                         <option value="published">已发布</option>
                         <option value="pending">待审核</option>
+                        <option value="rejected">已驳回</option>
                         <option value="draft">草稿</option>
                         <option value="ended">已结束</option>
                         <option value="offline">已下线</option>
@@ -184,7 +185,9 @@
             { id: 9, name: '科技创新成果展', category: 'tech', categoryName: '科技创新', status: 'pending', participants: 0, maxParticipants: 200, startTime: '2024-05-20 09:00', endTime: '2024-05-25 17:00', regStartTime: '2024-04-15 00:00', regEndTime: '2024-05-15 23:59', publishTime: '', creator: '张明远', organizer: '科技创新部', location: '展览中心', summary: '展示年度科技创新成果', tags: '科技,创新,成果展', content: '展览将分为多个展区...' },
             { id: 10, name: '心理健康讲座', category: 'education', categoryName: '教育培训', status: 'draft', participants: 0, maxParticipants: 100, startTime: '2024-04-15 15:00', endTime: '2024-04-15 17:00', regStartTime: '2024-03-20 00:00', regEndTime: '2024-04-10 23:59', publishTime: '', creator: '李晓华', organizer: '人力资源部', location: '集团总部多功能厅', summary: '关注员工心理健康', tags: '心理,健康,讲座', content: '讲座特邀心理专家主讲...' },
             { id: 11, name: '端午龙舟赛', category: 'sports', categoryName: '体育运动', status: 'published', participants: 120, maxParticipants: 150, startTime: '2024-06-10 08:00', endTime: '2024-06-10 14:00', regStartTime: '2024-05-15 00:00', regEndTime: '2024-06-05 23:59', publishTime: '2024-05-15 10:00', creator: '王建国', organizer: '工会体育部', location: '郊外湖面', summary: '传承传统文化，强身健体', tags: '龙舟,端午,团队', content: '比赛分为预赛和决赛两个阶段...' },
-            { id: 12, name: '中秋联欢晚会', category: 'culture', categoryName: '文化活动', status: 'draft', participants: 0, maxParticipants: 300, startTime: '2024-09-17 19:00', endTime: '2024-09-17 22:00', regStartTime: '2024-08-20 00:00', regEndTime: '2024-09-10 23:59', publishTime: '', creator: '李晓华', organizer: '工会', location: '集团大礼堂', summary: '共庆中秋佳节', tags: '中秋,晚会,联欢', content: '晚会节目丰富多彩...' }
+            { id: 12, name: '中秋联欢晚会', category: 'culture', categoryName: '文化活动', status: 'draft', participants: 0, maxParticipants: 300, startTime: '2024-09-17 19:00', endTime: '2024-09-17 22:00', regStartTime: '2024-08-20 00:00', regEndTime: '2024-09-10 23:59', publishTime: '', creator: '李晓华', organizer: '工会', location: '集团大礼堂', summary: '共庆中秋佳节', tags: '中秋,晚会,联欢', content: '晚会节目丰富多彩...' },
+            { id: 13, name: '年度盛典颁奖典礼', category: 'culture', categoryName: '文化活动', status: 'rejected', participants: 0, maxParticipants: 500, startTime: '2025-01-15 18:00', endTime: '2025-01-15 22:00', regStartTime: '2024-12-01 00:00', regEndTime: '2025-01-10 23:59', publishTime: '', creator: '李晓华', organizer: '集团办公室', location: '集团大礼堂', summary: '年度盛典颁奖典礼', tags: '年度,颁奖,盛典', content: '年度盛典颁奖典礼将表彰年度优秀团队和个人...', reviewHistory: [{ action: 'rejected', reason: '活动场地未确定，需补充场地租赁证明后再提交', reviewer: '审核管理员', time: '2024-11-22 10:30' }] },
+            { id: 14, name: '春节团建活动', category: 'sports', categoryName: '体育运动', status: 'rejected', participants: 0, maxParticipants: 200, startTime: '2025-01-28 09:00', endTime: '2025-01-28 17:00', regStartTime: '2024-12-15 00:00', regEndTime: '2025-01-20 23:59', publishTime: '', creator: '王建国', organizer: '工会', location: '户外拓展基地', summary: '春节团建活动', tags: '春节,团建,户外', content: '户外拓展训练，增强团队凝聚力...', reviewHistory: [{ action: 'rejected', reason: '预算超标，需重新核算成本后提交', reviewer: '审核管理员', time: '2024-12-08 15:20' }] }
         ];
 
         const STORAGE_KEY = 'activities_data';
@@ -284,7 +287,8 @@
                 pending: '<span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">待审核</span>',
                 published: '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">已发布</span>',
                 ended: '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">已结束</span>',
-                offline: '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-500">已下线</span>'
+                offline: '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-500">已下线</span>',
+                rejected: '<span class="px-2 py-1 text-xs rounded-full bg-red-100 text-red-700">已驳回</span>'
             };
             return statusMap[status] || status;
         }
