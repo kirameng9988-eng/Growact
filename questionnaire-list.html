@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>问卷管理 - 内容中台系统</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'primary-bg': '#FFFFFF',
+                        'secondary-bg': '#F8FAFC',
+                        'card-bg': '#FFFFFF',
+                        'border-dark': '#CBD5E1',
+                        'accent-blue': '#0A61FF',
+                        'accent-cyan': '#0891B2',
+                        'accent-green': '#059669',
+                        'accent-amber': '#D97706',
+                        'accent-red': '#DC2626',
+                        'text-primary': '#0F172A',
+                        'text-secondary': '#475569',
+                        'text-muted': '#94A3B8'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #F1F5F9; }
+        ::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 3px; }
+        .sidebar-menu-item:hover { background: rgba(10, 97, 255, 0.06); }
+        .sidebar-menu-item.active { background: rgba(10, 97, 255, 0.1); border-left: 3px solid #0A61FF; }
+        .table-row:hover { background: #F8FAFC; }
+        .toast { animation: slideIn 0.3s ease; }
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+    </style>
+</head>
+<body class="bg-secondary-bg text-gray-900">
+
+    <!-- 主内容区 -->
+    <main class="p-6">
+        <!-- 页面标题 -->
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-2xl font-semibold">问卷管理</h1>
+                <p class="text-gray-500 mt-1">创建、发布并管理所有问卷，收集用户反馈</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="refreshList()" class="px-4 py-2.5 border border-[#E2E8F0] rounded-xl hover:border-accent-blue transition-colors flex items-center gap-2">
+                    <i class="fas fa-sync-alt"></i>
+                    刷新
+                </button>
+                <a href="questionnaire-create.html" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors flex items-center gap-2">
+                    <i class="fas fa-plus"></i>
+                    新建问卷
+                </a>
+            </div>
+        </div>
+
+        <!-- 筛选栏 -->
+        <div class="bg-white rounded-xl p-4 mb-6 border border-[#E2E8F0]">
+            <div class="flex items-center gap-4 flex-wrap">
+                <div class="flex items-center gap-2">
+                    <select id="filterCategory" onchange="filterList()" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                        <option value="">全部分类</option>
+                        <option value="tech">科技创新</option>
+                        <option value="culture">文化活动</option>
+                        <option value="sports">体育运动</option>
+                        <option value="education">教育培训</option>
+                        <option value="other">其他</option>
+                    </select>
+                    <select id="filterStatus" onchange="filterList()" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                        <option value="">全部状态</option>
+                        <option value="draft">草稿</option>
+                        <option value="collecting">收集中</option>
+                        <option value="stopped">已停止</option>
+                        <option value="ended">已结束</option>
+                    </select>
+                    <select id="filterCreator" onchange="filterList()" class="bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm text-gray-700 focus:border-accent-blue focus:outline-none">
+                        <option value="">全部创建人</option>
+                        <option>张明远</option>
+                        <option>李晓华</option>
+                        <option>王建国</option>
+                        <option>陈思远</option>
+                    </select>
+                </div>
+                <div class="flex-1"></div>
+                <div class="relative">
+                    <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"></i>
+                    <input type="text" id="searchInput" oninput="filterList()" placeholder="搜索问卷标题..." class="bg-white border border-[#E2E8F0] rounded-lg pl-10 pr-4 py-2 text-sm text-gray-700 placeholder-gray-400 focus:border-accent-blue focus:outline-none w-64">
+                </div>
+            </div>
+        </div>
+
+        <!-- 批量操作栏 -->
+        <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-2">
+                <input type="checkbox" id="selectAll" onchange="toggleSelectAll()" class="w-4 h-4 rounded border-[#E2E8F0] bg-primary-bg accent-accent-blue">
+                <label for="selectAll" class="text-sm text-gray-600">全选</label>
+                <span id="selectedCount" class="text-sm text-gray-500 ml-4">已选择 0 项</span>
+            </div>
+            <div class="flex items-center gap-3">
+                <button onclick="batchPublish()" class="px-4 py-2 text-sm text-accent-green hover:bg-accent-green/10 rounded-lg transition-colors">批量发布</button>
+                <button onclick="batchStop()" class="px-4 py-2 text-sm text-accent-amber hover:bg-accent-amber/10 rounded-lg transition-colors">批量停止</button>
+                <button onclick="batchDelete()" class="px-4 py-2 text-sm text-accent-red hover:bg-accent-red/10 rounded-lg transition-colors">批量删除</button>
+            </div>
+        </div>
+
+        <!-- 问卷列表 -->
+        <div class="bg-white rounded-xl border border-[#E2E8F0] overflow-hidden">
+            <table class="w-full">
+                <thead>
+                    <tr class="text-left text-gray-500 text-sm border-b border-[#E2E8F0] bg-primary-bg/50">
+                        <th class="px-4 py-3 font-medium w-10"></th>
+                        <th class="px-4 py-3 font-medium">问卷标题</th>
+                        <th class="px-4 py-3 font-medium w-20">状态</th>
+                        <th class="px-4 py-3 font-medium w-16">题目数</th>
+                        <th class="px-4 py-3 font-medium w-16">答卷数</th>
+                        <th class="px-4 py-3 font-medium w-28">创建人</th>
+                        <th class="px-4 py-3 font-medium w-32">更新时间</th>
+                        <th class="px-4 py-3 font-medium w-56 text-right">操作</th>
+                    </tr>
+                </thead>
+                <tbody id="questionnaireTableBody">
+                    <!-- 通过JS渲染 -->
+                </tbody>
+            </table>
+            <!-- 分页 -->
+            <div class="flex items-center justify-between px-4 py-3 border-t border-[#E2E8F0]">
+                <span id="paginationInfo" class="text-sm text-gray-500">显示 1-10 条，共 0 条</span>
+                <div class="flex items-center gap-2">
+                    <button onclick="goToPage(currentPage - 1)" id="prevPage" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm disabled:opacity-50">上一页</button>
+                    <button id="pageBtn1" onclick="goToPage(1)" class="px-3 py-1 rounded bg-accent-blue text-white text-sm">1</button>
+                    <button id="pageBtn2" onclick="goToPage(2)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm">2</button>
+                    <button id="nextPage" onclick="goToPage(currentPage + 1)" class="px-3 py-1 rounded border border-[#E2E8F0] text-gray-500 hover:text-white hover:border-accent-blue transition-colors text-sm disabled:opacity-50">下一页</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast容器 -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 flex flex-col gap-2"></div>
+
+    <!-- 确认删除弹窗 -->
+    <div id="deleteModal" class="fixed inset-0 bg-black/70 z-[90] hidden items-center justify-center">
+        <div class="bg-white rounded-2xl w-[450px] border border-[#E2E8F0] shadow-2xl">
+            <div class="flex items-center gap-4 p-6 border-b border-[#E2E8F0]">
+                <div class="w-12 h-12 rounded-full bg-accent-red/20 flex items-center justify-center">
+                    <i class="fas fa-exclamation-triangle text-accent-red text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium">确认删除</h3>
+                    <p class="text-sm text-gray-500 mt-1">删除后无法恢复，请谨慎操作</p>
+                </div>
+            </div>
+            <div class="p-6">
+                <p class="text-sm text-gray-600">确定要删除以下问卷吗？</p>
+                <p id="deleteTitle" class="text-sm font-medium mt-2 text-gray-900"></p>
+                <p id="deleteWarning" class="text-xs text-accent-red mt-2 hidden"></p>
+            </div>
+            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0]">
+                <button onclick="closeModal('deleteModal')" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 transition-colors">取消</button>
+                <button id="confirmDeleteBtn" class="px-5 py-2.5 bg-accent-red text-white rounded-xl hover:bg-red-600 transition-colors">确认删除</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* =====================================================================
+         * 默认 Mock 问卷数据（5 条，覆盖各种状态）
+         * ===================================================================== */
+        const defaultQuestionnaires = [
+            {
+                id: 'q_demo_001',
+                title: '2024 上海数据开放创新应用大赛 参赛意向调研',
+                description: '为更好筹备本届大赛，请您花 2 分钟填写以下信息。',
+                cover: '',
+                category: 'tech',
+                categoryName: '科技创新',
+                status: 'collecting',
+                fields: [
+                    { id: 'f_1', type: 'text', label: '姓名', required: true, placeholder: '请输入您的真实姓名', maxLength: 20 },
+                    { id: 'f_2', type: 'radio', label: '您的角色', required: true, options: [
+                        { id: 'o_a', label: '开发者' }, { id: 'o_b', label: '产品经理' }, { id: 'o_c', label: '设计师' }, { id: 'o_d', label: '其他' }
+                    ]},
+                    { id: 'f_3', type: 'checkbox', label: '您感兴趣的赛道（多选）', required: true, maxSelected: 3, options: [
+                        { id: 'o_a', label: '智慧城市' }, { id: 'o_b', label: '金融科技' }, { id: 'o_c', label: '医疗健康' }, { id: 'o_d', label: '工业制造' }, { id: 'o_e', label: '教育文化' }
+                    ]},
+                    { id: 'f_4', type: 'textarea', label: '对本届大赛的建议', required: false, maxLength: 500 },
+                    { id: 'f_5', type: 'file', label: '上传个人简历 / 作品集（可选）', required: false, accept: '.pdf,.png,.jpg,.zip', maxSizeMB: 20, maxFiles: 1 }
+                ],
+                settings: { anonymous: false, allowMultiple: false, collectUserInfo: true, deadline: '2026-09-30 23:59', thankYouMessage: '感谢您的参与！' },
+                createdBy: '张明远',
+                createdAt: '2026-07-09T10:30:00+08:00',
+                updatedAt: '2026-07-09T10:30:00+08:00',
+                publishedAt: '2026-07-09T11:00:00+08:00',
+                responseCount: 18
+            },
+            {
+                id: 'q_demo_002',
+                title: '员工培训需求调研',
+                description: '了解大家对培训内容、形式、频率的真实想法，帮我们做得更好。',
+                cover: '',
+                category: 'education',
+                categoryName: '教育培训',
+                status: 'collecting',
+                fields: [
+                    { id: 'f_1', type: 'radio', label: '您希望的培训频率', required: true, options: [
+                        { id: 'o_a', label: '每周一次' }, { id: 'o_b', label: '每月一次' }, { id: 'o_c', label: '每季度一次' }, { id: 'o_d', label: '不一定' }
+                    ]},
+                    { id: 'f_2', type: 'checkbox', label: '您感兴趣的培训方向', required: true, options: [
+                        { id: 'o_a', label: '专业技能' }, { id: 'o_b', label: '管理能力' }, { id: 'o_c', label: '通用素养' }, { id: 'o_d', label: '行业前沿' }
+                    ]},
+                    { id: 'f_3', type: 'textarea', label: '其他建议', required: false, maxLength: 300 }
+                ],
+                settings: { anonymous: true, allowMultiple: false, collectUserInfo: false, deadline: '2026-08-31 23:59', thankYouMessage: '已收到，谢谢！' },
+                createdBy: '李晓华',
+                createdAt: '2026-07-05T09:00:00+08:00',
+                updatedAt: '2026-07-05T09:00:00+08:00',
+                publishedAt: '2026-07-05T10:00:00+08:00',
+                responseCount: 42
+            },
+            {
+                id: 'q_demo_003',
+                title: '2025 春节团建活动报名',
+                description: '为了让大家度过一个难忘的春节，请填写以下信息。',
+                cover: '',
+                category: 'culture',
+                categoryName: '文化活动',
+                status: 'draft',
+                fields: [
+                    { id: 'f_1', type: 'text', label: '姓名', required: true, maxLength: 20 },
+                    { id: 'f_2', type: 'radio', label: '参加意向', required: true, options: [
+                        { id: 'o_a', label: '一定参加' }, { id: 'o_b', label: '可能参加' }, { id: 'o_c', label: '不参加' }
+                    ]}
+                ],
+                settings: { anonymous: false, allowMultiple: false, collectUserInfo: true, deadline: '', thankYouMessage: '感谢您的反馈。' },
+                createdBy: '王建国',
+                createdAt: '2026-07-08T15:00:00+08:00',
+                updatedAt: '2026-07-08T15:00:00+08:00',
+                publishedAt: null,
+                responseCount: 0
+            },
+            {
+                id: 'q_demo_004',
+                title: '团建活动满意度反馈',
+                description: '感谢您参加此次团建，请花费 1 分钟告诉我们您的真实感受。',
+                cover: '',
+                category: 'culture',
+                categoryName: '文化活动',
+                status: 'ended',
+                fields: [
+                    { id: 'f_1', type: 'radio', label: '整体满意度', required: true, options: [
+                        { id: 'o_a', label: '非常满意' }, { id: 'o_b', label: '满意' }, { id: 'o_c', label: '一般' }, { id: 'o_d', label: '不满意' }
+                    ]},
+                    { id: 'f_2', type: 'textarea', label: '改进建议', required: false, maxLength: 500 }
+                ],
+                settings: { anonymous: true, allowMultiple: false, collectUserInfo: false, deadline: '2026-06-30 23:59', thankYouMessage: '' },
+                createdBy: '陈思远',
+                createdAt: '2026-06-01T10:00:00+08:00',
+                updatedAt: '2026-06-30T10:00:00+08:00',
+                publishedAt: '2026-06-01T10:00:00+08:00',
+                responseCount: 56
+            },
+            {
+                id: 'q_demo_005',
+                title: '网络安全宣传周反馈',
+                description: '已结束 — 收集大家对网络安全周活动的反馈。',
+                cover: '',
+                category: 'tech',
+                categoryName: '科技创新',
+                status: 'stopped',
+                fields: [
+                    { id: 'f_1', type: 'text', label: '所在部门', required: true, maxLength: 30 },
+                    { id: 'f_2', type: 'radio', label: '是否参与线下活动', required: true, options: [
+                        { id: 'o_a', label: '是' }, { id: 'o_b', label: '否' }
+                    ]}
+                ],
+                settings: { anonymous: false, allowMultiple: false, collectUserInfo: true, deadline: '', thankYouMessage: '' },
+                createdBy: '张明远',
+                createdAt: '2026-04-01T09:00:00+08:00',
+                updatedAt: '2026-04-20T09:00:00+08:00',
+                publishedAt: '2026-04-01T10:00:00+08:00',
+                responseCount: 12
+            }
+        ];
+
+        const STORAGE_KEY = 'questionnaires_data';
+        const RESPONSES_KEY = 'questionnaire_responses';
+
+        /* =====================================================================
+         * 数据存取（与 activity-list.html 一致：sessionStorage）
+         * ===================================================================== */
+        function loadQuestionnaires() {
+            try {
+                const stored = sessionStorage.getItem(STORAGE_KEY);
+                if (stored) return JSON.parse(stored);
+            } catch (e) {}
+            try {
+                sessionStorage.setItem(STORAGE_KEY, JSON.stringify(defaultQuestionnaires));
+            } catch (e) {}
+            return JSON.parse(JSON.stringify(defaultQuestionnaires));
+        }
+
+        function saveQuestionnaires(list) {
+            try {
+                sessionStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+            } catch (e) {}
+        }
+
+        function loadResponses() {
+            try {
+                const stored = sessionStorage.getItem(RESPONSES_KEY);
+                if (stored) return JSON.parse(stored);
+            } catch (e) {}
+            return [];
+        }
+
+        function countResponsesFor(questionnaireId) {
+            // 优先统计 sessionStorage 中的答卷；fallback 到 mock 数据中的 responseCount
+            const responses = loadResponses();
+            const matched = responses.filter(r => r.questionnaireId === questionnaireId).length;
+            if (matched > 0) return matched;
+            const q = questionnaires.find(q => q.id === questionnaireId);
+            return q ? (q.responseCount || 0) : 0;
+        }
+
+        let questionnaires = loadQuestionnaires();
+        let currentPage = 1;
+        const PAGE_SIZE = 10;
+        let selectedIds = [];
+
+        /* =====================================================================
+         * 页面初始化
+         * ===================================================================== */
+        document.addEventListener('DOMContentLoaded', function () {
+            renderTable();
+        });
+
+        /* =====================================================================
+         * 渲染
+         * ===================================================================== */
+        function renderTable() {
+            questionnaires = loadQuestionnaires();
+            const tbody = document.getElementById('questionnaireTableBody');
+            const filtered = getFiltered();
+            const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+            if (currentPage > totalPages) currentPage = totalPages;
+            const start = (currentPage - 1) * PAGE_SIZE;
+            const end = Math.min(start + PAGE_SIZE, filtered.length);
+            const pageItems = filtered.slice(start, end);
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = `
+                    <tr><td colspan="8" class="px-4 py-16 text-center text-gray-400">
+                        <i class="fas fa-clipboard-list text-4xl mb-3 block text-gray-300"></i>
+                        暂无问卷数据，<a href="questionnaire-create.html" class="text-accent-blue hover:underline">立即创建</a>
+                    </td></tr>
+                `;
+            } else {
+                tbody.innerHTML = pageItems.map(q => `
+                    <tr class="table-row border-b border-[#E2E8F0]">
+                        <td class="px-4 py-3">
+                            <input type="checkbox" class="w-4 h-4 rounded border-[#E2E8F0] q-checkbox" data-id="${q.id}" onchange="updateSelectedCount()">
+                        </td>
+                        <td class="px-4 py-3">
+                            <div class="font-medium text-gray-900">${escapeHtml(q.title)}</div>
+                            <div class="text-xs text-gray-500 mt-0.5">${escapeHtml((q.description || '').slice(0, 40))}${(q.description || '').length > 40 ? '…' : ''}</div>
+                        </td>
+                        <td class="px-4 py-3">${getStatusBadge(q.status)}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">${(q.fields || []).length}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">${countResponsesFor(q.id)}</td>
+                        <td class="px-4 py-3 text-sm text-gray-600">${escapeHtml(q.createdBy || '—')}</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">${formatDateTime(q.updatedAt)}</td>
+                        <td class="px-4 py-3 text-right">
+                            <div class="flex items-center justify-end gap-2">
+                                <a href="questionnaire-detail.html?id=${q.id}" class="text-accent-blue hover:text-blue-700 text-sm" title="详情">详情</a>
+                                <a href="questionnaire-detail.html?id=${q.id}&tab=responses" class="text-accent-cyan hover:text-cyan-700 text-sm" title="答卷">答卷</a>
+                                <a href="questionnaire-create.html?id=${q.id}" class="text-accent-amber hover:text-amber-700 text-sm" title="编辑">编辑</a>
+                                <button onclick="deleteQuestionnaire('${q.id}')" class="text-accent-red hover:text-red-700 text-sm" title="删除">删除</button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            }
+
+            // 分页信息
+            const total = filtered.length;
+            document.getElementById('paginationInfo').textContent =
+                total === 0 ? `共 0 条` : `显示 ${start + 1}-${end} 条，共 ${total} 条`;
+            // 分页按钮显隐
+            document.getElementById('prevPage').disabled = currentPage <= 1;
+            document.getElementById('nextPage').disabled = currentPage >= totalPages;
+            document.getElementById('pageBtn1').classList.toggle('bg-accent-blue', totalPages >= 1);
+            document.getElementById('pageBtn1').classList.toggle('text-white', totalPages >= 1);
+            document.getElementById('pageBtn1').style.display = totalPages >= 1 ? '' : 'none';
+            document.getElementById('pageBtn2').style.display = totalPages >= 2 ? '' : 'none';
+        }
+
+        function getFiltered() {
+            const search = (document.getElementById('searchInput').value || '').toLowerCase();
+            const category = document.getElementById('filterCategory').value;
+            const status = document.getElementById('filterStatus').value;
+            const creator = document.getElementById('filterCreator').value;
+
+            return questionnaires.filter(q => {
+                if (search && !(q.title || '').toLowerCase().includes(search)) return false;
+                if (category && q.category !== category) return false;
+                if (status && q.status !== status) return false;
+                if (creator && q.createdBy !== creator) return false;
+                return true;
+            });
+        }
+
+        function filterList() {
+            currentPage = 1;
+            renderTable();
+        }
+
+        /* =====================================================================
+         * 状态徽章 / 工具函数
+         * ===================================================================== */
+        function getStatusBadge(status) {
+            const map = {
+                draft:      '<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600">草稿</span>',
+                collecting: '<span class="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">收集中</span>',
+                stopped:    '<span class="px-2 py-1 text-xs rounded-full bg-amber-100 text-amber-700">已停止</span>',
+                ended:      '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">已结束</span>'
+            };
+            return map[status] || `<span class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-600">${escapeHtml(status || '')}</span>`;
+        }
+
+        function escapeHtml(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function formatDateTime(s) {
+            if (!s) return '—';
+            // 把 '2026-07-09T10:30:00+08:00' 显示为 '2026-07-09 10:30'
+            const m = String(s).match(/^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})/);
+            if (m) return `${m[1]} ${m[2]}`;
+            return String(s).substring(0, 16);
+        }
+
+        /* =====================================================================
+         * 分页 / 刷新
+         * ===================================================================== */
+        function goToPage(page) {
+            const filtered = getFiltered();
+            const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderTable();
+        }
+
+        function refreshList() {
+            showToast('列表已刷新', 'success');
+            renderTable();
+        }
+
+        /* =====================================================================
+         * 删除（单条 / 批量）
+         * ===================================================================== */
+        function deleteQuestionnaire(id) {
+            const q = questionnaires.find(q => q.id === id);
+            if (!q) return;
+            const respCount = countResponsesFor(id);
+
+            document.getElementById('deleteTitle').textContent = q.title;
+            const warnEl = document.getElementById('deleteWarning');
+            if (respCount > 0) {
+                warnEl.textContent = `该问卷下还有 ${respCount} 条答卷，删除后无法恢复`;
+                warnEl.classList.remove('hidden');
+            } else {
+                warnEl.classList.add('hidden');
+            }
+            document.getElementById('confirmDeleteBtn').onclick = function () {
+                questionnaires = questionnaires.filter(q => q.id !== id);
+                saveQuestionnaires(questionnaires);
+                // 同时清除该问卷下的答卷
+                const responses = loadResponses().filter(r => r.questionnaireId !== id);
+                try { sessionStorage.setItem(RESPONSES_KEY, JSON.stringify(responses)); } catch (e) {}
+                closeModal('deleteModal');
+                showToast('问卷已删除', 'success');
+                renderTable();
+            };
+            openModal('deleteModal');
+        }
+
+        /* =====================================================================
+         * 批量操作
+         * ===================================================================== */
+        function toggleSelectAll() {
+            const checked = document.getElementById('selectAll').checked;
+            document.querySelectorAll('.q-checkbox').forEach(cb => { cb.checked = checked; });
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            selectedIds = Array.from(document.querySelectorAll('.q-checkbox:checked')).map(cb => cb.dataset.id);
+            document.getElementById('selectedCount').textContent = `已选择 ${selectedIds.length} 项`;
+        }
+
+        function batchPublish() {
+            if (selectedIds.length === 0) { showToast('请先选择问卷', 'warning'); return; }
+            const now = new Date().toISOString();
+            selectedIds.forEach(id => {
+                const q = questionnaires.find(q => q.id === id);
+                if (q && q.status === 'draft') {
+                    q.status = 'collecting';
+                    q.publishedAt = now;
+                }
+            });
+            saveQuestionnaires(questionnaires);
+            showToast(`已发布 ${selectedIds.length} 份问卷`, 'success');
+            renderTable();
+        }
+
+        function batchStop() {
+            if (selectedIds.length === 0) { showToast('请先选择问卷', 'warning'); return; }
+            selectedIds.forEach(id => {
+                const q = questionnaires.find(q => q.id === id);
+                if (q && q.status === 'collecting') q.status = 'stopped';
+            });
+            saveQuestionnaires(questionnaires);
+            showToast(`已停止 ${selectedIds.length} 份问卷收集`, 'success');
+            renderTable();
+        }
+
+        function batchDelete() {
+            if (selectedIds.length === 0) { showToast('请先选择问卷', 'warning'); return; }
+            document.getElementById('deleteTitle').textContent = `已选择 ${selectedIds.length} 份问卷`;
+            document.getElementById('deleteWarning').classList.add('hidden');
+            document.getElementById('confirmDeleteBtn').onclick = function () {
+                questionnaires = questionnaires.filter(q => !selectedIds.includes(q.id));
+                saveQuestionnaires(questionnaires);
+                const responses = loadResponses().filter(r => !selectedIds.includes(r.questionnaireId));
+                try { sessionStorage.setItem(RESPONSES_KEY, JSON.stringify(responses)); } catch (e) {}
+                closeModal('deleteModal');
+                showToast(`已删除 ${selectedIds.length} 份问卷`, 'success');
+                selectedIds = [];
+                updateSelectedCount();
+                renderTable();
+            };
+            openModal('deleteModal');
+        }
+
+        /* =====================================================================
+         * 弹窗 / Toast
+         * ===================================================================== */
+        function openModal(modalId) {
+            const el = document.getElementById(modalId);
+            el.classList.remove('hidden');
+            el.classList.add('flex');
+        }
+
+        function closeModal(modalId) {
+            const el = document.getElementById(modalId);
+            el.classList.add('hidden');
+            el.classList.remove('flex');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            const bgColors = {
+                success: 'bg-accent-green',
+                error: 'bg-accent-red',
+                warning: 'bg-accent-amber'
+            };
+            const icons = {
+                success: 'fa-check-circle',
+                error: 'fa-exclamation-circle',
+                warning: 'fa-exclamation-triangle'
+            };
+            toast.className = `toast ${bgColors[type]} text-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3`;
+            toast.innerHTML = `<i class="fas ${icons[type]}"></i><span class="text-sm">${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transform = 'translateX(100%)';
+                toast.style.transition = 'all 0.3s ease';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+
+
+<!-- 浮动演示链接组件 -->
+<style>
+#demo-links-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s}
+#demo-links-overlay.active{opacity:1;pointer-events:auto}
+#demo-links-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+#demo-links-panel{display:flex;flex-direction:column;gap:6px;transform:translateY(16px) scale(.95);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);transform-origin:bottom right}
+#demo-links-panel.active{transform:translateY(0) scale(1);opacity:1;pointer-events:auto}
+.demo-link-btn{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;color:#0f172a;font-size:14px;font-weight:450;text-decoration:none;white-space:nowrap;box-shadow:0 2px 12px rgba(0,0,0,.08);transition:all .2s;min-width:200px}
+.demo-link-btn:hover{border-color:#3b82f6;box-shadow:0 4px 16px rgba(59,130,246,.18);transform:translateX(-4px);color:#3b82f6}
+.demo-link-btn:active{transform:translateX(-2px) scale(.98)}
+.demo-link-btn .link-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.demo-link-btn .link-icon.blue{background:#dbeafe;color:#2563eb}
+.demo-link-btn .link-icon.purple{background:#ede9fe;color:#7c3aed}
+.demo-link-btn .link-icon.green{background:#d1fae5;color:#059669}
+.demo-link-btn .link-icon.orange{background:#ffedd5;color:#ea580c}
+.demo-link-btn .link-icon.red{background:#fee2e2;color:#dc2626}
+#demo-links-toggle{display:flex;align-items:center;gap:8px;padding:12px 20px;background:linear-gradient(135deg,#0a61ff 0%,#3b82f6 100%);color:#fff;border:none;border-radius:12px;font-size:14px;font-weight:500;cursor:pointer;box-shadow:0 4px 20px rgba(10,97,255,.35);transition:all .2s;white-space:nowrap}
+#demo-links-toggle:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(10,97,255,.45)}
+#demo-links-toggle:active{transform:translateY(0)}
+#demo-links-toggle .toggle-icon{transition:transform .3s}
+#demo-links-toggle.expanded .toggle-icon{transform:rotate(180deg)}
+#demo-links-toggle .toggle-label{opacity:1;transition:opacity .2s}
+</style>
+<div id="demo-links-overlay" onclick="toggleDemoLinks(false)"></div>
+<div id="demo-links-container">
+  <div id="demo-links-panel">
+    <a href="portal.html" target="_blank" class="demo-link-btn"><span class="link-icon blue"><i class="fas fa-cogs"></i></span><span>运营侧活动运营中心</span></a>
+    <a href="activity-zone/index.html" target="_blank" class="demo-link-btn"><span class="link-icon purple"><i class="fas fa-users"></i></span><span>用户侧活动专区</span></a>
+    <a href="mobimobile-Activity-zone/index.html" target="_blank" class="demo-link-btn"><span class="link-icon green"><i class="fas fa-mobile-alt"></i></span><span>H5手机端用户侧</span></a>
+    <a href="h5-operator-activity/index.html" target="_blank" class="demo-link-btn"><span class="link-icon red"><i class="fas fa-mobile-screen"></i></span><span>H5手机端运营侧</span></a>
+    <a href="h5-checkin/index.html" target="_blank" class="demo-link-btn"><span class="link-icon orange"><i class="fas fa-calendar-check"></i></span><span>签到页面</span></a>
+  </div>
+  <button id="demo-links-toggle" onclick="toggleDemoLinks()"><i class="fas fa-link"></i><span class="toggle-label">演示链接</span><i class="fas fa-chevron-up toggle-icon"></i></button>
+</div>
+<script>function toggleDemoLinks(e){var t=document.getElementById("demo-links-overlay"),n=document.getElementById("demo-links-panel"),r=document.getElementById("demo-links-toggle");if(!t||!n||!r)return;var i=r.classList.contains("expanded"),a=void 0!==e?e:!i;a?(t.classList.add("active"),n.classList.add("active"),r.classList.add("expanded")):(t.classList.remove("active"),n.classList.remove("active"),r.classList.remove("expanded"))}</script>
+
+
+
+</body>
+</html>
