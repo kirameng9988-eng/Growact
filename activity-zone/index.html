@@ -402,8 +402,12 @@
             // 所有活动列表 - 20+活动覆盖所有状态组合
             allActivities: [
                 // ========== 报名中 ==========
-                { id: 101, title: '2024上海数据开放创新应用大赛', time: '2024-10-15 至 12-20', location: '上海世博中心', activityStatus: 'registration', userStatus: 'not_registered', registrations: 1256, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
-                { id: 102, title: '数据资产入表与评估培训', time: '2024-11-12', location: '线上直播', activityStatus: 'registration', userStatus: 'pending', registrations: 892, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop' },
+                { id: 101, title: '2024上海数据开放创新应用大赛', time: '2024-10-15 至 12-20', location: '上海世博中心', activityStatus: 'registration', userStatus: 'not_registered', registrations: 1256, cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop',
+                  linkedQuestionnaires: [{ id: 'q_demo_001', title: '上海数据开放创新应用大赛 参赛意向调研', mode: 'registration_extra' }]
+                },
+                { id: 102, title: '数据资产入表与评估培训', time: '2024-11-12', location: '线上直播', activityStatus: 'registration', userStatus: 'pending', registrations: 892, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop',
+                  linkedQuestionnaires: [{ id: 'q_demo_002', title: '员工培训需求调研', mode: 'standalone' }]
+                },
                 { id: 103, title: '数据交易合规与风险管理', time: '2024-11-18', location: '线上直播', activityStatus: 'registration', userStatus: 'approved', registrations: 634, cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
                 // ========== 报名截止 ==========
                 { id: 104, title: '公共数据开放应用案例分享会', time: '2024-11-15', location: '上海数据中心', activityStatus: 'registration_closed', userStatus: 'not_registered', registrations: 356, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop' },
@@ -416,7 +420,9 @@
                 { id: 109, title: 'AI公共数据开放培训会', time: '2024-11-0509:00', location: '上海数据交易所', activityStatus: 'ongoing', userStatus: 'pending_signin', registrations: 234, cover: 'https://images.unsplash.com/photo-1557804506-669a67965ba0?w=400&h=250&fit=crop' },
                 { id: 110, title: '数据安全工程师认证培训', time: '2024-11-06 14:00', location: '线上直播', activityStatus: 'ongoing', userStatus: 'signed', signInTime: '09:23', registrations: 189, cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop' },
                 // ========== 已结束 ==========
-                { id: 111, title: '2024数据要素市场建设峰会', time: '2024-09-28 09:00', location: '上海国际会议中心', activityStatus: 'ended', userStatus: 'signed', signInTime: '09:15', registrations: 356, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop', hasMaterials: true },
+                { id: 111, title: '2024数据要素市场建设峰会', time: '2024-09-28 09:00', location: '上海国际会议中心', activityStatus: 'ended', userStatus: 'signed', signInTime: '09:15', registrations: 356, cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop', hasMaterials: true,
+                  linkedQuestionnaires: [{ id: 'q_demo_004', title: '团建活动满意度反馈', mode: 'post_event' }]
+                },
                 { id: 112, title: '数据安全法实施三周年研讨会', time: '2024-09-15 14:00', location: '线上直播', activityStatus: 'ended', userStatus: 'absent', registrations: 245, cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop', hasMaterials: true },
                 { id: 113, title: '公共数据开放应用大赛颁奖典礼', time: '2024-08-20 10:00', location: '上海世博中心', activityStatus: 'ended', userStatus: 'signed', signInTime: '10:05', registrations: 567, cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop', hasMaterials: false },
                 { id: 114, title: '数据资产入表实务操作班', time: '2024-11-12 14:00', location: '上海数据交易所', activityStatus: 'ended', userStatus: 'signed', signInTime: '14:10', registrations: 89, cover: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=400&h=250&fit=crop', hasMaterials: true },
@@ -473,9 +479,13 @@
                 { id: 107, title: '数据要素市场化配置改革培训班', time: '2024-11-10 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'pending', signInTime: null, activityStatus: 'upcoming', activityStatusText: '即将开始', cover: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=400&h=250&fit=crop' },
                 { id: 103, title: '数据交易合规与风险管理', time: '2024-11-18 14:00', location: '线上直播', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'pending', signInTime: null, activityStatus: 'registration', activityStatusText: '报名中', cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop' },
                 // 已签到 3条
-                { id: 110, title: '数据安全工程师认证培训', time: '2024-11-06 14:00', location: '线上直播', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '09:23', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop' },
+                { id: 110, title: '数据安全工程师认证培训', time: '2024-11-06 14:00', location: '线上直播', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '09:23', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=400&h=250&fit=crop',
+                  linkedQuestionnaires: [{ id: 'q_demo_004', title: '团建活动满意度反馈', mode: 'post_event' }]
+                },
                 { id: 106, title: '可信数据空间建设研讨会', time: '2024-11-08 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '13:55', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
-                { id: 111, title: '2024数据要素市场建设峰会', time: '2024-09-28 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '08:58', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop' },
+                { id: 111, title: '2024数据要素市场建设峰会', time: '2024-09-28 09:00', location: '上海国际会议中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '08:58', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1559225120-d6e0a2a8e1a8?w=400&h=250&fit=crop',
+                  linkedQuestionnaires: [{ id: 'q_demo_004', title: '团建活动满意度反馈', mode: 'post_event' }]
+                },
                 // 已结束 4条
                 { id: 112, title: '数据安全法实施三周年研讨会', time: '2024-09-15 14:00', location: '线上直播', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'absent', signInTime: null, activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1591115765373-5207764f72e7?w=400&h=250&fit=crop', hasMaterials: true },
                 { id: 113, title: '公共数据开放应用大赛颁奖典礼', time: '2024-08-20 10:00', location: '上海世博中心', applyStatus: 'approved', applyStatusText: '已通过', signInStatus: 'signed', signInTime: '10:05', activityStatus: 'ended', activityStatusText: '已结束', cover: 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=400&h=250&fit=crop', hasMaterials: false },
@@ -496,6 +506,10 @@
                 description: '上海数据开放创新应用大赛是上海市数据局主办的重要赛事活动，旨在激发全社会对数据要素创新应用的热情，推动数据要素市场化配置改革。大赛设置多个赛道，覆盖智慧城市、数字政务、金融科技、医疗健康等领域，获奖团队将获得丰厚奖金及产业孵化支持。',
                 quota: { total: 2000, registered: 1256 },
                 deadline: '2024-11-30',
+                // 关联问卷 — registration_extra 模式
+                linkedQuestionnaires: [
+                    { id: 'q_demo_001', title: '上海数据开放创新应用大赛 参赛意向调研', mode: 'registration_extra' }
+                ],
                 guests: [
                     { name: '王部长', title: '上海市数据局 局长', avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face' },
                     { name: '李院士', title: '中国科学院 院士', avatar: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face' },
@@ -1639,20 +1653,9 @@
                 `;
             }
 
-            // 已签到状态
-            if (activity.signInStatus === 'signed') {
-                return `
-                    <button onclick="event.stopPropagation(); navigateTo('detail', ${activity.id})" class="flex-1 py-2.5 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors font-medium">
-                        <i class="fas fa-eye mr-1.5"></i>查看详情
-                    </button>
-                    <button class="flex-1 py-2.5 text-sm bg-green-500 text-white rounded-lg font-medium cursor-default opacity-80">
-                        <i class="fas fa-check-circle mr-1.5"></i>签到成功
-                    </button>
-                `;
-            }
-
-            // 已结束状态
+            // 已结束状态（优先级高于"已签到"，结束活动不再显示签到按钮）
             if (activity.activityStatus === 'ended') {
+                const pe = (activity.linkedQuestionnaires || []).filter(i => i.mode === 'post_event');
                 return `
                     <button onclick="event.stopPropagation(); navigateTo('detail', ${activity.id})" class="flex-1 py-2.5 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors font-medium">
                         <i class="fas fa-play-circle mr-1.5"></i>查看回顾
@@ -1662,6 +1665,25 @@
                             <i class="fas fa-download mr-1.5"></i>下载资料
                         </button>
                     ` : ''}
+                    ${pe.length > 0 ? `
+                        <a href="questionnaire-fill.html?id=${pe[0].id}&from=myactivity&id=${activity.id}" target="_blank"
+                           onclick="event.stopPropagation()"
+                           class="flex-1 py-2.5 text-sm bg-green-50 hover:bg-green-100 text-green-700 border border-green-200 rounded-lg transition-colors font-medium flex items-center justify-center">
+                            <i class="fas fa-comment-dots mr-1.5"></i>填写反馈
+                        </a>
+                    ` : ''}
+                `;
+            }
+
+            // 已签到状态（进行中的活动）
+            if (activity.signInStatus === 'signed') {
+                return `
+                    <button onclick="event.stopPropagation(); navigateTo('detail', ${activity.id})" class="flex-1 py-2.5 text-sm text-accent-blue hover:bg-accent-blue/10 rounded-lg transition-colors font-medium">
+                        <i class="fas fa-eye mr-1.5"></i>查看详情
+                    </button>
+                    <button class="flex-1 py-2.5 text-sm bg-green-500 text-white rounded-lg font-medium cursor-default opacity-80">
+                        <i class="fas fa-check-circle mr-1.5"></i>签到成功
+                    </button>
                 `;
             }
 
@@ -1842,12 +1864,17 @@
         function openRegistration(activityId) {
             const drawer = document.getElementById('registrationDrawer');
             const panel = drawer.querySelector('.drawer-panel');
-            // 找到当前活动，注入附加问卷题目
+            // 找当前活动：先内存 mockData，再回退 sessionStorage
+            let act = null;
             try {
-                const all = JSON.parse(sessionStorage.getItem('activities_data') || '[]');
-                const act = all.find(a => a.id === activityId || a.id === Number(activityId)) || null;
-                renderRegistrationExtras(act);
-            } catch (e) { renderRegistrationExtras(null); }
+                const idNum = parseInt(activityId, 10);
+                act = (mockData.allActivities || []).find(a => a.id === activityId || a.id === idNum) || null;
+                if (!act) {
+                    const all = JSON.parse(sessionStorage.getItem('activities_data') || '[]');
+                    act = all.find(a => a.id === idNum) || null;
+                }
+            } catch (e) {}
+            renderRegistrationExtras(act);
             drawer.classList.remove('hidden');
             setTimeout(() => {
                 panel.classList.remove('hidden');
