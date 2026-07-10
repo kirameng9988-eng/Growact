@@ -344,6 +344,9 @@
                         <textarea id="regNote" rows="3" placeholder="如有其他需求请备注说明" class="w-full px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl text-sm focus:border-accent-blue focus:outline-none focus:ring-2 focus:ring-accent-blue/20 transition-all resize-none"></textarea>
                     </div>
 
+                    <!-- 关联问卷附加题目注入点 (registration_extra 模式) -->
+                    <div id="regExtraQuestions" class="space-y-4 border-t border-[#E2E8F0] pt-4 mt-2"></div>
+
                     <div class="pt-4">
                         <button type="submit" class="w-full py-4 bg-gradient-to-r from-accent-blue to-accent-cyan text-white rounded-xl font-medium hover:shadow-lg hover:shadow-accent-blue/30 transition-all flex items-center justify-center gap-2">
                             <i class="fas fa-paper-plane"></i>
@@ -1417,11 +1420,95 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!-- 关联问卷 — 报名叠加 + 独立调研 -->
+                                ${renderLinkedQuestionnaireSection(activity.linkedQuestionnaires || [])}
                             </div>
                         </div>
                     </div>
                 </div>
             `;
+        }
+
+        // 关联问卷展示（PC 用户视角）
+        function renderLinkedQuestionnaireSection(items) {
+            if (!items || items.length === 0) return '';
+            const extra = items.filter(i => i.mode === 'registration_extra');
+            const stand = items.filter(i => i.mode === 'standalone');
+            if (extra.length === 0 && stand.length === 0) return '';
+            const allQ = (typeof QM !== 'undefined' && QM.findQuestionnaireById)
+                ? items.map(i => ({ meta: i, q: QM.findQuestionnaireById(i.id) })).filter(x => x.q)
+                : [];
+            const safeQ = q => (q || '').replace(/[<>&"']/g, c => ({ '<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;' }[c]));
+            const extraHtml = extra.length ? `<div class=\"bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-5\">
+                <h4 class=\"text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2\">
+                    <i class=\"fas fa-clipboard-list text-accent-amber\"></i> 报名时还会询问以下问题
+                </h4>
+                <ol class=\"list-decimal pl-5 space-y-1 text-sm text-gray-700\">
+                    ${extra.map(i => { const x = allQ.find(x => x.meta.id === i.id); return x ? '<li>' + safeQ(x.q.title) + '<span class=\"text-xs text-gray-400 ml-1\">(' + (x.q.fields || []).length + ' 题)</span></li>' : '<li>' + safeQ(i.title) + '</li>'; }).join('')}
+                </ol>
+            </div>` : '';
+            const standHtml = stand.length ? `<div class=\"bg-white rounded-2xl shadow-sm border border-[#E2E8F0] p-5\">
+                <h4 class=\"text-sm font-semibold text-gray-900 mb-3 flex items-center gap-2\">
+                    <i class=\"fas fa-poll text-accent-cyan\"></i> 调研问卷
+                </h4>
+                <div class=\"space-y-2\">
+                    ${stand.map(i => { const x = allQ.find(x => x.meta.id === i.id); const title = x ? x.q.title : i.title; return '<a href=\"questionnaire-fill.html?id=' + i.id + '\" target=\"_blank\" class=\"flex items-center justify-between bg-gray-50 hover:bg-cyan-50 border border-[#E2E8F0] rounded-lg px-3 py-2.5 text-sm text-gray-700 hover:text-accent-blue transition-colors\">'
+                        + '<span><i class=\"fas fa-external-link-alt mr-2 text-gray-400\"></i>' + safeQ(title) + '</span>'
+                        + '<span class=\"text-xs text-cyan-600 font-medium\">立即填写 →</span></a>'; }).join('')}
+                </div>
+            </div>` : '';
+            return extraHtml + standHtml;
+        }
+
+        // 在报名抽屉打开时注入附加题目 + 在 myActivities 卡片标记 post_event
+        function renderRegistrationExtras(activity) {
+            const wrap = document.getElementById('regExtraQuestions');
+            if (!wrap) return;
+            const extras = (activity && activity.linkedQuestionnaires || []).filter(i => i.mode === 'registration_extra');
+            if (extras.length === 0) { wrap.innerHTML = ''; return; }
+            const allQ = (typeof QM !== 'undefined' && QM.findQuestionnaireById)
+                ? extras.map(i => ({ meta: i, q: QM.findQuestionnaireById(i.id) })).filter(x => x.q)
+                : [];
+            const safeQ = s => (s || '').replace(/[<>&"']/g, c => ({ '<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;',"'":'&#39;' }[c]));
+            let html = '<div class=\"text-xs uppercase tracking-wide text-gray-500 mt-2 mb-1\">📋 附加问卷</div>';
+            extras.forEach(item => {
+                const qx = allQ.find(x => x.meta.id === item.id);
+                if (!qx) return;
+                html += '<div class=\"bg-accent-amber/5 border border-accent-amber/20 rounded-xl p-4\">'
+                    + '<div class=\"text-sm font-medium text-gray-900 mb-1\">' + safeQ(qx.q.title) + '</div>'
+                    + '<div class=\"space-y-3 mt-3\">';
+                (qx.q.fields || []).forEach(f => {
+                    const req = f.required ? '<span class=\"text-accent-red ml-0.5\">*</span>' : '';
+                    let inp = '';
+                    if (f.type === 'text') {
+                        inp = '<input type=\"text\" data-qf=\"' + f.id + '\" maxlength=\"' + (f.maxLength || 100) + '\" placeholder=\"' + safeQ(f.placeholder || '') + '\" class=\"w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none\">';
+                    } else if (f.type === 'textarea') {
+                        inp = '<textarea data-qf=\"' + f.id + '\" rows=\"3\" maxlength=\"' + (f.maxLength || 500) + '\" placeholder=\"' + safeQ(f.placeholder || '') + '\" class=\"w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none\"></textarea>';
+                    } else if (f.type === 'radio' || f.type === 'select') {
+                        const opts = (f.options || []).map(o => '<option value=\"' + o.id + '\">' + safeQ(o.label) + '</option>').join('');
+                        inp = '<select data-qf=\"' + f.id + '\" class=\"w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none\"><option value=\"\">请选择</option>' + opts + '</select>';
+                    } else if (f.type === 'checkbox') {
+                        inp = '<div class=\"space-y-1\">' + (f.options || []).map(o =>
+                            '<label class=\"flex items-center gap-2 text-sm\"><input type=\"checkbox\" data-qf=\"' + f.id + '\" value=\"' + o.id + '\" class=\"accent-accent-blue\"> ' + safeQ(o.label) + '</label>').join('') + '</div>';
+                    } else if (f.type === 'file') {
+                        inp = '<input type=\"file\" data-qf=\"' + f.id + '\" multiple class=\"text-xs text-gray-500\">';
+                    }
+                    html += '<div><div class=\"text-xs font-medium text-gray-700 mb-1\">' + safeQ(f.label) + req + '</div>' + inp + '</div>';
+                });
+                html += '</div></div>';
+            });
+            wrap.innerHTML = html;
+        }
+
+        // 让报名抽屉打开时根据当前 activity 注入
+        function renderPostEventNotice(activity) {
+            // 在 myActivities 卡片渲染入口附近调用：返回 post_event HTML 片段
+            if (!activity || !activity.linkedQuestionnaires) return '';
+            const pe = activity.linkedQuestionnaires.filter(i => i.mode === 'post_event');
+            if (pe.length === 0 || activity.activityStatus !== 'ended') return '';
+            return '<a href=\"questionnaire-fill.html?id=' + pe[0].id + '&from=activity&id=' + activity.id + '\" target=\"_blank\" class=\"block mt-2 text-xs px-3 py-2 bg-green-50 border border-green-200 text-green-700 rounded-lg hover:bg-green-100\">'
+                + '<i class=\"fas fa-comment-dots mr-1\"></i>填写活动反馈</a>';
         }
 
         // ==================== 我的活动页 ====================
@@ -1755,6 +1842,12 @@
         function openRegistration(activityId) {
             const drawer = document.getElementById('registrationDrawer');
             const panel = drawer.querySelector('.drawer-panel');
+            // 找到当前活动，注入附加问卷题目
+            try {
+                const all = JSON.parse(sessionStorage.getItem('activities_data') || '[]');
+                const act = all.find(a => a.id === activityId || a.id === Number(activityId)) || null;
+                renderRegistrationExtras(act);
+            } catch (e) { renderRegistrationExtras(null); }
             drawer.classList.remove('hidden');
             setTimeout(() => {
                 panel.classList.remove('hidden');
