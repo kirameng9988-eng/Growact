@@ -236,7 +236,7 @@
             html += '<div class="bg-cyan-50 border border-cyan-200 rounded-xl p-4 mb-6">'
                 + '<div class="text-sm font-semibold text-cyan-900 mb-2"><i class="fas fa-poll mr-1"></i>调研问卷</div>'
                 + '<div class="space-y-2">'
-                + stand.map(i => '<a href="questionnaire-fill.html?id=' + i.id + '" class="flex items-center justify-between bg-white border border-cyan-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 hover:text-cyan-700 active:scale-[0.99] transition-all">'
+                + stand.map(i => '<a href="../questionnaire-fill.html?id=' + i.id + '&source=activity-zone" class="flex items-center justify-between bg-white border border-cyan-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 hover:text-cyan-700 active:scale-[0.99] transition-all">'
                     + '<span><i class="fas fa-external-link-alt mr-2 text-cyan-400"></i>' + escapeHtml(i.title) + '</span>'
                     + '<span class="text-xs text-cyan-600 font-medium">立即填写 →</span>'
                     + '</a>').join('')
