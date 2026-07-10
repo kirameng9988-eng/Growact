@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#ffffff">
     <title>活动详情 - 移动端</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="../../components/questionnaire-shared.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
         tailwind.config = {
@@ -162,8 +163,8 @@
     <script>
     // ==================== Mock数据 ====================
     const activityData = {
-        id: 101,
-        title: '2024上海数据开放创新应用大赛',
+        id: 2,
+        title: '企业文化创意大赛',
         status: 'registration',
         statusText: '报名中',
         time: '2024年10月15日-12月20日',
@@ -211,6 +212,38 @@
         renderActivityDetail();
         switchTab('detail');
     });
+
+    // HTML 转义 + 关联问卷渲染
+    function escapeHtml(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
+
+    // 渲染关联问卷：registration_extra 显示题目提示，standalone 显示链接卡片
+    function renderLinkedSurveys() {
+        let act = null;
+        try { act = JSON.parse(sessionStorage.getItem('activities_data') || '[]').find(a => a.id == activityData.id) || null; } catch (e) {}
+        if (!act || !act.linkedQuestionnaires || act.linkedQuestionnaires.length === 0) return '';
+        const all = act.linkedQuestionnaires;
+        const extras = all.filter(i => i.mode === 'registration_extra');
+        const stand = all.filter(i => i.mode === 'standalone');
+        let html = '';
+        if (extras.length > 0) {
+            html += '<div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">'
+                + '<div class="text-sm font-semibold text-amber-900 mb-2"><i class="fas fa-clipboard-list mr-1"></i>报名时还会询问以下问题</div>'
+                + '<ol class="list-decimal pl-5 space-y-1 text-sm text-amber-900">'
+                + extras.map(i => '<li>' + escapeHtml(i.title) + '</li>').join('')
+                + '</ol></div>';
+        }
+        if (stand.length > 0) {
+            html += '<div class="bg-cyan-50 border border-cyan-200 rounded-xl p-4 mb-6">'
+                + '<div class="text-sm font-semibold text-cyan-900 mb-2"><i class="fas fa-poll mr-1"></i>调研问卷</div>'
+                + '<div class="space-y-2">'
+                + stand.map(i => '<a href="questionnaire-fill.html?id=' + i.id + '" class="flex items-center justify-between bg-white border border-cyan-200 rounded-lg px-3 py-2.5 text-sm text-gray-700 hover:text-cyan-700 active:scale-[0.99] transition-all">'
+                    + '<span><i class="fas fa-external-link-alt mr-2 text-cyan-400"></i>' + escapeHtml(i.title) + '</span>'
+                    + '<span class="text-xs text-cyan-600 font-medium">立即填写 →</span>'
+                    + '</a>').join('')
+                + '</div></div>';
+        }
+        return html;
+    }
 
     function renderActivityDetail() {
         const data = activityData;
@@ -279,6 +312,7 @@
                     <h3 class="text-base font-semibold text-gray-900 mb-3">活动介绍</h3>
                     <p class="text-sm text-gray-600 leading-relaxed mb-6">${activityData.description}</p>
 
+                    ${renderLinkedSurveys()}
                     <h3 class="text-base font-semibold text-gray-900 mb-3">活动嘉宾</h3>
                     <div class="space-y-3 mb-6">
                         ${activityData.guests.map(guest => `
