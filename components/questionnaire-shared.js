@@ -203,7 +203,50 @@
         STORAGE_KEY_R: STORAGE_KEY_R,
         defaultQuestionnaires: defaultQuestionnaires,
         seedIfEmpty: seedIfEmpty,
-        generateMockResponses: generateMockResponses
+        generateMockResponses: generateMockResponses,
+        /* ---------- v2 新增 — 活动↔问卷关联的辅助方法 ---------- */
+        /** 通过 id 读取问卷 */
+        findQuestionnaireById: function (id) {
+            try {
+                const list = JSON.parse(sessionStorage.getItem(STORAGE_KEY_Q) || '[]');
+                return list.find(function (q) { return q.id === id; }) || null;
+            } catch (e) { return null; }
+        },
+        /** 读取某活动已关联的问卷对象（按 id 反查；mode 来自 linked 字段） */
+        getLinkedQuestionnaires: function (activity) {
+            if (!activity || !Array.isArray(activity.linkedQuestionnaires)) return [];
+            const self = this;
+            return activity.linkedQuestionnaires.map(function (lq) {
+                const q = self.findQuestionnaireById(lq.id);
+                return { meta: lq, q: q };
+            }).filter(function (x) { return x.q; });
+        },
+        /** 反向查询：给定问卷 id，返回所有引用了该问卷的活动 */
+        findActivitiesUsingQuestionnaire: function (questionnaireId, allActivities) {
+            if (!Array.isArray(allActivities)) {
+                try { allActivities = JSON.parse(sessionStorage.getItem('activities_data') || '[]'); } catch (e) {}
+            }
+            if (!Array.isArray(allActivities)) return [];
+            return allActivities.filter(function (a) {
+                return Array.isArray(a.linkedQuestionnaires) && a.linkedQuestionnaires.some(function (lq) { return lq.id === questionnaireId; });
+            });
+        },
+        /** 6 种答案值的文本格式化（用于详情表格单元 / 回显） */
+        formatAnswerValue: function (q, v) {
+            if (v == null || v === '') return '';
+            if (q.type === 'text' || q.type === 'textarea') return String(v);
+            if (q.type === 'radio' || q.type === 'select') {
+                var o = (q.options || []).find(function (x) { return x.id === v; });
+                return o ? o.label : String(v);
+            }
+            if (q.type === 'checkbox' && Array.isArray(v)) {
+                return (q.options || []).filter(function (o) { return v.indexOf(o.id) >= 0; }).map(function (o) { return o.label; }).join('，');
+            }
+            if (q.type === 'file' && Array.isArray(v)) {
+                return v.map(function (f) { return f.name; }).join('，');
+            }
+            return '';
+        }
     };
 
 })(window);
