@@ -88,6 +88,7 @@
                 <button type="button" onclick="switchTab('detail')" id="tab-detail" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">活动详情</button>
                 <button type="button" onclick="switchTab('resource')" id="tab-resource" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">资源引用</button>
                 <button type="button" onclick="switchTab('review')" id="tab-review" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">审核记录</button>
+                <button type="button" onclick="switchTab('link')" id="tab-link" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">关联问卷</button>
             </div>
 
             <div class="p-6">
@@ -167,6 +168,24 @@
                 <div id="panel-review" class="tab-panel hidden">
                     <div id="reviewHistoryList" class="space-y-4">
                         <p class="text-sm text-gray-400">暂无审核记录</p>
+                    </div>
+                </div>
+
+                <!-- Tab5: 关联问卷（只读展示） -->
+                <div id="panel-link" class="tab-panel hidden">
+                    <div class="bg-white border border-[#E2E8F0] rounded-xl p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-medium">关联问卷</h3>
+                                <p class="text-xs text-gray-500 mt-1">本活动关联的问卷，将根据 mode 在用户端不同位置展示</p>
+                            </div>
+                            <a id="linkEditBtn" href="activity-edit.html" class="px-4 py-2 border border-accent-blue text-accent-blue rounded-lg hover:bg-accent-blue hover:text-white transition-colors flex items-center gap-2 text-sm">
+                                <i class="fas fa-edit"></i> 编辑关联
+                            </a>
+                        </div>
+                        <div id="linkedDetailList">
+                            <p class="text-sm text-gray-400 text-center py-8">未关联任何问卷</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -306,9 +325,63 @@
             // 审核记录 Tab
             renderReviewHistory(activity.reviewHistory || []);
 
+            // 关联问卷 Tab
+            renderLinkedQuestionnaires(activity.linkedQuestionnaires || []);
+
             // 编辑链接
             document.getElementById('editLink').href = `activity-edit.html?id=${id}`;
             document.getElementById('editLinkBottom').href = `activity-edit.html?id=${id}`;
+            document.getElementById('linkEditBtn').href = `activity-edit.html?id=${id}`;
+        }
+
+        function renderLinkedQuestionnaires(items) {
+            const wrap = document.getElementById('linkedDetailList');
+            if (!items || items.length === 0) {
+                wrap.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">未关联任何问卷</p>';
+                return;
+            }
+            const MODE_LABELS = {
+                registration_extra: '报名补充 — 表单尾部追加',
+                standalone: '独立调研 — 活动详情页链接',
+                post_event: '活动后反馈 — 结束后“我的活动”入口'
+            };
+            const all = (typeof QM !== 'undefined' && QM.getLinkedQuestionnaires)
+                ? QM.getLinkedQuestionnaires({ linkedQuestionnaires: items })
+                : items.map(lq => ({ meta: lq, q: { title: lq.title, fields: [], status: '' } }));
+            const qById = {};
+            try {
+                const list = JSON.parse(sessionStorage.getItem('questionnaires_data') || '[]');
+                list.forEach(q => { qById[q.id] = q; });
+            } catch (e) {}
+            wrap.innerHTML = items.map(lq => {
+                const q = qById[lq.id] || { title: lq.title, fields: [], status: '未知' };
+                const respCount = (() => {
+                    try {
+                        const rs = JSON.parse(sessionStorage.getItem('questionnaire_responses') || '[]');
+                        return rs.filter(r => r.questionnaireId === lq.id).length;
+                    } catch (e) { return 0; }
+                })();
+                return '<div class="border border-[#E2E8F0] rounded-lg p-4">' +
+                    '<div class="flex items-start justify-between">' +
+                        '<div class="flex-1 min-w-0">' +
+                            '<div class="flex items-center gap-2">' +
+                                '<span class="text-base font-medium text-gray-900">' + escapeHtml(q.title) + '</span>' +
+                                '<span class="text-xs px-2 py-0.5 rounded-full bg-gray-100 text-gray-600">' + escapeHtml((q.status || '未知')) + '</span>' +
+                            '</div>' +
+                            '<div class="text-xs text-gray-500 mt-1">' +
+                                (q.fields ? q.fields.length : 0) + ' 题 · ID: <span class="font-mono">' + escapeHtml(lq.id) + '</span> · 答卷 ' + respCount +
+                            '</div>' +
+                            '<div class="mt-2 inline-flex items-center gap-1 text-xs px-2 py-1 rounded-full bg-accent-blue/10 text-accent-blue">' +
+                                '<i class="fas fa-link"></i> ' + escapeHtml(MODE_LABELS[lq.mode] || lq.mode) +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="flex flex-col gap-1 ml-3">' +
+                            '<a href="questionnaire-detail.html?id=' + lq.id + '" target="_blank" class="text-xs px-2 py-1 border border-[#E2E8F0] rounded hover:border-accent-blue">查看问卷</a>' +
+                            (respCount > 0 ? '<a href="questionnaire-detail.html?id=' + lq.id + '&tab=responses" target="_blank" class="text-xs px-2 py-1 border border-[#E2E8F0] rounded hover:border-accent-blue text-accent-blue">查看答卷</a>' : '') +
+                        '</div>' +
+                    '</div>' +
+                '</div>';
+            }).join('');
         }
 
         function renderDetailResources(selectedIds) {

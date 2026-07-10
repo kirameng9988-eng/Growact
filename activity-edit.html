@@ -62,6 +62,9 @@
                 <button type="button" onclick="switchTab('basic')" id="tab-basic" class="tab-btn active px-6 py-3 text-sm font-medium border-b-2 border-[#0A61FF] text-[#0A61FF]">基础信息</button>
                 <button type="button" onclick="switchTab('detail')" id="tab-detail" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">活动详情</button>
                 <button type="button" onclick="switchTab('resource')" id="tab-resource" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">资源引用</button>
+                <button type="button" onclick="switchTab('link')" id="tab-link" class="tab-btn px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-900">
+                    关联问卷 <span id="linkedCount" class="ml-1 px-1.5 py-0.5 rounded-full bg-gray-100 text-gray-500 text-xs">0</span>
+                </button>
             </div>
 
             <div class="p-6">
@@ -208,6 +211,24 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- Tab4: 关联问卷 -->
+                <div id="panel-link" class="tab-panel hidden">
+                    <div class="bg-white border border-[#E2E8F0] rounded-xl p-5">
+                        <div class="flex items-center justify-between mb-4">
+                            <div>
+                                <h3 class="text-base font-medium">关联问卷</h3>
+                                <p class="text-xs text-gray-500 mt-1">引用已有问卷管理中的问卷，让用户在报名 / 活动详情 / 活动结束后填写</p>
+                            </div>
+                            <button onclick="openLinkPicker()" type="button" class="px-4 py-2 bg-accent-blue text-white rounded-lg hover:bg-blue-600 flex items-center gap-2 text-sm">
+                                <i class="fas fa-plus"></i> 添加关联问卷
+                            </button>
+                        </div>
+                        <div id="linkedList" class="space-y-3">
+                            <p class="text-sm text-gray-400 text-center py-8">尚未关联任何问卷</p>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <!-- 底部按钮 -->
@@ -344,6 +365,9 @@
                 selectedActivityResources = activity.selectedResources;
                 renderSelectedResources();
             }
+            // 关联问卷反填
+            linkedQuestionnaires = (activity.linkedQuestionnaires || []).map(lq => ({ id: lq.id, title: lq.title, mode: lq.mode || 'registration_extra' }));
+            renderLinkedList();
         }
 
         // 获取所有活动（与 activity-list.html 共享数据源）
@@ -467,7 +491,8 @@
                 regEndTime: document.getElementById('registrationEndTime').value,
                 content: document.getElementById('activityContent').value,
                 status: status,
-                selectedResources: selectedActivityResources
+                selectedResources: selectedActivityResources,
+                linkedQuestionnaires: linkedQuestionnaires.map(lq => ({ id: lq.id, title: lq.title, mode: lq.mode }))
             };
 
             // 保存到 sessionStorage
@@ -696,6 +721,114 @@
             renderActivityResourceList(currentTab);
         }
 
+        // HTML 转义
+        function escapeHtml(s) {
+            return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
+        /* =====================================================================
+         * 关联问卷管理（活动↔问卷）
+         * ===================================================================== */
+        let linkedQuestionnaires = [];
+
+        function openLinkPicker() {
+            if (typeof QM !== 'undefined' && QM.seedIfEmpty) QM.seedIfEmpty();
+            document.getElementById('linkPickerModal').classList.remove('hidden');
+            document.getElementById('linkPickerModal').classList.add('flex');
+            document.getElementById('linkPickerSearch').value = '';
+            renderLinkPicker();
+        }
+        function closeLinkPicker() {
+            document.getElementById('linkPickerModal').classList.add('hidden');
+            document.getElementById('linkPickerModal').classList.remove('flex');
+        }
+        function renderLinkPicker() {
+            const list = (typeof QM !== 'undefined' && QM.findQuestionnaireById) ? JSON.parse(sessionStorage.getItem('questionnaires_data') || '[]') : [];
+            const k = (document.getElementById('linkPickerSearch').value || '').toLowerCase();
+            const filtered = list.filter(q => (q.title || '').toLowerCase().includes(k));
+            const used = linkedQuestionnaires.map(lq => lq.id);
+            const wrap = document.getElementById('linkPickerList');
+            if (filtered.length === 0) {
+                wrap.innerHTML = '<p class="text-sm text-gray-400 text-center py-10">没有匹配的问卷（先到<a href="questionnaire-list.html" target="_blank" class="text-accent-blue hover:underline">问卷管理</a>创建）</p>';
+                return;
+            }
+            wrap.innerHTML = filtered.map(q => {
+                const isUsed = used.includes(q.id);
+                const isDraft = q.status === 'draft';
+                const cls = (isUsed || isDraft) ? 'opacity-50' : '';
+                const btnCls = (isUsed || isDraft) ? 'bg-gray-100 text-gray-400' : 'bg-accent-blue text-white hover:bg-blue-600';
+                const label = isUsed ? '已添加' : (isDraft ? '未发布' : '添加');
+                const disabled = (isUsed || isDraft) ? 'disabled' : '';
+                const statusText = q.status === 'draft' ? '草稿' : '收集中';
+                return '<div class="flex items-center justify-between border border-[#E2E8F0] rounded-lg px-3 py-3 mb-2 ' + cls + '">' +
+                    '<div class="flex-1 min-w-0">' +
+                    '<div class="text-sm font-medium truncate">' + escapeHtml(q.title || '') + '</div>' +
+                    '<div class="text-xs text-gray-500 mt-0.5">' + escapeHtml(q.categoryName || q.category || '') + ' · ' + (q.fields || []).length + ' 题 · 状态：' + statusText + '</div>' +
+                    '</div>' +
+                    '<button ' + disabled + ' data-add-q="' + q.id + '" class="px-3 py-1.5 ' + btnCls + ' rounded-lg text-sm">' + label + '</button>' +
+                    '</div>';
+            }).join('');
+            // 事件代理
+            wrap.querySelectorAll('[data-add-q]').forEach(btn => {
+                btn.addEventListener('click', () => addLinkedFromPicker(btn.dataset.addQ));
+            });
+        }
+        function addLinkedFromPicker(id) {
+            if (linkedQuestionnaires.some(lq => lq.id === id)) return;
+            const q = (typeof QM !== 'undefined' && QM.findQuestionnaireById) ? QM.findQuestionnaireById(id) : null;
+            if (!q) return;
+            linkedQuestionnaires.push({ id: q.id, title: q.title, mode: 'registration_extra' });
+            renderLinkedList();
+            closeLinkPicker();
+            showToast('已关联', 'success');
+        }
+        function removeLinked(id) {
+            linkedQuestionnaires = linkedQuestionnaires.filter(lq => lq.id !== id);
+            renderLinkedList();
+        }
+        function setLinkedMode(id, mode) {
+            const lq = linkedQuestionnaires.find(x => x.id === id);
+            if (lq) lq.mode = mode;
+        }
+        function renderLinkedList() {
+            const badge = document.getElementById('linkedCount');
+            if (badge) badge.textContent = linkedQuestionnaires.length;
+            const wrap = document.getElementById('linkedList');
+            if (linkedQuestionnaires.length === 0) {
+                wrap.innerHTML = '<p class="text-sm text-gray-400 text-center py-8">尚未关联任何问卷</p>';
+                return;
+            }
+            wrap.innerHTML = linkedQuestionnaires.map(lq => {
+                const modes = [
+                    { v: 'registration_extra', label: '报名补充', checked: lq.mode === 'registration_extra' },
+                    { v: 'standalone', label: '独立调研', checked: lq.mode === 'standalone' },
+                    { v: 'post_event', label: '活动后反馈', checked: lq.mode === 'post_event' }
+                ];
+                const radios = modes.map(m =>
+                    '<label class="flex items-center gap-1 cursor-pointer">' +
+                    '<input type="radio" name="link-mode-' + lq.id + '" ' + (m.checked ? 'checked ' : '') + ' data-mode-q="' + lq.id + '" data-mode-v="' + m.v + '" class="accent-accent-blue"> ' + m.label +
+                    '</label>'
+                ).join('');
+                return '<div class="border border-[#E2E8F0] rounded-lg p-3">' +
+                    '<div class="flex items-start justify-between">' +
+                    '<div class="flex-1 min-w-0">' +
+                    '<div class="text-sm font-medium truncate">' + escapeHtml(lq.title || '') + '</div>' +
+                    '<div class="text-xs text-gray-500 mt-1">问卷 ID: <span class="font-mono">' + escapeHtml(lq.id) + '</span></div>' +
+                    '</div>' +
+                    '<button data-remove-q="' + lq.id + '" class="text-gray-400 hover:text-accent-red text-xs px-2 py-1">移除</button>' +
+                    '</div>' +
+                    '<div class="mt-3 flex items-center gap-3 text-xs text-gray-600">' + radios + '</div>' +
+                    '</div>';
+            }).join('');
+            // 事件代理
+            wrap.querySelectorAll('[data-remove-q]').forEach(btn => {
+                btn.addEventListener('click', () => removeLinked(btn.dataset.removeQ));
+            });
+            wrap.querySelectorAll('[data-mode-q]').forEach(input => {
+                input.addEventListener('change', () => setLinkedMode(input.dataset.modeQ, input.dataset.modeV));
+            });
+        }
+
         // Toast提示
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
@@ -778,7 +911,20 @@
 </div>
 <script>function toggleDemoLinks(e){var t=document.getElementById("demo-links-overlay"),n=document.getElementById("demo-links-panel"),r=document.getElementById("demo-links-toggle");if(!t||!n||!r)return;var i=r.classList.contains("expanded"),a=void 0!==e?e:!i;a?(t.classList.add("active"),n.classList.add("active"),r.classList.add("expanded")):(t.classList.remove("active"),n.classList.remove("active"),r.classList.remove("expanded"))}</script>
 
-
+<!-- 关联问卷选择器 -->
+<div id="linkPickerModal" class="fixed inset-0 bg-black/70 z-[9999] hidden items-center justify-center">
+    <div class="bg-white rounded-2xl w-[640px] max-h-[85vh] overflow-hidden shadow-2xl">
+        <div class="flex items-center justify-between px-6 py-4 border-b border-[#E2E8F0]">
+            <h3 class="text-lg font-medium text-gray-900">📋 选择问卷</h3>
+            <button onclick="closeLinkPicker()" type="button" class="text-gray-500 hover:text-gray-700"><i class="fas fa-times text-xl"></i></button>
+        </div>
+        <div class="px-6 py-3 border-b border-[#E2E8F0] bg-gray-50">
+            <input id="linkPickerSearch" type="text" placeholder="搜索问卷标题..." oninput="renderLinkPicker()"
+                   class="w-full bg-white border border-[#E2E8F0] rounded-lg px-3 py-2 text-sm focus:border-accent-blue focus:outline-none">
+        </div>
+        <div id="linkPickerList" class="p-4 overflow-y-auto" style="max-height: 60vh;"></div>
+    </div>
+</div>
 
 </body>
 </html>
