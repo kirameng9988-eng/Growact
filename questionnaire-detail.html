@@ -121,6 +121,13 @@
                                 <!-- JS 渲染 -->
                             </ol>
                         </div>
+
+                        <!-- 被以下活动引用（反向引用） -->
+                        <div id="linkedActivitiesCard" class="border border-[#E2E8F0] rounded-xl p-5 hidden">
+                            <h3 class="text-base font-medium mb-3">被以下活动引用</h3>
+                            <p class="text-xs text-gray-500 mb-3">关联本问卷的活动 — 点击可查看该活动详情</p>
+                            <div id="linkedActivitiesList" class="space-y-2"></div>
+                        </div>
                     </div>
                     <!-- 分享区 -->
                     <div class="space-y-4">
@@ -403,6 +410,31 @@
                         ${f.required ? '<span class="ml-1 text-accent-red text-xs">*必填</span>' : ''}
                     </li>
                 `).join('');
+            }
+
+            // 反向引用：被哪些活动引用
+            const linkedActivities = (typeof QM !== 'undefined' && QM.findActivitiesUsingQuestionnaire)
+                ? QM.findActivitiesUsingQuestionnaire(q.id) : [];
+            const laCard = document.getElementById('linkedActivitiesCard');
+            const laList = document.getElementById('linkedActivitiesList');
+            if (linkedActivities.length > 0) {
+                laCard.classList.remove('hidden');
+                laList.innerHTML = linkedActivities.map(act => {
+                    const lq = (act.linkedQuestionnaires || []).find(i => i.id === q.id);
+                    const modeLabel = lq && lq.mode === 'registration_extra' ? '报名补充'
+                        : lq && lq.mode === 'standalone' ? '独立调研'
+                        : lq && lq.mode === 'post_event' ? '活动后反馈' : '';
+                    const statusMap = { draft:'草稿', pending:'待审核', published:'已发布', ended:'已结束', offline:'已下线', stopped:'已停止', collecting:'收集中' };
+                    return `<a href="activity-detail.html?id=${act.id}" class="flex items-center justify-between border border-[#E2E8F0] rounded-lg px-3 py-2.5 hover:border-accent-blue hover:bg-blue-50/40 transition-colors">
+                        <div class="flex-1 min-w-0">
+                            <div class="text-sm font-medium truncate">${escapeHtml(act.name || ('活动 #' + act.id))}</div>
+                            <div class="text-xs text-gray-500 mt-0.5">状态：${escapeHtml(statusMap[act.status] || act.status || '—')} · 模式：${escapeHtml(modeLabel)}</div>
+                        </div>
+                        <i class="fas fa-chevron-right text-gray-400 text-xs"></i>
+                    </a>`;
+                }).join('');
+            } else {
+                laCard.classList.add('hidden');
             }
         }
 
