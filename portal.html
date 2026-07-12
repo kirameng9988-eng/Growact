@@ -83,7 +83,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 14px 16px;
+            padding: 8px 16px;
             background: linear-gradient(135deg, #EFF6FF 0%, #FFFFFF 100%);
             border-bottom: 1px solid #E2E8F0;
         }
@@ -142,7 +142,6 @@
             </div>
             <div class="sidebar-module-meta">
                 <div class="sidebar-module-title">活动运营中心</div>
-                <div class="sidebar-module-subtitle">天机智信 · TianJi</div>
             </div>
         </div>
         <nav class="py-2 flex-1" id="sidebar-nav">
@@ -579,6 +578,14 @@
                     // 拦截本地页面跳转，改为更新 hash
                     if (/\.html?(\?.*)?$/i.test(href)) {
                         e.preventDefault();
+                        // ⚠ questionnaire-* 页面（详情/答卷/编辑）共享 questionnaire-detail.html / questionnaire-create.html
+                        //    reverseLookup 会先匹配到 questionnaireResponses/Create 而非 Detail/Edit
+                        //    → 直接换 iframe.src（保留 query 串），不依赖 pageMap key 路由
+                        if (/^questionnaire-(detail|create|fill)\.html/i.test(href)) {
+                            frame.src = href;
+                            history.replaceState(null, '', '#/' + href.replace(/[^a-z0-9]/gi, '_'));
+                            return;
+                        }
                         const key = reverseLookup(href.split('?')[0]);
                         if (key) {
                             loadPage(key);
@@ -678,7 +685,8 @@
 <style>
 #demo-links-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s}
 #demo-links-overlay.active{opacity:1;pointer-events:auto}
-#demo-links-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+#demo-links-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+#demo-links-toggle{pointer-events:auto}
 #demo-links-panel{display:flex;flex-direction:column;gap:6px;transform:translateY(16px) scale(.95);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);transform-origin:bottom right}
 #demo-links-panel.active{transform:translateY(0) scale(1);opacity:1;pointer-events:auto}
 .demo-link-btn{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;color:#0f172a;font-size:14px;font-weight:450;text-decoration:none;white-space:nowrap;box-shadow:0 2px 12px rgba(0,0,0,.08);transition:all .2s;min-width:200px}

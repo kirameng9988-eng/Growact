@@ -240,9 +240,9 @@
                         <td class="px-4 py-3 text-sm text-gray-500">${formatDateTime(q.updatedAt)}</td>
                         <td class="px-4 py-3 text-right">
                             <div class="flex items-center justify-end gap-2">
-                                <a href="questionnaire-detail.html?id=${q.id}" class="text-accent-blue hover:text-blue-700 text-sm" title="详情">详情</a>
-                                <a href="questionnaire-detail.html?id=${q.id}&tab=responses" class="text-accent-cyan hover:text-cyan-700 text-sm" title="答卷">答卷</a>
-                                <a href="questionnaire-create.html?id=${q.id}" class="text-accent-amber hover:text-amber-700 text-sm" title="编辑">编辑</a>
+                                <button onclick="window.location.href='questionnaire-detail.html?id=${q.id}'" class="text-accent-blue hover:text-blue-700 text-sm" title="详情">详情</button>
+                                <button onclick="window.location.href='questionnaire-detail.html?id=${q.id}&tab=responses'" class="text-accent-cyan hover:text-cyan-700 text-sm" title="答卷">答卷</button>
+                                <button onclick="window.location.href='questionnaire-create.html?id=${q.id}'" class="text-accent-amber hover:text-amber-700 text-sm" title="编辑">编辑</button>
                                 <button onclick="deleteQuestionnaire('${q.id}')" class="text-accent-red hover:text-red-700 text-sm" title="删除">删除</button>
                             </div>
                         </td>
@@ -461,7 +461,8 @@
 <style>
 #demo-links-overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);z-index:9998;opacity:0;pointer-events:none;transition:opacity .3s}
 #demo-links-overlay.active{opacity:1;pointer-events:auto}
-#demo-links-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+#demo-links-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;align-items:flex-end;gap:8px;pointer-events:none}
+#demo-links-toggle{pointer-events:auto}
 #demo-links-panel{display:flex;flex-direction:column;gap:6px;transform:translateY(16px) scale(.95);opacity:0;pointer-events:none;transition:all .3s cubic-bezier(.34,1.56,.64,1);transform-origin:bottom right}
 #demo-links-panel.active{transform:translateY(0) scale(1);opacity:1;pointer-events:auto}
 .demo-link-btn{display:flex;align-items:center;gap:10px;padding:12px 16px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;color:#0f172a;font-size:14px;font-weight:450;text-decoration:none;white-space:nowrap;box-shadow:0 2px 12px rgba(0,0,0,.08);transition:all .2s;min-width:200px}

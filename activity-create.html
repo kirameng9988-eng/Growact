@@ -238,11 +238,6 @@
                 <button type="button" onclick="cancelForm()" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-colors">取消</button>
                 <button type="button" onclick="saveActivity('draft')" class="px-5 py-2.5 border border-accent-blue text-accent-blue rounded-xl hover:bg-accent-blue/5 transition-colors">暂存</button>
                 <button type="button" onclick="saveActivity('pending')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">提交</button>
-            <!-- 底部按钮 -->
-            <div class="flex items-center justify-end gap-3 px-6 py-4 border-t border-[#E2E8F0] bg-gray-50 sticky bottom-0">
-                <button type="button" onclick="cancelForm()" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-colors">取消</button>
-                <button type="button" onclick="saveActivity('draft')" class="px-5 py-2.5 border border-accent-blue text-accent-blue rounded-xl hover:bg-accent-blue/5 transition-colors">暂存</button>
-                <button type="button" onclick="saveActivity('pending')" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors">提交</button>
             </div>
         </form>
     </main>
@@ -293,6 +288,65 @@
     </div>
 
     <script>
+        /* ---------- 演示种子：注入 9 份问卷（7份收集中 + 2份草稿），覆盖各种字段类型 ----------
+         * questionnaire-shared.js 已引入时用其 QM.seedIfEmpty()；本兜底 seed 保证 picker 有内容。
+         * 强制写入确保即使之前 sessionStorage 被其他旧 seed 污染也能源样例展示。 */
+        (function seedDemoQuestionnaires() {
+            const KEY = "questionnaires_data";
+            const mk = (id, title, cat, catName, status, fields) => ({
+                id, title, category: cat, categoryName: catName, status,
+                fields,
+                settings: { anonymous: false, allowMultiple: false, collectUserInfo: true, deadline: '2026-09-30', thankYouMessage: '感谢您的参与！' },
+                createdBy: '张明远', createdAt: '2026-07-01T09:00:00+08:00', updatedAt: '2026-07-01T09:00:00+08:00',
+                publishedAt: status !== 'draft' ? '2026-07-01T10:00:00+08:00' : null, responseCount: 0
+            });
+            const seed = [
+                mk("q_pub_001", "2024 数字化转型高峰论坛参会调研",   "tech",      "科技创新", "collecting", [
+                    { id: 'f_1', type: 'radio',   label: '您的参会角色',            required: true,  options: [{ id:'o1',label:'企业高管'},{ id:'o2',label:'技术人员'},{ id:'o3',label:'市场运营'},{ id:'o4',label:'其他'}] },
+                    { id: 'f_2', type: 'select',  label: '您感兴趣的论坛主题',       required: true,  options: [{ id:'o1',label:'AI 与大模型'},{ id:'o2',label:'数据治理'},{ id:'o3',label:'智慧城市'},{ id:'o4',label:'数字化转型实践'}] },
+                    { id: 'f_3', type: 'text',    label: '公司名称',                required: true,  placeholder: '请输入您的公司/单位名称', maxLength: 50 }
+                ]),
+                mk("q_pub_002", "员工心理健康关爱需求调研",           "education", "教育培训", "collecting", [
+                    { id: 'f_1', type: 'radio',   label: '您是否了解公司EAP员工援助计划', required: true, options: [{ id:'o1',label:'非常了解'},{ id:'o2',label:'知道一点'},{ id:'o3',label:'完全不了解'}] },
+                    { id: 'f_2', type: 'checkbox',label: '您希望获得哪类心理支持（多选）', required: false, options: [{ id:'o1',label:'压力管理'},{ id:'o2',label:'职业规划'},{ id:'o3',label:'情绪疏导'},{ id:'o4',label:'人际关系'},{ id:'o5',label:'工作与生活平衡'}] },
+                    { id: 'f_3', type: 'textarea',label: '其他建议或需求',           required: false, placeholder: '请简要描述...', maxLength: 300 }
+                ]),
+                mk("q_pub_003", "春季运动会报名统计",                 "sports",    "体育运动", "collecting", [
+                    { id: 'f_1', type: 'checkbox',label: '您计划参加哪些项目（必选1-3项）', required: true, options: [{ id:'o1',label:'田径跑'},{ id:'o2',label:'接力赛'},{ id:'o3',label:'拔河'},{ id:'o4',label:'趣味投篮'},{ id:'o5',label:'跳绳'}] },
+                    { id: 'f_2', type: 'radio',   label: '是否需要提供运动服装',      required: true, options: [{ id:'o1',label:'是，M码'},{ id:'o2',label:'是，L码'},{ id:'o3',label:'是，XL码'},{ id:'o4',label:'否，自己准备'}] },
+                    { id: 'f_3', type: 'text',    label: '食物过敏史（无则填"无"）', required: false, placeholder: '如：海鲜、花生...', maxLength: 50 }
+                ]),
+                mk("q_pub_004", "客户满意度年度调研",                 "tech",      "科技创新", "collecting", [
+                    { id: 'f_1', type: 'radio',   label: '总体满意度',               required: true, options: [{ id:'o1',label:'非常满意'},{ id:'o2',label:'满意'},{ id:'o3',label:'一般'},{ id:'o4',label:'不满意'},{ id:'o5',label:'非常不满意'}] },
+                    { id: 'f_2', type: 'radio',   label: '产品交付质量',             required: true, options: [{ id:'o1',label:'优秀'},{ id:'o2',label:'良好'},{ id:'o3',label:'一般'},{ id:'o4',label:'差'}] },
+                    { id: 'f_3', type: 'radio',   label: '技术支持响应速度',         required: true, options: [{ id:'o1',label:'非常及时'},{ id:'o2',label:'较快'},{ id:'o3',label:'一般'},{ id:'o4',label:'较慢'}] },
+                    { id: 'f_4', type: 'textarea',label: '改进建议',                 required: false, placeholder: '请详细说明...', maxLength: 500 },
+                    { id: 'f_5', type: 'file',     label: '附件：截图/文档（可选）',   required: false, accept: '.pdf,.png,.jpg,.zip', maxSizeMB: 10, maxFiles: 3 }
+                ]),
+                mk("q_pub_005", "新员工入职培训反馈",                 "education", "教育培训", "collecting", [
+                    { id: 'f_1', type: 'radio',   label: '整体培训安排满意度',       required: true, options: [{ id:'o1',label:'非常满意'},{ id:'o2',label:'满意'},{ id:'o3',label:'一般'},{ id:'o4',label:'不满意'}] },
+                    { id: 'f_2', type: 'textarea',label: '培训内容最实用的部分',     required: false, maxLength: 300 }
+                ]),
+                mk("q_pub_006", "网络安全意识在线测试",               "tech",      "科技创新", "collecting", [
+                    { id: 'f_1', type: 'radio',   label: '您是否知道如何识别钓鱼邮件', required: true, options: [{ id:'o1',label:'完全知道'},{ id:'o2',label:'大概知道'},{ id:'o3',label:'不太确定'},{ id:'o4',label:'完全不知道'}] },
+                    { id: 'f_2', type: 'radio',   label: '您多久更换一次账户密码',   required: true, options: [{ id:'o1',label:'每月'},{ id:'o2',label:'每季度'},{ id:'o3',label:'半年以上'},{ id:'o4',label:'从不主动更换'}] },
+                    { id: 'f_3', type: 'radio',   label: '公司安全培训频率',         required: true, options: [{ id:'o1',label:'每月'},{ id:'o2',label:'每季度'},{ id:'o3',label:'每年'},{ id:'o4',label:'几乎没有'}] },
+                    { id: 'f_4', type: 'textarea',label: '对网络安全培训的建议',    required: false, maxLength: 300 }
+                ]),
+                mk("q_pub_007", "企业文化活动偏好调研",               "culture",   "文化活动", "collecting", [
+                    { id: 'f_1', type: 'checkbox',label: '您希望参加哪类团建活动（多选）', required: true, options: [{ id:'o1',label:'户外拓展'},{ id:'o2',label:'运动竞技'},{ id:'o3',label:'文化艺术'},{ id:'o4',label:'桌游剧本杀'},{ id:'o5',label:'公益志愿'}] },
+                    { id: 'f_2', type: 'radio',   label: '活动频率偏好',             required: true, options: [{ id:'o1',label:'每月一次'},{ id:'o2',label:'每季度一次'},{ id:'o3',label:'半年一次'},{ id:'o4',label:'无所谓'}] }
+                ]),
+                mk("q_draft_008", "部门协作效率调研(草稿)",          "education", "教育培训", "draft", [
+                    { id: 'f_1', type: 'text', label: '部门名称', required: true, maxLength: 30 }
+                ]),
+                mk("q_draft_009", "差旅政策意见征集(草稿)",          "tech",      "科技创新", "draft", [
+                    { id: 'f_1', type: 'textarea', label: '意见描述', required: false, maxLength: 500 }
+                ])
+            ];
+            try { sessionStorage.setItem(KEY, JSON.stringify(seed)); } catch (e) {}
+        })();
+
         // 资源数据
         const mockResources = {
             image: [
@@ -325,7 +379,7 @@
 
         // Tab切换
         function switchTab(tab) {
-            ['basic', 'detail', 'resource'].forEach(t => {
+            ['basic', 'detail', 'resource', 'link'].forEach(t => {
                 document.getElementById('tab-' + t).classList.remove('active');
                 document.getElementById('tab-' + t).classList.add('border-transparent', 'text-gray-600');
                 document.getElementById('tab-' + t).classList.remove('border-[#0A61FF]', 'text-[#0A61FF]');
@@ -748,10 +802,14 @@
  * 关联问卷管理（活动↔问卷）
  * ===================================================================== */
 let linkedQuestionnaires = [];   // [{id, title, mode}]
+const LINK_PICKER_MAX = 5;
+let linkPickerSelected = new Set();  // 弹窗当前勾选的问卷 id（打开时从 linkedQuestionnaires 同步）
 
 function openLinkPicker() {
     // 确保问卷数据已注入
-    if (typeof QM !== undefined && QM.seedIfEmpty) QM.seedIfEmpty();
+    if (typeof QM !== "undefined" && QM.seedIfEmpty) QM.seedIfEmpty();
+    // 用已关联列表初始化弹窗选中状态（支持直接取消勾选来移除）
+    linkPickerSelected = new Set(linkedQuestionnaires.map(lq => lq.id));
     document.getElementById("linkPickerModal").classList.remove("hidden");
     document.getElementById("linkPickerModal").classList.add("flex");
     document.getElementById("linkPickerSearch").value = "";
@@ -762,39 +820,88 @@ function closeLinkPicker() {
     document.getElementById("linkPickerModal").classList.remove("flex");
 }
 function renderLinkPicker() {
-    const list = (typeof QM !== "undefined" && QM.findQuestionnaireById) ? JSON.parse(sessionStorage.getItem("questionnaires_data") || "[]") : [];
+    const raw = sessionStorage.getItem("questionnaires_data");
+    const list = raw ? JSON.parse(raw) : [];
     const k = (document.getElementById("linkPickerSearch").value || "").toLowerCase();
-    const filtered = list.filter(q => !(q.title||"").toLowerCase().includes(k) ^ false);
-    const used = linkedQuestionnaires.map(lq => lq.id);
+    // DEBUG
+    console.log('[renderLinkPicker] raw sessionStorage:', raw);
+    console.log('[renderLinkPicker] parsed list:', list);
+    console.log('[renderLinkPicker] list[0].status:', list[0] && list[0].status);
+    const filtered = list.filter(q => (q.status === "published" || q.status === "collecting") && (q.title||"").toLowerCase().includes(k));
+    console.log('[renderLinkPicker] filtered count:', filtered.length, 'filtered:', filtered);
     const wrap = document.getElementById("linkPickerList");
+    const atMax = linkPickerSelected.size >= LINK_PICKER_MAX;
+
     if (filtered.length === 0) {
-        wrap.innerHTML = `<p class="text-sm text-gray-400 text-center py-10">没有匹配的问卷（先到<a href="questionnaire-list.html" target="_blank" class="text-accent-blue hover:underline">问卷管理</a>创建）</p>`;
+        wrap.innerHTML = `<p class="text-sm text-gray-400 text-center py-10">没有已发布的问卷（先到<a href="questionnaire-list.html" target="_blank" class="text-accent-blue hover:underline">问卷管理</a>发布问卷）</p>`;
+        updateLinkPickerConfirm(atMax);
         return;
     }
+
     wrap.innerHTML = filtered.map(q => {
-        const isUsed = used.includes(q.id);
-        const isDraft = q.status === "draft";
-        return `<div class="flex items-center justify-between border border-[#E2E8F0] rounded-lg px-3 py-3 mb-2 ${isUsed ? "opacity-50" : ""}">
+        const isSelected = linkPickerSelected.has(q.id);
+        // 未勾选 且 已达上限 → 禁用 checkbox
+        const disableBecauseMax = !isSelected && atMax;
+        const checkboxDisabled = disableBecauseMax;
+        const rowClass = isSelected
+            ? "border-accent-blue bg-blue-50/40"
+            : "border-[#E2E8F0] hover:border-accent-blue/50";
+        return `<label class="flex items-center gap-3 border ${rowClass} rounded-lg px-3 py-3 mb-2 cursor-pointer transition-colors ${checkboxDisabled ? "opacity-50 cursor-not-allowed" : ""}">
+            <input type="checkbox" data-id="${escapeHtml(q.id)}" ${isSelected ? "checked" : ""} ${checkboxDisabled ? "disabled" : ""} onchange="toggleLinkPickerItem('${escapeHtml(q.id)}', this.checked)" class="w-4 h-4 accent-accent-blue flex-shrink-0">
             <div class="flex-1 min-w-0">
                 <div class="text-sm font-medium truncate">${escapeHtml(q.title||"")}</div>
                 <div class="text-xs text-gray-500 mt-0.5">
-                    ${(q.categoryName || q.category || "")} · ${(q.fields||[]).length} 题 · 状态：${q.status==="draft" ? "草稿" : "收集中"}
+                    ${escapeHtml(q.categoryName || q.category || "")} · ${(q.fields||[]).length} 题 · 收集中
                 </div>
             </div>
-            <button ${isUsed||isDraft?"disabled":""} onclick="addLinkedFromPicker("${q.id}")" class="px-3 py-1.5 ${isUsed||isDraft?"bg-gray-100 text-gray-400":"bg-accent-blue text-white hover:bg-blue-600"} rounded-lg text-sm">
-                ${isUsed ? "已添加" : (isDraft ? "未发布" : "添加")}
-            </button>
-        </div>`;
+            ${disableBecauseMax ? `<span class="text-xs text-gray-400 flex-shrink-0">已达上限</span>` : ""}
+        </label>`;
     }).join("");
+    updateLinkPickerConfirm(atMax);
 }
-function addLinkedFromPicker(id) {
-    if (linkedQuestionnaires.some(lq => lq.id === id)) return;
-    const q = (typeof QM !== "undefined" && QM.findQuestionnaireById) ? QM.findQuestionnaireById(id) : null;
-    if (!q) return;
-    linkedQuestionnaires.push({ id: q.id, title: q.title, mode: "registration_extra" });
+function toggleLinkPickerItem(id, checked) {
+    if (checked) {
+        if (linkPickerSelected.size >= LINK_PICKER_MAX) return;  // 保险栓
+        linkPickerSelected.add(id);
+    } else {
+        linkPickerSelected.delete(id);
+    }
+    renderLinkPicker();  // 重渲染以更新"已达上限"灰态
+}
+function updateLinkPickerConfirm(atMax) {
+    const counter = document.getElementById("linkPickerCounter");
+    const btn = document.getElementById("linkPickerConfirmBtn");
+    const n = linkPickerSelected.size;
+    counter.textContent = `已选 ${n}/${LINK_PICKER_MAX}`;
+    counter.className = `text-sm ${n >= LINK_PICKER_MAX ? "text-accent-amber" : "text-gray-500"}`;
+    btn.disabled = n === 0;
+    btn.textContent = n === 0 ? "确认选择" : `确认选择(${n})`;
+}
+function confirmLinkPicker() {
+    if (linkPickerSelected.size === 0) return;
+    const before = new Set(linkedQuestionnaires.map(lq => lq.id));
+    // 求差集：取消勾选的从活动中移除
+    const removed = linkedQuestionnaires.filter(lq => !linkPickerSelected.has(lq.id));
+    if (removed.length > 0) {
+        linkedQuestionnaires = linkedQuestionnaires.filter(lq => linkPickerSelected.has(lq.id));
+    }
+    // 新勾选的加入（保留原有 mode，新加默认 registration_extra）
+    let addedCount = 0;
+    linkPickerSelected.forEach(id => {
+        if (before.has(id)) return;  // 原本就在，不动
+        const q = (typeof QM !== "undefined" && QM.findQuestionnaireById)
+            ? QM.findQuestionnaireById(id)
+            : JSON.parse(sessionStorage.getItem("questionnaires_data") || "[]").find(x => x.id === id);
+        if (!q) return;
+        linkedQuestionnaires.push({ id: q.id, title: q.title, mode: "registration_extra" });
+        addedCount++;
+    });
     renderLinkedList();
     closeLinkPicker();
-    showToast("已关联", "success");
+    const parts = [];
+    if (addedCount > 0) parts.push(`新增 ${addedCount}`);
+    if (removed.length > 0) parts.push(`移除 ${removed.length}`);
+    showToast(parts.length ? `已${parts.join("，")}` : "未变更", "success");
 }
 function removeLinked(id) {
     linkedQuestionnaires = linkedQuestionnaires.filter(lq => lq.id !== id);
@@ -834,8 +941,7 @@ function renderLinkedList() {
         </div>
     `).join("");
 }
-
-
+</script>
 
 <!-- 浮动演示链接组件 -->
 <style>
@@ -887,8 +993,16 @@ function renderLinkedList() {
         <div id="linkPickerList" class="p-4 overflow-y-auto" style="max-height: 60vh;">
             <!-- JS 渲染 -->
         </div>
+        <div class="flex items-center justify-between px-6 py-3 border-t border-[#E2E8F0] bg-gray-50">
+            <span id="linkPickerCounter" class="text-sm text-gray-500">已选 0/5</span>
+            <div class="flex items-center gap-3">
+                <button onclick="closeLinkPicker()" type="button" class="px-5 py-2.5 border border-[#E2E8F0] rounded-xl text-gray-600 hover:text-gray-900 hover:border-gray-400 transition-colors">取消</button>
+                <button onclick="confirmLinkPicker()" id="linkPickerConfirmBtn" type="button" class="px-5 py-2.5 bg-accent-blue text-white rounded-xl hover:bg-blue-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed" disabled>确认选择</button>
+            </div>
+        </div>
     </div>
 </div>
 
 </body>
+<script src="../components/questionnaire-shared.js"></script>
 </html>

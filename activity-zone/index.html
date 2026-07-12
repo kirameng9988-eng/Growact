@@ -2080,8 +2080,11 @@
         // ==================== 初始化 ====================
 
         document.addEventListener('DOMContentLoaded', function() {
+            // 初始化问卷种子数据（registration_extra 模式需要通过 QM 查找问卷字段）
+            if (typeof QM !== 'undefined' && QM.seedIfEmpty) QM.seedIfEmpty();
             renderContent();
         });
     </script>
+    <script src="../components/questionnaire-shared.js"></script>
 </body>
 </html>

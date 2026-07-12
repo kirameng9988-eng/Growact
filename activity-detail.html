@@ -275,6 +275,13 @@
             return statusMap[status] || status;
         }
 
+        // HTML 转义（用于动态内容渲染）
+        function escapeHtml(s) {
+            return String(s == null ? '' : s)
+                .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+        }
+
         // 加载并渲染详情
         function loadActivityDetail(id) {
             const activities = getAllActivities();
